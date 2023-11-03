@@ -1,0 +1,30 @@
+import { EventEmitter } from '../../stencil-public-runtime';
+import { selectOption } from '../../common/models';
+export declare class IrSelect {
+  name: string;
+  data: selectOption[];
+  label: string;
+  selectedValue: any;
+  required: boolean;
+  LabelAvailable: boolean;
+  firstOption: string;
+  selectStyle: boolean;
+  submited: boolean;
+  size: 'sm' | 'md' | 'lg';
+  textSize: 'sm' | 'md' | 'lg';
+  labelPosition: 'left' | 'right' | 'center';
+  labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+  labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+  labelBorder: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
+  labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  initial: boolean;
+  valid: boolean;
+  selectChange: EventEmitter;
+  watchHandler(newValue: string): void;
+  watchHandler2(newValue: boolean): void;
+  componentwillload(): void;
+  disconnectedCallback(): void;
+  handleSelectChange(event: any): void;
+  count: number;
+  render(): any;
+}

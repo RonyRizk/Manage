@@ -1,0 +1,2 @@
+import{r as s,c as i,h as t}from"./p-a4ee474f.js";const c=class{constructor(t){s(this,t);this.iconClickHandler=i(this,"iconClickHandler",7);this.icon="ft-check"}render(){return t("i",{onClick:()=>{this.iconClickHandler.emit()},class:this.icon})}};export{c as ir_icon};
+//# sourceMappingURL=p-c2402c4b.entry.js.map

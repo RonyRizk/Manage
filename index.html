@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <title>Igloo Calendar</title>
+    <link rel="stylesheet" href="dist/collection/assets/feather/style.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/line-awesome/css/line-awesome.min.css">
+    <script src="dist/collection/assets/scripts/jquery.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
+
+    <script type="module" src="dist/ir-webcmp/ir-webcmp.esm.js"></script>
+</head>
+
+<body>
+    <igloo-calendar currency-name="USD" propertyid="42" from_date="2023-10-11" to_date="2024-1-31" language="en"
+        baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <script>
+        const calendar = document.querySelector("igloo-calendar")
+        fetch("https://gateway.igloorooms.com/IR/Authenticate", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: "A35", password: "BluePasta" })
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+            .then(data => {
+
+                calendar.ticket = data.My_Result;
+            })
+            .catch(error => {
+                console.log('There was a problem with the fetch operation:', error.message);
+            });
+    </script>
+</body>
+
+</html>
