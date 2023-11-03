@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <title>Igloo Calendar</title>
+    <link rel="stylesheet" href="dist/collection/assets/feather/style.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/line-awesome/css/line-awesome.min.css">
+    <script src="dist/collection/assets/scripts/jquery.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
+
+    <script type="module" src="dist/ir-webcmp/ir-webcmp.esm.js"></script>
+</head>
+
+<body>
+    <igloo-calendar currency-name="USD"  from_date="2023-10-11" to_date="2023-12-01" language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <!-- <script src="assets/"></script> -->
+    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+    <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+    <script>
+      const calendar = document.querySelector("igloo-calendar");
+  
+      setTimeout(()=>{
+        sessionStorage.removeItem('token');
+        
+        // Demo
+        // calendar.propertyid="42";
+        // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjA2OTYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.HlXEt6jMDOl9zG6qdBi12whhy3kaIRfJxBe2A_9UpkM";
+  
+        // Casa Mespilla
+        //calendar.propertyid="229";
+        //calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjM2OTIsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.Vb-4eQNwqSLDbQWVwxT4IcfZucqRiuQjdeW5aD1yJL4";
+  
+        // Flora Hotel Apartments
+        calendar.propertyid="20";
+        calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjM4OTEsIkNMQUlNLTAxIjoiQXhSQUl1OTErTm89IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.bdGTIQ1tPkkrqxR1W0VrusMjs-hIFKoGsTQlwTd6XnI";
+      
+        // Theo
+        // calendar.propertyid="235";
+        // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjE1MDMsIkNMQUlNLTAxIjoibk1nM0NIWDYzVjA9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.iKAxCG3kFTyHVhk7ugaSf0Rd-w2Ual69ocTyFq0IFXc";
+  
+    },300)  
+    </script>
+  
+  </body>
+
+</html>
