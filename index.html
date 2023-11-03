@@ -17,30 +17,35 @@
 </head>
 
 <body>
-    <igloo-calendar currency-name="USD" propertyid="42" from_date="2023-10-11" to_date="2024-1-31" language="en"
-        baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <igloo-calendar currency-name="USD"  from_date="2023-10-11" to_date="2023-12-01" language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <!-- <script src="assets/"></script> -->
+    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+    <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
     <script>
-        const calendar = document.querySelector("igloo-calendar")
-        fetch("https://gateway.igloorooms.com/IR/Authenticate", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: "A35", password: "BluePasta" })
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-            .then(data => {
-
-                calendar.ticket = data.My_Result;
-            })
-            .catch(error => {
-                console.log('There was a problem with the fetch operation:', error.message);
-            });
+      const calendar = document.querySelector("igloo-calendar");
+  
+      setTimeout(()=>{
+        sessionStorage.removeItem('token');
+        
+        // Demo
+        calendar.propertyid="42";
+        calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjA2OTYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.HlXEt6jMDOl9zG6qdBi12whhy3kaIRfJxBe2A_9UpkM";
+  
+        // Casa Mespilla
+        //calendar.propertyid="229";
+        //calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjM2OTIsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.Vb-4eQNwqSLDbQWVwxT4IcfZucqRiuQjdeW5aD1yJL4";
+  
+        // Flora Hotel Apartments
+        // calendar.propertyid="20";
+        // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjM4OTEsIkNMQUlNLTAxIjoiQXhSQUl1OTErTm89IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.bdGTIQ1tPkkrqxR1W0VrusMjs-hIFKoGsTQlwTd6XnI";
+      
+        // Theo
+        // calendar.propertyid="235";
+        // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjE1MDMsIkNMQUlNLTAxIjoibk1nM0NIWDYzVjA9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.iKAxCG3kFTyHVhk7ugaSf0Rd-w2Ual69ocTyFq0IFXc";
+  
+    },300)  
     </script>
-</body>
+  
+  </body>
 
 </html>
