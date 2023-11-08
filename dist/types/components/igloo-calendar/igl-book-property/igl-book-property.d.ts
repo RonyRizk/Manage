@@ -1,5 +1,5 @@
-import { EventEmitter } from "../../../stencil-public-runtime";
-import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "../../../models/models";
+import { EventEmitter } from '../../../stencil-public-runtime';
+import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
 export declare class IglBookProperty {
   propertyid: number;
   language: string;
