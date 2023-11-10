@@ -193,7 +193,7 @@ export class BookingService {
     }
     return days;
   }
-  async bookUser(bookedByInfoData, assign_units, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id) {
+  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id) {
     try {
       const token = JSON.parse(sessionStorage.getItem("token"));
       if (token) {
@@ -214,7 +214,8 @@ export class BookingService {
           guest = Object.assign(Object.assign({}, guest), { id: bookedByInfoData.id });
         }
         const body = {
-          assign_units,
+          assign_units: true,
+          check_in,
           booking: {
             booking_nbr: bookingNumber || "",
             from_date: fromDateStr,
@@ -247,7 +248,9 @@ export class BookingService {
                 cancelation: data.cancelation,
                 guarantee: data.guarantee,
               },
-              unit: { id: pr_id || data.roomId },
+              unit: typeof pr_id === "undefined" && data.roomId === ""
+                ? null
+                : { id: pr_id || data.roomId },
               occupancy: {
                 adult_nbr: data.adultCount,
                 children_nbr: data.childrenCount,
@@ -271,7 +274,7 @@ export class BookingService {
             })),
           },
         };
-        console.log("haida lbody", body);
+        console.log("body", body);
         const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
         if (data.ExceptionMsg !== "") {
           throw new Error(data.ExceptionMsg);

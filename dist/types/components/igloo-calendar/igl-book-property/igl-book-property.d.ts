@@ -107,7 +107,7 @@ export declare class IglBookProperty {
   }>): void;
   handlePageTwoDataUpdateEvent(event: CustomEvent<IPageTwoDataUpdateProps>): void;
   handleBlockDate(): Promise<void>;
-  bookUser(assign_units: boolean): Promise<void>;
+  bookUser(check_in: boolean): Promise<void>;
   setLoadingState(assign_units: boolean): void;
   getArrivalTimeForBooking(): string;
   resetLoadingState(): void;

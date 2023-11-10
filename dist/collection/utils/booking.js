@@ -58,7 +58,7 @@ const status = {
 function getDefaultData(cell, stayStatus) {
   var _a;
   if (["003", "002", "004"].includes(cell.STAY_STATUS_CODE)) {
-    // console.log("blocked cells",cell);
+    //console.log("blocked cells", cell);
     return {
       ID: cell.POOL,
       NOTES: cell.My_Block_Info.NOTES,
@@ -81,9 +81,9 @@ function getDefaultData(cell, stayStatus) {
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  //console.log("booked cells",cell);
+  //console.log("booked cells", cell);
   return {
-    ID: cell.booking.booking_nbr,
+    ID: cell.POOL,
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
@@ -104,10 +104,14 @@ function getDefaultData(cell, stayStatus) {
     POOL: cell.POOL,
     GUEST: cell.booking.guest,
     rooms: cell.booking.rooms,
+    BOOKING_NUMBER: cell.booking.booking_nbr,
+    cancelation: cell.room.rateplan.cancelation,
+    guarantee: cell.room.rateplan.guarantee,
     TOTAL_PRICE: cell.room.total,
     COUNTRY: cell.booking.guest.country_id,
     FROM_DATE_STR: cell.booking.format.from_date,
     TO_DATE_STR: cell.booking.format.to_date,
+    adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
   };
 }
 function updateBookingWithStayData(data, cell) {

@@ -13,7 +13,7 @@ export declare class BookingService {
   blockUnit(params: IBlockUnit): Promise<any>;
   getUserInfo(email: string): Promise<any>;
   private generateDays;
-  bookUser(bookedByInfoData: any, assign_units: boolean, fromDate: Date, toDate: Date, guestData: any, totalNights: number, source: {
+  bookUser(bookedByInfoData: any, check_in: boolean, fromDate: Date, toDate: Date, guestData: any, totalNights: number, source: {
     code: string;
     description: string;
   }, propertyid: number, currency: {

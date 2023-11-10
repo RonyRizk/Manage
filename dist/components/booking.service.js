@@ -59,7 +59,7 @@ const status = {
 function getDefaultData(cell, stayStatus) {
   var _a;
   if (["003", "002", "004"].includes(cell.STAY_STATUS_CODE)) {
-    // console.log("blocked cells",cell);
+    //console.log("blocked cells", cell);
     return {
       ID: cell.POOL,
       NOTES: cell.My_Block_Info.NOTES,
@@ -82,9 +82,9 @@ function getDefaultData(cell, stayStatus) {
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  //console.log("booked cells",cell);
+  //console.log("booked cells", cell);
   return {
-    ID: cell.booking.booking_nbr,
+    ID: cell.POOL,
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
@@ -105,10 +105,14 @@ function getDefaultData(cell, stayStatus) {
     POOL: cell.POOL,
     GUEST: cell.booking.guest,
     rooms: cell.booking.rooms,
+    BOOKING_NUMBER: cell.booking.booking_nbr,
+    cancelation: cell.room.rateplan.cancelation,
+    guarantee: cell.room.rateplan.guarantee,
     TOTAL_PRICE: cell.room.total,
     COUNTRY: cell.booking.guest.country_id,
     FROM_DATE_STR: cell.booking.format.from_date,
     TO_DATE_STR: cell.booking.format.to_date,
+    adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
   };
 }
 function updateBookingWithStayData(data, cell) {
@@ -326,7 +330,7 @@ class BookingService {
     }
     return days;
   }
-  async bookUser(bookedByInfoData, assign_units, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id) {
+  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id) {
     try {
       const token = JSON.parse(sessionStorage.getItem("token"));
       if (token) {
@@ -347,7 +351,8 @@ class BookingService {
           guest = Object.assign(Object.assign({}, guest), { id: bookedByInfoData.id });
         }
         const body = {
-          assign_units,
+          assign_units: true,
+          check_in,
           booking: {
             booking_nbr: bookingNumber || "",
             from_date: fromDateStr,
@@ -380,7 +385,9 @@ class BookingService {
                 cancelation: data.cancelation,
                 guarantee: data.guarantee,
               },
-              unit: { id: pr_id || data.roomId },
+              unit: typeof pr_id === "undefined" && data.roomId === ""
+                ? null
+                : { id: pr_id || data.roomId },
               occupancy: {
                 adult_nbr: data.adultCount,
                 children_nbr: data.childrenCount,
@@ -404,7 +411,7 @@ class BookingService {
             })),
           },
         };
-        console.log("haida lbody", body);
+        console.log("body", body);
         const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
         if (data.ExceptionMsg !== "") {
           throw new Error(data.ExceptionMsg);

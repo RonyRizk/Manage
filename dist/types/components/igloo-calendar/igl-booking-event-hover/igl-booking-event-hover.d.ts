@@ -1,5 +1,5 @@
-import { EventEmitter } from "../../../stencil-public-runtime";
-import { ICountry } from "../../../models/IBooking";
+import { EventEmitter } from '../../../stencil-public-runtime';
+import { ICountry } from '../../../models/IBooking';
 export declare class IglBookingEventHover {
   bookingEvent: {
     [key: string]: any;
