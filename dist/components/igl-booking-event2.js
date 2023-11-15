@@ -17,7 +17,6 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     /* show bubble */
     this.showInfoPopup = false;
     this.bubbleInfoTopSide = false;
-    //private eventsService = new EventsService();
     /* Resize props */
     this.resizeSide = '';
     this.isDragging = false;

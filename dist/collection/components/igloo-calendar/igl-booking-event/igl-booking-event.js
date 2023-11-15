@@ -1,5 +1,4 @@
 import { Host, h } from "@stencil/core";
-//import { EventsService } from '../../../services/events.service';
 export class IglBookingEvent {
   constructor() {
     this.dayWidth = 0;
@@ -8,7 +7,6 @@ export class IglBookingEvent {
     /* show bubble */
     this.showInfoPopup = false;
     this.bubbleInfoTopSide = false;
-    //private eventsService = new EventsService();
     /* Resize props */
     this.resizeSide = '';
     this.isDragging = false;
