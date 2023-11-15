@@ -1,4 +1,5 @@
-import { EventEmitter } from "../../stencil-public-runtime";
+import { EventEmitter } from '../../stencil-public-runtime';
+import { RoomBlockDetails, RoomBookingDetails } from '../../models/IBooking';
 export declare class IglooCalendar {
   propertyid: number;
   from_date: string;
@@ -22,6 +23,7 @@ export declare class IglooCalendar {
     [key: string]: any;
   };
   showLegend: boolean;
+  showPaymentDetails: boolean;
   showToBeAssigned: boolean;
   private bookingService;
   private countryNodeList;
@@ -45,6 +47,9 @@ export declare class IglooCalendar {
   getLocalizedMonth(date: any, locale?: string): string;
   getDateStr(date: any, locale?: string): string;
   scrollToElement(goToDate: any): void;
+  onBookingCreation(event: CustomEvent<RoomBookingDetails[]>): void;
+  onBlockCreation(event: CustomEvent<RoomBlockDetails>): void;
+  private transformDateForScroll;
   scrollPageToRoom(event: CustomEvent): void;
   shouldRenderCalendarView(): any;
   onOptionSelect(event: CustomEvent<{

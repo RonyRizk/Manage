@@ -1,7 +1,8 @@
-import { EventEmitter } from "../../../stencil-public-runtime";
+import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IglBookingEvent {
   private element;
   currency: any;
+  is_vacation_rental: boolean;
   hideBubbleInfo: EventEmitter;
   updateEventData: EventEmitter;
   dragOverEventData: EventEmitter;

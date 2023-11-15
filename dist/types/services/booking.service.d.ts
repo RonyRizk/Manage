@@ -1,4 +1,5 @@
-import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries } from "../models/IBooking";
+import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries } from '../models/IBooking';
+import { Booking } from '../models/booking.dto';
 export declare class BookingService {
   getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{
     [key: string]: any;
@@ -10,8 +11,10 @@ export declare class BookingService {
   getCountries(language: string): Promise<ICountry[]>;
   fetchSetupEntries(): Promise<ISetupEntries>;
   getBlockedInfo(): Promise<IEntries[]>;
+  getUserDefaultCountry(): Promise<any>;
   blockUnit(params: IBlockUnit): Promise<any>;
   getUserInfo(email: string): Promise<any>;
+  getExoposedBooking(booking_nbr: string, language: string): Promise<Booking>;
   private generateDays;
   bookUser(bookedByInfoData: any, check_in: boolean, fromDate: Date, toDate: Date, guestData: any, totalNights: number, source: {
     code: string;

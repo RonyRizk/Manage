@@ -1,4 +1,4 @@
-import { EventEmitter } from "../../../stencil-public-runtime";
+import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IglBlockDatesView {
   defaultData: {
     [key: string]: any;
@@ -20,6 +20,7 @@ export declare class IglBlockDatesView {
   handleReleaseAfterChange(evt: any): void;
   emitData(): void;
   getReleaseHoursString(): string;
+  formatNumber(value: number): string | number;
   handleOutOfService(evt: any): void;
   renderPage(): void;
   render(): any;

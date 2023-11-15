@@ -1,16 +1,17 @@
-import { EventEmitter } from "../../../stencil-public-runtime";
-import { ICountry } from "../../../models/IBooking";
+import { EventEmitter } from '../../../stencil-public-runtime';
+import { ICountry } from '../../../models/IBooking';
 export declare class IglPropertyBookedBy {
   language: string;
+  showPaymentDetails: boolean;
   defaultData: {
     [key: string]: any;
   };
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;
   }>;
+  countryNodeList: ICountry[];
   private bookingService;
   private arrivalTimeList;
-  countryNodeList: ICountry[];
   private expiryMonths;
   private expiryYears;
   private currentMonth;
@@ -19,6 +20,7 @@ export declare class IglPropertyBookedBy {
   };
   componentWillLoad(): Promise<void>;
   private initializeExpiryYears;
+  private assignCountryCode;
   private initializeDateData;
   private populateBookedByData;
   handleDataChange(key: any, event: any): void;

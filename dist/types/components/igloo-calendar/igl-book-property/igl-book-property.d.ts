@@ -1,9 +1,11 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
+import { RoomBlockDetails, RoomBookingDetails } from '../../../models/IBooking';
 import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
 export declare class IglBookProperty {
   propertyid: number;
   language: string;
   countryNodeList: any;
+  showPaymentDetails: boolean;
   currency: {
     id: number;
     code: string;
@@ -11,9 +13,6 @@ export declare class IglBookProperty {
   bookingData: {
     [key: string]: any;
   };
-  closeBookingWindow: EventEmitter<{
-    [key: string]: any;
-  }>;
   sourceOption: {
     code: string;
     description: string;
@@ -29,6 +28,11 @@ export declare class IglBookProperty {
   selectedUnits: {
     [key: string]: any;
   };
+  closeBookingWindow: EventEmitter<{
+    [key: string]: any;
+  }>;
+  bookingCreated: EventEmitter<RoomBookingDetails[]>;
+  blockedCreated: EventEmitter<RoomBlockDetails>;
   private PAGE_ZERO;
   private PAGE_ONE;
   private PAGE_TWO;
@@ -44,6 +48,8 @@ export declare class IglBookProperty {
   private bedPreferenceType;
   private bookingService;
   private eventsService;
+  componentDidLoad(): void;
+  disconnectedCallback(): void;
   componentWillLoad(): Promise<void>;
   fetchSetupEntries(): Promise<import("../../../models/IBooking").ISetupEntries>;
   setSourceOptions(bookingSource: any[]): void;

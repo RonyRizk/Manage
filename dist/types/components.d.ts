@@ -5,14 +5,16 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "./stencil-public-runtime";
-import { ICountry } from "./models/IBooking";
+import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
-export { ICountry } from "./models/IBooking";
+import { Guest, Room } from "./models/booking.dto";
+export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
+export { Guest, Room } from "./models/booking.dto";
 export namespace Components {
     interface IglApplicationInfo {
         "bedPreferenceType": any[];
@@ -37,18 +39,21 @@ export namespace Components {
         "currency": { id: number; code: string };
         "language": string;
         "propertyid": number;
+        "showPaymentDetails": boolean;
     }
     interface IglBookingEvent {
         "allBookingEvents": { [key: string]: any };
         "bookingEvent": { [key: string]: any };
         "countryNodeList": any;
         "currency": any;
+        "is_vacation_rental": boolean;
     }
     interface IglBookingEventHover {
         "bookingEvent": { [key: string]: any };
         "bubbleInfoTop": boolean;
         "countryNodeList": ICountry[];
         "currency": any;
+        "is_vacation_rental": boolean;
     }
     interface IglBookingRoomRatePlan {
         "bookingType": string;
@@ -100,12 +105,14 @@ export namespace Components {
         "language": string;
         "selectedGuestData": any;
         "selectedRooms": any;
+        "showPaymentDetails": boolean;
         "showSplitBookingOption": boolean;
     }
     interface IglPropertyBookedBy {
         "countryNodeList": ICountry[];
         "defaultData": { [key: string]: any };
         "language": string;
+        "showPaymentDetails": boolean;
     }
     interface IglTbaBookingView {
         "calendarData": { [key: string]: any };
@@ -142,7 +149,9 @@ export namespace Components {
         "to_date": string;
     }
     interface IrBookingDetails {
+        "baseurl": string;
         "bookingDetails": any;
+        "bookingNumber": string;
         "dropdownStatuses": any;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
@@ -153,12 +162,14 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
+        "language": string;
         "languageAbreviation": string;
         "paymentDetailsUrl": string;
         "paymentExceptionMessage": string;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
         "statusCodes": any;
+        "ticket": string;
     }
     interface IrButton {
         "btn_block": boolean;
@@ -239,7 +250,7 @@ export namespace Components {
         "mode": string;
     }
     interface IrGuestInfo {
-        "data": guestInfo;
+        "data": Guest;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
@@ -296,6 +307,9 @@ export namespace Components {
     interface IrLoader {
         "size": string;
     }
+    interface IrLoadingScreen {
+        "message": string;
+    }
     interface IrMapping {
         "_onSaveMapping": () => Promise<void>;
         "hostRoom": RoomType[];
@@ -330,7 +344,7 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
-        "item": any;
+        "item": Room;
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
     }
@@ -756,6 +770,12 @@ declare global {
         prototype: HTMLIrLoaderElement;
         new (): HTMLIrLoaderElement;
     };
+    interface HTMLIrLoadingScreenElement extends Components.IrLoadingScreen, HTMLStencilElement {
+    }
+    var HTMLIrLoadingScreenElement: {
+        prototype: HTMLIrLoadingScreenElement;
+        new (): HTMLIrLoadingScreenElement;
+    };
     interface HTMLIrMappingElement extends Components.IrMapping, HTMLStencilElement {
     }
     var HTMLIrMappingElement: {
@@ -857,6 +877,7 @@ declare global {
         "ir-label": HTMLIrLabelElement;
         "ir-list-item": HTMLIrListItemElement;
         "ir-loader": HTMLIrLoaderElement;
+        "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-mapping": HTMLIrMappingElement;
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
@@ -895,14 +916,18 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: { id: number; code: string };
         "language"?: string;
+        "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
+        "onBookingCreated"?: (event: IglBookPropertyCustomEvent<RoomBookingDetails[]>) => void;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
         "propertyid"?: number;
+        "showPaymentDetails"?: boolean;
     }
     interface IglBookingEvent {
         "allBookingEvents"?: { [key: string]: any };
         "bookingEvent"?: { [key: string]: any };
         "countryNodeList"?: any;
         "currency"?: any;
+        "is_vacation_rental"?: boolean;
         "onDragOverEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onUpdateEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
@@ -912,6 +937,7 @@ declare namespace LocalJSX {
         "bubbleInfoTop"?: boolean;
         "countryNodeList"?: ICountry[];
         "currency"?: any;
+        "is_vacation_rental"?: boolean;
         "onDeleteButton"?: (event: IglBookingEventHoverCustomEvent<string>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
@@ -986,6 +1012,7 @@ declare namespace LocalJSX {
         "onDataUpdateEvent"?: (event: IglPagetwoCustomEvent<IPageTwoDataUpdateProps>) => void;
         "selectedGuestData"?: any;
         "selectedRooms"?: any;
+        "showPaymentDetails"?: boolean;
         "showSplitBookingOption"?: boolean;
     }
     interface IglPropertyBookedBy {
@@ -993,6 +1020,7 @@ declare namespace LocalJSX {
         "defaultData"?: { [key: string]: any };
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;
+        "showPaymentDetails"?: boolean;
     }
     interface IglTbaBookingView {
         "calendarData"?: { [key: string]: any };
@@ -1041,7 +1069,9 @@ declare namespace LocalJSX {
         "to_date"?: string;
     }
     interface IrBookingDetails {
+        "baseurl"?: string;
         "bookingDetails"?: any;
+        "bookingNumber"?: string;
         "dropdownStatuses"?: any;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
@@ -1052,6 +1082,7 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
+        "language"?: string;
         "languageAbreviation"?: string;
         "onHandleAddPayment"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onHandleDeleteClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
@@ -1067,6 +1098,7 @@ declare namespace LocalJSX {
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
         "statusCodes"?: any;
+        "ticket"?: string;
     }
     interface IrButton {
         "btn_block"?: boolean;
@@ -1160,7 +1192,7 @@ declare namespace LocalJSX {
         "onSendToParent"?: (event: IrGeneralSettingsCustomEvent<any>) => void;
     }
     interface IrGuestInfo {
-        "data"?: guestInfo;
+        "data"?: Guest;
         "onGetSetupData"?: (event: IrGuestInfoCustomEvent<any>) => void;
         "onSubmitForm"?: (event: IrGuestInfoCustomEvent<guestInfo>) => void;
         "setupDataCountries"?: selectOption[];
@@ -1226,6 +1258,9 @@ declare namespace LocalJSX {
     interface IrLoader {
         "size"?: string;
     }
+    interface IrLoadingScreen {
+        "message"?: string;
+    }
     interface IrMapping {
         "hostRoom"?: RoomType[];
         "map"?: RoomType[];
@@ -1262,7 +1297,7 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
-        "item"?: any;
+        "item"?: Room;
         "mealCodeName"?: string;
         "myRoomTypeFoodCat"?: string;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
@@ -1366,6 +1401,7 @@ declare namespace LocalJSX {
         "ir-label": IrLabel;
         "ir-list-item": IrListItem;
         "ir-loader": IrLoader;
+        "ir-loading-screen": IrLoadingScreen;
         "ir-mapping": IrMapping;
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
@@ -1417,6 +1453,7 @@ declare module "@stencil/core" {
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;
             "ir-list-item": LocalJSX.IrListItem & JSXBase.HTMLAttributes<HTMLIrListItemElement>;
             "ir-loader": LocalJSX.IrLoader & JSXBase.HTMLAttributes<HTMLIrLoaderElement>;
+            "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-mapping": LocalJSX.IrMapping & JSXBase.HTMLAttributes<HTMLIrMappingElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;

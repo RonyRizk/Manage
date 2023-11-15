@@ -1,4 +1,4 @@
-import { EventEmitter } from "../../../stencil-public-runtime";
+import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IglCalHeader {
   private element;
   optionEvent: EventEmitter<{

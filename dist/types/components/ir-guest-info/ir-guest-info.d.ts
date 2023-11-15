@@ -1,5 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { selectOption, guestInfo, guestInfoValidation } from '../../common/models';
+import { Guest } from '../../models/booking.dto';
 export declare class GuestInfo {
   Model: guestInfoValidation;
   gotdata: boolean;
@@ -8,7 +9,7 @@ export declare class GuestInfo {
   getSetupData: EventEmitter;
   setupDataCountries: selectOption[];
   setupDataCountriesCode: selectOption[];
-  data: guestInfo;
+  data: Guest;
   componentWillLoad(): void;
   watchHandler(): void;
   handleInputChange(event: any): void;

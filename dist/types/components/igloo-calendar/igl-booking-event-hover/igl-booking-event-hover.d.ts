@@ -7,6 +7,7 @@ export declare class IglBookingEventHover {
   bubbleInfoTop: boolean;
   currency: any;
   countryNodeList: ICountry[];
+  is_vacation_rental: boolean;
   isLoading: string;
   showBookingPopup: EventEmitter;
   hideBubbleInfo: EventEmitter;

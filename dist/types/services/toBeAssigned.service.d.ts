@@ -1,4 +1,4 @@
-import { IRoomCategory, InnerRecord } from "../models/tobeassigned";
+import { IRoomCategory, InnerRecord } from '../models/tobeassigned';
 export declare class ToBeAssignedService {
   getUnassignedDates(propertyid: number, from_date: string, to_date: string): Promise<Record<number, InnerRecord>>;
   getUnassignedRooms(propertyid: number, specific_date: string, roomInfo: any, formattedLegendData: any): Promise<IRoomCategory[]>;

@@ -1,6 +1,7 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
+import { Room } from '../../../models/booking.dto';
 export declare class IrRoom {
-  item: any;
+  item: Room;
   mealCodeName: string;
   myRoomTypeFoodCat: string;
   currency: string;

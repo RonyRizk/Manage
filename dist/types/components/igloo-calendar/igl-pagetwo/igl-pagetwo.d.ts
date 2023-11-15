@@ -1,6 +1,7 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
 export declare class IglPagetwo {
+  showPaymentDetails: boolean;
   isEditOrAddRoomEvent: boolean;
   dateRangeData: {
     [key: string]: any;

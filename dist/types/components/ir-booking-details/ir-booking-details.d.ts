@@ -1,10 +1,16 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { guestInfo, selectOption } from '../../common/models';
+import { Booking, Guest } from '../../models/booking.dto';
 export declare class IrBookingDetails {
+  element: HTMLElement;
   bookingDetails: any;
   setupDataCountries: selectOption[];
   setupDataCountriesCode: selectOption[];
   languageAbreviation: string;
+  language: string;
+  ticket: string;
+  bookingNumber: string;
+  baseurl: string;
   dropdownStatuses: any;
   paymentDetailsUrl: string;
   paymentExceptionMessage: string;
@@ -20,7 +26,8 @@ export declare class IrBookingDetails {
   hasCheckOut: boolean;
   statusData: any[];
   tempStatus: string;
-  guestData: guestInfo;
+  bookingData: Booking;
+  guestData: Guest;
   rerenderFlag: boolean;
   sendDataToServer: EventEmitter<guestInfo>;
   handlePrintClick: EventEmitter;
@@ -31,13 +38,16 @@ export declare class IrBookingDetails {
   handleRoomEdit: EventEmitter;
   handleRoomDelete: EventEmitter;
   handleAddPayment: EventEmitter;
+  private bookingService;
+  componentDidLoad(): void;
+  ticketChanged(): Promise<void>;
+  initializeApp(): Promise<void>;
   handleIconClick(e: any): void;
   handleSidebarToggle(): void;
   handleEditSidebar(): void;
   handleFormSubmit(e: any): void;
   handleSelectChange(e: any): void;
   handleClick(e: any): void;
-  watchHandler(newValue: any, oldValue: any): void;
   watchDropdownStatuses(newValue: any, oldValue: any): void;
   openEditSidebar(): void;
   _calculateNights(fromDate: string, toDate: string): number;
