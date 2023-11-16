@@ -2641,8 +2641,11 @@ const IglToBeAssigned = class {
       });
       this.selectedDate = null;
       this.unassignedDates = await this.toBeAssignedService.getUnassignedDates(this.propertyid, booking_service.dateToFormattedString(new Date()), this.to_date);
-      const firstKey = Object.keys(this.unassignedDates)[0];
-      await this.updateCategories(firstKey, this.calendarData);
+      console.log(this.unassignedDates);
+      if (Object.keys(this.unassignedDates).length > 0) {
+        const firstKey = Object.keys(this.unassignedDates)[0];
+        await this.updateCategories(firstKey, this.calendarData);
+      }
       this.data = this.unassignedDates;
       this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
       if (!this.selectedDate && this.orderedDatesList.length) {
