@@ -1,4 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { E as EventsService } from './events.service.js';
 import { d as defineCustomElement$2 } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$1 } from './igl-booking-event-hover2.js';
 
@@ -17,6 +18,7 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     /* show bubble */
     this.showInfoPopup = false;
     this.bubbleInfoTopSide = false;
+    this.eventsService = new EventsService();
     /* Resize props */
     this.resizeSide = '';
     this.isDragging = false;
@@ -83,13 +85,8 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
         else {
           const { pool, from_date, to_date, toRoomId } = event.detail;
           console.log(pool, from_date, to_date, toRoomId);
-          // const result = await this.eventsService.reallocateEvent(
-          //   pool,
-          //   toRoomId,
-          //   from_date,
-          //   to_date
-          // );
-          //this.bookingEvent.POOL = result.My_Result.POOL;
+          const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+          this.bookingEvent.POOL = result.My_Result.POOL;
           console.log(event.detail);
           console.log('calll update here');
         }

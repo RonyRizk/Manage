@@ -14,11 +14,18 @@ export declare class IglCalHeader {
     [key: string]: any;
   };
   today: String;
+  propertyid: number;
+  to_date: string;
   renderAgain: boolean;
+  unassignedRoomsNumber: any;
   private searchValue;
   private searchList;
   private roomsList;
+  private toBeAssignedService;
   componentWillLoad(): void;
+  private initializeRoomsList;
+  private fetchAndAssignUnassignedRooms;
+  private assignRoomsToDate;
   handleReduceAvailableUnitEvent(event: CustomEvent<{
     [key: string]: any;
   }>): void;

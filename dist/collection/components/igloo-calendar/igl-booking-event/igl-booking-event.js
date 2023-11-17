@@ -1,4 +1,5 @@
 import { Host, h } from "@stencil/core";
+import { EventsService } from "../../../services/events.service";
 export class IglBookingEvent {
   constructor() {
     this.dayWidth = 0;
@@ -7,6 +8,7 @@ export class IglBookingEvent {
     /* show bubble */
     this.showInfoPopup = false;
     this.bubbleInfoTopSide = false;
+    this.eventsService = new EventsService();
     /* Resize props */
     this.resizeSide = '';
     this.isDragging = false;
@@ -73,13 +75,8 @@ export class IglBookingEvent {
         else {
           const { pool, from_date, to_date, toRoomId } = event.detail;
           console.log(pool, from_date, to_date, toRoomId);
-          // const result = await this.eventsService.reallocateEvent(
-          //   pool,
-          //   toRoomId,
-          //   from_date,
-          //   to_date
-          // );
-          //this.bookingEvent.POOL = result.My_Result.POOL;
+          const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+          this.bookingEvent.POOL = result.My_Result.POOL;
           console.log(event.detail);
           console.log('calll update here');
         }

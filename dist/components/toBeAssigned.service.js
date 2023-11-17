@@ -1,6 +1,7 @@
-import axios from "axios";
-import { dateDifference, dateToFormattedString } from "../utils/utils";
-export class ToBeAssignedService {
+import { a as axios } from './axios.js';
+import { b as dateToFormattedString, d as dateDifference } from './utils.js';
+
+class ToBeAssignedService {
   async getUnassignedDates(propertyid, from_date, to_date) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
@@ -162,4 +163,7 @@ export class ToBeAssignedService {
     return convertedDates;
   }
 }
+
+export { ToBeAssignedService as T };
+
 //# sourceMappingURL=toBeAssigned.service.js.map

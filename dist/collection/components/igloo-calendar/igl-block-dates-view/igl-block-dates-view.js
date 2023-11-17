@@ -14,6 +14,7 @@ export class IglBlockDatesView {
     this.toDate = undefined;
     this.entryDate = undefined;
     this.entryHour = undefined;
+    this.isEventHover = false;
     this.entryMinute = undefined;
     this.renderAgain = false;
   }
@@ -77,7 +78,7 @@ export class IglBlockDatesView {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "row m-0 p-0 ml-1 mb-1" }, h("div", { class: "col-12 text-left p-0" }, h("span", { class: "pr-1" }, h("span", { class: "text-bold-700 font-medium-1" }, "From: "), this.fromDate), ' ', h("span", { class: "text-bold-700 font-medium-1" }, "To: "), this.toDate)), h("div", { class: "col mb-1 text-left" }, h("div", { class: "mb-1" }, h("label", { class: "p-0 text-bold-700 font-medium-1 m-0 align-middle" }, "Reason:"), h("div", { class: "p-0 m-0 pr-1 controlContainer checkBoxContainer d-inline-block align-middle" }, h("input", { class: "form-control", type: "checkbox", checked: this.blockDatesData.OUT_OF_SERVICE, id: "userinput6", onChange: event => this.handleOutOfService(event) })), ' ', h("span", { class: "align-middle" }, "Out of service")), !this.blockDatesData.OUT_OF_SERVICE ? (h("div", null, h("div", { class: "mb-1 d-flex w-100 align-items-center" }, h("span", { class: "align-middle" }, "or "), h("div", { class: "d-inline-flex col pr-0 align-middle" }, h("input", { class: "form-control", type: "text", placeholder: "Optional reason", id: "optReason", value: this.blockDatesData.OPTIONAL_REASON, onInput: event => this.handleOptionalReason(event) }))), h("div", { class: "mb-1 w-100 pr-0 " }, h("span", { class: "text-bold-700 font-medium-1" }, "Automatic release in: "), h("div", { class: "d-inline-block" }, h("select", { class: "form-control input-sm", id: "zSmallSelect", onChange: evt => this.handleReleaseAfterChange(evt) }, this.releaseList.map(releaseItem => (h("option", { value: +releaseItem.CODE_NAME, selected: this.blockDatesData.RELEASE_AFTER_HOURS == +releaseItem.CODE_NAME }, releaseItem.CODE_VALUE_EN))))), this.blockDatesData.RELEASE_AFTER_HOURS ? (h("div", { class: "d-inline-block releaseTime" }, h("em", null, "on ", this.getReleaseHoursString()))) : null))) : null)));
+    return (h(Host, null, h("div", { class: `row m-0 p-0 ${!this.isEventHover && "ml-1"} mb-1` }, h("div", { class: "col-12 text-left p-0" }, h("span", { class: "pr-1" }, h("span", { class: "text-bold-700 font-medium-1" }, "From: "), this.fromDate), ' ', h("span", { class: "text-bold-700 font-medium-1" }, "To: "), this.toDate)), h("div", { class: `col mb-1 text-left ${this.isEventHover && "p-0"}` }, h("div", { class: "mb-1 " }, h("label", { class: "p-0 text-bold-700 font-medium-1 m-0 align-middle" }, "Reason:"), h("div", { class: "p-0 m-0 pr-1 controlContainer checkBoxContainer d-inline-block align-middle" }, h("input", { class: "form-control", type: "checkbox", checked: this.blockDatesData.OUT_OF_SERVICE, id: "userinput6", onChange: event => this.handleOutOfService(event) })), ' ', h("span", { class: "align-middle" }, "Out of service")), !this.blockDatesData.OUT_OF_SERVICE ? (h("div", null, h("div", { class: "mb-1 d-flex w-100 align-items-center" }, h("span", { class: "align-middle" }, "or "), h("div", { class: "d-inline-flex col pr-0 align-middle" }, h("input", { class: "form-control", type: "text", placeholder: "Optional reason", id: "optReason", value: this.blockDatesData.OPTIONAL_REASON, onInput: event => this.handleOptionalReason(event) }))), h("div", { class: "mb-1 w-100 pr-0 " }, h("span", { class: "text-bold-700 font-medium-1" }, "Automatic release in: "), h("div", { class: "d-inline-block" }, h("select", { class: "form-control input-sm", id: "zSmallSelect", onChange: evt => this.handleReleaseAfterChange(evt) }, this.releaseList.map(releaseItem => (h("option", { value: +releaseItem.CODE_NAME, selected: this.blockDatesData.RELEASE_AFTER_HOURS == +releaseItem.CODE_NAME }, releaseItem.CODE_VALUE_EN))))), this.blockDatesData.RELEASE_AFTER_HOURS ? (h("div", { class: "d-inline-block releaseTime" }, h("em", null, "on ", this.getReleaseHoursString()))) : null))) : null)));
   }
   static get is() { return "igl-block-dates-view"; }
   static get encapsulation() { return "scoped"; }
@@ -175,6 +176,24 @@ export class IglBlockDatesView {
         },
         "attribute": "entry-hour",
         "reflect": false
+      },
+      "isEventHover": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "is-event-hover",
+        "reflect": false,
+        "defaultValue": "false"
       },
       "entryMinute": {
         "type": "number",

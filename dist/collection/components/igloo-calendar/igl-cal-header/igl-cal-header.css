@@ -4484,7 +4484,9 @@ readers do not read off random characters that represent icons */
   top: 0;
   height: 100%;
 }
-
+.darkGrey {
+  background: #ececec;
+}
 .btn {
   pointer-events: auto;
 }
@@ -4618,7 +4620,7 @@ readers do not read off random characters that represent icons */
 }
 
 .badge-light {
-  background-color: #e0e0e0;
+  background-color: #999999;
 }
 .min-width-full {
   min-width: 100%;

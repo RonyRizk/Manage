@@ -1,4 +1,6 @@
-import { h as hooks } from './moment-7d60e5ef.js';
+'use strict';
+
+const moment = require('./moment-f96595e5.js');
 
 function bind(fn, thisArg) {
   return function wrap() {
@@ -3217,53 +3219,29 @@ axios.HttpStatusCode = HttpStatusCode;
 axios.default = axios;
 
 function convertDateToCustomFormat(dayWithWeekday, monthWithYear) {
-  const months = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC",
-  ];
-  const [_, day] = dayWithWeekday.split(" ");
-  const [month, year] = monthWithYear.split(" ");
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const [_, day] = dayWithWeekday.split(' ');
+  const [month, year] = monthWithYear.split(' ');
   const monthIndex = months.indexOf(month);
   if (monthIndex !== -1) {
     return `${day}_${monthIndex + 1}_${year}`;
   }
   else {
-    throw new Error("Invalid Month");
+    throw new Error('Invalid Month');
   }
 }
 function convertDateToTime(dayWithWeekday, monthWithYear) {
-  const months = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC",
-  ];
-  const [_, day] = dayWithWeekday.split(" ");
-  const [month, year] = monthWithYear.split(" ");
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const [_, day] = dayWithWeekday.split(' ');
+  const [month, year] = monthWithYear.split(' ');
   const monthIndex = months.indexOf(month);
   if (monthIndex !== -1) {
-    return new Date(`${year}-${monthIndex + 1}-${day}`).getTime();
+    let date = new Date(`${year}-${monthIndex + 1}-${day}`);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
   }
   else {
-    throw new Error("Invalid Month");
+    throw new Error('Invalid Month');
   }
 }
 function dateDifference(FROM_DATE, TO_DATE) {
@@ -3273,25 +3251,25 @@ function dateDifference(FROM_DATE, TO_DATE) {
 }
 function dateToFormattedString(date) {
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // +1 because months are 0-based in JS
-  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-based in JS
+  const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 function formatLegendColors(legendData) {
   let formattedLegendData = {};
   const statusId = {
-    "IN-HOUSE": { id: 1, clsName: "IN_HOUSE" },
-    CONFIRMED: { id: 2, clsName: "CONFIRMED" },
-    "PENDING-CONFIRMATION": { id: 3, clsName: "PENDING_CONFIRMATION" },
-    "SPLIT-UNIT": { id: 4, clsName: "SPLIT_UNIT" },
-    "CHECKED-IN": { id: 5, clsName: "CHECKED_IN" },
-    "CHECKED-OUT": { id: 5, clsName: "CHECKED_OUT" },
-    BLOCKED: { id: 6, clsName: "BLOCKED" },
-    "BLOCKED-WITH-DATES": { id: 7, clsName: "BLOCKED_WITH_DATES" },
-    NOTES: { id: 8, clsName: "NOTES" },
-    "OUTSTANDING-BALANCE": { id: 9, clsName: "OUTSTANDING_BALANCE" },
+    'IN-HOUSE': { id: 1, clsName: 'IN_HOUSE' },
+    'CONFIRMED': { id: 2, clsName: 'CONFIRMED' },
+    'PENDING-CONFIRMATION': { id: 3, clsName: 'PENDING_CONFIRMATION' },
+    'SPLIT-UNIT': { id: 4, clsName: 'SPLIT_UNIT' },
+    'CHECKED-IN': { id: 5, clsName: 'CHECKED_IN' },
+    'CHECKED-OUT': { id: 5, clsName: 'CHECKED_OUT' },
+    'BLOCKED': { id: 6, clsName: 'BLOCKED' },
+    'BLOCKED-WITH-DATES': { id: 7, clsName: 'BLOCKED_WITH_DATES' },
+    'NOTES': { id: 8, clsName: 'NOTES' },
+    'OUTSTANDING-BALANCE': { id: 9, clsName: 'OUTSTANDING_BALANCE' },
   };
-  legendData.forEach((legend) => {
+  legendData.forEach(legend => {
     formattedLegendData[legend.id] = legend;
     formattedLegendData.statusId = statusId; // NOTE: This will overwrite the 'statusId' property with every iteration.
   });
@@ -3299,14 +3277,14 @@ function formatLegendColors(legendData) {
 }
 function getCurrencySymbol(currencyCode) {
   const formatter = new Intl.NumberFormat(undefined, {
-    style: "currency",
+    style: 'currency',
     currency: currencyCode,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
-  return formatter.format(0).replace(/[0-9]/g, "").trim();
+  return formatter.format(0).replace(/[0-9]/g, '').trim();
 }
-const findCountry = (id, countries) => countries.find((country) => country.id === id);
+const findCountry = (id, countries) => countries.find(country => country.id === id);
 function getReleaseHoursString(releaseDate) {
   const dt = new Date();
   const releaseAfterHours = releaseDate;
@@ -3318,13 +3296,13 @@ function getReleaseHoursString(releaseDate) {
   };
 }
 function computeEndDate(startDate, numberOfDays) {
-  const dateObj = hooks(startDate, "D_M_YYYY");
-  dateObj.add(numberOfDays, "days");
-  return dateObj.format("YYYY-MM-DD");
+  const dateObj = moment.hooks(startDate, 'D_M_YYYY');
+  dateObj.add(numberOfDays, 'days');
+  return dateObj.format('YYYY-MM-DD');
 }
 function convertDMYToISO(date) {
-  const dateObj = hooks(date, "D_M_YYYY");
-  return dateObj.format("YYYY-MM-DD");
+  const dateObj = moment.hooks(date, 'D_M_YYYY');
+  return dateObj.format('YYYY-MM-DD');
 }
 
 async function getMyBookings(months) {
@@ -3385,12 +3363,12 @@ async function getStayStatus() {
 function getDefaultData(cell, stayStatus) {
   var _a;
   if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
-    //console.log("blocked cells", cell);
+    //console.log('blocked cells', cell);
     return {
       ID: cell.POOL,
-      NOTES: cell.My_Block_Info.NOTES,
+      NOTES: '',
       BALANCE: '',
-      NAME: stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
+      NAME: cell.My_Block_Info.NOTES !== '' ? cell.My_Block_Info.NOTES : stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
       RELEASE_AFTER_HOURS: cell.My_Block_Info.DESCRIPTION,
       PR_ID: cell.My_Block_Info.pr_id,
       ENTRY_DATE: cell.My_Block_Info.BLOCKED_TILL_DATE,
@@ -3441,6 +3419,7 @@ function getDefaultData(cell, stayStatus) {
     FROM_DATE_STR: cell.booking.format.from_date,
     TO_DATE_STR: cell.booking.format.to_date,
     adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
+    NOTES: cell.booking.remark,
   };
 }
 function updateBookingWithStayData(data, cell) {
@@ -3502,6 +3481,7 @@ function transformNewBooking(data) {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
+      NOTES: data.remark,
     });
   });
   return bookings;
@@ -3510,9 +3490,9 @@ async function transformNewBLockedRooms(data) {
   const stayStatus = await getStayStatus();
   return {
     ID: data.POOL,
-    NOTES: data.NOTES,
+    NOTES: '',
     BALANCE: '',
-    NAME: stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
+    NAME: data.NOTES !== '' ? data.NOTES : stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
     RELEASE_AFTER_HOURS: data.DESCRIPTION,
     PR_ID: data.pr_id,
     ENTRY_DATE: data.BLOCKED_TILL_DATE,
@@ -3531,8 +3511,8 @@ async function transformNewBLockedRooms(data) {
   };
 }
 function calculateDaysBetweenDates(from_date, to_date) {
-  const startDate = hooks(from_date, 'YYYY-MM-DD');
-  const endDate = hooks(to_date, 'YYYY-MM-DD');
+  const startDate = moment.hooks(from_date, 'YYYY-MM-DD');
+  const endDate = moment.hooks(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
   return daysDiff;
 }
@@ -3870,6 +3850,17 @@ class BookingService {
   }
 }
 
-export { BookingService as B, axios as a, transformNewBooking as b, getCurrencySymbol as c, dateToFormattedString as d, dateDifference as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, convertDMYToISO as i, computeEndDate as j, transformNewBLockedRooms as t };
+exports.BookingService = BookingService;
+exports.axios = axios;
+exports.computeEndDate = computeEndDate;
+exports.convertDMYToISO = convertDMYToISO;
+exports.dateDifference = dateDifference;
+exports.dateToFormattedString = dateToFormattedString;
+exports.findCountry = findCountry;
+exports.formatLegendColors = formatLegendColors;
+exports.getCurrencySymbol = getCurrencySymbol;
+exports.getReleaseHoursString = getReleaseHoursString;
+exports.transformNewBLockedRooms = transformNewBLockedRooms;
+exports.transformNewBooking = transformNewBooking;
 
-//# sourceMappingURL=booking.service-4f980e29.js.map
+//# sourceMappingURL=booking.service-03d1742c.js.map

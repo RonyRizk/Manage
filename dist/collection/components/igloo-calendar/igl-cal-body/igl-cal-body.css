@@ -4493,6 +4493,10 @@ readers do not read off random characters that represent icons */
 .roomRow:first-child {
   margin-top: 80px;
 }
+.categoryName {
+  font-weight: bold;
+}
+
 
 .cellData {
   width: 70px;

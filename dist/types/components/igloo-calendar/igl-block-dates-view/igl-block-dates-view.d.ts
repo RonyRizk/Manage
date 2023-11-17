@@ -7,6 +7,7 @@ export declare class IglBlockDatesView {
   toDate: string;
   entryDate: string;
   entryHour: number;
+  isEventHover: boolean;
   entryMinute: number;
   renderAgain: boolean;
   dataUpdateEvent: EventEmitter<{

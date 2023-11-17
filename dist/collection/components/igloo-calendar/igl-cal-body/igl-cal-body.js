@@ -212,7 +212,7 @@ export class IglCalBody {
     if (this.getTotalPhysicalRooms(roomCategory) <= 1) {
       return null;
     }
-    return (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`, onClick: () => this.toggleCategory(roomCategory) }, h("div", null, this.getCategoryName(roomCategory)), " ", h("i", { class: `la la-angle-${roomCategory.expanded ? 'down' : 'right'}` })), this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)));
+    return (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`, onClick: () => this.toggleCategory(roomCategory) }, h("div", { class: "categoryName" }, this.getCategoryName(roomCategory)), " ", h("i", { class: `la la-angle-${roomCategory.expanded ? 'down' : 'right'}` })), this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)));
   }
   getRoomsByCategory(roomCategory) {
     var _a;

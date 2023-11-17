@@ -19,6 +19,7 @@ export declare class IglToBeAssigned {
   showDatesList: boolean;
   renderAgain: boolean;
   orderedDatesList: any[];
+  isGotoToBeAssignedDate: boolean;
   isLoading: boolean;
   private selectedDate;
   private data;
@@ -29,7 +30,8 @@ export declare class IglToBeAssigned {
   componentWillLoad(): void;
   updateCategories(key: any, calendarData: any): Promise<void>;
   reArrangeData(): Promise<void>;
-  gotoDate(event: CustomEvent): void;
+  componentDidLoad(): Promise<void>;
+  gotoDate(event: CustomEvent): Promise<void>;
   showForDate(dateStamp: any): Promise<void>;
   getDay(dt: any): string;
   getLocalizedDayOfWeek(date: any, locale: any): any;

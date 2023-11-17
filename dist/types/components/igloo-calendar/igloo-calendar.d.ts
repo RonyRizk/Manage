@@ -32,6 +32,7 @@ export declare class IglooCalendar {
   private today;
   private roomService;
   private eventsService;
+  private toBeAssignedService;
   ticketChanged(): Promise<void>;
   componentWillLoad(): Promise<void>;
   initializeApp(): void;
