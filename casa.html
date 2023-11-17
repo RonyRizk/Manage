@@ -17,19 +17,26 @@
 </head>
 
 <body>
-    <igloo-calendar currency-name="USD"  from_date="2023-10-11" to_date="2023-12-01" language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <igloo-calendar currency-name="USD" language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
     <!-- <script src="assets/"></script> -->
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
     <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
     <script>
-      const calendar = document.querySelector("igloo-calendar");
-      setTimeout(() => {
-          const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA0OTEyNDEsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiZEMwZitSMk92c3A0S1YxY2JMak1Ob3FWSHZZSU1QTlp1QmtaWHNjY0R3RT0ifQ.l1xTiGkqS4zmgJilYfgQxVheC8Xt4wmQMfPNrH96V3g";
-          sessionStorage.removeItem('token');
-          sessionStorage.setItem('token', JSON.stringify(token))
-          calendar.propertyid = "229";
-          calendar.ticket = token;
-      }, 300)
+        var today = new Date();
+        today.setDate(today.getDate() -1);
+        var _FROM_DATE = today.toISOString().substring(0,10);
+        today.setDate(today.getDate() + 60);
+        var _TO_DATE = today.toISOString().substring(0,10);
+        const calendar = document.querySelector("igloo-calendar");
+        setTimeout(() => {
+            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA0OTEyNDEsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiZEMwZitSMk92c3A0S1YxY2JMak1Ob3FWSHZZSU1QTlp1QmtaWHNjY0R3RT0ifQ.l1xTiGkqS4zmgJilYfgQxVheC8Xt4wmQMfPNrH96V3g";
+            sessionStorage.removeItem('token');
+            sessionStorage.setItem('token', JSON.stringify(token))
+            calendar.from_date = _FROM_DATE;
+            calendar.to_date = _TO_DATE;
+            calendar.propertyid = "229";
+            calendar.ticket = token;
+        }, 300)
       </script>  
   </body>
 

@@ -17,21 +17,29 @@
 </head>
 
 <body>
-    <igloo-calendar currency-name="USD"  from_date="2023-10-11" to_date="2023-12-01" language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <igloo-calendar currency-name="USD"   language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
     <!-- <script src="assets/"></script> -->
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
     <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
     <script>
-      const calendar = document.querySelector("igloo-calendar");
+        
+        var today = new Date();
+        today.setDate(today.getDate() -1);
+        var _FROM_DATE = today.toISOString().substring(0,10);
+        today.setDate(today.getDate() + 60);
+        var _TO_DATE = today.toISOString().substring(0,10);
+        const calendar = document.querySelector("igloo-calendar");
       setTimeout(() => {
           const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA4MTU4ODgsIkNMQUlNLTAxIjoibk1nM0NIWDYzVjA9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdvOXEydXJuOUhtdz09In0.8nxicfUwwlPD1GWBQ6rXgT2t7NsjWaUE7dfys2d19Sc";
           sessionStorage.removeItem('token');
           sessionStorage.setItem('token', JSON.stringify(token))
+          calendar.from_date = _FROM_DATE;
+            calendar.to_date = _TO_DATE;
           calendar.propertyid = "235";
           calendar.ticket = token;
       }, 300)
       </script>      
-  
+    
   </body>
 
 </html>
