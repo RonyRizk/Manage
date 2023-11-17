@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <title>Igloo Calendar</title>
+    <link rel="stylesheet" href="dist/collection/assets/feather/style.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/line-awesome/css/line-awesome.min.css">
+    <script src="dist/collection/assets/scripts/jquery.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
+
+    <script type="module" src="dist/ir-webcmp/ir-webcmp.esm.js"></script>
+</head>
+
+<body>
+    <igloo-calendar currency-name="USD"  from_date="2023-10-11" to_date="2023-12-01" language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <!-- <script src="assets/"></script> -->
+    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+    <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+    <script>
+      const calendar = document.querySelector("igloo-calendar");
+      setTimeout(() => {
+          const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA4MTMwNjgsIkNMQUlNLTAxIjoiNG1UZkFZZHNqS1E9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdvOXEydXJuOUhtdz09In0.J3Y9JuFJpkmIav8fUr-A41UUcr56IdAJqI6DFJvSGcY";
+          sessionStorage.removeItem('token');
+          sessionStorage.setItem('token', JSON.stringify(token))
+          calendar.propertyid = "561";
+          calendar.ticket = token;
+      }, 300)
+      </script>      
+  
+  </body>
+
+</html>
