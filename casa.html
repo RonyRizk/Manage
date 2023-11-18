@@ -29,7 +29,7 @@
         var _TO_DATE = today.toISOString().substring(0,10);
         const calendar = document.querySelector("igloo-calendar");
         setTimeout(() => {
-            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA0OTEyNDEsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiZEMwZitSMk92c3A0S1YxY2JMak1Ob3FWSHZZSU1QTlp1QmtaWHNjY0R3RT0ifQ.l1xTiGkqS4zmgJilYfgQxVheC8Xt4wmQMfPNrH96V3g";
+            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDE1MjY4ODIsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdvOXEydXJuOUhtdz09In0.2flth_0X-lKmvW_upFg5DVU_yVn6fZDAFnN2xhhXdgQ";
             sessionStorage.removeItem('token');
             sessionStorage.setItem('token', JSON.stringify(token))
             calendar.from_date = _FROM_DATE;
