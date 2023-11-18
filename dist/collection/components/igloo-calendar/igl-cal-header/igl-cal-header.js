@@ -2,6 +2,7 @@ import { Host, h } from "@stencil/core";
 import { ToBeAssignedService } from "../../../services/toBeAssigned.service";
 import { dateToFormattedString } from "../../../utils/utils";
 import { transformDateFormatWithMoment } from "../../../utils/events.utils";
+import moment from "moment";
 export class IglCalHeader {
   constructor() {
     this.searchValue = '';
@@ -51,12 +52,8 @@ export class IglCalHeader {
     event.stopPropagation();
     // return {day, dayDisplayName, currentDate, tobeAssignedCount: dates[currentDate]};
     if (opt.key === 'reduceAvailableDays') {
-      this.calendarData.days.find(day => {
-        if (day.currentDate === parseInt(data.selectedDate)) {
-          day.tobeAssignedCount--;
-          return true;
-        }
-      });
+      const selectedDate = moment(+data.selectedDate).format('D_M_YYYY');
+      this.unassignedRoomsNumber[selectedDate] = this.unassignedRoomsNumber[selectedDate] - 1;
       this.renderView();
     }
   }

@@ -11,6 +11,7 @@ export declare class IglCalBody {
   countryNodeList: any;
   dragOverElement: string;
   renderAgain: boolean;
+  addBookingDatasEvent: EventEmitter<any[]>;
   private selectedRooms;
   private fromRoomId;
   private newEvent;

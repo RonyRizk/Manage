@@ -1,7 +1,8 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { B as BookingService, t as transformNewBLockedRooms, a as transformNewBooking } from './booking.service.js';
-import { b as dateToFormattedString, g as getReleaseHoursString } from './utils.js';
+import { B as BookingService } from './booking.service.js';
+import { d as dateToFormattedString, g as getReleaseHoursString } from './utils.js';
 import { E as EventsService } from './events.service.js';
+import { t as transformNewBLockedRooms, a as transformNewBooking } from './booking.js';
 import { d as defineCustomElement$9 } from './igl-application-info2.js';
 import { d as defineCustomElement$8 } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$7 } from './igl-booking-room-rate-plan2.js';
@@ -388,16 +389,28 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
   async bookUser(check_in) {
     this.setLoadingState(check_in);
     try {
+      let booking = {
+        pool: '',
+        data: [],
+      };
       if (['003', '002', '004'].includes(this.bookingData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.bookingData.POOL);
+        booking.pool = this.bookingData.POOL;
+      }
+      if (this.isEventType('EDIT_BOOKING')) {
+        booking.pool = this.bookingData.POOL;
       }
       const arrivalTime = this.isEventType('EDIT_BOOKING') ? this.getArrivalTimeForBooking() : '';
       const pr_id = this.isEventType('BAR_BOOKING') ? this.bookingData.PR_ID : undefined;
       const booking_nbr = this.isEventType('EDIT_BOOKING') ? this.bookingData.BOOKING_NUMBER : undefined;
+      if (this.isEventType('EDIT_BOOKING')) {
+        this.bookedByInfoData.message = this.bookingData.NOTES;
+      }
       const result = await this.bookingService.bookUser(this.bookedByInfoData, check_in, this.bookingData.defaultDateRange.fromDate, this.bookingData.defaultDateRange.toDate, this.guestData, this.dateRangeData.dateDifference, this.sourceOption, this.propertyid, this.currency, booking_nbr, this.bookingData.GUEST, arrivalTime, pr_id);
-      if (check_in) {
+      if (check_in || this.isEventType('EDIT_BOOKING')) {
         const newBookings = transformNewBooking(result);
-        this.bookingCreated.emit(newBookings);
+        booking.data = newBookings;
+        this.bookingCreated.emit(booking);
       }
       //window.location.reload();
       //console.log("booking data ", this.bookingData);

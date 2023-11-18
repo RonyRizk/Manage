@@ -177,10 +177,16 @@ export class IglooCalendar {
   onBookingCreation(event) {
     event.stopPropagation();
     event.stopImmediatePropagation();
-    this.updateBookingEventsDateRange(event.detail);
-    this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: [...this.calendarData.bookingEvents, ...event.detail] });
+    const { data, pool } = event.detail;
+    this.updateBookingEventsDateRange(data);
+    let bookings = [...this.calendarData.bookingEvents];
+    if (pool) {
+      bookings = bookings.filter(booking => booking.POOL !== pool);
+    }
+    bookings.push(...data);
+    this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: bookings });
     setTimeout(() => {
-      this.scrollToElement(this.transformDateForScroll(new Date(event.detail[0].FROM_DATE)));
+      this.scrollToElement(this.transformDateForScroll(new Date(data[0].FROM_DATE)));
     }, 200);
   }
   onBlockCreation(event) {
@@ -209,6 +215,15 @@ export class IglooCalendar {
         top: gotoRect.top - containerRect.top - topLeftCellRect.height - gotoRect.height,
       });
     }
+  }
+  handleBookingDatasChange(event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    let bookings = [...this.calendarData.bookingEvents];
+    bookings = bookings.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
+    bookings.push(...event.detail);
+    this.updateBookingEventsDateRange(event.detail);
+    this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: bookings });
   }
   shouldRenderCalendarView() {
     // console.log("rendering...")
@@ -396,7 +411,7 @@ export class IglooCalendar {
       this.showToBeAssigned ? (h("igl-to-be-assigned", { loadingMessage: 'Fetching unassigned units', to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       this.showLegend ? (h("igl-legends", { class: "legendContainer", legendData: this.calendarData.legendData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, h("div", { id: "calendarContainer" }, h("igl-cal-header", { to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }), h("igl-cal-body", { countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), h("igl-cal-footer", { today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
-    ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" })), this.bookingItem && (h("igl-book-property", { showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: _ => (this.bookingItem = null) })))));
+    ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (h("igl-book-property", { showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: _ => (this.bookingItem = null) }))));
   }
   static get is() { return "igloo-calendar"; }
   static get encapsulation() { return "scoped"; }
@@ -625,6 +640,12 @@ export class IglooCalendar {
         "name": "scrollPageToRoom",
         "method": "scrollPageToRoom",
         "target": "window",
+        "capture": false,
+        "passive": false
+      }, {
+        "name": "addBookingDatasEvent",
+        "method": "handleBookingDatasChange",
+        "target": undefined,
         "capture": false,
         "passive": false
       }, {

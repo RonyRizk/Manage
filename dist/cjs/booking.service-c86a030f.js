@@ -1,4 +1,6 @@
-import { h as hooks } from './moment-7d60e5ef.js';
+'use strict';
+
+const moment = require('./moment-f96595e5.js');
 
 function bind(fn, thisArg) {
   return function wrap() {
@@ -3294,12 +3296,12 @@ function getReleaseHoursString(releaseDate) {
   };
 }
 function computeEndDate(startDate, numberOfDays) {
-  const dateObj = hooks(startDate, 'D_M_YYYY');
+  const dateObj = moment.hooks(startDate, 'D_M_YYYY');
   dateObj.add(numberOfDays, 'days');
   return dateObj.format('YYYY-MM-DD');
 }
 function convertDMYToISO(date) {
-  const dateObj = hooks(date, 'D_M_YYYY');
+  const dateObj = moment.hooks(date, 'D_M_YYYY');
   return dateObj.format('YYYY-MM-DD');
 }
 
@@ -3384,7 +3386,7 @@ function getDefaultData(cell, stayStatus) {
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  console.log('booked cells', cell);
+  //console.log('booked cells', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
@@ -3447,7 +3449,7 @@ function transformNewBooking(data) {
   data.rooms.forEach(room => {
     var _a;
     bookings.push({
-      ID: room.identifier,
+      ID: room['assigned_units_pool'],
       TO_DATE: room.to_date,
       FROM_DATE: room.from_date,
       NO_OF_DAYS: room.days.length,
@@ -3465,7 +3467,7 @@ function transformNewBooking(data) {
       ADULTS_COUNT: room.occupancy.adult_nbr,
       CHILDREN_COUNT: room.occupancy.children_nbr,
       PR_ID: +room.unit.id,
-      POOL: room.identifier,
+      POOL: room['assigned_units_pool'],
       GUEST: data.guest,
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
@@ -3509,8 +3511,8 @@ async function transformNewBLockedRooms(data) {
   };
 }
 function calculateDaysBetweenDates(from_date, to_date) {
-  const startDate = hooks(from_date, 'YYYY-MM-DD');
-  const endDate = hooks(to_date, 'YYYY-MM-DD');
+  const startDate = moment.hooks(from_date, 'YYYY-MM-DD');
+  const endDate = moment.hooks(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
   return daysDiff;
 }
@@ -3848,6 +3850,17 @@ class BookingService {
   }
 }
 
-export { BookingService as B, axios as a, transformNewBooking as b, getCurrencySymbol as c, dateToFormattedString as d, dateDifference as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, convertDMYToISO as i, computeEndDate as j, transformNewBLockedRooms as t };
+exports.BookingService = BookingService;
+exports.axios = axios;
+exports.computeEndDate = computeEndDate;
+exports.convertDMYToISO = convertDMYToISO;
+exports.dateDifference = dateDifference;
+exports.dateToFormattedString = dateToFormattedString;
+exports.findCountry = findCountry;
+exports.formatLegendColors = formatLegendColors;
+exports.getCurrencySymbol = getCurrencySymbol;
+exports.getReleaseHoursString = getReleaseHoursString;
+exports.transformNewBLockedRooms = transformNewBLockedRooms;
+exports.transformNewBooking = transformNewBooking;
 
-//# sourceMappingURL=booking.service-afe3eaf3.js.map
+//# sourceMappingURL=booking.service-c86a030f.js.map

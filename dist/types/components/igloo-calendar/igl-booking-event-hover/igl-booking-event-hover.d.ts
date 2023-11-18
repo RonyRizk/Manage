@@ -12,6 +12,10 @@ export declare class IglBookingEventHover {
   showBookingPopup: EventEmitter;
   hideBubbleInfo: EventEmitter;
   deleteButton: EventEmitter<string>;
+  bookingCreated: EventEmitter<{
+    pool?: string;
+    data: any[];
+  }>;
   private fromTimeStamp;
   private toTimeStamp;
   private todayTimeStamp;

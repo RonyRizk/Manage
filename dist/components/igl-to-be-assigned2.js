@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
 import { T as ToBeAssignedService } from './toBeAssigned.service.js';
-import { b as dateToFormattedString } from './utils.js';
+import { d as dateToFormattedString } from './utils.js';
 import { d as defineCustomElement$2 } from './igl-tba-booking-view2.js';
 import { d as defineCustomElement$1 } from './igl-tba-category-view2.js';
 
@@ -15,6 +15,8 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     this.showBookingPopup = createEvent(this, "showBookingPopup", 7);
     this.addToBeAssignedEvent = createEvent(this, "addToBeAssignedEvent", 7);
     this.highlightToBeAssignedBookingEvent = createEvent(this, "highlightToBeAssignedBookingEvent", 7);
+    this.isGotoToBeAssignedDate = false;
+    this.isLoading = true;
     this.selectedDate = null;
     this.data = {};
     this.today = new Date();
@@ -28,8 +30,6 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     this.showDatesList = false;
     this.renderAgain = false;
     this.orderedDatesList = [];
-    this.isGotoToBeAssignedDate = undefined;
-    this.isLoading = true;
   }
   componentWillLoad() {
     this.reArrangeData();
@@ -79,10 +79,13 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     }
   }
   async componentDidLoad() {
-    if (!this.isGotoToBeAssignedDate && Object.keys(this.unassignedDates).length > 0) {
-      const firstKey = Object.keys(this.unassignedDates)[0];
-      this.showForDate(firstKey);
-    }
+    setTimeout(() => {
+      if (!this.isGotoToBeAssignedDate && Object.keys(this.unassignedDates).length > 0) {
+        console.log(this.isGotoToBeAssignedDate);
+        const firstKey = Object.keys(this.unassignedDates)[0];
+        this.showForDate(firstKey);
+      }
+    }, 100);
   }
   async gotoDate(event) {
     this.isGotoToBeAssignedDate = true;
@@ -145,28 +148,52 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
       return null;
     }
   }
-  handleAssignUnit(event) {
-    const opt = event.detail;
-    const data = opt.data;
+  async handleAssignUnit(event) {
     event.stopImmediatePropagation();
-    event.stopPropagation();
-    if (opt.key === 'assignUnit') {
-      // this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
-      // // this.calendarData = data.calendarData; // RAJA
-      // // this.calendarData.bookingEvents.push(data.assignEvent);
-      // if (!this.data[data.selectedDate].categories[data.RT_ID].length) {
-      //   delete this.data[data.selectedDate].categories[data.RT_ID];
-      //   if (!Object.keys(this.data[data.selectedDate].categories).length) {
-      //     delete this.data[data.selectedDate];
-      //     this.orderedDatesList = this.orderedDatesList.filter(dateStamp => dateStamp != data.selectedDate);
-      //     this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
-      //   }
-      // }
-      this.reduceAvailableUnitEvent.emit({
-        key: 'reduceAvailableDays',
-        data: { selectedDate: data.selectedDate },
-      });
+    if (event.detail.key !== 'assignUnit')
+      return;
+    const assignmentDetails = event.detail.data;
+    const { selectedDate, RT_ID } = assignmentDetails;
+    const categories = this.data[selectedDate].categories;
+    this.removeEventFromCategory(assignmentDetails);
+    this.checkAndCleanEmptyCategories(assignmentDetails);
+    if (!categories[RT_ID]) {
       this.renderView();
+    }
+    else {
+      await this.updateSelectedDateCategories(assignmentDetails.selectedDate);
+      this.renderView();
+    }
+    this.emitUnitReductionEvent(assignmentDetails.selectedDate);
+  }
+  removeEventFromCategory(assignmentDetails) {
+    const { selectedDate, RT_ID, assignEvent } = assignmentDetails;
+    const categories = this.data[selectedDate].categories;
+    if (categories[RT_ID]) {
+      categories[RT_ID] = categories[RT_ID].filter(event => event.ID != assignEvent.ID);
+    }
+  }
+  emitUnitReductionEvent(selectedDate) {
+    this.reduceAvailableUnitEvent.emit({
+      key: 'reduceAvailableDays',
+      data: { selectedDate },
+    });
+  }
+  async updateSelectedDateCategories(selectedDate) {
+    if (selectedDate !== null) {
+      await this.updateCategories(selectedDate, this.calendarData);
+    }
+  }
+  checkAndCleanEmptyCategories(assignmentDetails) {
+    const { selectedDate, RT_ID } = assignmentDetails;
+    const categories = this.data[selectedDate].categories;
+    if (!categories[RT_ID]) {
+      delete categories[RT_ID];
+      if (!Object.keys(categories).length) {
+        delete this.data[selectedDate];
+        this.orderedDatesList = this.orderedDatesList.filter(date => date != selectedDate);
+        this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+      }
     }
   }
   renderView() {
@@ -184,9 +211,7 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     "calendarData": [1040],
     "showDatesList": [32],
     "renderAgain": [32],
-    "orderedDatesList": [32],
-    "isGotoToBeAssignedDate": [32],
-    "isLoading": [32]
+    "orderedDatesList": [32]
   }, [[8, "gotoToBeAssignedDate", "gotoDate"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

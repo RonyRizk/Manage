@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { T as ToBeAssignedService } from './toBeAssigned.service.js';
-import { b as dateToFormattedString } from './utils.js';
+import { d as dateToFormattedString } from './utils.js';
 import { h as hooks } from './moment.js';
 
 function transformDateFormatWithMoment(dateStr) {
@@ -64,12 +64,8 @@ const IglCalHeader = /*@__PURE__*/ proxyCustomElement(class IglCalHeader extends
     event.stopPropagation();
     // return {day, dayDisplayName, currentDate, tobeAssignedCount: dates[currentDate]};
     if (opt.key === 'reduceAvailableDays') {
-      this.calendarData.days.find(day => {
-        if (day.currentDate === parseInt(data.selectedDate)) {
-          day.tobeAssignedCount--;
-          return true;
-        }
-      });
+      const selectedDate = hooks(+data.selectedDate).format('D_M_YYYY');
+      this.unassignedRoomsNumber[selectedDate] = this.unassignedRoomsNumber[selectedDate] - 1;
       this.renderView();
     }
   }

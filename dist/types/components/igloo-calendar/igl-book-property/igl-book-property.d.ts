@@ -31,7 +31,10 @@ export declare class IglBookProperty {
   closeBookingWindow: EventEmitter<{
     [key: string]: any;
   }>;
-  bookingCreated: EventEmitter<RoomBookingDetails[]>;
+  bookingCreated: EventEmitter<{
+    pool?: string;
+    data: RoomBookingDetails[];
+  }>;
   blockedCreated: EventEmitter<RoomBlockDetails>;
   private PAGE_ZERO;
   private PAGE_ONE;

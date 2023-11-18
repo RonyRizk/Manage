@@ -87,6 +87,6 @@ function convertDMYToISO(date) {
   return dateObj.format('YYYY-MM-DD');
 }
 
-export { convertDateToTime as a, dateToFormattedString as b, convertDateToCustomFormat as c, dateDifference as d, getCurrencySymbol as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, convertDMYToISO as i, computeEndDate as j };
+export { convertDateToTime as a, dateDifference as b, convertDateToCustomFormat as c, dateToFormattedString as d, getCurrencySymbol as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, convertDMYToISO as i, computeEndDate as j };
 
 //# sourceMappingURL=utils.js.map

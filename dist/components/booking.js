@@ -1,7 +1,8 @@
-import moment from "moment";
-import { dateDifference } from "./utils";
-import axios from "axios";
-export async function getMyBookings(months) {
+import { h as hooks } from './moment.js';
+import { b as dateDifference } from './utils.js';
+import { a as axios } from './axios.js';
+
+async function getMyBookings(months) {
   const myBookings = [];
   const stayStatus = await getStayStatus();
   for (const month of months) {
@@ -140,7 +141,7 @@ function addOrUpdateBooking(cell, myBookings, stayStatus) {
     myBookings[index] = updatedData;
   }
 }
-export function transformNewBooking(data) {
+function transformNewBooking(data) {
   let bookings = [];
   data.rooms.forEach(room => {
     var _a;
@@ -182,7 +183,7 @@ export function transformNewBooking(data) {
   });
   return bookings;
 }
-export async function transformNewBLockedRooms(data) {
+async function transformNewBLockedRooms(data) {
   const stayStatus = await getStayStatus();
   return {
     ID: data.POOL,
@@ -207,9 +208,12 @@ export async function transformNewBLockedRooms(data) {
   };
 }
 function calculateDaysBetweenDates(from_date, to_date) {
-  const startDate = moment(from_date, 'YYYY-MM-DD');
-  const endDate = moment(to_date, 'YYYY-MM-DD');
+  const startDate = hooks(from_date, 'YYYY-MM-DD');
+  const endDate = hooks(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
   return daysDiff;
 }
+
+export { transformNewBooking as a, getMyBookings as g, transformNewBLockedRooms as t };
+
 //# sourceMappingURL=booking.js.map

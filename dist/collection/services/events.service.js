@@ -7,18 +7,18 @@ export class EventsService {
   }
   async reallocateEvent(pool, destination_pr_id, from_date, to_date) {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
         console.log(pool, destination_pr_id, from_date, to_date);
         const { data } = await axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date });
-        if (data.ExceptionMsg !== "") {
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         console.log(data);
         return data;
       }
       else {
-        throw new Error("Invalid Token");
+        throw new Error('Invalid Token');
       }
     }
     catch (error) {
@@ -28,18 +28,18 @@ export class EventsService {
   }
   async deleteEvent(POOL) {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
         const { data } = await axios.post(`/UnBlock_Exposed_Unit?Ticket=${token}`, {
           POOL,
         });
-        if (data.ExceptionMsg !== "") {
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         return data.My_Result;
       }
       else {
-        throw new Error("Invalid Token");
+        throw new Error('Invalid Token');
       }
     }
     catch (error) {
@@ -49,18 +49,15 @@ export class EventsService {
   }
   async updateBlockedEvent(bookingEvent) {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
         const releaseData = getReleaseHoursString(+bookingEvent.RELEASE_AFTER_HOURS);
         await this.deleteEvent(bookingEvent.POOL);
-        await this.bookingService.blockUnit(Object.assign({ from_date: this.formatDate(bookingEvent.FROM_DATE), to_date: this.formatDate(bookingEvent.TO_DATE), pr_id: bookingEvent.PR_ID, STAY_STATUS_CODE: bookingEvent.OUT_OF_SERVICE
-            ? "004"
-            : bookingEvent.RELEASE_AFTER_HOURS === 0
-              ? "002"
-              : "003", DESCRIPTION: bookingEvent.RELEASE_AFTER_HOURS || "", NOTES: bookingEvent.OPTIONAL_REASON || "" }, releaseData));
+        const result = await this.bookingService.blockUnit(Object.assign({ from_date: this.formatDate(bookingEvent.FROM_DATE), to_date: this.formatDate(bookingEvent.TO_DATE), pr_id: bookingEvent.PR_ID, STAY_STATUS_CODE: bookingEvent.OUT_OF_SERVICE ? '004' : bookingEvent.RELEASE_AFTER_HOURS === 0 ? '002' : '003', DESCRIPTION: bookingEvent.RELEASE_AFTER_HOURS || '', NOTES: bookingEvent.OPTIONAL_REASON || '' }, releaseData));
+        return result;
       }
       else {
-        throw new Error("Invalid Token");
+        throw new Error('Invalid Token');
       }
     }
     catch (error) {
@@ -69,7 +66,7 @@ export class EventsService {
     }
   }
   formatDate(date) {
-    return date.split("/").join("-");
+    return date.split('/').join('-');
   }
 }
 //# sourceMappingURL=events.service.js.map

@@ -48,10 +48,14 @@ export declare class IglooCalendar {
   getLocalizedMonth(date: any, locale?: string): string;
   getDateStr(date: any, locale?: string): string;
   scrollToElement(goToDate: any): void;
-  onBookingCreation(event: CustomEvent<RoomBookingDetails[]>): void;
+  onBookingCreation(event: CustomEvent<{
+    pool?: string;
+    data: RoomBookingDetails[];
+  }>): void;
   onBlockCreation(event: CustomEvent<RoomBlockDetails>): void;
   private transformDateForScroll;
   scrollPageToRoom(event: CustomEvent): void;
+  handleBookingDatasChange(event: CustomEvent): void;
   shouldRenderCalendarView(): any;
   onOptionSelect(event: CustomEvent<{
     [key: string]: any;

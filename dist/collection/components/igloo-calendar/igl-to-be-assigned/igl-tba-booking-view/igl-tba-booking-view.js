@@ -1,15 +1,12 @@
 import { Host, h } from "@stencil/core";
 import { ToBeAssignedService } from "../../../../services/toBeAssigned.service";
 import { v4 } from "uuid";
-import { BookingService } from "../../../../services/booking.service";
 import { transformNewBooking } from "../../../../utils/booking";
-// import $ from 'jquery';
 export class IglTbaBookingView {
   constructor() {
     this.highlightSection = false;
     this.allRoomsList = [];
     this.toBeAssignedService = new ToBeAssignedService();
-    this.bookingService = new BookingService();
     this.calendarData = undefined;
     this.selectedDate = undefined;
     this.eventData = {};
@@ -49,29 +46,20 @@ export class IglTbaBookingView {
       }, 100);
     }
   }
-  // initializeToolTips(){
-  // console.log($(this.element));
-  // console.log($('[data-toggle="tooltip"]'))
-  // console.log($(this.element + ' [data-toggle="tooltip"]'));
-  // $('[data-toggle="tooltip"]').tooltip({
-  //   container: 'body'
-  // });
-  // }
-  //
   async handleAssignUnit(event) {
     try {
       event.stopImmediatePropagation();
       event.stopPropagation();
       if (this.selectedRoom) {
-        await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
-        const booking = await this.bookingService.getExoposedBooking(this.eventData.BOOKING_NUMBER, 'en');
-        let assignEvent = transformNewBooking(booking);
-        const newEvent = Object.assign(Object.assign({}, this.eventData), assignEvent[0]);
-        this.calendarData.bookingEvents.push(newEvent);
+        const result = await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
+        let assignEvent = transformNewBooking(result);
+        const newEvent = Object.assign(Object.assign(Object.assign({}, this.eventData), assignEvent[0]), { ID: this.eventData.ID });
+        console.log(newEvent);
+        //this.calendarData.bookingEvents.push(newEvent);
         //console.log(newEvent);
         this.addToBeAssignedEvent.emit({
           key: 'tobeAssignedEvents',
-          data: [newEvent],
+          data: [assignEvent[0]],
         });
         this.assignRoomEvent.emit({ key: 'assignRoom', data: newEvent });
       }

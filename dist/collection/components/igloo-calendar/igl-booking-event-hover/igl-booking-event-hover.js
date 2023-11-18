@@ -1,6 +1,7 @@
 import { Host, h } from "@stencil/core";
 import { findCountry, getCurrencySymbol } from "../../../utils/utils";
 import { EventsService } from "../../../services/events.service";
+import { transformNewBLockedRooms } from "../../../utils/booking";
 export class IglBookingEventHover {
   constructor() {
     this.todayTimeStamp = new Date().setHours(0, 0, 0, 0);
@@ -28,7 +29,7 @@ export class IglBookingEventHover {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
   }
   renderPhone() {
-    return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct ? this.getPhoneCode() + "-" : ""}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
+    return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct ? this.getPhoneCode() + '-' : ''}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
   }
   getGuestNote() {
     return this.bookingEvent.NOTES;
@@ -166,7 +167,9 @@ export class IglBookingEventHover {
   async handleUpdateBlockedDates() {
     try {
       this.isLoading = 'update';
-      await this.eventService.updateBlockedEvent(this.bookingEvent);
+      const result = await this.eventService.updateBlockedEvent(this.bookingEvent);
+      const blockedUnit = await transformNewBLockedRooms(result);
+      this.bookingCreated.emit({ pool: this.bookingEvent.POOL, data: [blockedUnit] });
       this.hideBubbleInfo.emit({
         key: 'hidebubble',
         currentInfoBubbleId: this.getBookingId(),
@@ -401,6 +404,21 @@ export class IglBookingEventHover {
         "complexType": {
           "original": "string",
           "resolved": "string",
+          "references": {}
+        }
+      }, {
+        "method": "bookingCreated",
+        "name": "bookingCreated",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "{ pool?: string; data: any[] }",
+          "resolved": "{ pool?: string; data: any[]; }",
           "references": {}
         }
       }];

@@ -24,7 +24,6 @@ export declare class IglTbaBookingView {
   private highlightSection;
   private allRoomsList;
   private toBeAssignedService;
-  private bookingService;
   onSelectRoom(evt: any): void;
   componentShouldUpdate(newValue: string, oldValue: string, propName: string): boolean;
   componentWillLoad(): void;

@@ -73,8 +73,7 @@ export class IglCalBody {
     return this.calendarData.bookingEvents;
   }
   addBookingDatas(aData) {
-    this.calendarData.bookingEvents = this.calendarData.bookingEvents.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
-    this.calendarData.bookingEvents = this.calendarData.bookingEvents.concat(aData);
+    this.addBookingDatasEvent.emit(aData);
   }
   getSelectedCellRefName(roomId, selectedDay) {
     return 'room_' + roomId + '_' + selectedDay.currentDate;
@@ -212,7 +211,7 @@ export class IglCalBody {
     if (this.getTotalPhysicalRooms(roomCategory) <= 1) {
       return null;
     }
-    return (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`, onClick: () => this.toggleCategory(roomCategory) }, h("div", { class: "categoryName" }, this.getCategoryName(roomCategory)), " ", h("i", { class: `la la-angle-${roomCategory.expanded ? 'down' : 'right'}` })), this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)));
+    return (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`, onClick: () => this.toggleCategory(roomCategory) }, h("div", { class: 'categoryName' }, this.getCategoryName(roomCategory)), " ", h("i", { class: `la la-angle-${roomCategory.expanded ? 'down' : 'right'}` })), this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)));
   }
   getRoomsByCategory(roomCategory) {
     var _a;
@@ -367,6 +366,21 @@ export class IglCalBody {
         "complexType": {
           "original": "any",
           "resolved": "any",
+          "references": {}
+        }
+      }, {
+        "method": "addBookingDatasEvent",
+        "name": "addBookingDatasEvent",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "any[]",
+          "resolved": "any[]",
           "references": {}
         }
       }];
