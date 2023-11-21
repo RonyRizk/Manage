@@ -15,6 +15,7 @@ export declare class IglCalHeader {
   };
   today: String;
   propertyid: number;
+  unassignedDates: {};
   to_date: string;
   renderAgain: boolean;
   unassignedRoomsNumber: any;
@@ -23,6 +24,7 @@ export declare class IglCalHeader {
   private roomsList;
   private toBeAssignedService;
   componentWillLoad(): void;
+  handleCalendarDataChanged(): void;
   private initializeRoomsList;
   private fetchAndAssignUnassignedRooms;
   private assignRoomsToDate;

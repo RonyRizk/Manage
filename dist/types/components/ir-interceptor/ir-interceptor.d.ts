@@ -1,11 +1,9 @@
 export declare class IrInterceptor {
   isShown: boolean;
   isLoading: boolean;
-  isSuccess: boolean;
   isUnassignedUnit: boolean;
   defaultMessage: {
     loadingMessage: string;
-    successMessage: string;
     errorMessage: string;
   };
   handledEndpoints: string[];

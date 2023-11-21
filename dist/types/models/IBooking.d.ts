@@ -27,6 +27,7 @@ export default interface IBooking {
   RATE_TYPE?: number;
 }
 export type STATUS = 'IN-HOUSE' | 'CONFIRMED' | 'PENDING-CONFIRMATION' | 'SPLIT-UNIT' | 'CHECKED-IN' | 'CHECKED-OUT' | 'BLOCKED' | 'BLOCKED-WITH-DATES' | 'NOTES' | 'OUTSTANDING-BALANCE';
+export type bookingReasons = 'DORESERVATION' | 'BLOCK_EXPOSED_UNIT' | 'REALLOCATE_EXPOSED_ROOM_BLOCK' | 'ASSIGN_EXPOSED_ROOM' | 'REALLOCATE_EXPOSED_ROOM_BOOK' | 'UNBLOCK_EXPOSED_UNIT' | 'DELETE_CALENDAR_POOL';
 export interface ICountry {
   cities: string[];
   id: number;

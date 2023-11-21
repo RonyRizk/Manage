@@ -1,5 +1,4 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { RoomBlockDetails, RoomBookingDetails } from '../../models/IBooking';
 export declare class IglooCalendar {
   propertyid: number;
   from_date: string;
@@ -25,6 +24,7 @@ export declare class IglooCalendar {
   showLegend: boolean;
   showPaymentDetails: boolean;
   showToBeAssigned: boolean;
+  unassignedDates: {};
   private bookingService;
   private countryNodeList;
   private visibleCalendarCells;
@@ -33,11 +33,14 @@ export declare class IglooCalendar {
   private roomService;
   private eventsService;
   private toBeAssignedService;
-  ticketChanged(): Promise<void>;
-  componentWillLoad(): Promise<void>;
+  private socket;
+  private reachedEndOfCalendar;
+  ticketChanged(): void;
+  componentWillLoad(): void;
   initializeApp(): void;
   componentDidLoad(): void;
-  handledeleteEvent(ev: CustomEvent): Promise<void>;
+  handleDeleteEvent(ev: CustomEvent): Promise<void>;
+  checkBookingAvailability(data: any): any;
   updateBookingEventsDateRange(eventData: any): void;
   setRoomsData(roomServiceResp: any): void;
   getLegendData(aData: any): any;
@@ -47,12 +50,9 @@ export declare class IglooCalendar {
   getLocalizedDayOfWeek(date: any, locale: any): any;
   getLocalizedMonth(date: any, locale?: string): string;
   getDateStr(date: any, locale?: string): string;
+  addNextTwoMonthsToCalendar(): Promise<void>;
   scrollToElement(goToDate: any): void;
-  onBookingCreation(event: CustomEvent<{
-    pool?: string;
-    data: RoomBookingDetails[];
-  }>): void;
-  onBlockCreation(event: CustomEvent<RoomBlockDetails>): void;
+  private AddOrUpdateRoomBookings;
   private transformDateForScroll;
   scrollPageToRoom(event: CustomEvent): void;
   handleBookingDatasChange(event: CustomEvent): void;
