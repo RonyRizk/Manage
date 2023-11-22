@@ -6942,9 +6942,9 @@ const IglooCalendar = class {
       }
     });
     this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: bookings });
-    setTimeout(() => {
-      this.scrollToElement(this.transformDateForScroll(new Date(data[0].FROM_DATE)));
-    }, 200);
+    // setTimeout(() => {
+    //   this.scrollToElement(this.transformDateForScroll(new Date(data[0].FROM_DATE)));
+    // }, 200);
   }
   // @Listen('bookingCreated')
   // onBookingCreation(event: CustomEvent<{ pool?: string; data: RoomBookingDetails[] }>) {
