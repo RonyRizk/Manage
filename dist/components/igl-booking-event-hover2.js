@@ -129,7 +129,7 @@ const IglBookingEventHover = /*@__PURE__*/ proxyCustomElement(class IglBookingEv
   }
   handleEditBooking() {
     // console.log("Edit booking");
-    this.bookingEvent.TITLE = 'Edit Room';
+    this.bookingEvent.TITLE = 'Edit Room for';
     this.handleBookingOption('EDIT_BOOKING');
   }
   getStringDateFormat(dt) {
@@ -213,12 +213,13 @@ const IglBookingEventHover = /*@__PURE__*/ proxyCustomElement(class IglBookingEv
     const roomInfo = this.getRoomInfo();
     let data = roomData ? roomData : this.bookingEvent;
     data.event_type = eventType;
+    data.TITLE = eventType === 'EDIT_BOOKING' ? `Edit Booking for ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}` : `New Booking for ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
     if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
       data.roomsInfo = [roomInfo.ROOMS_INFO];
     }
     this.showBookingPopup.emit({
       key: 'add',
-      data: Object.assign(Object.assign({}, data), { TITLE: `New Booking for ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}` }),
+      data: Object.assign({}, data),
     });
     this.hideBubbleInfo.emit({
       key: 'hidebubble',

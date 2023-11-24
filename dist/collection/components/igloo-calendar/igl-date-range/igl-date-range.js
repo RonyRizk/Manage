@@ -1,21 +1,16 @@
-import { Host, h, } from "@stencil/core";
+import { Host, h } from "@stencil/core";
 export class IglDateRange {
   constructor() {
     this.totalNights = 0;
-    this.fromDateStr = "from";
-    this.toDateStr = "to";
-    this.message = "";
+    this.fromDateStr = 'from';
+    this.toDateStr = 'to';
+    this.message = '';
     this.defaultData = undefined;
+    this.disabled = false;
     this.renderAgain = false;
   }
   getStringDateFormat(dt) {
-    return (dt.getFullYear() +
-      "-" +
-      (dt.getMonth() < 9 ? "0" : "") +
-      (dt.getMonth() + 1) +
-      "-" +
-      (dt.getDate() <= 9 ? "0" : "") +
-      dt.getDate());
+    return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
   componentWillLoad() {
     let dt = new Date();
@@ -35,7 +30,7 @@ export class IglDateRange {
     }
     if (this.fromDate && this.toDate) {
       this.calculateTotalNights();
-      this.handleDateSelectEvent("selectedDateRange", {
+      this.handleDateSelectEvent('selectedDateRange', {
         fromDate: this.fromDate.getTime(),
         toDate: this.toDate.getTime(),
         fromDateStr: this.fromDateStr,
@@ -48,13 +43,9 @@ export class IglDateRange {
     this.totalNights = Math.floor((this.toDate.getTime() - this.fromDate.getTime()) / 86400000);
   }
   getFormattedDateString(dt) {
-    return (dt.getDate() +
-      " " +
-      dt.toLocaleString("default", { month: "short" }).toLowerCase() +
-      " " +
-      dt.getFullYear());
+    return dt.getDate() + ' ' + dt.toLocaleString('default', { month: 'short' }).toLowerCase() + ' ' + dt.getFullYear();
   }
-  handleDateSelectEvent(key, data = "") {
+  handleDateSelectEvent(key, data = '') {
     this.dateSelectEvent.emit({ key, data });
   }
   handleDateChange(evt) {
@@ -62,20 +53,19 @@ export class IglDateRange {
     this.fromDate = start.toDate();
     this.toDate = end.toDate();
     this.calculateTotalNights();
-    this.handleDateSelectEvent("selectedDateRange", {
+    this.handleDateSelectEvent('selectedDateRange', {
       fromDate: this.fromDate.getTime(),
       toDate: this.toDate.getTime(),
-      fromDateStr: start.format("DD MMM YYYY"),
-      toDateStr: end.format("DD MMM YYYY"),
+      fromDateStr: start.format('DD MMM YYYY'),
+      toDateStr: end.format('DD MMM YYYY'),
       dateDifference: this.totalNights,
     });
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0" }, h("h5", { class: "dateRangeLabel" }, "Dates"), h("div", { class: "iglRangePicker" }, h("ir-date-picker", { fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: (evt) => {
+    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0" }, h("h5", { class: "dateRangeLabel" }, "Dates"), h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
-      } }), this.totalNights ? (h("span", { class: "iglRangeNights" }, this.totalNights +
-      (this.totalNights > 1 ? " nights" : " night"))) : (""))), h("div", { class: "taxMessage display-inline" }, this.message)));
+      } }), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : '')), h("div", { class: "taxMessage display-inline" }, this.message)));
   }
   static get is() { return "igl-date-range"; }
   static get encapsulation() { return "scoped"; }
@@ -107,7 +97,7 @@ export class IglDateRange {
         },
         "attribute": "message",
         "reflect": true,
-        "defaultValue": "\"\""
+        "defaultValue": "''"
       },
       "defaultData": {
         "type": "unknown",
@@ -123,6 +113,24 @@ export class IglDateRange {
           "tags": [],
           "text": ""
         }
+      },
+      "disabled": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "disabled",
+        "reflect": true,
+        "defaultValue": "false"
       }
     };
   }

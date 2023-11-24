@@ -16,6 +16,7 @@ export declare class BookingService {
   getUserInfo(email: string): Promise<any>;
   getExoposedBooking(booking_nbr: string, language: string): Promise<Booking>;
   private generateDays;
+  private calculateTotalRate;
   bookUser(bookedByInfoData: any, check_in: boolean, fromDate: Date, toDate: Date, guestData: any, totalNights: number, source: {
     code: string;
     description: string;

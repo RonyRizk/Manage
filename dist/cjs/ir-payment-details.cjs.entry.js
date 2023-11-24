@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-7a63c2a9.js');
+const index = require('./index-79158a29.js');
 const functions = require('./functions-8f682f69.js');
 require('./moment-f96595e5.js');
 
@@ -25,8 +25,8 @@ const IrPaymentDetails = class {
     this.flag = false;
     this.confirmModal = false;
     this.toBeDeletedItem = {};
-    this.paymentDetailsUrl = "";
-    this.paymentExceptionMessage = "";
+    this.paymentDetailsUrl = '';
+    this.paymentExceptionMessage = '';
   }
   _handleSave() {
     var _a;
@@ -54,7 +54,7 @@ const IrPaymentDetails = class {
     this.toBeDeletedItem = {};
   }
   wandler() {
-    console.log("Changed");
+    console.log('Changed');
     this.flag = !this.flag;
   }
   _renderTableRow(item, rowMode = 'normal') {
@@ -102,7 +102,7 @@ const IrPaymentDetails = class {
       } })), index.h("div", { class: "collapse guarrantee" }, this.item.IS_DIRECT ? ([
       index.h("div", null, ((_b = (_a = this.item) === null || _a === void 0 ? void 0 : _a.My_Guest) === null || _b === void 0 ? void 0 : _b.CCN) && 'Card:', " ", index.h("span", null, ((_d = (_c = this.item) === null || _c === void 0 ? void 0 : _c.My_Guest) === null || _d === void 0 ? void 0 : _d.CCN) || ''), " ", ((_f = (_e = this.item) === null || _e === void 0 ? void 0 : _e.My_Guest) === null || _f === void 0 ? void 0 : _f.CC_EXP_MONTH) && 'Expiry: ', index.h("span", null, ' ', ((_h = (_g = this.item) === null || _g === void 0 ? void 0 : _g.My_Guest) === null || _h === void 0 ? void 0 : _h.CC_EXP_MONTH) || '', " ", ((_k = (_j = this.item) === null || _j === void 0 ? void 0 : _j.My_Guest) === null || _k === void 0 ? void 0 : _k.CC_EXP_YEAR) && '/' + ((_m = (_l = this.item) === null || _l === void 0 ? void 0 : _l.My_Guest) === null || _m === void 0 ? void 0 : _m.CC_EXP_YEAR))),
       index.h("div", null, ((_p = (_o = this.item) === null || _o === void 0 ? void 0 : _o.My_Guest) === null || _p === void 0 ? void 0 : _p.CHN) && 'Name:', " ", index.h("span", null, ((_r = (_q = this.item) === null || _q === void 0 ? void 0 : _q.My_Guest) === null || _r === void 0 ? void 0 : _r.CHN) || ''), " ", ((_t = (_s = this.item) === null || _s === void 0 ? void 0 : _s.My_Guest) === null || _t === void 0 ? void 0 : _t.CVC) && '- CVC:', ' ', index.h("span", null, " ", ((_u = this.item.My_Guest) === null || _u === void 0 ? void 0 : _u.CVC) || '')),
-    ]) : this.paymentDetailsUrl ? (index.h("iframe", { src: this.paymentDetailsUrl, width: "100%", class: 'iframeHeight', frameborder: "0" })) : (index.h("div", { class: "text-center" }, this.paymentExceptionMessage)))));
+    ]) : this.paymentDetailsUrl ? (index.h("iframe", { src: this.paymentDetailsUrl, width: "100%", class: "iframeHeight", frameborder: "0" })) : (index.h("div", { class: "text-center" }, this.paymentExceptionMessage)))));
   }
   _renderDueDate(item) {
     return (index.h("div", { class: "fluid-container" }, index.h("div", { class: "row mb-1" }, index.h("div", { class: "col-xl-3 col-lg-4 col-md-2 col-sm-3 col-4 pr-0" }, functions._formatDate(item.Date)), index.h("div", { class: "col-1 d-flex px-0 justify-content-end" }, functions._formatAmount(item.Amount, this.item.My_Currency.REF)), index.h("div", { class: "col-xl-3 col-lg-4 col-md-3 col-sm-3 col-4" }, item.Description), index.h("span", { class: "ml-1 col-12 font-size-small collapse roomName" }, item.Room))));
@@ -110,7 +110,7 @@ const IrPaymentDetails = class {
   render() {
     var _a, _b;
     if (!this.item) {
-      return index.h("div", null);
+      return null;
     }
     return [
       index.h("div", { class: "card" }, index.h("div", { class: "p-1" }, index.h("div", { class: "mb-2 h4" }, "Due Balance: ", index.h("span", { class: "danger font-weight-bold" }, functions._formatAmount(this.item.DUE_AMOUNT, this.item.My_Currency.REF))), (this.item.My_Ac.AC_PAYMENT_OPTION_CODE == '001' || this.item.My_Ac.AC_PAYMENT_OPTION_CODE == '004' || this.item.IS_CHM_SOURCE || this.item.IS_DIRECT) &&

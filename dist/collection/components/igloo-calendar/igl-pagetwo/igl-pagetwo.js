@@ -23,6 +23,12 @@ export class IglPagetwo {
   initializeGuestData() {
     let total = 0;
     const newSelectedUnits = Object.assign({}, this.selectedUnits);
+    const getRate = (rate, totalNights, isRateModified, preference) => {
+      if (isRateModified && preference === 2) {
+        return rate * totalNights;
+      }
+      return rate;
+    };
     for (const key in this.selectedRooms) {
       for (const prop in this.selectedRooms[key]) {
         const totalRooms = this.selectedRooms[key][prop].totalRooms;
@@ -36,7 +42,9 @@ export class IglPagetwo {
         for (let i = 1; i <= this.selectedRooms[key][prop].totalRooms; i++) {
           this.guestData.push(Object.assign({ guestName: '', roomId: '', preference: '' }, this.selectedRooms[key][prop]));
         }
-        total += this.selectedRooms[key][prop].totalRooms * this.selectedRooms[key][prop].rate;
+        total +=
+          this.selectedRooms[key][prop].totalRooms *
+            getRate(this.selectedRooms[key][prop].rate, this.dateRangeData.dateDifference, this.selectedRooms[key][prop].isRateModified, this.selectedRooms[key][prop].rateType);
       }
     }
     this.bookingData.TOTAL_PRICE = total;
@@ -88,10 +96,10 @@ export class IglPagetwo {
       if (property === this.selectedGuestData) {
         return this.isGuestDataIncomplete();
       }
-      const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
-      if (!this.showPaymentDetails && isCardDetails) {
-        return false;
-      }
+      // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
+      // if (!this.showPaymentDetails && isCardDetails) {
+      //   return false;
+      // }
       return property[key] === comparedBy || property[key] === undefined;
     };
     return (this.isLoading === key ||
@@ -102,11 +110,12 @@ export class IglPagetwo {
       isValidProperty(this.selectedBookedByData, 'lastName', '') ||
       isValidProperty(this.selectedBookedByData, 'countryId', -1) ||
       isValidProperty(this.selectedBookedByData, 'selectedArrivalTime', '') ||
-      isValidProperty(this.selectedBookedByData, 'email', '') ||
-      isValidProperty(this.selectedBookedByData, 'cardNumber', '') ||
-      isValidProperty(this.selectedBookedByData, 'cardHolderName', '') ||
-      isValidProperty(this.selectedBookedByData, 'expiryMonth', '') ||
-      isValidProperty(this.selectedBookedByData, 'expiryYear', ''));
+      isValidProperty(this.selectedBookedByData, 'email', '')
+    // isValidProperty(this.selectedBookedByData, 'cardNumber', '') ||
+    // isValidProperty(this.selectedBookedByData, 'cardHolderName', '') ||
+    // isValidProperty(this.selectedBookedByData, 'expiryMonth', '') ||
+    // isValidProperty(this.selectedBookedByData, 'expiryYear', '')
+    );
   }
   render() {
     return (h(Host, { class: "scrollContent" }, h("div", { class: "row" }, h("div", { class: "col-6 text-left p-0" }, h("span", { class: "mr-1 font-weight-bold font-medium-1" }, this.dateRangeData.fromDateStr, " - ", this.dateRangeData.toDateStr), this.dateRangeData.dateDifference, " nights"), h("div", { class: "col-6 text-right" }, "Total price ", h("span", { class: "font-weight-bold font-medium-1" }, '$' + this.bookingData.TOTAL_PRICE || '$0.00'))), this.guestData.map((roomInfo, index) => (h("igl-application-info", { bedPreferenceType: this.bedPreferenceType, index: index, selectedUnits: this.selectedUnits[`c_${roomInfo.roomCategoryId}`], guestInfo: roomInfo, guestRefKey: index, bookingType: this.bookingData.event_type, roomsList: this.getRoomsListFromCategoryId(roomInfo.roomCategoryId), onDataUpdateEvent: event => 

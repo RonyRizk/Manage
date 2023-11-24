@@ -228,6 +228,12 @@ export class BookingService {
     }
     return days;
   }
+  calculateTotalRate(rate, totalNights, isRateModified, preference) {
+    if (isRateModified && preference === 2) {
+      return +rate;
+    }
+    return +rate / +totalNights;
+  }
   async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
@@ -300,7 +306,7 @@ export class BookingService {
               from_date: fromDateStr,
               to_date: toDateStr,
               notes: null,
-              days: this.generateDays(fromDateStr, toDateStr, +data.rate / totalNights),
+              days: this.generateDays(fromDateStr, toDateStr, this.calculateTotalRate(data.rate, totalNights, data.isRateModified, data.rateType)),
               guest: {
                 email: null,
                 first_name: data.guestName,

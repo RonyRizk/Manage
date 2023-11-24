@@ -1,9 +1,10 @@
-import { EventEmitter } from "../../../stencil-public-runtime";
+import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IglDateRange {
   message: string;
   defaultData: {
     [key: string]: any;
   };
+  disabled: boolean;
   dateSelectEvent: EventEmitter<{
     [key: string]: any;
   }>;

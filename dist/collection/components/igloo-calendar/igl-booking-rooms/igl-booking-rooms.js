@@ -1,10 +1,10 @@
-import { Host, h, } from "@stencil/core";
+import { Host, h } from "@stencil/core";
 export class IglBookingRooms {
   constructor() {
-    this.validBookingTypes = ["PLUS_BOOKING", "ADD_ROOM", "EDIT_BOOKING"];
+    this.validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
     this.roomTypeData = undefined;
     this.defaultData = undefined;
-    this.bookingType = "PLUS_BOOKING";
+    this.bookingType = 'PLUS_BOOKING';
     this.dateDifference = undefined;
     this.ratePricingMode = [];
     this.currency = undefined;
@@ -13,18 +13,23 @@ export class IglBookingRooms {
   }
   componentWillLoad() {
     this.totalRooms = this.roomTypeData.physicalrooms.length;
-    this.selectedRooms = new Array(this.totalRooms).fill(0);
-    this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
+    if (!this.selectedRooms.length) {
+      this.selectedRooms = new Array(this.totalRooms).fill(0);
+    }
+    if (!this.roomsDistributions.length) {
+      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
+    }
   }
   onRoomDataUpdate(event, index) {
     event.stopImmediatePropagation();
-    event.stopPropagation();
     const opt = event.detail;
     let data = Object.assign({}, opt.data);
-    if (opt.changedKey === "totalRooms") {
+    if (opt.changedKey === 'totalRooms') {
       let newValue = data.totalRooms;
-      this.selectedRooms[index] = newValue;
-      this.updateRatePlanTotalRooms(index);
+      if (this.selectedRooms[index] !== newValue) {
+        this.selectedRooms[index] = newValue;
+        this.updateRatePlanTotalRooms(index);
+      }
     }
     data.roomCategoryId = this.roomTypeData.id;
     data.roomCategoryName = this.roomTypeData.name;
@@ -36,25 +41,26 @@ export class IglBookingRooms {
     });
   }
   updateRatePlanTotalRooms(ratePlanIndex) {
-    const calculateTotalSelectedRoomsExcludingIndex = (excludedIndex) => {
+    const calculateTotalSelectedRoomsExcludingIndex = excludedIndex => {
       return this.selectedRooms.reduce((acc, rooms, idx) => (idx !== excludedIndex ? acc + rooms : acc), 0);
     };
-    this.roomsDistributions = this.roomsDistributions.map((ratePlan, index) => {
+    const newRoomsDistributions = this.selectedRooms.map((_, index) => {
       if (index === ratePlanIndex) {
-        return ratePlan;
+        return this.roomsDistributions[index];
       }
       const totalSelectedRoomsExcludingCurrent = calculateTotalSelectedRoomsExcludingIndex(index);
       const availableRooms = this.totalRooms - totalSelectedRoomsExcludingCurrent;
       return availableRooms > 0 ? availableRooms : 0;
     });
+    if (JSON.stringify(this.roomsDistributions) !== JSON.stringify(newRoomsDistributions)) {
+      this.roomsDistributions = newRoomsDistributions;
+    }
   }
   render() {
-    return (h(Host, null, this.validBookingTypes.includes(this.bookingType) && (h("div", { class: "font-weight-bold font-medium-1" }, this.roomTypeData.name)), this.roomTypeData.rateplans.map((ratePlan, index) => {
+    const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
+    return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
       if (ratePlan.variations !== null) {
-        return (h("igl-booking-room-rate-plan", { ratePricingMode: this.ratePricingMode, class: this.validBookingTypes.includes(this.bookingType)
-            ? "ml-1"
-            : "", currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData["p_" + ratePlan.id]) ||
-            null, onDataUpdateEvent: (evt) => this.onRoomDataUpdate(evt, index) }));
+        return (h("igl-booking-room-rate-plan", { key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? 'ml-1' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData['p_' + ratePlan.id]) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
       }
       else {
         return null;
@@ -121,7 +127,7 @@ export class IglBookingRooms {
         },
         "attribute": "booking-type",
         "reflect": false,
-        "defaultValue": "\"PLUS_BOOKING\""
+        "defaultValue": "'PLUS_BOOKING'"
       },
       "dateDifference": {
         "type": "number",

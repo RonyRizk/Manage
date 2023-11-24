@@ -1,4 +1,4 @@
-import { h, } from "@stencil/core";
+import { h } from "@stencil/core";
 import moment from "moment";
 export class IrDatePicker {
   constructor() {
@@ -7,43 +7,23 @@ export class IrDatePicker {
     this.opens = undefined;
     this.autoApply = undefined;
     this.firstDay = 1;
-    this.monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    this.daysOfWeek = [
-      "Su",
-      "Mo",
-      "Tu",
-      "We",
-      "Th",
-      "Fr",
-      "Sa",
-    ];
-    this.format = "MMM DD,YYYY";
-    this.separator = "-";
-    this.applyLabel = "Apply";
-    this.cancelLabel = "Cancel";
-    this.fromLabel = "Form";
-    this.toLabel = "To";
-    this.customRangeLabel = "Custom";
-    this.weekLabel = "W";
+    this.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    this.daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    this.format = 'MMM DD,YYYY';
+    this.separator = '-';
+    this.applyLabel = 'Apply';
+    this.cancelLabel = 'Cancel';
+    this.fromLabel = 'Form';
+    this.toLabel = 'To';
+    this.customRangeLabel = 'Custom';
+    this.weekLabel = 'W';
+    this.disabled = false;
     this.maxSpan = {
       days: 240,
     };
   }
   componentDidLoad() {
-    this.dateRangeInput = this.element.querySelector(".date-range-input");
+    this.dateRangeInput = this.element.querySelector('.date-range-input');
     $(this.dateRangeInput).daterangepicker({
       opens: this.opens,
       startDate: moment(this.fromDate),
@@ -68,7 +48,7 @@ export class IrDatePicker {
     });
   }
   render() {
-    return h("input", { class: "date-range-input", type: "text" });
+    return h("input", { class: "date-range-input", type: "text", disabled: this.disabled });
   }
   static get is() { return "ir-date-picker"; }
   static get encapsulation() { return "scoped"; }
@@ -128,7 +108,7 @@ export class IrDatePicker {
         "type": "string",
         "mutable": false,
         "complexType": {
-          "original": "\"left\" | \"right\" | \"center\"",
+          "original": "'left' | 'right' | 'center'",
           "resolved": "\"center\" | \"left\" | \"right\"",
           "references": {}
         },
@@ -190,7 +170,7 @@ export class IrDatePicker {
           "tags": [],
           "text": ""
         },
-        "defaultValue": "[\r\n    \"January\",\r\n    \"February\",\r\n    \"March\",\r\n    \"April\",\r\n    \"May\",\r\n    \"June\",\r\n    \"July\",\r\n    \"August\",\r\n    \"September\",\r\n    \"October\",\r\n    \"November\",\r\n    \"December\",\r\n  ]"
+        "defaultValue": "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']"
       },
       "daysOfWeek": {
         "type": "unknown",
@@ -206,7 +186,7 @@ export class IrDatePicker {
           "tags": [],
           "text": ""
         },
-        "defaultValue": "[\r\n    \"Su\",\r\n    \"Mo\",\r\n    \"Tu\",\r\n    \"We\",\r\n    \"Th\",\r\n    \"Fr\",\r\n    \"Sa\",\r\n  ]"
+        "defaultValue": "['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']"
       },
       "format": {
         "type": "string",
@@ -224,7 +204,7 @@ export class IrDatePicker {
         },
         "attribute": "format",
         "reflect": true,
-        "defaultValue": "\"MMM DD,YYYY\""
+        "defaultValue": "'MMM DD,YYYY'"
       },
       "separator": {
         "type": "string",
@@ -242,7 +222,7 @@ export class IrDatePicker {
         },
         "attribute": "separator",
         "reflect": true,
-        "defaultValue": "\"-\""
+        "defaultValue": "'-'"
       },
       "applyLabel": {
         "type": "string",
@@ -260,7 +240,7 @@ export class IrDatePicker {
         },
         "attribute": "apply-label",
         "reflect": true,
-        "defaultValue": "\"Apply\""
+        "defaultValue": "'Apply'"
       },
       "cancelLabel": {
         "type": "string",
@@ -278,7 +258,7 @@ export class IrDatePicker {
         },
         "attribute": "cancel-label",
         "reflect": true,
-        "defaultValue": "\"Cancel\""
+        "defaultValue": "'Cancel'"
       },
       "fromLabel": {
         "type": "string",
@@ -296,7 +276,7 @@ export class IrDatePicker {
         },
         "attribute": "from-label",
         "reflect": true,
-        "defaultValue": "\"Form\""
+        "defaultValue": "'Form'"
       },
       "toLabel": {
         "type": "string",
@@ -314,7 +294,7 @@ export class IrDatePicker {
         },
         "attribute": "to-label",
         "reflect": true,
-        "defaultValue": "\"To\""
+        "defaultValue": "'To'"
       },
       "customRangeLabel": {
         "type": "string",
@@ -332,7 +312,7 @@ export class IrDatePicker {
         },
         "attribute": "custom-range-label",
         "reflect": true,
-        "defaultValue": "\"Custom\""
+        "defaultValue": "'Custom'"
       },
       "weekLabel": {
         "type": "string",
@@ -350,7 +330,25 @@ export class IrDatePicker {
         },
         "attribute": "week-label",
         "reflect": true,
-        "defaultValue": "\"W\""
+        "defaultValue": "'W'"
+      },
+      "disabled": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "disabled",
+        "reflect": true,
+        "defaultValue": "false"
       },
       "maxSpan": {
         "type": "any",

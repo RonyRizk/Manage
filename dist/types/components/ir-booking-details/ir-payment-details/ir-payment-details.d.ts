@@ -18,5 +18,5 @@ export declare class IrPaymentDetails {
   _renderTableRow(item: any, rowMode?: 'add' | 'normal'): any;
   bookingGuarantee(): any;
   _renderDueDate(item: any): any;
-  render(): any;
+  render(): any[];
 }

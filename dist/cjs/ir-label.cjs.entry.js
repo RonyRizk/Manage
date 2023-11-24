@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-7a63c2a9.js');
+const index = require('./index-79158a29.js');
 
 const IrLabel = class {
   constructor(hostRef) {

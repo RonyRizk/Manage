@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
 import { h as hooks } from './moment.js';
 
-const irDatePickerCss = ".date-range-input.sc-ir-date-picker{border:0;outline:0;margin:0;flex:1}.date-range-input.sc-ir-date-picker:focus{border:0;outline:0}";
+const irDatePickerCss = "input.sc-ir-date-picker{all:unset;width:100%}";
 
 const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends HTMLElement {
   constructor() {
@@ -13,43 +13,23 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     this.opens = undefined;
     this.autoApply = undefined;
     this.firstDay = 1;
-    this.monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    this.daysOfWeek = [
-      "Su",
-      "Mo",
-      "Tu",
-      "We",
-      "Th",
-      "Fr",
-      "Sa",
-    ];
-    this.format = "MMM DD,YYYY";
-    this.separator = "-";
-    this.applyLabel = "Apply";
-    this.cancelLabel = "Cancel";
-    this.fromLabel = "Form";
-    this.toLabel = "To";
-    this.customRangeLabel = "Custom";
-    this.weekLabel = "W";
+    this.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    this.daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    this.format = 'MMM DD,YYYY';
+    this.separator = '-';
+    this.applyLabel = 'Apply';
+    this.cancelLabel = 'Cancel';
+    this.fromLabel = 'Form';
+    this.toLabel = 'To';
+    this.customRangeLabel = 'Custom';
+    this.weekLabel = 'W';
+    this.disabled = false;
     this.maxSpan = {
       days: 240,
     };
   }
   componentDidLoad() {
-    this.dateRangeInput = this.element.querySelector(".date-range-input");
+    this.dateRangeInput = this.element.querySelector('.date-range-input');
     $(this.dateRangeInput).daterangepicker({
       opens: this.opens,
       startDate: hooks(this.fromDate),
@@ -74,7 +54,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     });
   }
   render() {
-    return h("input", { class: "date-range-input", type: "text" });
+    return h("input", { class: "date-range-input", type: "text", disabled: this.disabled });
   }
   get element() { return this; }
   static get style() { return irDatePickerCss; }
@@ -94,6 +74,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     "toLabel": [513, "to-label"],
     "customRangeLabel": [513, "custom-range-label"],
     "weekLabel": [513, "week-label"],
+    "disabled": [516],
     "maxSpan": [520, "max-span"]
   }]);
 function defineCustomElement() {

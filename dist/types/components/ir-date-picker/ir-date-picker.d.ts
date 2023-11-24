@@ -1,10 +1,10 @@
-import { EventEmitter } from "../../stencil-public-runtime";
-import moment from "moment";
+import { EventEmitter } from '../../stencil-public-runtime';
+import moment from 'moment';
 export declare class IrDatePicker {
   private element;
   fromDate: Date;
   toDate: Date;
-  opens: "left" | "right" | "center";
+  opens: 'left' | 'right' | 'center';
   autoApply: boolean;
   firstDay: number;
   monthNames: string[];
@@ -17,6 +17,7 @@ export declare class IrDatePicker {
   toLabel: string;
   customRangeLabel: string;
   weekLabel: string;
+  disabled: boolean;
   maxSpan: moment.DurationInputArg1;
   dateChanged: EventEmitter<{
     start: moment.Moment;
