@@ -1,10 +1,13 @@
-import { r as registerInstance, c as createEvent, h } from './index-47b77f6c.js';
-import { _ as _formatDate, b as _formatAmount } from './functions-d7681931.js';
-import './moment-7d60e5ef.js';
+import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
+import { _ as _formatDate, b as _formatAmount } from './functions.js';
+import { d as defineCustomElement$3 } from './ir-button2.js';
+import { d as defineCustomElement$2 } from './ir-icon2.js';
+import { d as defineCustomElement$1 } from './ir-modal2.js';
 
-const IrPaymentDetails = class {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
+const IrPaymentDetails = /*@__PURE__*/ proxyCustomElement(class IrPaymentDetails extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
     this.handlePaymentItemChange = createEvent(this, "handlePaymentItemChange", 7);
     this.creditCardPressHandler = createEvent(this, "creditCardPressHandler", 7);
     this.itemToBeAdded = {
@@ -121,8 +124,46 @@ const IrPaymentDetails = class {
   static get watchers() { return {
     "paymentDetailsUrl": ["wandler"]
   }; }
-};
+}, [0, "ir-payment-details", {
+    "item": [1544],
+    "paymentDetailsUrl": [1, "payment-details-url"],
+    "paymentExceptionMessage": [1, "payment-exception-message"],
+    "newTableRow": [32],
+    "collapsedPayment": [32],
+    "collapsedGuarantee": [32],
+    "flag": [32],
+    "confirmModal": [32],
+    "toBeDeletedItem": [32]
+  }, [[0, "confirmModal", "handleConfirmModal"]]]);
+function defineCustomElement() {
+  if (typeof customElements === "undefined") {
+    return;
+  }
+  const components = ["ir-payment-details", "ir-button", "ir-icon", "ir-modal"];
+  components.forEach(tagName => { switch (tagName) {
+    case "ir-payment-details":
+      if (!customElements.get(tagName)) {
+        customElements.define(tagName, IrPaymentDetails);
+      }
+      break;
+    case "ir-button":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$3();
+      }
+      break;
+    case "ir-icon":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
+      }
+      break;
+    case "ir-modal":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$1();
+      }
+      break;
+  } });
+}
 
-export { IrPaymentDetails as ir_payment_details };
+export { IrPaymentDetails as I, defineCustomElement as d };
 
-//# sourceMappingURL=ir-payment-details.entry.js.map
+//# sourceMappingURL=ir-payment-details2.js.map

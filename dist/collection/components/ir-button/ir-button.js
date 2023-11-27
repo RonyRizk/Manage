@@ -23,6 +23,16 @@ export class IrButton {
       }, class: `btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`, type: this.btn_type }, h("i", { class: this.icon }), "\u00A0", this.text));
   }
   static get is() { return "ir-button"; }
+  static get originalStyleUrls() {
+    return {
+      "$": ["ir-button.css"]
+    };
+  }
+  static get styleUrls() {
+    return {
+      "$": ["ir-button.css"]
+    };
+  }
   static get properties() {
     return {
       "name": {

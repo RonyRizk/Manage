@@ -70,6 +70,7 @@ export class IglooCalendar {
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date).then(async (bookingResp) => {
           this.countryNodeList = await this.bookingService.getCountries(this.language);
           this.calendarData.currency = roomResp['My_Result'].currency;
+          this.calendarData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
           this.calendarData.legendData = this.getLegendData(roomResp);
           this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
           this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
@@ -493,7 +494,7 @@ export class IglooCalendar {
       this.showToBeAssigned ? (h("igl-to-be-assigned", { loadingMessage: 'Fetching unassigned units', to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       this.showLegend ? (h("igl-legends", { class: "legendContainer", legendData: this.calendarData.legendData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, h("div", { id: "calendarContainer" }, h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }), h("igl-cal-body", { countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), h("igl-cal-footer", { today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
-    ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (h("igl-book-property", { showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: _ => (this.bookingItem = null) }))));
+    ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: _ => (this.bookingItem = null) }))));
   }
   static get is() { return "igloo-calendar"; }
   static get encapsulation() { return "scoped"; }

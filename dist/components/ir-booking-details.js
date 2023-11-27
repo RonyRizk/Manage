@@ -3,13 +3,15 @@ import { h as hooks } from './moment.js';
 import { _ as _formatDate, a as _formatTime } from './functions.js';
 import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
-import { d as defineCustomElement$b } from './ir-button2.js';
-import { d as defineCustomElement$a } from './ir-checlbox.js';
-import { d as defineCustomElement$9 } from './ir-common2.js';
-import { d as defineCustomElement$8 } from './ir-guest-info2.js';
-import { d as defineCustomElement$7 } from './ir-icon2.js';
-import { d as defineCustomElement$6 } from './ir-input-text2.js';
-import { d as defineCustomElement$5 } from './ir-label2.js';
+import { d as defineCustomElement$d } from './ir-button2.js';
+import { d as defineCustomElement$c } from './ir-checlbox.js';
+import { d as defineCustomElement$b } from './ir-common2.js';
+import { d as defineCustomElement$a } from './ir-guest-info2.js';
+import { d as defineCustomElement$9 } from './ir-icon2.js';
+import { d as defineCustomElement$8 } from './ir-input-text2.js';
+import { d as defineCustomElement$7 } from './ir-label2.js';
+import { d as defineCustomElement$6 } from './ir-modal2.js';
+import { d as defineCustomElement$5 } from './ir-payment-details2.js';
 import { d as defineCustomElement$4 } from './ir-room2.js';
 import { d as defineCustomElement$3 } from './ir-select2.js';
 import { d as defineCustomElement$2 } from './ir-sidebar2.js';
@@ -222,7 +224,7 @@ const IrBookingDetails$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingDetai
     }
     return [
       h("ir-common", null),
-      h("div", { class: "fluid-container pt-1 mr-2 ml-2" }, h("div", { class: "row" }, h("div", { class: "col-lg-7 col-md-12 d-flex justify-content-start align-items-end" }, h("div", { class: "font-size-large sm-padding-right" }, `Booking#${this.bookingNumber}`), h("div", null, "@ ", _formatDate(this.bookingData.booked_on.date), " ", _formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString()))), h("div", { class: "col-lg-5 col-md-12 d-flex justify-content-end align-items-center" }, h("span", { class: `confirmed btn-sm mr-2 ${confirmationBG}` }, this.bookingData.status.description), h("ir-select", { id: "update-status", size: "sm", "label-available": "false", data: this.statusData, textSize: "sm", class: "sm-padding-right" }), h("ir-button", { icon: "", id: "update-status-btn", size: "sm", text: "Update" }), this.hasReceipt && h("ir-icon", { id: "receipt", icon: "ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasPrint && h("ir-icon", { id: "print", icon: "ft-printer h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasDelete && h("ir-icon", { id: "book-delete", icon: "ft-trash-2 h1 danger ml-1 pointer" }), this.hasMenu && h("ir-icon", { id: "menu", icon: "ft-list h1 color-ir-dark-blue-hover ml-1 pointer" })))),
+      h("div", { class: "fluid-container pt-1 mr-2 ml-2" }, h("div", { class: "row" }, h("div", { class: "col-lg-7 col-md-12 d-flex justify-content-start align-items-end" }, h("div", { class: "font-size-large sm-padding-right" }, `Booking#${this.bookingNumber}`), h("div", null, "@ ", _formatDate(this.bookingData.booked_on.date), " ", _formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString()))), h("div", { class: "col-lg-5 col-md-12 d-flex justify-content-end align-items-center" }, h("span", { class: `confirmed btn-sm mr-2 ${confirmationBG}` }, this.bookingData.status.description), h("ir-select", { id: "update-status", size: "sm", "label-available": "false", data: this.statusData, textSize: "sm", class: "sm-padding-right" }), h("ir-button", { id: "update-status-btn", size: "sm", text: "Update" }), this.hasReceipt && h("ir-icon", { id: "receipt", icon: "ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasPrint && h("ir-icon", { id: "print", icon: "ft-printer h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasDelete && h("ir-icon", { id: "book-delete", icon: "ft-trash-2 h1 danger ml-1 pointer" }), this.hasMenu && h("ir-icon", { id: "menu", icon: "ft-list h1 color-ir-dark-blue-hover ml-1 pointer" })))),
       h("div", { class: "fluid-container m-1" }, h("div", { class: "row m-0" }, h("div", { class: "col-lg-7 col-md-12 pl-0 pr-lg-1 p-0" }, h("div", { class: "card" }, h("div", { class: "p-1" }, this.bookingData.property.name || '', h("ir-label", { label: "Source:", value: this.bookingData.origin.Label, imageSrc: this.bookingData.origin.Icon }), h("ir-label", { label: "Booked by:", value: `${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`, iconShown: true }), h("ir-label", { label: "Phone:", value: this.bookingData.guest.mobile }), h("ir-label", { label: "Email:", value: this.bookingData.guest.email }), h("ir-label", { label: "Address:", value: this.bookingData.guest.address }), h("ir-label", { label: "Arrival Time:", value: this.bookingData.arrival.description }), h("ir-label", { label: "Notes:", value: this.bookingData.remark }))), h("div", { class: "font-size-large d-flex justify-content-between align-items-center ml-1 mb-1" }, `${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date)} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1 ? 'nights' : 'night'})`, this.hasRoomAdd && h("ir-icon", { id: "room-add", icon: "ft-plus h3 color-ir-dark-blue-hover pointer" })), h("div", { class: "card" }, this.bookingData.rooms.map((room, index) => {
         const mealCodeName = room.rateplan.name;
         const myRoomTypeFoodCat = room.roomtype.name;
@@ -231,7 +233,7 @@ const IrBookingDetails$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingDetai
           // add separator if not last item with marginHorizontal and alignCenter
           index !== this.bookingData.rooms.length - 1 && h("hr", { class: "mr-2 ml-2 mt-1 mb-1" }),
         ];
-      }))))),
+      }))), h("div", { class: "col-lg-5 col-md-12 pr-0 pl-0 pl-md-1" }, h("ir-payment-details", { item: this.bookingDetails, paymentDetailsUrl: this.paymentDetailsUrl, paymentExceptionMessage: this.paymentExceptionMessage })))),
       h("ir-sidebar", { side: 'right', id: "editGuestInfo" }, h("ir-guest-info", { data: this.guestData, setupDataCountries: this.setupDataCountries, setupDataCountriesCode: this.setupDataCountriesCode })),
     ];
   }
@@ -273,7 +275,7 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-booking-details", "ir-button", "ir-checkbox", "ir-common", "ir-guest-info", "ir-icon", "ir-input-text", "ir-label", "ir-room", "ir-select", "ir-sidebar"];
+  const components = ["ir-booking-details", "ir-button", "ir-checkbox", "ir-common", "ir-guest-info", "ir-icon", "ir-input-text", "ir-label", "ir-modal", "ir-payment-details", "ir-room", "ir-select", "ir-sidebar"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-booking-details":
       if (!customElements.get(tagName)) {
@@ -282,35 +284,45 @@ function defineCustomElement$1() {
       break;
     case "ir-button":
       if (!customElements.get(tagName)) {
-        defineCustomElement$b();
+        defineCustomElement$d();
       }
       break;
     case "ir-checkbox":
       if (!customElements.get(tagName)) {
-        defineCustomElement$a();
+        defineCustomElement$c();
       }
       break;
     case "ir-common":
       if (!customElements.get(tagName)) {
-        defineCustomElement$9();
+        defineCustomElement$b();
       }
       break;
     case "ir-guest-info":
       if (!customElements.get(tagName)) {
-        defineCustomElement$8();
+        defineCustomElement$a();
       }
       break;
     case "ir-icon":
       if (!customElements.get(tagName)) {
-        defineCustomElement$7();
+        defineCustomElement$9();
       }
       break;
     case "ir-input-text":
       if (!customElements.get(tagName)) {
-        defineCustomElement$6();
+        defineCustomElement$8();
       }
       break;
     case "ir-label":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$7();
+      }
+      break;
+    case "ir-modal":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$6();
+      }
+      break;
+    case "ir-payment-details":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }

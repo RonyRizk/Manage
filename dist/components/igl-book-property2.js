@@ -37,6 +37,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     this.bookingService = new BookingService();
     this.eventsService = new EventsService();
     this.propertyid = undefined;
+    this.allowedBookingSources = undefined;
     this.language = undefined;
     this.countryNodeList = undefined;
     this.showPaymentDetails = false;
@@ -45,6 +46,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     this.sourceOption = {
       code: '',
       description: '',
+      tag: '',
     };
     this.splitBookingId = '';
     this.renderAgain = false;
@@ -71,7 +73,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     this.dateRangeData = Object.assign({}, this.bookingData.defaultDateRange);
     try {
       const setupEntries = await this.fetchSetupEntries();
-      this.setSourceOptions(setupEntries.bookingSource);
+      this.setSourceOptions(this.allowedBookingSources);
       this.setOtherProperties(setupEntries);
       if (this.isEventType('EDIT_BOOKING')) {
         this.setEditingRoomInfo();
@@ -88,12 +90,14 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
   }
   setSourceOptions(bookingSource) {
     this.sourceOptions = bookingSource.map(source => ({
-      id: source.CODE_NAME,
-      value: source.CODE_VALUE_EN,
+      id: source.code,
+      value: source.description,
+      tag: source.tag
     }));
     this.sourceOption = {
-      code: bookingSource[0].CODE_NAME,
-      description: bookingSource[0].CODE_VALUE_EN,
+      code: bookingSource[0].code,
+      description: bookingSource[0].description,
+      tag: bookingSource[0].tag
     };
   }
   setOtherProperties(res) {
@@ -285,9 +289,11 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     return this.sourceOption === srcIndex ? 'active' : '';
   }
   handleSourceDropDown(selectedOption) {
+    const selectedSource = this.sourceOptions.find(opt => opt.id === selectedOption.target.value.toString());
     this.sourceOption = {
       code: selectedOption.target.value,
-      description: this.sourceOptions.find(opt => opt.id === selectedOption.target.value.toString()).value || '',
+      description: selectedSource.value || '',
+      tag: selectedSource.tag
     };
   }
   renderPage() {
@@ -438,6 +444,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
   static get style() { return iglBookPropertyCss; }
 }, [2, "igl-book-property", {
     "propertyid": [2],
+    "allowedBookingSources": [8, "allowed-booking-sources"],
     "language": [1],
     "countryNodeList": [8, "country-node-list"],
     "showPaymentDetails": [4, "show-payment-details"],

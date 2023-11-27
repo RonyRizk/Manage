@@ -3,6 +3,7 @@ import { RoomBlockDetails, RoomBookingDetails } from '../../../models/IBooking';
 import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
 export declare class IglBookProperty {
   propertyid: number;
+  allowedBookingSources: any;
   language: string;
   countryNodeList: any;
   showPaymentDetails: boolean;
@@ -16,6 +17,7 @@ export declare class IglBookProperty {
   sourceOption: {
     code: string;
     description: string;
+    tag: string;
   };
   splitBookingId: any;
   renderAgain: boolean;

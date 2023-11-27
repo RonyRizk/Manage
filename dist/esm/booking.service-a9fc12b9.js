@@ -3623,7 +3623,7 @@ class BookingService {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
         const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, {
-          TBL_NAMES: ['_ARRIVAL_TIME', '_BOOKING_SOURCE', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
+          TBL_NAMES: ['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -3631,7 +3631,6 @@ class BookingService {
         const res = data.My_Result;
         return {
           arrivalTime: res.filter(e => e.TBL_NAME === '_ARRIVAL_TIME'),
-          bookingSource: res.filter(e => e.TBL_NAME === '_BOOKING_SOURCE'),
           ratePricingMode: res.filter(e => e.TBL_NAME === '_RATE_PRICING_MODE'),
           bedPreferenceType: res.filter(e => e.TBL_NAME === '_BED_PREFERENCE_TYPE'),
         };
@@ -3862,4 +3861,4 @@ class BookingService {
 
 export { BookingService as B, axios as a, transformNewBooking as b, getCurrencySymbol as c, dateToFormattedString as d, dateDifference as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, addTwoMonthToDate as i, getNextDay as j, convertDMYToISO as k, computeEndDate as l, transformNewBLockedRooms as t };
 
-//# sourceMappingURL=booking.service-fa951f75.js.map
+//# sourceMappingURL=booking.service-a9fc12b9.js.map
