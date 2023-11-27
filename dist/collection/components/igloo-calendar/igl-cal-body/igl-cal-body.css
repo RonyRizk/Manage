@@ -4497,6 +4497,7 @@ readers do not read off random characters that represent icons */
   font-weight: bold;
   -webkit-user-select: none;
   user-select: none;
+  -webkit-user-drag: none;
 }
 
 
@@ -4559,6 +4560,7 @@ readers do not read off random characters that represent icons */
   font-size: 0.9em;
   -webkit-user-select: none;
   user-select: none;
+  -webkit-user-drag: none;
 }
 
 .roomTitle > :nth-child(1) {

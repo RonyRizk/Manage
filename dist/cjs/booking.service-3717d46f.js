@@ -3426,6 +3426,7 @@ function getDefaultData(cell, stayStatus) {
     TO_DATE_STR: cell.booking.format.to_date,
     adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
     NOTES: cell.booking.remark,
+    SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
 function updateBookingWithStayData(data, cell) {
@@ -3488,6 +3489,7 @@ function transformNewBooking(data) {
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
       NOTES: data.remark,
+      SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
     });
   });
   return bookings;
@@ -3876,4 +3878,4 @@ exports.getReleaseHoursString = getReleaseHoursString;
 exports.transformNewBLockedRooms = transformNewBLockedRooms;
 exports.transformNewBooking = transformNewBooking;
 
-//# sourceMappingURL=booking.service-1e4442ac.js.map
+//# sourceMappingURL=booking.service-3717d46f.js.map

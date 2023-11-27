@@ -4541,6 +4541,10 @@ readers do not read off random characters that represent icons */
   text-overflow: ellipsis;
   top: 2px;
   left: 5px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+
 }
 
 .legend_circle {

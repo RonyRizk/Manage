@@ -3424,6 +3424,7 @@ function getDefaultData(cell, stayStatus) {
     TO_DATE_STR: cell.booking.format.to_date,
     adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
     NOTES: cell.booking.remark,
+    SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
 function updateBookingWithStayData(data, cell) {
@@ -3486,6 +3487,7 @@ function transformNewBooking(data) {
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
       NOTES: data.remark,
+      SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
     });
   });
   return bookings;
@@ -3861,4 +3863,4 @@ class BookingService {
 
 export { BookingService as B, axios as a, transformNewBooking as b, getCurrencySymbol as c, dateToFormattedString as d, dateDifference as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, addTwoMonthToDate as i, getNextDay as j, convertDMYToISO as k, computeEndDate as l, transformNewBLockedRooms as t };
 
-//# sourceMappingURL=booking.service-a9fc12b9.js.map
+//# sourceMappingURL=booking.service-d07d4fc1.js.map

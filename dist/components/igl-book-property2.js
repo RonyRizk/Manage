@@ -92,13 +92,19 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     this.sourceOptions = bookingSource.map(source => ({
       id: source.code,
       value: source.description,
-      tag: source.tag
+      tag: source.tag,
     }));
-    this.sourceOption = {
-      code: bookingSource[0].code,
-      description: bookingSource[0].description,
-      tag: bookingSource[0].tag
-    };
+    if (this.isEventType('EDIT_BOOKING')) {
+      this.sourceOption = Object.assign({}, this.bookingData.SOURCE);
+      console.log(this.sourceOption);
+    }
+    else {
+      this.sourceOption = {
+        code: bookingSource[0].code,
+        description: bookingSource[0].description,
+        tag: bookingSource[0].tag,
+      };
+    }
   }
   setOtherProperties(res) {
     this.ratePricingMode = res.ratePricingMode;
@@ -293,7 +299,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     this.sourceOption = {
       code: selectedOption.target.value,
       description: selectedSource.value || '',
-      tag: selectedSource.tag
+      tag: selectedSource.tag,
     };
   }
   renderPage() {
