@@ -1,5 +1,5 @@
-import { DayType, MonthType } from "./IBooking";
-import { CalendarLegend } from "./property-types";
+import { DayType, MonthType } from './IBooking';
+import { CalendarLegend } from './property-types';
 export interface ICalendarData {
   legendData: CalendarLegend[];
   months: MonthType[];
@@ -8,8 +8,7 @@ export interface ICalendarData {
   roomsInfo: any;
   monthsInfo: any;
 }
-export type PageTwoButtonsTypes = "cancel" | "save" | "back" | "book" | "bookAndCheckIn";
 export interface IPageTwoDataUpdateProps {
-  key: "applicationInfoUpdateEvent" | "propertyBookedBy";
+  key: 'applicationInfoUpdateEvent' | 'propertyBookedBy';
   value: any;
 }

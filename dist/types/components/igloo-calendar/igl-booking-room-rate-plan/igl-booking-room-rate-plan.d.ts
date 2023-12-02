@@ -11,6 +11,7 @@ export declare class IglBookingRoomRatePlan {
   currency: any;
   dateDifference: number;
   bookingType: string;
+  fullyBlocked: boolean;
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;
   }>;
@@ -21,7 +22,9 @@ export declare class IglBookingRoomRatePlan {
     [key: string]: any;
   };
   private initialRateValue;
+  getAvailableRooms(assignable_units: any[]): any[];
   componentWillLoad(): void;
+  disableForm(): any;
   getSelectedOffering(value: any): any;
   ratePlanDataChanged(): Promise<void>;
   handleRateDaysUpdate(): any;

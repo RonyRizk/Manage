@@ -11,7 +11,6 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
     this.totalNights = 0;
     this.fromDateStr = 'from';
     this.toDateStr = 'to';
-    this.message = '';
     this.defaultData = undefined;
     this.disabled = false;
     this.renderAgain = false;
@@ -72,11 +71,10 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
   render() {
     return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0" }, h("h5", { class: "dateRangeLabel" }, "Dates"), h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
-      } }), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : '')), h("div", { class: "taxMessage display-inline" }, this.message)));
+      } }), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : ''))));
   }
   static get style() { return iglDateRangeCss; }
 }, [2, "igl-date-range", {
-    "message": [513],
     "defaultData": [16],
     "disabled": [516],
     "renderAgain": [32]

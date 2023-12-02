@@ -4,6 +4,9 @@
     "components/igloo-calendar/igl-application-info/igl-application-info.js",
     "components/igloo-calendar/igl-block-dates-view/igl-block-dates-view.js",
     "components/igloo-calendar/igl-book-property/igl-book-property.js",
+    "components/igloo-calendar/igl-book-property/igl-book-property-footer/igl-book-property-footer.js",
+    "components/igloo-calendar/igl-book-property/igl-book-property-header/igl-book-property-header.js",
+    "components/igloo-calendar/igl-book-property/igl-booking-overview-page/igl-booking-overview-page.js",
     "components/igloo-calendar/igl-booking-event/igl-booking-event.js",
     "components/igloo-calendar/igl-booking-event-hover/igl-booking-event-hover.js",
     "components/igloo-calendar/igl-booking-room-rate-plan/igl-booking-room-rate-plan.js",
@@ -45,6 +48,7 @@
     "components/ir-span/ir-span.js",
     "components/ir-switch/ir-switch.js",
     "components/ir-textarea/ir-textarea.js",
+    "components/ir-toast/ir-toast.js",
     "components/ir-tooltip/ir-tooltip.js"
   ],
   "compiler": {

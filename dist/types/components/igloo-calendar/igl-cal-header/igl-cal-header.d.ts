@@ -1,6 +1,5 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IglCalHeader {
-  private element;
   optionEvent: EventEmitter<{
     [key: string]: any;
   }>;
@@ -33,7 +32,7 @@ export declare class IglCalHeader {
   }>): void;
   showToBeAssigned(dayInfo: any): void;
   handleOptionEvent(key: any, data?: any): void;
-  handleDateSelect(event: Event): void;
+  handleDateSelect(event: CustomEvent): void;
   handleClearSearch(): void;
   handleFilterRooms(event: Event): void;
   handleScrollToRoom(roomId: any): void;

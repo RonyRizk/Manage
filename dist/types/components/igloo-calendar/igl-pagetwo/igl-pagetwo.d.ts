@@ -1,5 +1,6 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
-import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
+import { IPageTwoDataUpdateProps } from '../../../models/models';
+import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
 export declare class IglPagetwo {
   showPaymentDetails: boolean;
   isEditOrAddRoomEvent: boolean;
@@ -15,13 +16,13 @@ export declare class IglPagetwo {
     [key: string]: any;
   };
   bedPreferenceType: any;
-  selectedRooms: any;
+  selectedRooms: Map<string, Map<string, any>>;
   isLoading: string;
   countryNodeList: any;
   selectedGuestData: any;
   dataUpdateEvent: EventEmitter<IPageTwoDataUpdateProps>;
   buttonClicked: EventEmitter<{
-    key: PageTwoButtonsTypes;
+    key: TPropertyButtonsTypes;
     data?: CustomEvent;
   }>;
   selectedBookedByData: any;
@@ -31,7 +32,6 @@ export declare class IglPagetwo {
   };
   componentWillLoad(): void;
   initializeGuestData(): void;
-  getRoomsListFromCategoryId(categoryId: any): any;
   handleOnApplicationInfoDataUpdateEvent(event: CustomEvent, index: number): void;
   handleEventData(event: any, key: string, index: number): void;
   isGuestDataIncomplete(): boolean;

@@ -3,9 +3,7 @@ export declare class IglBookingRooms {
   roomTypeData: {
     [key: string]: any;
   };
-  defaultData: {
-    [key: string]: any;
-  };
+  defaultData: Map<string, any>;
   bookingType: string;
   dateDifference: number;
   ratePricingMode: any[];
@@ -18,6 +16,7 @@ export declare class IglBookingRooms {
   private validBookingTypes;
   private totalRooms;
   componentWillLoad(): void;
+  handleRoomTypeDataChange(newValue: any): void;
   onRoomDataUpdate(event: CustomEvent<{
     [key: string]: any;
   }>, index: number): void;

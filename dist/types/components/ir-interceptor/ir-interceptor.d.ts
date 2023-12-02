@@ -1,3 +1,5 @@
+import { EventEmitter } from '../../stencil-public-runtime';
+import { IToast } from '../ir-toast/toast';
 export declare class IrInterceptor {
   isShown: boolean;
   isLoading: boolean;
@@ -7,6 +9,7 @@ export declare class IrInterceptor {
     errorMessage: string;
   };
   handledEndpoints: string[];
+  toast: EventEmitter<IToast>;
   componentWillLoad(): void;
   setupAxiosInterceptors(): void;
   extractEndpoint(url: string): string;
@@ -16,7 +19,6 @@ export declare class IrInterceptor {
   handleError(error: any): Promise<never>;
   showToast(): void;
   hideToastAfterDelay(isSuccess: boolean): void;
-  handleCompletion(message: string, success: boolean): void;
   renderMessage(): string;
   render(): any;
 }

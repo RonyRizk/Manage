@@ -1,4 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
+import { Moment } from 'moment';
 export declare class IglooCalendar {
   propertyid: number;
   from_date: string;
@@ -50,7 +51,6 @@ export declare class IglooCalendar {
   getLocalizedDayOfWeek(date: any, locale: any): any;
   getLocalizedMonth(date: any, locale?: string): string;
   getDateStr(date: any, locale?: string): string;
-  addNextTwoMonthsToCalendar(): Promise<void>;
   scrollToElement(goToDate: any): void;
   private AddOrUpdateRoomBookings;
   private transformDateForScroll;
@@ -60,6 +60,11 @@ export declare class IglooCalendar {
   onOptionSelect(event: CustomEvent<{
     [key: string]: any;
   }>): void;
+  addDatesToCalendar(fromDate: string, toDate: string): Promise<void>;
+  handleDateSearch(dates: {
+    start: Moment;
+    end: Moment;
+  }): Promise<void>;
   closeSideMenu(): void;
   scrollViewDragPos: {
     top: number;

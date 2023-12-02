@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-79158a29.js');
+const index = require('./index-c42658be.js');
 
 const IrTextArea = class {
   constructor(hostRef) {

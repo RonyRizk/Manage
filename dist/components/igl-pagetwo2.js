@@ -39,30 +39,18 @@ const IglPagetwo = /*@__PURE__*/ proxyCustomElement(class IglPagetwo extends HTM
       }
       return rate;
     };
-    for (const key in this.selectedRooms) {
-      for (const prop in this.selectedRooms[key]) {
-        const totalRooms = this.selectedRooms[key][prop].totalRooms;
-        newSelectedUnits[key] = Array(totalRooms).fill(-1);
-      }
-    }
     this.selectedUnits = newSelectedUnits;
     this.guestData = [];
-    for (const key of Object.keys(this.selectedRooms)) {
-      for (const prop of Object.keys(this.selectedRooms[key])) {
-        for (let i = 1; i <= this.selectedRooms[key][prop].totalRooms; i++) {
-          this.guestData.push(Object.assign({ guestName: '', roomId: '', preference: '' }, this.selectedRooms[key][prop]));
+    this.selectedRooms.forEach((room, key) => {
+      room.forEach(rate_plan => {
+        newSelectedUnits[key] = rate_plan.selectedUnits;
+        total += rate_plan.totalRooms * getRate(rate_plan.rate, this.dateRangeData.dateDifference, rate_plan.isRateModified, rate_plan.rateType);
+        for (let i = 1; i <= rate_plan.totalRooms; i++) {
+          this.guestData.push(Object.assign({ guestName: '', roomId: '', preference: '' }, rate_plan));
         }
-        total +=
-          this.selectedRooms[key][prop].totalRooms *
-            getRate(this.selectedRooms[key][prop].rate, this.dateRangeData.dateDifference, this.selectedRooms[key][prop].isRateModified, this.selectedRooms[key][prop].rateType);
-      }
-    }
+      });
+    });
     this.bookingData.TOTAL_PRICE = total;
-  }
-  getRoomsListFromCategoryId(categoryId) {
-    var _a;
-    let category = (_a = this.bookingData.roomsInfo) === null || _a === void 0 ? void 0 : _a.find(category => category.id === categoryId);
-    return (category && category.physicalrooms) || [];
   }
   handleOnApplicationInfoDataUpdateEvent(event, index) {
     const opt = event.detail;
@@ -128,9 +116,9 @@ const IglPagetwo = /*@__PURE__*/ proxyCustomElement(class IglPagetwo extends HTM
     );
   }
   render() {
-    return (h(Host, { class: "scrollContent" }, h("div", { class: "row" }, h("div", { class: "col-6 text-left p-0" }, h("span", { class: "mr-1 font-weight-bold font-medium-1" }, this.dateRangeData.fromDateStr, " - ", this.dateRangeData.toDateStr), this.dateRangeData.dateDifference, " nights"), h("div", { class: "col-6 text-right" }, "Total price ", h("span", { class: "font-weight-bold font-medium-1" }, '$' + this.bookingData.TOTAL_PRICE || '$0.00'))), this.guestData.map((roomInfo, index) => (h("igl-application-info", { bedPreferenceType: this.bedPreferenceType, index: index, selectedUnits: this.selectedUnits[`c_${roomInfo.roomCategoryId}`], guestInfo: roomInfo, guestRefKey: index, bookingType: this.bookingData.event_type, roomsList: this.getRoomsListFromCategoryId(roomInfo.roomCategoryId), onDataUpdateEvent: event => 
-      //this.handleOnApplicationInfoDataUpdateEvent(event, index)
-      this.handleEventData(event, 'application-info', index) }))), this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (h("igl-property-booked-by", { countryNodeList: this.countryNodeList, language: this.language, showPaymentDetails: this.showPaymentDetails, defaultData: this.bookedByInfoData, onDataUpdateEvent: event => 
+    return (h(Host, { class: "scrollContent" }, h("div", { class: "row" }, h("div", { class: "col-6 text-left p-0" }, h("span", { class: "mr-1 font-weight-bold font-medium-1" }, this.dateRangeData.fromDateStr, " - ", this.dateRangeData.toDateStr), this.dateRangeData.dateDifference, " nights"), h("div", { class: "col-6 text-right" }, "Total price ", h("span", { class: "font-weight-bold font-medium-1" }, '$' + this.bookingData.TOTAL_PRICE || '$0.00'))), this.guestData.map((roomInfo, index) => {
+      return (h("igl-application-info", { bedPreferenceType: this.bedPreferenceType, index: index, selectedUnits: this.selectedUnits[`c_${roomInfo.roomCategoryId}`], guestInfo: roomInfo, guestRefKey: index, bookingType: this.bookingData.event_type, roomsList: roomInfo.physicalRooms, onDataUpdateEvent: event => this.handleEventData(event, 'application-info', index) }));
+    }), this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (h("igl-property-booked-by", { countryNodeList: this.countryNodeList, language: this.language, showPaymentDetails: this.showPaymentDetails, defaultData: this.bookedByInfoData, onDataUpdateEvent: event => 
       // this.dataUpdateEvent.emit({
       //   key: "propertyBookedBy",
       //   value: event.detail,
@@ -147,7 +135,7 @@ const IglPagetwo = /*@__PURE__*/ proxyCustomElement(class IglPagetwo extends HTM
     "language": [1],
     "bookedByInfoData": [16],
     "bedPreferenceType": [8, "bed-preference-type"],
-    "selectedRooms": [8, "selected-rooms"],
+    "selectedRooms": [16],
     "isLoading": [513, "is-loading"],
     "countryNodeList": [8, "country-node-list"],
     "selectedGuestData": [8, "selected-guest-data"],

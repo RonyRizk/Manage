@@ -12,7 +12,16 @@ export class IglBookingRooms {
     this.roomsDistributions = [];
   }
   componentWillLoad() {
-    this.totalRooms = this.roomTypeData.physicalrooms.length;
+    this.totalRooms = this.roomTypeData.inventory || 0;
+    if (!this.selectedRooms.length) {
+      this.selectedRooms = new Array(this.totalRooms).fill(0);
+    }
+    if (!this.roomsDistributions.length) {
+      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
+    }
+  }
+  handleRoomTypeDataChange(newValue) {
+    this.totalRooms = newValue.inventory || 0;
     if (!this.selectedRooms.length) {
       this.selectedRooms = new Array(this.totalRooms).fill(0);
     }
@@ -60,7 +69,9 @@ export class IglBookingRooms {
     const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
     return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
       if (ratePlan.variations !== null) {
-        return (h("igl-booking-room-rate-plan", { key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? 'ml-1' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData['p_' + ratePlan.id]) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
+        return (h("igl-booking-room-rate-plan", { key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? 'ml-1' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan,
+          //fullyBlocked={this.roomTypeData.rate === 0}
+          totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
       }
       else {
         return null;
@@ -100,9 +111,14 @@ export class IglBookingRooms {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "{ [key: string]: any }",
-          "resolved": "{ [key: string]: any; }",
-          "references": {}
+          "original": "Map<string, any>",
+          "resolved": "Map<string, any>",
+          "references": {
+            "Map": {
+              "location": "global",
+              "id": "global::Map"
+            }
+          }
         },
         "required": false,
         "optional": false,
@@ -203,6 +219,12 @@ export class IglBookingRooms {
           "resolved": "{ [key: string]: any; }",
           "references": {}
         }
+      }];
+  }
+  static get watchers() {
+    return [{
+        "propName": "roomTypeData",
+        "methodName": "handleRoomTypeDataChange"
       }];
   }
 }

@@ -1,6 +1,7 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 import { RoomBlockDetails, RoomBookingDetails } from '../../../models/IBooking';
-import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
+import { IPageTwoDataUpdateProps } from '../../../models/models';
+import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption } from '../../../models/igl-book-property';
 export declare class IglBookProperty {
   propertyid: number;
   allowedBookingSources: any;
@@ -14,21 +15,18 @@ export declare class IglBookProperty {
   bookingData: {
     [key: string]: any;
   };
-  sourceOption: {
-    code: string;
-    description: string;
-    tag: string;
-  };
+  adultChildConstraints: TAdultChildConstraints;
+  sourceOption: TSourceOption;
   splitBookingId: any;
   renderAgain: boolean;
   message: string;
   isLoading: string;
-  isConvertedBooking: boolean;
   dateRangeData: {
     [key: string]: any;
   };
-  selectedUnits: {
-    [key: string]: any;
+  adultChildCount: {
+    adult: number;
+    child: number;
   };
   closeBookingWindow: EventEmitter<{
     [key: string]: any;
@@ -38,20 +36,17 @@ export declare class IglBookProperty {
     data: RoomBookingDetails[];
   }>;
   blockedCreated: EventEmitter<RoomBlockDetails>;
-  private PAGE_ZERO;
-  private PAGE_ONE;
-  private PAGE_TWO;
-  private PAGE_BLOCK_DATES;
   private page;
   private showSplitBookingOption;
   private sourceOptions;
-  private selectedRooms;
   private guestData;
   private bookedByInfoData;
   private blockDatesData;
   private ratePricingMode;
+  private selectedUnits;
   private bedPreferenceType;
   private bookingService;
+  private bookPropertyService;
   private eventsService;
   componentDidLoad(): void;
   disconnectedCallback(): void;
@@ -59,61 +54,32 @@ export declare class IglBookProperty {
   fetchSetupEntries(): Promise<import("../../../models/IBooking").ISetupEntries>;
   setSourceOptions(bookingSource: any[]): void;
   setOtherProperties(res: any): void;
-  setEditingRoomInfo(): void;
+  handleAdultChildChange(event: CustomEvent): void;
   initializeBookingAvailability(from_date: string, to_date: string): Promise<void>;
   getRoomCategoryByRoomId(roomId: any): any;
-  getDefaultPage(): string;
-  getBookingPreferenceRoomId(): any;
   getSplitBookings(): any;
-  isEventType(key: string): boolean;
   closeWindow(): void;
-  isEditBooking(): boolean;
-  onRoomsDataUpdate(event: CustomEvent<{
-    [key: string]: any;
-  }>): void;
-  getRoomCategoryKey(roomCategoryId: string): string;
-  getRatePlanKey(ratePlanId: string): string;
-  shouldClearData(key: string | undefined): boolean;
-  isEditBookingEvent(key: string | undefined): boolean;
-  initializeRoomCategoryIfNeeded(roomCategoryKey: string): void;
-  setSelectedRoomData(roomCategoryKey: string, ratePlanKey: string, data: any): void;
-  hasSelectedRoomData(roomCategoryKey: string, ratePlanKey: string): boolean;
-  cleanupEmptyData(roomCategoryKey: string, ratePlanKey: string): void;
-  applyBookingEditToSelectedRoom(roomCategoryKey: string, ratePlanKey: string, data: any): void;
+  isEventType(key: string): boolean;
   onDateRangeSelect(event: CustomEvent<{
     [key: string]: any;
   }>): void;
   handleBlockDateUpdate(event: CustomEvent<{
     [key: string]: any;
   }>): void;
-  handleSubmit(event: any): void;
   handleGuestInfoUpdate(event: CustomEvent<{
     [key: string]: any;
   }>): void;
   handleBookedByInfoUpdate(event: CustomEvent<{
     [key: string]: any;
   }>): void;
-  isActiveSouceOption(srcIndex: any): "" | "active";
-  handleSourceDropDown(selectedOption: any): void;
+  handleSourceDropDown(event: CustomEvent): void;
   renderPage(): void;
   gotoSplitPageTwo(): void;
   gotoPage(gotoPage: any): void;
   showSplitBooking(): void;
-  getSelectedSplitBookingName(bookingId: any): string;
-  isActiveSplitBookingOption(spltIndex: any): "" | "active";
-  handleSplitBookingDropDown(evt: any): void;
-  isPageZero(): boolean;
-  isPageOne(): boolean;
-  isPageTwo(): boolean;
-  isPageBlockDates(): boolean;
-  getSplitBookingList(): any;
-  getSourceNode(): any;
-  getRoomsListFromCategoryId(categoryId: any): any;
-  getPageZeroView(): any;
-  getPageOneView(): any;
   getPageBlockDatesView(): any;
   handleButtonClicked(event: CustomEvent<{
-    key: PageTwoButtonsTypes;
+    key: TPropertyButtonsTypes;
     data?: CustomEvent;
   }>): void;
   handlePageTwoDataUpdateEvent(event: CustomEvent<IPageTwoDataUpdateProps>): void;
@@ -122,5 +88,7 @@ export declare class IglBookProperty {
   setLoadingState(assign_units: boolean): void;
   getArrivalTimeForBooking(): string;
   resetLoadingState(): void;
+  onRoomDataUpdate(event: CustomEvent): void;
+  getCurrentPage(name: string): boolean;
   render(): any;
 }

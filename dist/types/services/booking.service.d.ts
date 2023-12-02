@@ -4,7 +4,10 @@ export declare class BookingService {
   getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{
     [key: string]: any;
   }>;
-  getBookingAvailability(from_date: string, to_date: string, propertyid: number, language: string, room_type_ids: number[], currency: {
+  getBookingAvailability(from_date: string, to_date: string, propertyid: number, adultChildCount: {
+    adult: number;
+    child: number;
+  }, language: string, room_type_ids: number[], currency: {
     id: number;
     code: string;
   }): Promise<BookingDetails>;

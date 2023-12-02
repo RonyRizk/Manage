@@ -4,7 +4,6 @@ export class IglDateRange {
     this.totalNights = 0;
     this.fromDateStr = 'from';
     this.toDateStr = 'to';
-    this.message = '';
     this.defaultData = undefined;
     this.disabled = false;
     this.renderAgain = false;
@@ -65,7 +64,7 @@ export class IglDateRange {
   render() {
     return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0" }, h("h5", { class: "dateRangeLabel" }, "Dates"), h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
-      } }), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : '')), h("div", { class: "taxMessage display-inline" }, this.message)));
+      } }), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : ''))));
   }
   static get is() { return "igl-date-range"; }
   static get encapsulation() { return "scoped"; }
@@ -81,24 +80,6 @@ export class IglDateRange {
   }
   static get properties() {
     return {
-      "message": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "message",
-        "reflect": true,
-        "defaultValue": "''"
-      },
       "defaultData": {
         "type": "unknown",
         "mutable": false,

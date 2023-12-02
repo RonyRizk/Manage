@@ -52,7 +52,7 @@ export class BookingService {
       console.error(error);
     }
   }
-  async getBookingAvailability(from_date, to_date, propertyid, language, room_type_ids, currency) {
+  async getBookingAvailability(from_date, to_date, propertyid, adultChildCount, language, room_type_ids, currency) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -60,8 +60,8 @@ export class BookingService {
           propertyid,
           from_date,
           to_date,
-          adult_nbr: 2,
-          child_nbr: 0,
+          adult_nbr: adultChildCount.adult,
+          child_nbr: adultChildCount.child,
           language,
           currency_ref: currency.code,
           room_type_ids,
@@ -296,7 +296,7 @@ export class BookingService {
                 cancelation: data.cancelation,
                 guarantee: data.guarantee,
               },
-              unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: pr_id || data.roomId },
+              unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: +pr_id || +data.roomId },
               occupancy: {
                 adult_nbr: data.adultCount,
                 children_nbr: data.childrenCount,

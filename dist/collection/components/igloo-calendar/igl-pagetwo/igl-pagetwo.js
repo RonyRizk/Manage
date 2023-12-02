@@ -29,30 +29,18 @@ export class IglPagetwo {
       }
       return rate;
     };
-    for (const key in this.selectedRooms) {
-      for (const prop in this.selectedRooms[key]) {
-        const totalRooms = this.selectedRooms[key][prop].totalRooms;
-        newSelectedUnits[key] = Array(totalRooms).fill(-1);
-      }
-    }
     this.selectedUnits = newSelectedUnits;
     this.guestData = [];
-    for (const key of Object.keys(this.selectedRooms)) {
-      for (const prop of Object.keys(this.selectedRooms[key])) {
-        for (let i = 1; i <= this.selectedRooms[key][prop].totalRooms; i++) {
-          this.guestData.push(Object.assign({ guestName: '', roomId: '', preference: '' }, this.selectedRooms[key][prop]));
+    this.selectedRooms.forEach((room, key) => {
+      room.forEach(rate_plan => {
+        newSelectedUnits[key] = rate_plan.selectedUnits;
+        total += rate_plan.totalRooms * getRate(rate_plan.rate, this.dateRangeData.dateDifference, rate_plan.isRateModified, rate_plan.rateType);
+        for (let i = 1; i <= rate_plan.totalRooms; i++) {
+          this.guestData.push(Object.assign({ guestName: '', roomId: '', preference: '' }, rate_plan));
         }
-        total +=
-          this.selectedRooms[key][prop].totalRooms *
-            getRate(this.selectedRooms[key][prop].rate, this.dateRangeData.dateDifference, this.selectedRooms[key][prop].isRateModified, this.selectedRooms[key][prop].rateType);
-      }
-    }
+      });
+    });
     this.bookingData.TOTAL_PRICE = total;
-  }
-  getRoomsListFromCategoryId(categoryId) {
-    var _a;
-    let category = (_a = this.bookingData.roomsInfo) === null || _a === void 0 ? void 0 : _a.find(category => category.id === categoryId);
-    return (category && category.physicalrooms) || [];
   }
   handleOnApplicationInfoDataUpdateEvent(event, index) {
     const opt = event.detail;
@@ -118,9 +106,9 @@ export class IglPagetwo {
     );
   }
   render() {
-    return (h(Host, { class: "scrollContent" }, h("div", { class: "row" }, h("div", { class: "col-6 text-left p-0" }, h("span", { class: "mr-1 font-weight-bold font-medium-1" }, this.dateRangeData.fromDateStr, " - ", this.dateRangeData.toDateStr), this.dateRangeData.dateDifference, " nights"), h("div", { class: "col-6 text-right" }, "Total price ", h("span", { class: "font-weight-bold font-medium-1" }, '$' + this.bookingData.TOTAL_PRICE || '$0.00'))), this.guestData.map((roomInfo, index) => (h("igl-application-info", { bedPreferenceType: this.bedPreferenceType, index: index, selectedUnits: this.selectedUnits[`c_${roomInfo.roomCategoryId}`], guestInfo: roomInfo, guestRefKey: index, bookingType: this.bookingData.event_type, roomsList: this.getRoomsListFromCategoryId(roomInfo.roomCategoryId), onDataUpdateEvent: event => 
-      //this.handleOnApplicationInfoDataUpdateEvent(event, index)
-      this.handleEventData(event, 'application-info', index) }))), this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (h("igl-property-booked-by", { countryNodeList: this.countryNodeList, language: this.language, showPaymentDetails: this.showPaymentDetails, defaultData: this.bookedByInfoData, onDataUpdateEvent: event => 
+    return (h(Host, { class: "scrollContent" }, h("div", { class: "row" }, h("div", { class: "col-6 text-left p-0" }, h("span", { class: "mr-1 font-weight-bold font-medium-1" }, this.dateRangeData.fromDateStr, " - ", this.dateRangeData.toDateStr), this.dateRangeData.dateDifference, " nights"), h("div", { class: "col-6 text-right" }, "Total price ", h("span", { class: "font-weight-bold font-medium-1" }, '$' + this.bookingData.TOTAL_PRICE || '$0.00'))), this.guestData.map((roomInfo, index) => {
+      return (h("igl-application-info", { bedPreferenceType: this.bedPreferenceType, index: index, selectedUnits: this.selectedUnits[`c_${roomInfo.roomCategoryId}`], guestInfo: roomInfo, guestRefKey: index, bookingType: this.bookingData.event_type, roomsList: roomInfo.physicalRooms, onDataUpdateEvent: event => this.handleEventData(event, 'application-info', index) }));
+    }), this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (h("igl-property-booked-by", { countryNodeList: this.countryNodeList, language: this.language, showPaymentDetails: this.showPaymentDetails, defaultData: this.bookedByInfoData, onDataUpdateEvent: event => 
       // this.dataUpdateEvent.emit({
       //   key: "propertyBookedBy",
       //   value: event.detail,
@@ -272,21 +260,24 @@ export class IglPagetwo {
         "reflect": false
       },
       "selectedRooms": {
-        "type": "any",
+        "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "any",
-          "resolved": "any",
-          "references": {}
+          "original": "Map<string, Map<string, any>>",
+          "resolved": "Map<string, Map<string, any>>",
+          "references": {
+            "Map": {
+              "location": "global",
+              "id": "global::Map"
+            }
+          }
         },
         "required": false,
         "optional": false,
         "docs": {
           "tags": [],
           "text": ""
-        },
-        "attribute": "selected-rooms",
-        "reflect": false
+        }
       },
       "isLoading": {
         "type": "string",
@@ -381,13 +372,13 @@ export class IglPagetwo {
           "text": ""
         },
         "complexType": {
-          "original": "{\r\n    key: PageTwoButtonsTypes;\r\n    data?: CustomEvent;\r\n  }",
-          "resolved": "{ key: PageTwoButtonsTypes; data?: CustomEvent<any>; }",
+          "original": "{\r\n    key: TPropertyButtonsTypes;\r\n    data?: CustomEvent;\r\n  }",
+          "resolved": "{ key: TPropertyButtonsTypes; data?: CustomEvent<any>; }",
           "references": {
-            "PageTwoButtonsTypes": {
+            "TPropertyButtonsTypes": {
               "location": "import",
-              "path": "../../../models/models",
-              "id": "src/models/models.ts::PageTwoButtonsTypes"
+              "path": "../../../models/igl-book-property",
+              "id": "src/models/igl-book-property.d.ts::TPropertyButtonsTypes"
             },
             "CustomEvent": {
               "location": "global",

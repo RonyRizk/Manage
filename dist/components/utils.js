@@ -93,6 +93,6 @@ function getNextDay(date) {
   return hooks(date).add(1, 'days').format('YYYY-MM-DD');
 }
 
-export { convertDateToTime as a, dateDifference as b, convertDateToCustomFormat as c, dateToFormattedString as d, getCurrencySymbol as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, addTwoMonthToDate as i, getNextDay as j, convertDMYToISO as k, computeEndDate as l };
+export { convertDateToTime as a, dateDifference as b, convertDateToCustomFormat as c, dateToFormattedString as d, getCurrencySymbol as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, getNextDay as i, addTwoMonthToDate as j, convertDMYToISO as k, computeEndDate as l };
 
 //# sourceMappingURL=utils.js.map
