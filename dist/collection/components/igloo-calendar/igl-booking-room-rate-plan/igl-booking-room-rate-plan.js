@@ -7,6 +7,7 @@ export class IglBookingRoomRatePlan {
     this.defaultData = undefined;
     this.ratePlanData = undefined;
     this.totalAvailableRooms = undefined;
+    this.index = undefined;
     this.ratePricingMode = [];
     this.currency = undefined;
     this.dateDifference = undefined;
@@ -24,21 +25,31 @@ export class IglBookingRoomRatePlan {
     return result;
   }
   componentWillLoad() {
+    this.updateSelectedRatePlan(this.ratePlanData);
+  }
+  disableForm() {
+    return this.selectedData.is_closed || this.totalAvailableRooms === 0;
+  }
+  getSelectedOffering(value) {
+    return this.ratePlanData.variations.find(variation => variation.adult_child_offering === value);
+  }
+  updateSelectedRatePlan(data) {
     this.selectedData = {
-      ratePlanId: this.ratePlanData.id,
-      adult_child_offering: this.ratePlanData.variations[0].adult_child_offering,
+      ratePlanId: data.id,
+      adult_child_offering: data.variations[0].adult_child_offering,
       rateType: 1,
       totalRooms: 0,
-      rate: this.ratePlanData.variations[0].amount,
-      ratePlanName: this.ratePlanData.name,
-      adultCount: this.ratePlanData.variations[0].adult_nbr,
-      childrenCount: this.ratePlanData.variations[0].child_nbr,
-      cancelation: this.ratePlanData.cancelation,
-      guarantee: this.ratePlanData.guarantee,
+      rate: data.variations[0].amount,
+      ratePlanName: data.name,
+      adultCount: data.variations[0].adult_nbr,
+      childrenCount: data.variations[0].child_nbr,
+      cancelation: data.cancelation,
+      guarantee: data.guarantee,
       isRateModified: false,
       defaultSelectedRate: 0,
-      is_closed: this.ratePlanData.is_closed,
-      physicalRooms: this.getAvailableRooms(this.ratePlanData.assignable_units),
+      index: this.index,
+      is_closed: data.is_closed,
+      physicalRooms: this.getAvailableRooms(data.assignable_units),
     };
     if (this.defaultData) {
       for (const [key, value] of Object.entries(this.defaultData)) {
@@ -52,14 +63,8 @@ export class IglBookingRoomRatePlan {
     }
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
-  disableForm() {
-    return this.selectedData.is_closed || this.totalAvailableRooms === undefined || this.selectedData.rate === null || this.selectedData.rate === undefined;
-  }
-  getSelectedOffering(value) {
-    return this.ratePlanData.variations.find(variation => variation.adult_child_offering === value);
-  }
-  async ratePlanDataChanged() {
-    this.selectedData = Object.assign(Object.assign({}, this.selectedData), { rate: this.handleRateDaysUpdate() });
+  async ratePlanDataChanged(newData) {
+    this.selectedData = Object.assign(Object.assign({}, this.selectedData), { rate: this.handleRateDaysUpdate(), physicalRooms: this.getAvailableRooms(newData.assignable_units) });
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -184,7 +189,7 @@ export class IglBookingRoomRatePlan {
       },
       "totalAvailableRooms": {
         "type": "number",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
           "original": "number",
           "resolved": "number",
@@ -198,6 +203,23 @@ export class IglBookingRoomRatePlan {
         },
         "attribute": "total-available-rooms",
         "reflect": true
+      },
+      "index": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "index",
+        "reflect": false
       },
       "ratePricingMode": {
         "type": "unknown",

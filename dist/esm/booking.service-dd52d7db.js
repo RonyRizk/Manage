@@ -3755,7 +3755,7 @@ class BookingService {
     }
     return +rate / +totalNights;
   }
-  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id) {
+  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -3801,6 +3801,7 @@ class BookingService {
             },
             guest: defaultGuest || guest,
             rooms: guestData.map(data => ({
+              identifier: identifier || null,
               roomtype: {
                 id: data.roomCategoryId,
                 name: data.roomCategoryName,
@@ -3863,4 +3864,4 @@ class BookingService {
 
 export { BookingService as B, axios as a, getCurrencySymbol as b, dateDifference as c, dateToFormattedString as d, transformNewBooking as e, findCountry as f, getReleaseHoursString as g, formatLegendColors as h, getNextDay as i, addTwoMonthToDate as j, convertDMYToISO as k, computeEndDate as l, transformNewBLockedRooms as t };
 
-//# sourceMappingURL=booking.service-daa4fe91.js.map
+//# sourceMappingURL=booking.service-dd52d7db.js.map

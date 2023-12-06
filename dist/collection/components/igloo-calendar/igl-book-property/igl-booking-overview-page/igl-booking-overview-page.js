@@ -10,7 +10,7 @@ export class IglBookingOverviewPage {
     this.ratePricingMode = undefined;
     this.dateRangeData = undefined;
     this.selectedRooms = undefined;
-    this.bookingDataDefaultDateRange = undefined;
+    this.adultChildCount = undefined;
     this.sourceOptions = undefined;
   }
   getSplitBookings() {
@@ -20,8 +20,10 @@ export class IglBookingOverviewPage {
     return event === this.eventType;
   }
   render() {
-    var _a;
-    return (h(Host, null, h("igl-book-property-header", { splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingDataDefaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings() }), h("div", { class: "col text-left" }, (_a = this.bookingData.roomsInfo) === null || _a === void 0 ? void 0 : _a.map(roomInfo => (h("igl-booking-rooms", { currency: this.currency, ratePricingMode: this.ratePricingMode, dateDifference: this.dateRangeData.dateDifference, bookingType: this.bookingData.event_type, roomTypeData: roomInfo, class: "mt-2 mb-1", defaultData: this.selectedRooms.get(`c_${roomInfo.id}`), onDataUpdateEvent: evt => this.roomsDataUpdate.emit(evt.detail) })))), h("igl-book-property-footer", { class: 'p-0 mb-1 mt-2', eventType: this.bookingData.event_type, disabled: this.selectedRooms.size === 0 })));
+    var _a, _b;
+    return (h(Host, null, h("igl-book-property-header", { adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings() }), h("div", { class: "col text-left" }, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
+      return (h("igl-booking-rooms", { key: `room-info-${roomInfo.id}`, currency: this.currency, ratePricingMode: this.ratePricingMode, dateDifference: this.dateRangeData.dateDifference, bookingType: this.bookingData.event_type, roomTypeData: roomInfo, class: "mt-2 mb-1", defaultData: this.selectedRooms.get(`c_${roomInfo.id}`), onDataUpdateEvent: evt => this.roomsDataUpdate.emit(evt.detail) }));
+    })), h("igl-book-property-footer", { class: 'p-0 mb-1 mt-2', eventType: this.bookingData.event_type, disabled: this.selectedRooms.size === 0 })));
   }
   static get is() { return "igl-booking-overview-page"; }
   static get encapsulation() { return "scoped"; }
@@ -197,12 +199,12 @@ export class IglBookingOverviewPage {
           "text": ""
         }
       },
-      "bookingDataDefaultDateRange": {
-        "type": "any",
+      "adultChildCount": {
+        "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "any",
-          "resolved": "any",
+          "original": "{ adult: number; child: number }",
+          "resolved": "{ adult: number; child: number; }",
           "references": {}
         },
         "required": false,
@@ -210,9 +212,7 @@ export class IglBookingOverviewPage {
         "docs": {
           "tags": [],
           "text": ""
-        },
-        "attribute": "booking-data-default-date-range",
-        "reflect": false
+        }
       },
       "sourceOptions": {
         "type": "unknown",
@@ -239,21 +239,6 @@ export class IglBookingOverviewPage {
   }
   static get events() {
     return [{
-        "method": "dateRangeSelect",
-        "name": "dateRangeSelect",
-        "bubbles": true,
-        "cancelable": true,
-        "composed": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "complexType": {
-          "original": "any",
-          "resolved": "any",
-          "references": {}
-        }
-      }, {
         "method": "roomsDataUpdate",
         "name": "roomsDataUpdate",
         "bubbles": true,

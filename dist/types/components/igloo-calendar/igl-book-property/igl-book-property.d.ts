@@ -1,7 +1,7 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 import { RoomBlockDetails, RoomBookingDetails } from '../../../models/IBooking';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
-import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption } from '../../../models/igl-book-property';
+import { TAdultChildConstraints, TPropertyButtonsTypes } from '../../../models/igl-book-property';
 export declare class IglBookProperty {
   propertyid: number;
   allowedBookingSources: any;
@@ -16,26 +16,16 @@ export declare class IglBookProperty {
     [key: string]: any;
   };
   adultChildConstraints: TAdultChildConstraints;
-  sourceOption: TSourceOption;
-  splitBookingId: any;
-  renderAgain: boolean;
-  message: string;
-  isLoading: string;
-  dateRangeData: {
-    [key: string]: any;
-  };
   adultChildCount: {
     adult: number;
     child: number;
   };
-  closeBookingWindow: EventEmitter<{
-    [key: string]: any;
-  }>;
-  bookingCreated: EventEmitter<{
-    pool?: string;
-    data: RoomBookingDetails[];
-  }>;
-  blockedCreated: EventEmitter<RoomBlockDetails>;
+  renderAgain: boolean;
+  defaultData: any;
+  isLoading: string;
+  private message;
+  private sourceOption;
+  private dateRangeData;
   private page;
   private showSplitBookingOption;
   private sourceOptions;
@@ -48,6 +38,14 @@ export declare class IglBookProperty {
   private bookingService;
   private bookPropertyService;
   private eventsService;
+  closeBookingWindow: EventEmitter<{
+    [key: string]: any;
+  }>;
+  bookingCreated: EventEmitter<{
+    pool?: string;
+    data: RoomBookingDetails[];
+  }>;
+  blockedCreated: EventEmitter<RoomBlockDetails>;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   componentWillLoad(): Promise<void>;

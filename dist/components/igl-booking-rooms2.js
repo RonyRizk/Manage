@@ -17,45 +17,71 @@ const IglBookingRooms = /*@__PURE__*/ proxyCustomElement(class IglBookingRooms e
     this.ratePricingMode = [];
     this.currency = undefined;
     this.selectedRooms = [];
+    this.totalRooms = undefined;
     this.roomsDistributions = [];
   }
   componentWillLoad() {
-    this.totalRooms = this.roomTypeData.inventory || 0;
-    if (!this.selectedRooms.length) {
-      this.selectedRooms = new Array(this.totalRooms).fill(0);
-    }
-    if (!this.roomsDistributions.length) {
-      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
-    }
+    this.initializeRoomData();
   }
-  handleRoomTypeDataChange(newValue) {
-    this.totalRooms = newValue.inventory || 0;
-    if (!this.selectedRooms.length) {
-      this.selectedRooms = new Array(this.totalRooms).fill(0);
+  initializeRoomData() {
+    const { inventory, rateplans } = this.roomTypeData;
+    this.totalRooms = inventory || 0;
+    this.selectedRooms = new Array(rateplans.length).fill(0);
+    this.roomsDistributions = this.calculateInitialDistributions(rateplans, inventory);
+  }
+  handleRoomTypeData() {
+    this.initializeRoomData();
+  }
+  calculateInitialDistributions(rateplans, inventory) {
+    let distributions = new Array(rateplans.length).fill(inventory);
+    if (this.defaultData && this.bookingType !== 'EDIT_BOOKING' && inventory > 0) {
+      let selectedIndexes = [];
+      let sum = 0;
+      this.defaultData.forEach(category => {
+        this.selectedRooms[category.index] = category.totalRooms;
+        distributions[category.index] = category.totalRooms;
+        sum += category.totalRooms;
+        selectedIndexes.push(category.index);
+      });
+      if (selectedIndexes.length < distributions.length) {
+        distributions.forEach((_, index) => {
+          if (!selectedIndexes.includes(index)) {
+            if (sum === this.totalRooms) {
+              distributions[index] = 0;
+            }
+            else {
+              distributions[index] = distributions[index] - sum;
+            }
+          }
+          else {
+            if (sum < this.totalRooms) {
+              distributions[index] = this.totalRooms - sum + distributions[index];
+            }
+          }
+        });
+      }
     }
-    if (!this.roomsDistributions.length) {
-      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
+    else {
+      distributions.fill(inventory);
     }
+    return distributions;
   }
   onRoomDataUpdate(event, index) {
     event.stopImmediatePropagation();
-    const opt = event.detail;
-    let data = Object.assign({}, opt.data);
-    if (opt.changedKey === 'totalRooms') {
-      let newValue = data.totalRooms;
-      if (this.selectedRooms[index] !== newValue) {
-        this.selectedRooms[index] = newValue;
-        this.updateRatePlanTotalRooms(index);
-      }
+    const { detail: { data, changedKey }, } = event;
+    let updatedData = Object.assign({}, data);
+    if (changedKey === 'totalRooms') {
+      this.handleTotalRoomsUpdate(index, updatedData.totalRooms);
     }
-    data.roomCategoryId = this.roomTypeData.id;
-    data.roomCategoryName = this.roomTypeData.name;
-    data.inventory = this.roomTypeData.inventory;
-    this.dataUpdateEvent.emit({
-      key: opt.key,
-      data: data,
-      changedKey: opt.changedKey,
-    });
+    updatedData = Object.assign(Object.assign({}, updatedData), { roomCategoryId: this.roomTypeData.id, roomCategoryName: this.roomTypeData.name, inventory: this.roomTypeData.inventory });
+    this.dataUpdateEvent.emit({ key: data.key, data: updatedData, changedKey });
+  }
+  handleTotalRoomsUpdate(index, newValue) {
+    if (this.selectedRooms[index] !== newValue) {
+      this.selectedRooms[index] = newValue;
+      this.updateRatePlanTotalRooms(index);
+    }
+    //console.log(this.roomsDistributions, this.selectedRooms);
   }
   updateRatePlanTotalRooms(ratePlanIndex) {
     const calculateTotalSelectedRoomsExcludingIndex = excludedIndex => {
@@ -70,16 +96,14 @@ const IglBookingRooms = /*@__PURE__*/ proxyCustomElement(class IglBookingRooms e
       return availableRooms > 0 ? availableRooms : 0;
     });
     if (JSON.stringify(this.roomsDistributions) !== JSON.stringify(newRoomsDistributions)) {
-      this.roomsDistributions = newRoomsDistributions;
+      this.roomsDistributions = [...newRoomsDistributions];
     }
   }
   render() {
     const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
     return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
       if (ratePlan.variations !== null) {
-        return (h("igl-booking-room-rate-plan", { key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? 'ml-1' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan,
-          //fullyBlocked={this.roomTypeData.rate === 0}
-          totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
+        return (h("igl-booking-room-rate-plan", { index: index, key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? 'ml-1' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
       }
       else {
         return null;
@@ -87,7 +111,7 @@ const IglBookingRooms = /*@__PURE__*/ proxyCustomElement(class IglBookingRooms e
     })));
   }
   static get watchers() { return {
-    "roomTypeData": ["handleRoomTypeDataChange"]
+    "roomTypeData": ["handleRoomTypeData"]
   }; }
   static get style() { return iglBookingRoomsCss; }
 }, [2, "igl-booking-rooms", {
@@ -98,6 +122,7 @@ const IglBookingRooms = /*@__PURE__*/ proxyCustomElement(class IglBookingRooms e
     "ratePricingMode": [16],
     "currency": [8],
     "selectedRooms": [32],
+    "totalRooms": [32],
     "roomsDistributions": [32]
   }]);
 function defineCustomElement() {

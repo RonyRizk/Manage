@@ -10,9 +10,11 @@ export declare class IglBookingOverviewPage {
   ratePricingMode: any;
   dateRangeData: any;
   selectedRooms: Map<string, Map<string, any>>;
-  bookingDataDefaultDateRange: any;
+  adultChildCount: {
+    adult: number;
+    child: number;
+  };
   sourceOptions: TSourceOptions[];
-  dateRangeSelect: EventEmitter;
   roomsDataUpdate: EventEmitter;
   getSplitBookings(): any;
   isEventType(event: string): boolean;

@@ -8,18 +8,21 @@ export declare class IglBookingRooms {
   dateDifference: number;
   ratePricingMode: any[];
   currency: any;
+  selectedRooms: number[];
+  totalRooms: number;
+  roomsDistributions: number[];
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;
   }>;
-  selectedRooms: number[];
-  roomsDistributions: number[];
   private validBookingTypes;
-  private totalRooms;
   componentWillLoad(): void;
-  handleRoomTypeDataChange(newValue: any): void;
+  private initializeRoomData;
+  handleRoomTypeData(): void;
+  private calculateInitialDistributions;
   onRoomDataUpdate(event: CustomEvent<{
     [key: string]: any;
   }>, index: number): void;
+  private handleTotalRoomsUpdate;
   updateRatePlanTotalRooms(ratePlanIndex: number): void;
   render(): any;
 }

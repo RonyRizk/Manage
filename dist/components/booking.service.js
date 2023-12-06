@@ -234,7 +234,7 @@ class BookingService {
     }
     return +rate / +totalNights;
   }
-  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id) {
+  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -280,6 +280,7 @@ class BookingService {
             },
             guest: defaultGuest || guest,
             rooms: guestData.map(data => ({
+              identifier: identifier || null,
               roomtype: {
                 id: data.roomCategoryId,
                 name: data.roomCategoryName,

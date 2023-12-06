@@ -7,6 +7,7 @@ export declare class IglBookingRoomRatePlan {
     [key: string]: any;
   };
   totalAvailableRooms: number;
+  index: number;
   ratePricingMode: any[];
   currency: any;
   dateDifference: number;
@@ -26,7 +27,8 @@ export declare class IglBookingRoomRatePlan {
   componentWillLoad(): void;
   disableForm(): any;
   getSelectedOffering(value: any): any;
-  ratePlanDataChanged(): Promise<void>;
+  updateSelectedRatePlan(data: any): void;
+  ratePlanDataChanged(newData: any): Promise<void>;
   handleRateDaysUpdate(): any;
   handleInput(event: InputEvent): void;
   handleDataChange(key: any, evt: any): void;

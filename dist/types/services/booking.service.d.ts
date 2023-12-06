@@ -26,5 +26,5 @@ export declare class BookingService {
   }, propertyid: number, currency: {
     id: number;
     code: string;
-  }, bookingNumber?: string, defaultGuest?: any, arrivalTime?: any, pr_id?: number): Promise<any>;
+  }, bookingNumber?: string, defaultGuest?: any, arrivalTime?: any, pr_id?: number, identifier?: string): Promise<any>;
 }

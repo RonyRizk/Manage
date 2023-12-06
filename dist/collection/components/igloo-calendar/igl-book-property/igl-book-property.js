@@ -6,6 +6,7 @@ import { IglBookPropertyService } from "./igl-book-property.service";
 import { EventsService } from "../../../services/events.service";
 export class IglBookProperty {
   constructor() {
+    this.message = '';
     this.showSplitBookingOption = false;
     this.sourceOptions = [];
     this.guestData = [];
@@ -25,16 +26,13 @@ export class IglBookProperty {
     this.currency = undefined;
     this.bookingData = undefined;
     this.adultChildConstraints = undefined;
-    this.sourceOption = undefined;
-    this.splitBookingId = '';
-    this.renderAgain = false;
-    this.message = '';
-    this.isLoading = undefined;
-    this.dateRangeData = undefined;
     this.adultChildCount = {
       adult: 0,
       child: 0,
     };
+    this.renderAgain = false;
+    this.defaultData = undefined;
+    this.isLoading = undefined;
   }
   componentDidLoad() {
     document.addEventListener('keydown', e => {
@@ -50,26 +48,27 @@ export class IglBookProperty {
     if (!this.bookingData.defaultDateRange) {
       return;
     }
-    this.dateRangeData = Object.assign({}, this.bookingData.defaultDateRange);
+    this.defaultData = this.bookingData;
+    this.dateRangeData = Object.assign({}, this.defaultData.defaultDateRange);
     try {
       const setupEntries = await this.fetchSetupEntries();
       this.setSourceOptions(this.allowedBookingSources);
       this.setOtherProperties(setupEntries);
       if (this.isEventType('EDIT_BOOKING')) {
         this.adultChildCount = {
-          adult: this.bookingData.ADULTS_COUNT,
-          child: this.bookingData.CHILDREN_COUNT,
+          adult: this.defaultData.ADULTS_COUNT,
+          child: this.defaultData.CHILDREN_COUNT,
         };
-        this.bookPropertyService.setEditingRoomInfo(this.bookingData, this.selectedUnits);
+        this.bookPropertyService.setEditingRoomInfo(this.defaultData, this.selectedUnits);
       }
       if (!this.isEventType('BAR_BOOKING')) {
-        this.bookingData.roomsInfo = [];
+        this.defaultData.roomsInfo = [];
       }
-      if (this.bookingData.event_type === 'SPLIT_BOOKING') {
+      if (this.defaultData.event_type === 'SPLIT_BOOKING') {
         this.showSplitBookingOption = true;
         this.page = 'page_one';
       }
-      else if (this.bookingData.event_type === 'BLOCK_DATES') {
+      else if (this.defaultData.event_type === 'BLOCK_DATES') {
         this.page = 'page_block_date';
       }
       else {
@@ -90,7 +89,7 @@ export class IglBookProperty {
       tag: source.tag,
     }));
     if (this.isEventType('EDIT_BOOKING')) {
-      this.sourceOption = Object.assign({}, this.bookingData.SOURCE);
+      this.sourceOption = Object.assign({}, this.defaultData.SOURCE);
     }
     else {
       this.sourceOption = {
@@ -106,15 +105,19 @@ export class IglBookProperty {
     this.bedPreferenceType = res.bedPreferenceType;
   }
   handleAdultChildChange(event) {
-    this.adultChildCount = event.detail;
+    this.adultChildCount = Object.assign({}, event.detail);
   }
   async initializeBookingAvailability(from_date, to_date) {
     try {
-      const room_type_ids = this.bookingData.roomsInfo.map(room => room.id);
+      const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
       const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
       this.message = '';
-      this.bookingData = Object.assign(Object.assign({}, this.bookingData), { roomsInfo: data.roomtypes });
       this.message = data.tax_statement;
+      if (!this.isEventType('EDIT_BOOKING')) {
+        this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
+        this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
+      }
+      this.defaultData = Object.assign(Object.assign({}, this.defaultData), { roomsInfo: data.roomtypes });
     }
     catch (error) {
       // toastr.error(error);
@@ -122,29 +125,28 @@ export class IglBookProperty {
   }
   getRoomCategoryByRoomId(roomId) {
     var _a;
-    return (_a = this.bookingData.roomsInfo) === null || _a === void 0 ? void 0 : _a.find(roomCategory => {
+    return (_a = this.defaultData.roomsInfo) === null || _a === void 0 ? void 0 : _a.find(roomCategory => {
       return roomCategory.physicalrooms.find(room => room.id === +roomId);
     });
   }
   getSplitBookings() {
-    return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
+    return (this.defaultData.hasOwnProperty('splitBookingEvents') && this.defaultData.splitBookingEvents) || [];
   }
   closeWindow() {
+    this.dateRangeData = {};
     this.closeBookingWindow.emit();
   }
   isEventType(key) {
-    return this.bookingData.event_type === key;
+    return this.defaultData.event_type === key;
   }
   onDateRangeSelect(event) {
-    const opt = event.detail;
     event.stopImmediatePropagation();
     event.stopPropagation();
+    const opt = event.detail;
     if (opt.key === 'selectedDateRange') {
       this.dateRangeData = opt.data;
-      this.bookingData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
-      this.bookingData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
       if (this.adultChildCount.adult !== 0) {
-        this.initializeBookingAvailability(dateToFormattedString(this.bookingData.defaultDateRange.fromDate), dateToFormattedString(this.bookingData.defaultDateRange.toDate));
+        this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
       }
     }
   }
@@ -160,7 +162,7 @@ export class IglBookProperty {
     const opt = event.detail;
     if (opt.guestRefKey) {
       if (this.isEventType('BAR_BOOKING')) {
-        this.guestData[opt.guestRefKey] = Object.assign(Object.assign({}, opt.data), { roomId: this.bookingData.PR_ID });
+        this.guestData[opt.guestRefKey] = Object.assign(Object.assign({}, opt.data), { roomId: this.defaultData.PR_ID });
       }
       else
         this.guestData[opt.guestRefKey] = opt.data;
@@ -198,7 +200,7 @@ export class IglBookProperty {
     this.gotoPage('page_one');
   }
   getPageBlockDatesView() {
-    return (h("div", { class: "scrollContent blockDatesForm" }, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.bookingData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "row p-0 mb-1 mt-2" }, h("div", { class: "col-6" }, h("button", { class: "btn btn-secondary full-width", onClick: () => this.closeWindow() }, "Cancel")), h("div", { class: "col-6" }, h("button", { class: "btn btn-primary full-width", onClick: () => this.handleBlockDate() }, "Block dates")))));
+    return (h("div", { class: "scrollContent blockDatesForm" }, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "row p-0 mb-1 mt-2" }, h("div", { class: "col-6" }, h("button", { class: "btn btn-secondary full-width", onClick: () => this.closeWindow() }, "Cancel")), h("div", { class: "col-6" }, h("button", { class: "btn btn-primary full-width", onClick: () => this.handleBlockDate() }, "Block dates")))));
   }
   handleButtonClicked(event) {
     event.stopImmediatePropagation();
@@ -222,7 +224,7 @@ export class IglBookProperty {
       case 'next':
         this.gotoPage('page_two');
       case 'check':
-        this.initializeBookingAvailability(dateToFormattedString(this.bookingData.defaultDateRange.fromDate), dateToFormattedString(this.bookingData.defaultDateRange.toDate));
+        this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
       default:
         break;
     }
@@ -239,7 +241,7 @@ export class IglBookProperty {
   }
   async handleBlockDate() {
     const releaseData = getReleaseHoursString(+this.blockDatesData.RELEASE_AFTER_HOURS);
-    const result = await this.bookingService.blockUnit(Object.assign({ from_date: dateToFormattedString(this.bookingData.defaultDateRange.fromDate), to_date: dateToFormattedString(this.bookingData.defaultDateRange.toDate), NOTES: this.blockDatesData.OPTIONAL_REASON || '', pr_id: this.bookingData.PR_ID.toString(), STAY_STATUS_CODE: this.blockDatesData.OUT_OF_SERVICE ? '004' : this.blockDatesData.RELEASE_AFTER_HOURS === 0 ? '002' : '003', DESCRIPTION: this.blockDatesData.RELEASE_AFTER_HOURS || '' }, releaseData));
+    const result = await this.bookingService.blockUnit(Object.assign({ from_date: dateToFormattedString(this.defaultData.defaultDateRange.fromDate), to_date: dateToFormattedString(this.defaultData.defaultDateRange.toDate), NOTES: this.blockDatesData.OPTIONAL_REASON || '', pr_id: this.defaultData.PR_ID.toString(), STAY_STATUS_CODE: this.blockDatesData.OUT_OF_SERVICE ? '004' : this.blockDatesData.RELEASE_AFTER_HOURS === 0 ? '002' : '003', DESCRIPTION: this.blockDatesData.RELEASE_AFTER_HOURS || '' }, releaseData));
     const blockedUnit = await transformNewBLockedRooms(result);
     this.blockedCreated.emit(blockedUnit);
     this.closeWindow();
@@ -247,13 +249,13 @@ export class IglBookProperty {
   async bookUser(check_in) {
     this.setLoadingState(check_in);
     try {
-      if (['003', '002', '004'].includes(this.bookingData.STATUS_CODE)) {
-        this.eventsService.deleteEvent(this.bookingData.POOL);
+      if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
+        this.eventsService.deleteEvent(this.defaultData.POOL);
       }
       if (this.isEventType('EDIT_BOOKING')) {
-        this.bookedByInfoData.message = this.bookingData.NOTES;
+        this.bookedByInfoData.message = this.defaultData.NOTES;
       }
-      const serviceParams = this.bookPropertyService.prepareBookUserServiceParams(this, check_in);
+      const serviceParams = this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
       await this.bookingService.bookUser(...serviceParams);
     }
     catch (error) {
@@ -272,7 +274,7 @@ export class IglBookProperty {
     }
   }
   getArrivalTimeForBooking() {
-    return this.bookedByInfoData.arrivalTime.find(e => e.CODE_VALUE_EN === this.bookingData.ARRIVAL_TIME).CODE_NAME;
+    return this.bookedByInfoData.arrivalTime.find(e => e.CODE_VALUE_EN === this.defaultData.ARRIVAL_TIME).CODE_NAME;
   }
   resetLoadingState() {
     this.isLoading = '';
@@ -281,7 +283,7 @@ export class IglBookProperty {
     }, 100);
   }
   onRoomDataUpdate(event) {
-    const units = this.bookPropertyService.onDataRoomUpdate(event, this.selectedUnits, this.isEventType('EDIT_BOOKING'), this.bookingData.NAME, this.bookingData.PR_ID, this.bookingData);
+    const units = this.bookPropertyService.onDataRoomUpdate(event, this.selectedUnits, this.isEventType('EDIT_BOOKING'), this.defaultData.NAME);
     this.selectedUnits = new Map(units);
     this.renderPage();
   }
@@ -289,9 +291,12 @@ export class IglBookProperty {
     return this.page === name;
   }
   render() {
-    return (h(Host, null, h("div", { class: "background-overlay", onClick: () => this.closeWindow() }), h("div", { class: 'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'col-sm-12 col-md-6 col-lg-5 col-xl-4' : 'col-sm-12 col-md-11 col-lg-9 col-xl-8') }, h("div", { class: "card mb-0 shadow-none p-0" }, h("div", { class: "card-header" }, h("h3", { class: "card-title text-left pb-1 font-medium-2" }, this.getCurrentPage('page_block_date') ? this.bookingData.BLOCK_DATES_TITLE : this.bookingData.TITLE), h("button", { type: "button", class: "close close-icon", onClick: () => this.closeWindow() }, h("i", { class: "ft-x" })))), this.getCurrentPage('page_one') && (h("div", { class: "scrollContent" }, h("igl-booking-overview-page", { class: 'p-0 mb-1 mt-2', eventType: this.bookingData.event_type, selectedRooms: this.selectedUnits, currency: this.currency, message: this.message, showSplitBookingOption: this.showSplitBookingOption, ratePricingMode: this.ratePricingMode, dateRangeData: this.dateRangeData, bookingData: this.bookingData, bookingDataDefaultDateRange: this.dateRangeData, adultChildConstraints: this.adultChildConstraints, onRoomsDataUpdate: evt => {
+    //console.log('render');
+    return (h(Host, null, h("div", { class: "background-overlay", onClick: () => this.closeWindow() }), h("div", { class: 'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'col-sm-12 col-md-6 col-lg-5 col-xl-4' : 'col-sm-12 col-md-11 col-lg-9 col-xl-8') }, h("div", { class: "card mb-0 shadow-none p-0" }, h("div", { class: "card-header" }, h("h3", { class: "card-title text-left pb-1 font-medium-2" }, this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE), h("button", { type: "button", class: "close close-icon", onClick: () => this.closeWindow() }, h("i", { class: "ft-x" })))), this.getCurrentPage('page_one') && (h("div", { class: "scrollContent" }, h("igl-booking-overview-page", { class: 'p-0 mb-1 mt-2', eventType: this.defaultData.event_type, selectedRooms: this.selectedUnits, currency: this.currency, message: this.message, showSplitBookingOption: this.showSplitBookingOption, ratePricingMode: this.ratePricingMode, dateRangeData: this.dateRangeData, bookingData: this.defaultData, adultChildCount: this.adultChildCount,
+      // bookingDataDefaultDateRange={this.dateRangeData}
+      adultChildConstraints: this.adultChildConstraints, onRoomsDataUpdate: evt => {
         this.onRoomDataUpdate(evt);
-      }, sourceOptions: this.sourceOptions }))), this.getCurrentPage('page_two') && (h("igl-pagetwo", { showPaymentDetails: this.showPaymentDetails, selectedGuestData: this.guestData, countryNodeList: this.countryNodeList, isLoading: this.isLoading, selectedRooms: this.selectedUnits, bedPreferenceType: this.bedPreferenceType, dateRangeData: this.dateRangeData, bookingData: this.bookingData, showSplitBookingOption: this.showSplitBookingOption, language: this.language, bookedByInfoData: this.bookedByInfoData, isEditOrAddRoomEvent: this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM'), onDataUpdateEvent: event => this.handlePageTwoDataUpdateEvent(event) })), this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null)));
+      }, sourceOptions: this.sourceOptions }))), this.getCurrentPage('page_two') && (h("igl-pagetwo", { showPaymentDetails: this.showPaymentDetails, selectedGuestData: this.guestData, countryNodeList: this.countryNodeList, isLoading: this.isLoading, selectedRooms: this.selectedUnits, bedPreferenceType: this.bedPreferenceType, dateRangeData: this.dateRangeData, bookingData: this.defaultData, showSplitBookingOption: this.showSplitBookingOption, language: this.language, bookedByInfoData: this.bookedByInfoData, isEditOrAddRoomEvent: this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM'), onDataUpdateEvent: event => this.handlePageTwoDataUpdateEvent(event) })), this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null)));
   }
   static get is() { return "igl-book-property"; }
   static get encapsulation() { return "scoped"; }
@@ -448,13 +453,10 @@ export class IglBookProperty {
   }
   static get states() {
     return {
-      "sourceOption": {},
-      "splitBookingId": {},
+      "adultChildCount": {},
       "renderAgain": {},
-      "message": {},
-      "isLoading": {},
-      "dateRangeData": {},
-      "adultChildCount": {}
+      "defaultData": {},
+      "isLoading": {}
     };
   }
   static get events() {
@@ -525,7 +527,7 @@ export class IglBookProperty {
         "capture": false,
         "passive": false
       }, {
-        "name": "dateRangeSelectChange",
+        "name": "dateSelectEvent",
         "method": "onDateRangeSelect",
         "target": undefined,
         "capture": false,

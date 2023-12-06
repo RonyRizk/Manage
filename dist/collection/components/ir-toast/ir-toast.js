@@ -68,7 +68,7 @@ export class IrToast {
     }
   }
   render() {
-    return (h(Host, null, h("section", { "aria-live": "off", role: "status", "aria-atomic": "true", ref: el => (this.toastRef = el), class: `ToastRoot` }, this.isVisible && (h(Fragment, null, this.toastBody.type === 'custom' ? (this.toastBody.body) : (h(Fragment, null, h("h3", { class: "ToastTitle" }, this.toastBody.title), h("p", { class: "ToastDescription" }, this.toastBody.description), this.renderIcon())))))));
+    return (h(Host, null, h("section", { "aria-live": "off", role: "status", "aria-atomic": "true", ref: el => (this.toastRef = el), class: `ToastRoot` }, this.isVisible && (h(Fragment, null, this.toastBody.type === 'custom' ? (this.toastBody.body) : (h(Fragment, null, this.toastBody.title !== '' && h("h3", { class: "ToastTitle" }, this.toastBody.title), this.toastBody.description !== '' && h("p", { class: "ToastDescription" }, this.toastBody.description), this.renderIcon())))))));
   }
   static get is() { return "ir-toast"; }
   static get encapsulation() { return "scoped"; }
