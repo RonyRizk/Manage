@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h } from './index-737913b0.js';
+import { r as registerInstance, c as createEvent, h } from './index-44eee748.js';
 import { v as v4 } from './v4-87f26972.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};

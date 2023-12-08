@@ -1,7 +1,6 @@
 import { Host, h } from "@stencil/core";
 import { ToBeAssignedService } from "../../../../services/toBeAssigned.service";
 import { v4 } from "uuid";
-import { transformNewBooking } from "../../../../utils/booking";
 export class IglTbaBookingView {
   constructor() {
     this.highlightSection = false;
@@ -51,17 +50,22 @@ export class IglTbaBookingView {
       event.stopImmediatePropagation();
       event.stopPropagation();
       if (this.selectedRoom) {
-        const result = await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
-        let assignEvent = transformNewBooking(result);
-        const newEvent = Object.assign(Object.assign(Object.assign({}, this.eventData), assignEvent[0]), { ID: this.eventData.ID });
-        console.log(newEvent);
-        //this.calendarData.bookingEvents.push(newEvent);
-        //console.log(newEvent);
+        await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
+        // //let assignEvent = transformNewBooking(result);
+        // const newEvent = { ...this.eventData, ID: this.eventData.ID };
+        // //this.calendarData.bookingEvents.push(newEvent);
+        // //console.log(newEvent);
+        // this.addToBeAssignedEvent.emit({
+        //   key: 'tobeAssignedEvents',
+        //   //data: [assignEvent[0]],
+        // });
+        //this.assignRoomEvent.emit({ key: 'assignRoom', data: newEvent });
+        let assignEvent = Object.assign(Object.assign({}, this.eventData), { PR_ID: this.selectedRoom });
         this.addToBeAssignedEvent.emit({
           key: 'tobeAssignedEvents',
-          data: [assignEvent[0]],
+          data: [assignEvent],
         });
-        this.assignRoomEvent.emit({ key: 'assignRoom', data: newEvent });
+        this.assignRoomEvent.emit({ key: 'assignRoom', data: assignEvent });
       }
     }
     catch (error) {
@@ -129,7 +133,7 @@ export class IglTbaBookingView {
     // this.initializeToolTips();
   }
   render() {
-    return (h(Host, null, h("div", { class: "bookingContainer", onClick: () => this.handleHighlightAvailability() }, h("div", { class: `guestTitle ${this.highlightSection ? 'selectedOrder' : ''} pointer font-small-3`, "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Click to assign unit" }, `Book# ${this.eventData.BOOKING_NUMBER} , ${this.eventData.NAME}`), h("div", { class: "row m-0 p-0 actionsContainer" }, h("div", { class: "d-inline-block p-0 selectContainer" }, h("select", { class: "form-control input-sm", id: v4(), onChange: evt => this.onSelectRoom(evt) }, h("option", { value: "", selected: this.selectedRoom == -1 }, "Assign unit"), this.allRoomsList.map(room => (h("option", { value: room.id, selected: this.selectedRoom == room.id }, room.name))))), this.highlightSection ? (h("div", { class: "d-inline-block text-right buttonsContainer" }, h("button", { type: "button", class: "btn btn-secondary btn-sm", onClick: evt => this.handleCloseAssignment(evt) }, "X"), h("button", { type: "button", class: "btn btn-primary btn-sm", onClick: evt => this.handleAssignUnit(evt), disabled: this.selectedRoom === -1 }, "Assign"))) : null), h("hr", null))));
+    return (h(Host, null, h("div", { class: "bookingContainer", onClick: () => this.handleHighlightAvailability() }, h("div", { class: `guestTitle ${this.highlightSection ? 'selectedOrder' : ''} pointer font-small-3`, "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Click to assign unit" }, `Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`), h("div", { class: "row m-0 p-0 actionsContainer" }, h("div", { class: "d-inline-block p-0 selectContainer" }, h("select", { class: "form-control input-sm", id: v4(), onChange: evt => this.onSelectRoom(evt) }, h("option", { value: "", selected: this.selectedRoom == -1 }, "Assign unit"), this.allRoomsList.map(room => (h("option", { value: room.id, selected: this.selectedRoom == room.id }, room.name))))), this.highlightSection ? (h("div", { class: "d-inline-block text-right buttonsContainer" }, h("button", { type: "button", class: "btn btn-secondary btn-sm", onClick: evt => this.handleCloseAssignment(evt) }, "X"), h("button", { type: "button", class: "btn btn-primary btn-sm", onClick: evt => this.handleAssignUnit(evt), disabled: this.selectedRoom === -1 }, "Assign"))) : null), h("hr", null))));
   }
   static get is() { return "igl-tba-booking-view"; }
   static get encapsulation() { return "scoped"; }

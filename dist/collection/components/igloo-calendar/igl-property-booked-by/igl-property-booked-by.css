@@ -4490,7 +4490,9 @@ readers do not read off random characters that represent icons */
 .bookedByEmailContainer {
   flex: auto;
   max-width: 250px;
+  margin-left: 37px;
 }
+
 
 .bookedDetailsForm label {
   min-width: 125px;
@@ -4508,4 +4510,14 @@ readers do not read off random characters that represent icons */
 .bookedDetailsForm .checkBoxContainer input {
   height: 1.2rem !important;
   width: 30px;
+}
+/* .controlContainer1 .textarea-container {
+  border: 1px solid #ced4da; 
+  border-radius: 0.25rem; 
+  height: 60px; 
+  width: 100%;
+} */
+.controlContainer textarea{
+height: 60px !important;
+
 }

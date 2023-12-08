@@ -20,6 +20,7 @@ export declare class BookingService {
   getExoposedBooking(booking_nbr: string, language: string): Promise<Booking>;
   private generateDays;
   private calculateTotalRate;
+  fetchExposedGuest(email: string, property_id: number): Promise<any>;
   bookUser(bookedByInfoData: any, check_in: boolean, fromDate: Date, toDate: Date, guestData: any, totalNights: number, source: {
     code: string;
     description: string;

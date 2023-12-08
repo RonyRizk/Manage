@@ -12,6 +12,7 @@ export declare class IglooCalendar {
   private element;
   dragOverHighlightElement: EventEmitter;
   moveBookingTo: EventEmitter;
+  calculateUnassignedDates: EventEmitter;
   calendarData: {
     [key: string]: any;
   };

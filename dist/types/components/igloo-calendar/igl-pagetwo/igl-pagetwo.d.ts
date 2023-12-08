@@ -3,6 +3,7 @@ import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
 export declare class IglPagetwo {
   showPaymentDetails: boolean;
+  currency: any;
   isEditOrAddRoomEvent: boolean;
   dateRangeData: {
     [key: string]: any;
@@ -15,6 +16,7 @@ export declare class IglPagetwo {
   bookedByInfoData: {
     [key: string]: any;
   };
+  propertyId: number;
   bedPreferenceType: any;
   selectedRooms: Map<string, Map<string, any>>;
   isLoading: string;

@@ -1,0 +1,43 @@
+import { EventEmitter } from '../../stencil-public-runtime';
+export declare class IrAutocomplete {
+  duration: number;
+  placeholder: string;
+  propertyId: number;
+  type: 'email' | 'text' | 'password' | 'number' | 'search';
+  name: string;
+  inputId: string;
+  required: boolean;
+  disabled: boolean;
+  value: string;
+  inputValue: string;
+  data: any[];
+  selectedIndex: number;
+  isComboBoxVisible: boolean;
+  comboboxValue: EventEmitter<{
+    key: string;
+    data: unknown;
+  }>;
+  isItemSelected: boolean;
+  el: HTMLElement;
+  private inputRef;
+  private debounceTimer;
+  private bookingService;
+  handleKeyDown(event: KeyboardEvent): void;
+  getHeightOfPElement(): number;
+  adjustScrollPosition(itemHeight: any, visibleHeight?: number): void;
+  setInputValue(item: any): void;
+  selectItem(index: any): void;
+  debounceFetchData(): void;
+  fetchData(): Promise<void>;
+  handleInputChange(event: Event): void;
+  handleDocumentClick(event: MouseEvent): void;
+  handleBlur(): void;
+  isDropdownItem(element: any): any;
+  disconnectedCallback(): void;
+  handleItemKeyDown(event: KeyboardEvent, index: number): void;
+  renderDropdown(): any;
+  handleFocus(): void;
+  clearInput(): void;
+  resetCombobox(withblur?: boolean): void;
+  render(): any;
+}

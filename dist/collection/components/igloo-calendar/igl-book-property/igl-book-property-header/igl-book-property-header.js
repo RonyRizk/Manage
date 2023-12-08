@@ -27,7 +27,12 @@ export class IglBookPropertyHeader {
     return (h("fieldset", { class: "form-group col-12 text-left" }, h("label", { class: "h5" }, "To booking# "), h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.splitBookingDropDownChange.emit(evt) }, h("option", { value: "", selected: this.splitBookingId != '' }, "Select"), this.splitBookings.map(option => (h("option", { value: option.ID, selected: this.splitBookingId === option.ID }, this.getSelectedSplitBookingName(option.ID))))))));
   }
   getSourceNode() {
-    return (h("fieldset", { class: "form-group col-12 text-left" }, h("label", { class: "h5" }, "Source "), h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.sourceDropDownChange.emit(evt.target.value) }, this.sourceOptions.map(option => (h("option", { value: option.id, selected: this.sourceOption.code === option.id }, option.value)))))));
+    return (h("fieldset", { class: "col-12 text-left" }, h("label", { class: "h5" }, "Source "), h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.sourceDropDownChange.emit(evt.target.value) }, this.sourceOptions.map(option => {
+      if (option.type === 'LABEL') {
+        return h("optgroup", { label: option.value });
+      }
+      return (h("option", { value: option.id, selected: this.sourceOption.code === option.id }, option.value));
+    })))));
   }
   handleAdultChildChange(key, event) {
     const value = event.target.value;
@@ -41,13 +46,21 @@ export class IglBookPropertyHeader {
     this.adultChild.emit(obj);
   }
   getAdultChildConstraints() {
-    return (h("div", { class: "form-group  text-left d-flex align-items-center mt-1" }, h("fieldset", null, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, h("option", { value: '' }, "Ad..."), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (h("fieldset", { class: 'ml-1' }, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, h("option", { value: '' }, `Ch... < ${this.adultChildConstraints.child_max_age} years`), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option))))))), h("button", { disabled: this.adultChildCount.adult === 0, class: 'btn btn-primary ml-2 ', onClick: () => this.buttonClicked.emit({ key: 'check' }) }, "Check")));
+    return (h("div", { class: "form-group  text-left d-flex align-items-center mt-1" }, h("fieldset", null, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, h("option", { value: "" }, "Ad.."), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (h("fieldset", { class: 'ml-1' }, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, h("option", { value: '' }, `Ch... < ${this.adultChildConstraints.child_max_age} years`), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option))))))), h("button", { class: 'btn btn-primary btn-sm ml-2 ', onClick: () => this.handleButtonClicked() }, "Check")));
+  }
+  handleButtonClicked() {
+    if (this.adultChildCount.adult === 0) {
+      this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
+    }
+    else {
+      this.buttonClicked.emit({ key: 'check' });
+    }
   }
   isEventType(key) {
     return this.bookingData.event_type === key;
   }
   render() {
-    return (h(Host, null, this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode(), h("div", { class: 'd-md-flex align-items-center' }, h("fieldset", { class: "form-group row" }, h("igl-date-range", { disabled: this.isEventType('BAR_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-left ml-1 mt-1" }, this.message)));
+    return (h(Host, null, this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode(), h("div", { class: 'd-md-flex align-items-center' }, h("fieldset", { class: "form-group row mt-1 mt-md-0  " }, h("igl-date-range", { disabled: this.isEventType('BAR_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-left ml-1 mt-1" }, this.message)));
   }
   static get is() { return "igl-book-property-header"; }
   static get encapsulation() { return "scoped"; }
@@ -78,7 +91,7 @@ export class IglBookPropertyHeader {
           "text": ""
         },
         "attribute": "split-booking-id",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "''"
       },
       "bookingData": {
@@ -96,7 +109,7 @@ export class IglBookPropertyHeader {
           "text": ""
         },
         "attribute": "booking-data",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "''"
       },
       "sourceOptions": {
@@ -136,11 +149,11 @@ export class IglBookPropertyHeader {
           "text": ""
         },
         "attribute": "message",
-        "reflect": true
+        "reflect": false
       },
       "bookingDataDefaultDateRange": {
         "type": "unknown",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
           "original": "{ [key: string]: any }",
           "resolved": "{ [key: string]: any; }",
@@ -168,7 +181,7 @@ export class IglBookPropertyHeader {
           "text": ""
         },
         "attribute": "show-split-booking-option",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "false"
       },
       "adultChildConstraints": {
@@ -303,6 +316,27 @@ export class IglBookPropertyHeader {
               "location": "import",
               "path": "../../../../models/igl-book-property",
               "id": "src/models/igl-book-property.d.ts::TPropertyButtonsTypes"
+            }
+          }
+        }
+      }, {
+        "method": "toast",
+        "name": "toast",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "IToast",
+          "resolved": "ICustomToast & Partial<IToastWithButton> | IDefaultToast & Partial<IToastWithButton>",
+          "references": {
+            "IToast": {
+              "location": "import",
+              "path": "../../../ir-toast/toast",
+              "id": "src/components/ir-toast/toast.ts::IToast"
             }
           }
         }

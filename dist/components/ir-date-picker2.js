@@ -24,6 +24,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     this.customRangeLabel = 'Custom';
     this.weekLabel = 'W';
     this.disabled = false;
+    this.singleDatePicker = false;
     this.maxSpan = {
       days: 240,
     };
@@ -31,6 +32,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
   componentDidLoad() {
     this.dateRangeInput = this.element.querySelector('.date-range-input');
     $(this.dateRangeInput).daterangepicker({
+      singleDatePicker: this.singleDatePicker,
       opens: this.opens,
       startDate: hooks(this.fromDate),
       endDate: hooks(this.toDate),
@@ -61,21 +63,22 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
 }, [2, "ir-date-picker", {
     "fromDate": [16],
     "toDate": [16],
-    "opens": [513],
-    "autoApply": [516, "auto-apply"],
-    "firstDay": [514, "first-day"],
+    "opens": [1],
+    "autoApply": [4, "auto-apply"],
+    "firstDay": [2, "first-day"],
     "monthNames": [16],
     "daysOfWeek": [16],
-    "format": [513],
-    "separator": [513],
-    "applyLabel": [513, "apply-label"],
-    "cancelLabel": [513, "cancel-label"],
-    "fromLabel": [513, "from-label"],
-    "toLabel": [513, "to-label"],
-    "customRangeLabel": [513, "custom-range-label"],
-    "weekLabel": [513, "week-label"],
-    "disabled": [516],
-    "maxSpan": [520, "max-span"]
+    "format": [1],
+    "separator": [1],
+    "applyLabel": [1, "apply-label"],
+    "cancelLabel": [1, "cancel-label"],
+    "fromLabel": [1, "from-label"],
+    "toLabel": [1, "to-label"],
+    "customRangeLabel": [1, "custom-range-label"],
+    "weekLabel": [1, "week-label"],
+    "disabled": [4],
+    "singleDatePicker": [4, "single-date-picker"],
+    "maxSpan": [8, "max-span"]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

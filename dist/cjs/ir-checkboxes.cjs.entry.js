@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-c42658be.js');
+const index = require('./index-e59d0388.js');
 
 const IrCheckBoxes = class {
   constructor(hostRef) {

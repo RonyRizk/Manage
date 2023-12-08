@@ -4519,6 +4519,7 @@ readers do not read off random characters that represent icons */
   right: 0;
   height: 100%;
   background-color: #ffffff;
+  width: 100vw;
 }
 
 .close {
@@ -4551,4 +4552,14 @@ button:not(:disabled),
 .row {
   padding: 0 0 0 15px;
   margin: 0;
+}
+@media only screen and   (min-width: 1200px) { 
+  .sideWindow{
+    max-width: 70%;
+  }
+}
+@media only screen and   (min-width: 2000px) { 
+  .sideWindow{
+    max-width: 40%;
+  }
 }

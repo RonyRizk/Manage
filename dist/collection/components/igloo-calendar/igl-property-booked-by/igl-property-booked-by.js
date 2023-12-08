@@ -12,6 +12,7 @@ export class IglPropertyBookedBy {
     this.showPaymentDetails = false;
     this.defaultData = undefined;
     this.countryNodeList = [];
+    this.propertyId = undefined;
     this.bookedByData = {
       id: undefined,
       email: '',
@@ -24,7 +25,7 @@ export class IglPropertyBookedBy {
         code: '',
         description: '',
       },
-      emailGuest: false,
+      emailGuest: true,
       message: '',
       cardNumber: '',
       cardHolderName: '',
@@ -37,6 +38,7 @@ export class IglPropertyBookedBy {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
+    console.log("default data", this.defaultData);
   }
   initializeExpiryYears() {
     const currentYear = new Date().getFullYear();
@@ -44,9 +46,7 @@ export class IglPropertyBookedBy {
   }
   async assignCountryCode() {
     const country = await this.bookingService.getUserDefaultCountry();
-    console.log(country);
     const countryId = country['COUNTRY_ID'];
-    console.log(countryId);
     this.bookedByData = Object.assign(Object.assign({}, this.bookedByData), { isdCode: countryId.toString(), countryId });
   }
   initializeDateData() {
@@ -56,7 +56,7 @@ export class IglPropertyBookedBy {
   }
   populateBookedByData() {
     var _a;
-    this.bookedByData = this.defaultData ? Object.assign({}, this.defaultData) : {};
+    this.bookedByData = this.defaultData ? Object.assign(Object.assign({}, this.bookedByData), this.defaultData) : {};
     this.arrivalTimeList = ((_a = this.defaultData) === null || _a === void 0 ? void 0 : _a.arrivalTime) || [];
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
@@ -129,8 +129,30 @@ export class IglPropertyBookedBy {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailPattern.test(emailId);
   }
+  handleComboboxChange(e) {
+    const { key, data } = e.detail;
+    console.log(key, data);
+    switch (key) {
+      case 'blur':
+        if (data !== '') {
+          this.bookedByData.email = data;
+          this.checkUser();
+        }
+        break;
+      case 'select':
+        this.bookedByData.email = data.email;
+        this.bookedByData = Object.assign(Object.assign({}, this.bookedByData), { id: data.id, firstName: data.first_name, lastName: data.last_name, contactNumber: data.mobile, countryId: data.country_id, isdCode: data.country_id.toString() });
+        this.dataUpdateEvent.emit({
+          key: 'bookedByInfoUpdated',
+          data: Object.assign({}, this.bookedByData),
+        });
+        break;
+      default:
+        break;
+    }
+  }
   render() {
-    return (h(Host, null, h("div", { class: "text-left mt-3" }, h("div", { class: "form-group row text-left align-items-center" }, h("label", { class: "p-0 m-0 label-control mr-1 font-weight-bold" }, "Booked by"), h("div", { class: "bookedByEmailContainer" }, h("input", { id: v4(), type: "email", class: "form-control", placeholder: "Email address", name: "bookeyByEmail", value: this.bookedByData.email, onInput: event => this.handleEmailInput('email', event), required: true, onBlur: () => this.checkUser() })))), h("div", { class: "bookedDetailsForm text-left mt-2 font-small-3" }, h("div", { class: "row" }, h("div", { class: "p-0 col-md-6" }, h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "First name"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "First name", id: v4(), value: this.bookedByData.firstName, onInput: event => this.handleDataChange('firstName', event), required: true }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Last name"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "Last name", id: v4(), value: this.bookedByData.lastName, onInput: event => this.handleDataChange('lastName', event) }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Country"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('countryId', event) }, h("option", { value: "", selected: this.bookedByData.countryId === '' }, "Select"), this.countryNodeList.map(countryNode => (h("option", { value: countryNode.id, selected: this.bookedByData.countryId === countryNode.id }, countryNode.name)))))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Mobile phone"), h("div", { class: "p-0 m-0 pr-1 row controlContainer" }, h("div", { class: "col-3 p-0 m-0" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('isdCode', event) }, h("option", { value: "", selected: this.bookedByData.isdCode === '' }, "ISD"), this.countryNodeList.map(country => (h("option", { value: country.id, selected: this.bookedByData.isdCode === country.id.toString() }, country.phone_prefix))))), h("div", { class: "col-9 p-0 m-0" }, h("input", { class: "form-control", type: "tel", placeholder: "Contact Number", id: v4(), value: this.bookedByData.contactNumber, onInput: event => this.handleNumberInput('contactNumber', event) })))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Your arrival time"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('selectedArrivalTime', event) }, h("option", { value: "", selected: this.bookedByData.selectedArrivalTime === '' }, "-"), this.arrivalTimeList.map(time => (h("option", { value: time.CODE_NAME, selected: this.bookedByData.selectedArrivalTime === time.CODE_NAME }, time.CODE_VALUE_EN)))))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Email the guest"), h("div", { class: "p-0 m-0 pr-1 controlContainer checkBoxContainer" }, h("input", { class: "form-control", type: "checkbox", checked: this.bookedByData.emailGuest, id: v4(), onChange: event => this.handleDataChange('emailGuest', event) })))), h("div", { class: "col-md-6 p-0" }, h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Any message for us?"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("textarea", { id: v4(), rows: 4, class: "form-control", name: "message", value: this.bookedByData.message, onInput: event => this.handleDataChange('message', event) }))), this.showPaymentDetails && (h(Fragment, null, h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Card Number"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "", pattern: "0-9 ", id: v4(), value: this.bookedByData.cardNumber, onInput: event => this.handleNumberInput('cardNumber', event) }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Card holder name"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "", pattern: "0-9 ", id: v4(), value: this.bookedByData.cardHolderName, onInput: event => this.handleDataChange('cardHolderName', event) }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Expiry Date"), h("div", { class: "p-0 m-0 row pr-1 controlContainer" }, h("div", { class: "p-0 m-0" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('expiryMonth', event) }, this.expiryMonths.map(month => (h("option", { value: month, selected: month === this.bookedByData.expiryMonth }, month))))), h("div", { class: "p-0 m-0 ml-1" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('expiryYear', event) }, this.expiryYears.map((year, index) => (h("option", { value: year, selected: index === this.bookedByData.expiryYear }, year))))))))))))));
+    return (h(Host, null, h("div", { class: "text-left mt-3" }, h("div", { class: "form-group row text-left align-items-center" }, h("label", { class: "p-0 m-0 label-control mr-1 font-weight-bold" }, "Booked by"), h("div", { class: "bookedByEmailContainer" }, h("ir-autocomplete", { onComboboxValue: this.handleComboboxChange.bind(this), propertyId: this.propertyId, type: "email", value: this.bookedByData.email, required: true, placeholder: "Email address" })))), h("div", { class: "bookedDetailsForm text-left mt-2 font-small-3" }, h("div", { class: "row" }, h("div", { class: "p-0 col-md-6" }, h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "First name"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "First name", id: v4(), value: this.bookedByData.firstName, onInput: event => this.handleDataChange('firstName', event), required: true }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Last name"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "Last name", id: v4(), value: this.bookedByData.lastName, onInput: event => this.handleDataChange('lastName', event) }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Country"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('countryId', event) }, h("option", { value: "", selected: this.bookedByData.countryId === '' }, "Select"), this.countryNodeList.map(countryNode => (h("option", { value: countryNode.id, selected: this.bookedByData.countryId === countryNode.id }, countryNode.name)))))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Mobile phone"), h("div", { class: "p-0 m-0 pr-1 row controlContainer" }, h("div", { class: "col-4 p-0 m-0" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('isdCode', event) }, h("option", { value: "", selected: this.bookedByData.isdCode === '' }, "ISD"), this.countryNodeList.map(country => (h("option", { value: country.id, selected: this.bookedByData.isdCode === country.id.toString() }, country.phone_prefix))))), h("div", { class: "col-8 p-0 m-0" }, h("input", { class: "form-control", type: "tel", placeholder: "Contact Number", id: v4(), value: this.bookedByData.contactNumber, onInput: event => this.handleNumberInput('contactNumber', event) })))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Your arrival time"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('selectedArrivalTime', event) }, h("option", { value: "", selected: this.bookedByData.selectedArrivalTime === '' }, "-"), this.arrivalTimeList.map(time => (h("option", { value: time.CODE_NAME, selected: this.bookedByData.selectedArrivalTime === time.CODE_NAME }, time.CODE_VALUE_EN))))))), h("div", { class: "col-md-6 p-0" }, h("div", { class: " row p-0 align-items-center mb-1" }, h("label", { class: "p-0 m-0" }, "Any message for us?"), h("div", { class: "p-0 m-0 pr-1 controlContainer " }, h("textarea", { id: v4(), rows: 4, class: "form-control ", name: "message", value: this.bookedByData.message, onInput: event => this.handleDataChange('message', event) }))), this.showPaymentDetails && (h(Fragment, null, h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Card Number"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "", pattern: "0-9 ", id: v4(), value: this.bookedByData.cardNumber, onInput: event => this.handleNumberInput('cardNumber', event) }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Card holder name"), h("div", { class: "p-0 m-0 pr-1 controlContainer" }, h("input", { class: "form-control", type: "text", placeholder: "", pattern: "0-9 ", id: v4(), value: this.bookedByData.cardHolderName, onInput: event => this.handleDataChange('cardHolderName', event) }))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Expiry Date"), h("div", { class: "p-0 m-0 row pr-1 controlContainer" }, h("div", { class: "p-0 m-0" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('expiryMonth', event) }, this.expiryMonths.map(month => (h("option", { value: month, selected: month === this.bookedByData.expiryMonth }, month))))), h("div", { class: "p-0 m-0 ml-1" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('expiryYear', event) }, this.expiryYears.map((year, index) => (h("option", { value: year, selected: index === this.bookedByData.expiryYear }, year))))))))), h("div", { class: "form-group row p-0 align-items-center" }, h("label", { class: "p-0 m-0" }, "Email the guest"), h("div", { class: "p-0 m-0 pr-1 controlContainer checkBoxContainer" }, h("input", { class: "form-control", type: "checkbox", checked: this.bookedByData.emailGuest, id: v4(), onChange: event => this.handleDataChange('emailGuest', event) }))))))));
   }
   static get is() { return "igl-property-booked-by"; }
   static get encapsulation() { return "scoped"; }
@@ -217,6 +239,23 @@ export class IglPropertyBookedBy {
           "text": ""
         },
         "defaultValue": "[]"
+      },
+      "propertyId": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "property-id",
+        "reflect": false
       }
     };
   }

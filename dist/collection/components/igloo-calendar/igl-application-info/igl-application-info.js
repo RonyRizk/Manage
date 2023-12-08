@@ -1,8 +1,10 @@
 import { Host, h } from "@stencil/core";
 import { v4 } from "uuid";
+import { getCurrencySymbol } from "../../../utils/utils";
 export class IglApplicationInfo {
   constructor() {
     this.guestInfo = undefined;
+    this.currency = undefined;
     this.roomsList = [];
     this.guestRefKey = undefined;
     this.bedPreferenceType = [];
@@ -47,7 +49,7 @@ export class IglApplicationInfo {
   }
   render() {
     //console.log(this.guestInfo, this.roomsList);
-    return (h(Host, null, h("div", { class: "text-left mt-1" }, h("div", { class: "ml-1 mb-1" }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("span", { class: "h5" }, this.guestInfo.roomCategoryName)) : null, h("span", { class: "ml-1 font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), h("ir-tooltip", { class: "ml-1 mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), h("span", null, this.guestInfo.adult_child_offering)), h("div", { class: "row m-0 p-0 align-items-center" }, h("div", { class: "col-5" }, h("input", { id: v4(), type: "email", class: "form-control", placeholder: "Guest first name & last name", name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: "col-2 p-0" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, h("option", { value: "", selected: this.guestData.roomId === '' }, "Assign units"), this.filterdRoomList.map(room => (h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, h("div", { class: "col-3" }, h("select", { class: "form-control input-sm", id: v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, h("option", { value: "", selected: this.guestData.preference === '' }, "No preference"), this.bedPreferenceType.map(data => (h("option", { value: data.CODE_NAME, selected: this.guestData.preference === data.CODE_NAME }, data.CODE_VALUE_EN))))), h("div", { class: "col-2" }, "$", this.guestInfo.rate)))));
+    return (h(Host, null, h("div", { class: "text-left mt-1" }, h("div", { class: "ml-1 mb-1" }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("span", { class: "h5" }, this.guestInfo.roomCategoryName)) : null, h("span", { class: "ml-1 font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), h("ir-tooltip", { class: "ml-1 mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), h("span", null, this.guestInfo.adult_child_offering)), h("div", { class: "row m-0 p-0 align-items-center" }, h("div", { class: "col-5" }, h("input", { id: v4(), type: "email", class: "form-control", placeholder: "Guest first name & last name", name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: "col-2 p-0" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, h("option", { value: "", selected: this.guestData.roomId === '' }, "Assign units"), this.filterdRoomList.map(room => (h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, h("div", { class: "col-3" }, h("select", { class: "form-control input-sm", id: v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, h("option", { value: "", selected: this.guestData.preference === '' }, "No preference"), this.bedPreferenceType.map(data => (h("option", { value: data.CODE_NAME, selected: this.guestData.preference === data.CODE_NAME }, data.CODE_VALUE_EN))))), h("div", { class: "col-2" }, getCurrencySymbol(this.currency.code) + this.guestInfo.rate)))));
   }
   static get is() { return "igl-application-info"; }
   static get encapsulation() { return "scoped"; }
@@ -77,6 +79,23 @@ export class IglApplicationInfo {
           "tags": [],
           "text": ""
         }
+      },
+      "currency": {
+        "type": "any",
+        "mutable": false,
+        "complexType": {
+          "original": "any",
+          "resolved": "any",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "currency",
+        "reflect": false
       },
       "roomsList": {
         "type": "unknown",

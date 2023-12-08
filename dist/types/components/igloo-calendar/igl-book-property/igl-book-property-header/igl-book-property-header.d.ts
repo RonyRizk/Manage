@@ -1,5 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from '../../../../models/igl-book-property';
+import { IToast } from '../../../ir-toast/toast';
 export declare class IglBookPropertyHeader {
   splitBookingId: any;
   bookingData: any;
@@ -22,6 +23,7 @@ export declare class IglBookPropertyHeader {
   buttonClicked: EventEmitter<{
     key: TPropertyButtonsTypes;
   }>;
+  toast: EventEmitter<IToast>;
   private sourceOption;
   getSplitBookings(): any;
   getSelectedSplitBookingName(bookingId: any): string;
@@ -29,6 +31,7 @@ export declare class IglBookPropertyHeader {
   getSourceNode(): any;
   handleAdultChildChange(key: string, event: Event): void;
   getAdultChildConstraints(): any;
+  handleButtonClicked(): void;
   isEventType(key: string): boolean;
   render(): any;
 }

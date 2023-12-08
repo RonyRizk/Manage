@@ -21,6 +21,7 @@
     "components/igloo-calendar/igl-to-be-assigned/igl-to-be-assigned.js",
     "components/igloo-calendar/igl-to-be-assigned/igl-tba-booking-view/igl-tba-booking-view.js",
     "components/igloo-calendar/igl-to-be-assigned/igl-tba-category-view/igl-tba-category-view.js",
+    "components/ir-autocomplete/ir-autocomplete.js",
     "components/ir-booking-details/ir-booking-details.js",
     "components/ir-booking-details/ir-payment-details/ir-payment-details.js",
     "components/ir-booking-details/ir-room/ir-room.js",

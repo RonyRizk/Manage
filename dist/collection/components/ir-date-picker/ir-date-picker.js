@@ -18,6 +18,7 @@ export class IrDatePicker {
     this.customRangeLabel = 'Custom';
     this.weekLabel = 'W';
     this.disabled = false;
+    this.singleDatePicker = false;
     this.maxSpan = {
       days: 240,
     };
@@ -25,6 +26,7 @@ export class IrDatePicker {
   componentDidLoad() {
     this.dateRangeInput = this.element.querySelector('.date-range-input');
     $(this.dateRangeInput).daterangepicker({
+      singleDatePicker: this.singleDatePicker,
       opens: this.opens,
       startDate: moment(this.fromDate),
       endDate: moment(this.toDate),
@@ -119,7 +121,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "opens",
-        "reflect": true
+        "reflect": false
       },
       "autoApply": {
         "type": "boolean",
@@ -136,7 +138,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "auto-apply",
-        "reflect": true
+        "reflect": false
       },
       "firstDay": {
         "type": "number",
@@ -153,7 +155,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "first-day",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "1"
       },
       "monthNames": {
@@ -203,7 +205,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "format",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'MMM DD,YYYY'"
       },
       "separator": {
@@ -221,7 +223,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "separator",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'-'"
       },
       "applyLabel": {
@@ -239,7 +241,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "apply-label",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'Apply'"
       },
       "cancelLabel": {
@@ -257,7 +259,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "cancel-label",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'Cancel'"
       },
       "fromLabel": {
@@ -275,7 +277,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "from-label",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'Form'"
       },
       "toLabel": {
@@ -293,7 +295,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "to-label",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'To'"
       },
       "customRangeLabel": {
@@ -311,7 +313,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "custom-range-label",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'Custom'"
       },
       "weekLabel": {
@@ -329,7 +331,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "week-label",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'W'"
       },
       "disabled": {
@@ -347,7 +349,25 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "disabled",
-        "reflect": true,
+        "reflect": false,
+        "defaultValue": "false"
+      },
+      "singleDatePicker": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "single-date-picker",
+        "reflect": false,
         "defaultValue": "false"
       },
       "maxSpan": {
@@ -370,7 +390,7 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "max-span",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "{\r\n    days: 240,\r\n  }"
       }
     };

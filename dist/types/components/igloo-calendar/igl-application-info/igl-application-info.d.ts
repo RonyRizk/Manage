@@ -3,6 +3,7 @@ export declare class IglApplicationInfo {
   guestInfo: {
     [key: string]: any;
   };
+  currency: any;
   roomsList: {
     [key: string]: any;
   }[];

@@ -1,4 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { g as getCurrencySymbol } from './utils.js';
 import { d as defineCustomElement$3 } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$2 } from './igl-booking-event2.js';
 import { d as defineCustomElement$1 } from './igl-booking-event-hover2.js';
@@ -208,7 +209,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     this.renderAgain = !this.renderAgain;
   }
   getGeneralCategoryDayColumns(addClass, isCategory = false, index) {
-    return this.calendarData.days.map(dayInfo => (h("div", { class: `cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (h("span", null, dayInfo.rate[index].inventory, h("br", null), h("u", null, "$ ", dayInfo.rate[index].rate))) : (''))));
+    return this.calendarData.days.map(dayInfo => (h("div", { class: `cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (h("span", null, dayInfo.rate[index].inventory, h("br", null), dayInfo.rate[index].rate && h("u", null, getCurrencySymbol(this.currency.code), " ", dayInfo.rate[index].rate))) : (''))));
   }
   getGeneralRoomDayColumns(roomId, roomCategory) {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}

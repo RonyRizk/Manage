@@ -36,13 +36,13 @@ export class IglBookingRoomRatePlan {
   updateSelectedRatePlan(data) {
     this.selectedData = {
       ratePlanId: data.id,
-      adult_child_offering: data.variations[0].adult_child_offering,
+      adult_child_offering: data.variations[data.variations.length - 1].adult_child_offering,
       rateType: 1,
       totalRooms: 0,
-      rate: data.variations[0].amount,
+      rate: data.variations[data.variations.length - 1].amount,
       ratePlanName: data.name,
-      adultCount: data.variations[0].adult_nbr,
-      childrenCount: data.variations[0].child_nbr,
+      adultCount: data.variations[data.variations.length - 1].adult_nbr,
+      childrenCount: data.variations[data.variations.length - 1].child_nbr,
       cancelation: data.cancelation,
       guarantee: data.guarantee,
       isRateModified: false,
@@ -61,10 +61,11 @@ export class IglBookingRoomRatePlan {
         data: this.selectedData,
       });
     }
+    //
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
   async ratePlanDataChanged(newData) {
-    this.selectedData = Object.assign(Object.assign({}, this.selectedData), { rate: this.handleRateDaysUpdate(), physicalRooms: this.getAvailableRooms(newData.assignable_units) });
+    this.selectedData = Object.assign(Object.assign({}, this.selectedData), { adult_child_offering: newData.variations[newData.variations.length - 1].adult_child_offering, adultCount: newData.variations[newData.variations.length - 1].adult_nbr, childrenCount: newData.variations[newData.variations.length - 1].child_nbr, rate: this.handleRateDaysUpdate(), physicalRooms: this.getAvailableRooms(newData.assignable_units) });
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -141,7 +142,7 @@ export class IglBookingRoomRatePlan {
     return this.selectedData.rateType === 1 ? this.selectedData.rate : this.initialRateValue;
   }
   render() {
-    return (h(Host, null, h("div", { class: "row m-0 p-0" }, h("div", { class: "col-md-6 col-sm-12 p-0 align-self-center" }, h("span", null, this.ratePlanData.name), h("ir-tooltip", { message: this.ratePlanData.cancelation + this.ratePlanData.guarantee })), h("div", { class: "col-md-6 col-sm-12 row pr-0" }, h("div", { class: "col-4" }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.disableForm(), class: "form-control input-sm", id: v4(), onChange: evt => this.handleDataChange('adult_child_offering', evt) }, this.ratePlanData.variations.map(variation => (h("option", { value: variation.adult_child_offering, selected: this.selectedData.adult_child_offering === variation.adult_child_offering }, variation.adult_child_offering)))))), h("div", { class: "row col-6 m-0 p-0" }, h("fieldset", { class: "position-relative has-icon-left col-6 m-0 p-0" }, h("input", { disabled: this.disableForm(), type: "text", class: "form-control input-sm", value: this.renderRate(), id: v4(), placeholder: "Rate", onInput: (event) => this.handleInput(event) }), h("span", { class: "form-control-position" }, getCurrencySymbol(this.currency.code))), h("fieldset", { class: "position-relative m-0 p-0" }, h("select", { disabled: this.disableForm(), class: "form-control input-sm", id: v4(), onChange: evt => this.handleDataChange('rateType', evt) }, this.ratePricingMode.map(data => (h("option", { value: data.CODE_NAME, selected: this.selectedData.rateType === +data.CODE_NAME }, data.CODE_VALUE_EN)))))), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (h("div", { class: "col-2 m-0 p-0" }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.selectedData.rate === 0 || this.disableForm(), class: "form-control input-sm", id: v4(), onChange: evt => this.handleDataChange('totalRooms', evt) }, Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (h("option", { value: i, selected: this.selectedData.totalRooms === i }, i))))))) : null, this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: "col-2 m-0 p-0 align-self-center" }, h("fieldset", { class: "position-relative" }, h("input", { disabled: this.disableForm(), type: "radio", name: "ratePlanGroup", value: "1", onChange: evt => this.handleDataChange('totalRooms', evt), checked: this.selectedData.totalRooms === 1 })))) : null, this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (h("button", { disabled: this.selectedData.rate === 0 || this.disableForm(), type: "button", class: "btn mb-1 btn-primary btn-sm", onClick: () => this.bookProperty() }, "Book")) : null))));
+    return (h(Host, null, h("div", { class: "d-flex flex-column mt-2 m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between " }, h("div", { class: " rateplan-name-container" }, h("span", null, this.ratePlanData.name), h("ir-tooltip", { message: this.ratePlanData.cancelation + this.ratePlanData.guarantee })), h("div", { class: 'd-md-flex justify-content-md-end align-items-md-center pr-0  flex-fill rateplan-container' }, h("div", { class: "mt-1 mt-lg-0 flex-fill max-w-300  " }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.disableForm(), class: "form-control  input-sm", id: v4(), onChange: evt => this.handleDataChange('adult_child_offering', evt) }, this.ratePlanData.variations.map(variation => (h("option", { value: variation.adult_child_offering, selected: this.selectedData.adult_child_offering === variation.adult_child_offering }, variation.adult_child_offering)))))), h("div", { class: 'm-0 p-0 d-md-flex justify-content-between ml-md-1 ' }, h("div", { class: " d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   " }, h("fieldset", { class: "position-relative has-icon-left m-0 p-0 rate-input-container  " }, h("input", { disabled: this.disableForm(), type: "text", class: "form-control input-sm rate-input py-0 m-0", value: this.renderRate(), id: v4(), placeholder: "Rate", onInput: (event) => this.handleInput(event) }), h("span", { class: "currency" }, getCurrencySymbol(this.currency.code))), h("fieldset", { class: "position-relative m-0 total-nights-container p-0" }, h("select", { disabled: this.disableForm(), class: "form-control input-sm m-0  py-0", id: v4(), onChange: evt => this.handleDataChange('rateType', evt) }, this.ratePricingMode.map(data => (h("option", { value: data.CODE_NAME, selected: this.selectedData.rateType === +data.CODE_NAME }, data.CODE_VALUE_EN)))))), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (h("div", { class: "flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0" }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.selectedData.rate === 0 || this.disableForm(), class: "form-control input-sm", id: v4(), onChange: evt => this.handleDataChange('totalRooms', evt) }, Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (h("option", { value: i, selected: this.selectedData.totalRooms === i }, i))))))) : null), this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: " m-0 p-0  mt-lg-0  ml-md-1 mt-md-1" }, h("fieldset", { class: "position-relative" }, h("input", { disabled: this.disableForm(), type: "radio", name: "ratePlanGroup", value: "1", onChange: evt => this.handleDataChange('totalRooms', evt), checked: this.selectedData.totalRooms === 1 })))) : null, this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (h("button", { disabled: this.selectedData.rate === 0 || this.disableForm(), type: "button", class: "btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 ", onClick: () => this.bookProperty() }, "Book")) : null))));
   }
   static get is() { return "igl-booking-room-rate-plan"; }
   static get encapsulation() { return "scoped"; }
@@ -159,7 +160,7 @@ export class IglBookingRoomRatePlan {
     return {
       "defaultData": {
         "type": "unknown",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
           "original": "{ [key: string]: any }",
           "resolved": "{ [key: string]: any; }",
@@ -174,7 +175,7 @@ export class IglBookingRoomRatePlan {
       },
       "ratePlanData": {
         "type": "unknown",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
           "original": "{ [key: string]: any }",
           "resolved": "{ [key: string]: any; }",
@@ -202,7 +203,7 @@ export class IglBookingRoomRatePlan {
           "text": ""
         },
         "attribute": "total-available-rooms",
-        "reflect": true
+        "reflect": false
       },
       "index": {
         "type": "number",
@@ -223,7 +224,7 @@ export class IglBookingRoomRatePlan {
       },
       "ratePricingMode": {
         "type": "unknown",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
           "original": "any[]",
           "resolved": "any[]",
@@ -239,7 +240,7 @@ export class IglBookingRoomRatePlan {
       },
       "currency": {
         "type": "any",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
           "original": "any",
           "resolved": "any",
@@ -252,7 +253,7 @@ export class IglBookingRoomRatePlan {
           "text": ""
         },
         "attribute": "currency",
-        "reflect": true
+        "reflect": false
       },
       "dateDifference": {
         "type": "number",
@@ -269,11 +270,11 @@ export class IglBookingRoomRatePlan {
           "text": ""
         },
         "attribute": "date-difference",
-        "reflect": true
+        "reflect": false
       },
       "bookingType": {
         "type": "string",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
           "original": "string",
           "resolved": "string",
@@ -286,7 +287,7 @@ export class IglBookingRoomRatePlan {
           "text": ""
         },
         "attribute": "booking-type",
-        "reflect": true,
+        "reflect": false,
         "defaultValue": "'PLUS_BOOKING'"
       },
       "fullyBlocked": {
@@ -304,7 +305,7 @@ export class IglBookingRoomRatePlan {
           "text": ""
         },
         "attribute": "fully-blocked",
-        "reflect": true
+        "reflect": false
       }
     };
   }
