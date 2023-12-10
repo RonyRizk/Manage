@@ -16,6 +16,7 @@ export declare class IglPropertyBookedBy {
   private expiryMonths;
   private expiryYears;
   private currentMonth;
+  private country;
   bookedByData: {
     [key: string]: any;
   };
@@ -30,5 +31,6 @@ export declare class IglPropertyBookedBy {
   checkUser(): Promise<void>;
   isValidEmail(emailId: any): boolean;
   handleComboboxChange(e: CustomEvent): void;
+  clearEvent(): void;
   render(): any;
 }

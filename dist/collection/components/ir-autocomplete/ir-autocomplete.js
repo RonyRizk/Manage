@@ -162,7 +162,7 @@ export class IrAutocomplete {
   }
   renderDropdown() {
     if (this.data.length > 0) {
-      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, `${d.email} - ${d.first_name} ${d.last_name}`)))));
+      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`))))));
     }
   }
   handleFocus() {
@@ -171,6 +171,7 @@ export class IrAutocomplete {
   clearInput() {
     this.inputValue = '';
     this.resetCombobox();
+    this.inputCleared.emit(null);
   }
   resetCombobox(withblur = true) {
     var _a;
@@ -383,6 +384,21 @@ export class IrAutocomplete {
         "complexType": {
           "original": "{ key: string; data: unknown }",
           "resolved": "{ key: string; data: unknown; }",
+          "references": {}
+        }
+      }, {
+        "method": "inputCleared",
+        "name": "inputCleared",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "null",
+          "resolved": "null",
           "references": {}
         }
       }];

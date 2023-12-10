@@ -3890,6 +3890,6 @@ class BookingService {
   }
 }
 
-export { BookingService as B, axios as a, getReleaseHoursString as b, dateDifference as c, dateToFormattedString as d, formatDate as e, findCountry as f, getCurrencySymbol as g, formatLegendColors as h, transformNewBooking as i, getNextDay as j, addTwoMonthToDate as k, convertDMYToISO as l, computeEndDate as m, transformNewBLockedRooms as t };
+export { BookingService as B, axios as a, getReleaseHoursString as b, findCountry as c, dateToFormattedString as d, dateDifference as e, formatDate as f, getCurrencySymbol as g, formatLegendColors as h, transformNewBooking as i, getNextDay as j, addTwoMonthToDate as k, convertDMYToISO as l, computeEndDate as m, transformNewBLockedRooms as t };
 
-//# sourceMappingURL=booking.service-59647f34.js.map
+//# sourceMappingURL=booking.service-9a036da8.js.map

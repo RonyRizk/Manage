@@ -4489,8 +4489,8 @@ readers do not read off random characters that represent icons */
 
 .bookedByEmailContainer {
   flex: auto;
-  max-width: 250px;
-  margin-left: 37px;
+  max-width: 350px;
+ 
 }
 
 
@@ -4500,7 +4500,7 @@ readers do not read off random characters that represent icons */
 }
 
 .bookedDetailsForm .controlContainer {
-  width: calc(100% - 127px);
+  /* width: calc(100% - 127px); */
 }
 
 .bookedDetailsForm .form-group {
@@ -4520,4 +4520,12 @@ readers do not read off random characters that represent icons */
 .controlContainer textarea{
 height: 60px !important;
 
+}
+.margin3{
+  margin-bottom: 5px !important;
+}
+@media (min-width: 768px) {
+  .bookedByEmailContainer{
+    margin-left:37px ;
+  }
 }

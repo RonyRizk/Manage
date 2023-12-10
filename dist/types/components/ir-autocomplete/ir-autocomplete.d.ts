@@ -17,6 +17,7 @@ export declare class IrAutocomplete {
     key: string;
     data: unknown;
   }>;
+  inputCleared: EventEmitter<null>;
   isItemSelected: boolean;
   el: HTMLElement;
   private inputRef;

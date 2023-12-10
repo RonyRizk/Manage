@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
 
-const iglBookPropertyFooterCss = ".sc-igl-book-property-footer-h{display:block;margin:0;padding:0}.sc-igl-book-property-footer-h>*.sc-igl-book-property-footer{margin:auto;padding:auto}";
+const iglBookPropertyFooterCss = ".sc-igl-book-property-footer-h{display:block;margin:0;padding:0}.sc-igl-book-property-footer-h>*.sc-igl-book-property-footer{margin:auto;padding:auto}.gap-30.sc-igl-book-property-footer{gap:30px}";
 
 const IglBookPropertyFooter = /*@__PURE__*/ proxyCustomElement(class IglBookPropertyFooter extends HTMLElement {
   constructor() {
@@ -13,14 +13,25 @@ const IglBookPropertyFooter = /*@__PURE__*/ proxyCustomElement(class IglBookProp
   isEventType(event) {
     return event === this.eventType;
   }
+  editNext(label) {
+    if (this.isEventType('EDIT_BOOKING')) {
+      if (label === 'Cancel') {
+        return 'flex-fill';
+      }
+      else {
+        return 'd-none d-md-block  flex-fill';
+      }
+    }
+    return 'flex-fill';
+  }
   renderButton(type, label, disabled = false) {
-    return (h("div", { class: this.shouldRenderTwoButtons() ? 'col-6' : 'col-12' }, h("button", { class: `btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`, onClick: () => this.buttonClicked.emit({ key: type }), disabled: disabled }, label)));
+    return (h("div", { class: this.shouldRenderTwoButtons() ? ` ${this.editNext(label)}` : 'flex-fill' }, h("button", { class: `btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`, onClick: () => this.buttonClicked.emit({ key: type }), disabled: disabled }, label)));
   }
   shouldRenderTwoButtons() {
     return this.isEventType('PLUS_BOOKING') || this.isEventType('ADD_ROOM') || this.isEventType('EDIT_BOOKING');
   }
   render() {
-    return (h(Host, null, h("div", { class: "row" }, this.isEventType('EDIT_BOOKING') ? (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>'))) : (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>', this.disabled))))));
+    return (h(Host, null, h("div", { class: "d-flex justify-content-between gap-30 align-items-center" }, this.isEventType('EDIT_BOOKING') ? (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>'))) : (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>', this.disabled))))));
   }
   static get style() { return iglBookPropertyFooterCss; }
 }, [2, "igl-book-property-footer", {

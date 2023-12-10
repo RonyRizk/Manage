@@ -9,6 +9,7 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
     super();
     this.__registerHost();
     this.comboboxValue = createEvent(this, "comboboxValue", 7);
+    this.inputCleared = createEvent(this, "inputCleared", 7);
     this.bookingService = new BookingService();
     this.duration = 300;
     this.placeholder = '';
@@ -168,7 +169,7 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
   }
   renderDropdown() {
     if (this.data.length > 0) {
-      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, `${d.email} - ${d.first_name} ${d.last_name}`)))));
+      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`))))));
     }
   }
   handleFocus() {
@@ -177,6 +178,7 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
   clearInput() {
     this.inputValue = '';
     this.resetCombobox();
+    this.inputCleared.emit(null);
   }
   resetCombobox(withblur = true) {
     var _a;

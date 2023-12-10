@@ -62,9 +62,9 @@ export class IglDateRange {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0" }, h("h5", { class: "dateRangeLabel" }, "Dates"), h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: evt => {
+    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("h5", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, "Dates"), h("div", { class: "d-flex align-items-center mr-lg-1" }, h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
-      } })), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : '')));
+      } })), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : ''))));
   }
   static get is() { return "igl-date-range"; }
   static get encapsulation() { return "scoped"; }
