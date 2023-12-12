@@ -4,6 +4,7 @@ import { IToast } from '../../../ir-toast/toast';
 export declare class IglBookPropertyHeader {
   splitBookingId: any;
   bookingData: any;
+  minDate: string;
   sourceOptions: TSourceOptions[];
   message: string;
   bookingDataDefaultDateRange: {
@@ -15,6 +16,11 @@ export declare class IglBookPropertyHeader {
   adultChildCount: {
     adult: number;
     child: number;
+  };
+  dateRangeData: any;
+  defaultDaterange: {
+    from_date: string;
+    to_date: string;
   };
   splitBookingDropDownChange: EventEmitter<any>;
   sourceDropDownChange: EventEmitter<string>;

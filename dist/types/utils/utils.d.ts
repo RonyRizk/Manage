@@ -16,5 +16,5 @@ export declare function getReleaseHoursString(releaseDate: number): {
 export declare function computeEndDate(startDate: string, numberOfDays: number): string;
 export declare function convertDMYToISO(date: string): string;
 export declare function addTwoMonthToDate(date: Date): string;
-export declare function formatDate(dateString: any): string;
+export declare function formatDate(dateString: any, option?: string): string;
 export declare function getNextDay(date: Date): string;

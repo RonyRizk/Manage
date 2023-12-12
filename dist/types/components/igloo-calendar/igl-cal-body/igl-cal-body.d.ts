@@ -8,6 +8,7 @@ export declare class IglCalBody {
   };
   today: String;
   currency: any;
+  language: string;
   countryNodeList: any;
   dragOverElement: string;
   renderAgain: boolean;

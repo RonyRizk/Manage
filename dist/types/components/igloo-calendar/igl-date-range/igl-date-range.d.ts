@@ -1,13 +1,16 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
+import { IToast } from '../../ir-toast/toast';
 export declare class IglDateRange {
   defaultData: {
     [key: string]: any;
   };
   disabled: boolean;
+  minDate: string;
   dateSelectEvent: EventEmitter<{
     [key: string]: any;
   }>;
   renderAgain: boolean;
+  toast: EventEmitter<IToast>;
   private totalNights;
   private fromDate;
   private toDate;

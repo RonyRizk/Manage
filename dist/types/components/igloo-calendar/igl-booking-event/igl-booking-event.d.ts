@@ -3,6 +3,7 @@ export declare class IglBookingEvent {
   private element;
   currency: any;
   is_vacation_rental: boolean;
+  language: string;
   hideBubbleInfo: EventEmitter;
   updateEventData: EventEmitter;
   dragOverEventData: EventEmitter;
@@ -22,8 +23,9 @@ export declare class IglBookingEvent {
   vertSpace: number;
   private showInfoPopup;
   private bubbleInfoTopSide;
-  private eventsService;
   private isStreatch;
+  private eventsService;
+  private bookingService;
   resizeSide: string;
   isDragging: boolean;
   initialX: number;
@@ -49,6 +51,7 @@ export declare class IglBookingEvent {
   handleMouseUpBind: any;
   handleClickOutsideBind: any;
   componentWillLoad(): void;
+  fetchAndAssignBookingData(): Promise<void>;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   handleClickOutside(event: Event): void;

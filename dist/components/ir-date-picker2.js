@@ -25,6 +25,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     this.weekLabel = 'W';
     this.disabled = false;
     this.singleDatePicker = false;
+    this.minDate = undefined;
     this.maxSpan = {
       days: 240,
     };
@@ -36,6 +37,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
       opens: this.opens,
       startDate: hooks(this.fromDate),
       endDate: hooks(this.toDate),
+      minDate: hooks(this.minDate || '2000-01-01'),
       maxSpan: this.maxSpan,
       autoApply: this.autoApply,
       locale: {
@@ -78,6 +80,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     "weekLabel": [1, "week-label"],
     "disabled": [4],
     "singleDatePicker": [4, "single-date-picker"],
+    "minDate": [1, "min-date"],
     "maxSpan": [8, "max-span"]
   }]);
 function defineCustomElement() {

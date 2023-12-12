@@ -19,6 +19,7 @@ export declare class IrDatePicker {
   weekLabel: string;
   disabled: boolean;
   singleDatePicker: boolean;
+  minDate: string;
   maxSpan: moment.DurationInputArg1;
   dateChanged: EventEmitter<{
     start: moment.Moment;

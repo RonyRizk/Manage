@@ -1,7 +1,7 @@
 import { Host, h } from "@stencil/core";
-import { findCountry, getCurrencySymbol } from "../../../utils/utils";
+import { findCountry, formatDate, getCurrencySymbol } from "../../../utils/utils";
 import { EventsService } from "../../../services/events.service";
-import { transformNewBLockedRooms } from "../../../utils/booking";
+//import { transformNewBLockedRooms } from '../../../utils/booking';
 export class IglBookingEventHover {
   constructor() {
     this.todayTimeStamp = new Date().setHours(0, 0, 0, 0);
@@ -12,6 +12,29 @@ export class IglBookingEventHover {
     this.countryNodeList = undefined;
     this.is_vacation_rental = false;
     this.isLoading = undefined;
+  }
+  componentWillLoad() {
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+  handleKeyDown(event) {
+    if (event.key === 'Escape') {
+      this.hideBubble();
+    }
+    else
+      return;
+  }
+  hideBubble() {
+    this.hideBubbleInfo.emit({
+      key: 'hidebubble',
+      currentInfoBubbleId: this.getBookingId(),
+    });
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+  componentDidLoad() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
   getBookingId() {
     return this.bookingEvent.ID;
@@ -126,22 +149,29 @@ export class IglBookingEventHover {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
   handleAddRoom() {
-    let fromDate = new Date();
+    let fromDate = new Date(this.bookingEvent.FROM_DATE);
     fromDate.setHours(0, 0, 0, 0);
     let from_date_str = this.getStringDateFormat(fromDate);
-    let toDate = new Date();
-    toDate.setDate(toDate.getDate() + 1);
+    let toDate = new Date(this.bookingEvent.TO_DATE);
+    //toDate.setDate(toDate.getDate() + 1);
     toDate.setHours(0, 0, 0, 0);
     let to_date_str = this.getStringDateFormat(toDate);
+    //console.log(this.bookingEvent);
     let eventData = {
       ID: '',
       NAME: '',
+      BOOKING_NUMBER: this.bookingEvent.BOOKING_NUMBER,
       FROM_DATE: from_date_str,
       TO_DATE: to_date_str,
       roomsInfo: this.bookingEvent.roomsInfo,
+      ARRIVAL: this.bookingEvent.ARRIVAL,
       ADD_ROOM_TO_BOOKING: this.bookingEvent.ID,
       TITLE: 'Add Room to #' + this.bookingEvent.ID + ' - ' + this.bookingEvent.NAME,
       event_type: 'ADD_ROOM',
+      ROOMS: this.bookingEvent.ROOMS,
+      GUEST: this.bookingEvent.GUEST,
+      message: this.bookingEvent.NOTES,
+      SOURCE: this.bookingEvent.SOURCE,
       defaultDateRange: {
         fromDate: fromDate,
         fromDateStr: '',
@@ -161,21 +191,18 @@ export class IglBookingEventHover {
     console.log('Handle Customer Check Out');
   }
   handleDeleteEvent() {
+    this.hideBubble();
     this.deleteButton.emit(this.bookingEvent.POOL);
     console.log('Delete Event');
   }
   async handleUpdateBlockedDates() {
     try {
       this.isLoading = 'update';
-      const result = await this.eventService.updateBlockedEvent(this.bookingEvent);
-      const blockedUnit = await transformNewBLockedRooms(result);
-      this.bookingCreated.emit({ pool: this.bookingEvent.POOL, data: [blockedUnit] });
-      this.hideBubbleInfo.emit({
-        key: 'hidebubble',
-        currentInfoBubbleId: this.getBookingId(),
-      });
+      setTimeout(() => {
+        this.hideBubble();
+      }, 50);
+      await this.eventService.updateBlockedEvent(this.bookingEvent);
       this.isLoading = '';
-      console.log('Updated blocked dates');
     }
     catch (error) {
       //   toastr.error(error);
@@ -217,7 +244,7 @@ export class IglBookingEventHover {
     });
   }
   getInfoElement() {
-    return (h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, h("div", { class: "row p-0 m-0 pb-1" }, h("div", { class: "pl-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, h("img", { src: this.bookingEvent.origin.Icon, alt: "icon", class: 'icon-image' }), h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), h("div", { class: "pr-0 col-4 text-right" }, getCurrencySymbol(this.currency.code), this.getTotalPrice())), h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "In: "), this.getCheckInDate(), " - ", h("span", { class: "font-weight-bold" }, "Out: "), this.getCheckOutDate())), this.getArrivalTime() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "Arrival time: "), this.getArrivalTime()))), this.getTotalOccupants() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "Occupancy: "), this.getTotalOccupants()))), this.getPhoneNumber() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12 text-wrap" }, h("span", { class: "font-weight-bold" }, "Phone: "), this.renderPhone()))), this.getRatePlan() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "Rate plan: "), this.getRatePlan()))), this.getGuestNote() ? (h("div", { class: "row p-0 m-0" }, h("div", { class: "col-12 pl-0 pr-0 text-wrap" }, h("sapn", { class: "font-weight-bold" }, "Note: "), this.getGuestNote()))) : null, this.getInternalNote() ? (h("div", { class: "row p-0 m-0" }, h("div", { class: "col-12 pl-0 pr-0 text-wrap" }, h("span", { class: "font-weight-bold" }, "Internal remark: "), this.getInternalNote()))) : null, h("div", { class: "row p-0 m-0 mt-2" }, h("div", { class: "full-width btn-group btn-group-sm font-small-3", role: "group" }, h("button", { type: "button", class: "btn btn-primary mr-1", onClick: _ => {
+    return (h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, h("div", { class: "row p-0 m-0 pb-1" }, h("div", { class: "pl-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, h("img", { src: this.bookingEvent.origin.Icon, alt: "icon", class: 'icon-image' }), h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), h("div", { class: "pr-0 col-4 text-right" }, getCurrencySymbol(this.currency.code), this.getTotalPrice())), h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "In: "), formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD'), "- ", h("span", { class: "font-weight-bold" }, "Out: "), formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))), this.getArrivalTime() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "Arrival time: "), this.getArrivalTime()))), this.getTotalOccupants() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "Occupancy: "), this.getTotalOccupants()))), this.getPhoneNumber() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12 text-wrap" }, h("span", { class: "font-weight-bold" }, "Phone: "), this.renderPhone()))), this.getRatePlan() && (h("div", { class: "row p-0 m-0" }, h("div", { class: "pl-0 pr-0 col-12" }, h("span", { class: "font-weight-bold" }, "Rate plan: "), this.getRatePlan()))), this.getGuestNote() ? (h("div", { class: "row p-0 m-0" }, h("div", { class: "col-12 pl-0 pr-0 text-wrap" }, h("sapn", { class: "font-weight-bold" }, "Note: "), this.getGuestNote()))) : null, this.getInternalNote() ? (h("div", { class: "row p-0 m-0" }, h("div", { class: "col-12 pl-0 pr-0 text-wrap" }, h("span", { class: "font-weight-bold" }, "Internal remark: "), this.getInternalNote()))) : null, h("div", { class: "row p-0 m-0 mt-2" }, h("div", { class: "full-width btn-group btn-group-sm font-small-3", role: "group" }, h("button", { type: "button", class: "btn btn-primary mr-1", onClick: _ => {
         this.handleEditBooking();
       }, disabled: !this.bookingEvent.IS_EDITABLE }, h("i", { class: "ft ft-edit font-small-3" }), " Edit"), h("button", { type: "button", class: "btn btn-primary mr-1", onClick: _ => {
         this.handleAddRoom();
@@ -234,7 +261,7 @@ export class IglBookingEventHover {
         this.handleBookingOption('BAR_BOOKING');
       } }, "Create new booking"), this.hasSplitBooking() ? (h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square", onClick: _ => {
         this.handleBookingOption('SPLIT_BOOKING');
-      } }, "Assign unit to existing booking")) : null, h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary font-small-3 square", onClick: _ => {
+      } }, "Add unit to existing booking")) : null, h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary font-small-3 square", onClick: _ => {
         this.handleBookingOption('BLOCK_DATES');
       } }, "Block dates")));
   }
@@ -424,5 +451,6 @@ export class IglBookingEventHover {
         }
       }];
   }
+  static get elementRef() { return "element"; }
 }
 //# sourceMappingURL=igl-booking-event-hover.js.map

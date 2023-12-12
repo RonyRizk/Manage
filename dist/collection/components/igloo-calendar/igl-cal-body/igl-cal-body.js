@@ -1,5 +1,4 @@
 import { Host, h } from "@stencil/core";
-import { getCurrencySymbol } from "../../../utils/utils";
 export class IglCalBody {
   constructor() {
     this.selectedRooms = {};
@@ -9,6 +8,7 @@ export class IglCalBody {
     this.calendarData = undefined;
     this.today = undefined;
     this.currency = undefined;
+    this.language = undefined;
     this.countryNodeList = undefined;
     this.dragOverElement = '';
     this.renderAgain = false;
@@ -198,7 +198,9 @@ export class IglCalBody {
     this.renderAgain = !this.renderAgain;
   }
   getGeneralCategoryDayColumns(addClass, isCategory = false, index) {
-    return this.calendarData.days.map(dayInfo => (h("div", { class: `cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (h("span", null, dayInfo.rate[index].inventory, h("br", null), dayInfo.rate[index].rate && h("u", null, getCurrencySymbol(this.currency.code), " ", dayInfo.rate[index].rate))) : (''))));
+    return this.calendarData.days.map(dayInfo => {
+      return (h("div", { class: `cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (h("span", null, dayInfo.rate[index].exposed_inventory.total, h("br", null), dayInfo.rate[index].exposed_inventory.offline)) : ('')));
+    });
   }
   getGeneralRoomDayColumns(roomId, roomCategory) {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
@@ -228,7 +230,7 @@ export class IglCalBody {
   render() {
     var _a;
     // onDragStart={event => this.handleDragStart(event)} draggable={true}
-    return (h(Host, null, h("div", { class: "bodyContainer" }, this.getRoomRows(), h("div", { class: "bookingEventsContainer preventPageScroll" }, (_a = this.getBookingData()) === null || _a === void 0 ? void 0 : _a.map(bookingEvent => (h("igl-booking-event", { is_vacation_rental: this.calendarData.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, "data-component-id": bookingEvent.ID, bookingEvent: bookingEvent, allBookingEvents: this.getBookingData() })))))));
+    return (h(Host, null, h("div", { class: "bodyContainer" }, this.getRoomRows(), h("div", { class: "bookingEventsContainer preventPageScroll" }, (_a = this.getBookingData()) === null || _a === void 0 ? void 0 : _a.map(bookingEvent => (h("igl-booking-event", { language: this.language, is_vacation_rental: this.calendarData.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, "data-component-id": bookingEvent.ID, bookingEvent: bookingEvent, allBookingEvents: this.getBookingData() })))))));
   }
   static get is() { return "igl-cal-body"; }
   static get encapsulation() { return "scoped"; }
@@ -311,6 +313,23 @@ export class IglCalBody {
           "text": ""
         },
         "attribute": "currency",
+        "reflect": false
+      },
+      "language": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "language",
         "reflect": false
       },
       "countryNodeList": {

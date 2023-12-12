@@ -19,6 +19,7 @@ export class IrDatePicker {
     this.weekLabel = 'W';
     this.disabled = false;
     this.singleDatePicker = false;
+    this.minDate = undefined;
     this.maxSpan = {
       days: 240,
     };
@@ -30,6 +31,7 @@ export class IrDatePicker {
       opens: this.opens,
       startDate: moment(this.fromDate),
       endDate: moment(this.toDate),
+      minDate: moment(this.minDate || '2000-01-01'),
       maxSpan: this.maxSpan,
       autoApply: this.autoApply,
       locale: {
@@ -369,6 +371,23 @@ export class IrDatePicker {
         "attribute": "single-date-picker",
         "reflect": false,
         "defaultValue": "false"
+      },
+      "minDate": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "min-date",
+        "reflect": false
       },
       "maxSpan": {
         "type": "any",

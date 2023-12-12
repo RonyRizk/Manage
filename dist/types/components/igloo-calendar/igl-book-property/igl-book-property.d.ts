@@ -25,7 +25,9 @@ export declare class IglBookProperty {
   isLoading: string;
   private message;
   private sourceOption;
-  private dateRangeData;
+  dateRangeData: {
+    [key: string]: any;
+  };
   private page;
   private showSplitBookingOption;
   private sourceOptions;
@@ -38,6 +40,7 @@ export declare class IglBookProperty {
   private bookingService;
   private bookPropertyService;
   private eventsService;
+  private defaultDateRange;
   closeBookingWindow: EventEmitter<{
     [key: string]: any;
   }>;
@@ -46,6 +49,7 @@ export declare class IglBookProperty {
     data: RoomBookingDetails[];
   }>;
   blockedCreated: EventEmitter<RoomBlockDetails>;
+  handleKeyDown(e: KeyboardEvent): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   componentWillLoad(): Promise<void>;

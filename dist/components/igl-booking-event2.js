@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { E as EventsService } from './events.service.js';
+import { B as BookingService, a as transformNewBooking } from './booking.service.js';
 import { d as defineCustomElement$2 } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$1 } from './igl-booking-event-hover2.js';
 
@@ -18,8 +19,10 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     /* show bubble */
     this.showInfoPopup = false;
     this.bubbleInfoTopSide = false;
-    this.eventsService = new EventsService();
     this.isStreatch = false;
+    /*Services */
+    this.eventsService = new EventsService();
+    this.bookingService = new BookingService();
     /* Resize props */
     this.resizeSide = '';
     this.isDragging = false;
@@ -28,6 +31,7 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     this.handleClickOutsideBind = this.handleClickOutside.bind(this);
     this.currency = undefined;
     this.is_vacation_rental = false;
+    this.language = undefined;
     this.bookingEvent = undefined;
     this.allBookingEvents = [];
     this.countryNodeList = undefined;
@@ -37,12 +41,27 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
   componentWillLoad() {
     window.addEventListener('click', this.handleClickOutsideBind);
   }
+  async fetchAndAssignBookingData() {
+    if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+      const data = await this.bookingService.getExoposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
+      this.bookingEvent = Object.assign(Object.assign({}, this.bookingEvent), transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0]);
+      this.showEventInfo(true);
+    }
+  }
   componentDidLoad() {
     if (this.isNewEvent()) {
       if (!this.bookingEvent.hideBubble) {
         /* auto matically open the popup, calling the method shows bubble either top or bottom based on available space. */
-        setTimeout(() => {
-          this.showEventInfo(true);
+        setTimeout(async () => {
+          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+            this.showEventInfo(true);
+          }
+          else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+            await this.fetchAndAssignBookingData();
+          }
+          else {
+            this.showEventInfo(true);
+          }
           this.renderAgain();
         }, 1);
       }
@@ -75,12 +94,22 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
-          this.showEventInfo(true);
+          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+            this.showEventInfo(true);
+          }
+          else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+            await this.fetchAndAssignBookingData();
+          }
         }
       }
       else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
-          this.showEventInfo(true);
+          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+            this.showEventInfo(true);
+          }
+          else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+            await this.fetchAndAssignBookingData();
+          }
         }
         else {
           const { pool, from_date, to_date, toRoomId } = event.detail;
@@ -413,7 +442,8 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
 }, [2, "igl-booking-event", {
     "currency": [8],
     "is_vacation_rental": [4],
-    "bookingEvent": [16],
+    "language": [1],
+    "bookingEvent": [1040],
     "allBookingEvents": [16],
     "countryNodeList": [8, "country-node-list"],
     "renderElement": [32],

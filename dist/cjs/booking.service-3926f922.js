@@ -91,8 +91,8 @@ function convertDMYToISO(date) {
 function addTwoMonthToDate(date) {
   return moment.hooks(date).add(2, 'months').format('YYYY-MM-DD');
 }
-function formatDate(dateString) {
-  const formattedDate = moment.hooks(dateString, 'DD MMM YYYY').format('ddd, DD MMM YYYY');
+function formatDate(dateString, option = 'DD MMM YYYY') {
+  const formattedDate = moment.hooks(dateString, option).format('ddd, DD MMM YYYY');
   return formattedDate;
 }
 function getNextDay(date) {
@@ -3370,15 +3370,23 @@ async function getStayStatus() {
     console.log(error);
   }
 }
+function renderBlock003Date(date, hour, minute) {
+  const dt = new Date(date);
+  dt.setHours(hour);
+  dt.setMinutes(minute);
+  return `Blocked till ${moment.hooks(dt).format('MMM DD, HH:mm')}`;
+}
 function getDefaultData(cell, stayStatus) {
-  var _a;
   if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
-    //console.log('blocked cells', cell);
     return {
       ID: cell.POOL,
       NOTES: '',
       BALANCE: '',
-      NAME: cell.My_Block_Info.NOTES !== '' ? cell.My_Block_Info.NOTES : stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
+      NAME: cell.My_Block_Info.NOTES !== ''
+        ? cell.My_Block_Info.NOTES
+        : cell.STAY_STATUS_CODE === '003'
+          ? renderBlock003Date(cell.My_Block_Info.BLOCKED_TILL_DATE, cell.My_Block_Info.BLOCKED_TILL_HOUR, cell.My_Block_Info.BLOCKED_TILL_MINUTE)
+          : stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
       RELEASE_AFTER_HOURS: cell.My_Block_Info.DESCRIPTION,
       PR_ID: cell.My_Block_Info.pr_id,
       ENTRY_DATE: cell.My_Block_Info.BLOCKED_TILL_DATE,
@@ -3402,35 +3410,38 @@ function getDefaultData(cell, stayStatus) {
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
-    IS_EDITABLE: cell.booking.is_editable,
     STATUS: status[cell.STAY_STATUS_CODE],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
-    PHONE: (_a = cell.booking.guest.mobile) !== null && _a !== void 0 ? _a : '',
-    ENTRY_DATE: cell.booking.booked_on.date,
-    RATE: cell.room.total,
-    RATE_PLAN: cell.room.rateplan.name,
-    SPLIT_BOOKING: false,
-    RATE_PLAN_ID: cell.room.rateplan.id,
     IDENTIFIER: cell.room.identifier,
-    RATE_TYPE: 1,
-    ADULTS_COUNT: cell.room.occupancy.adult_nbr,
-    CHILDREN_COUNT: cell.room.occupancy.children_nbr,
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
-    channel_booking_nbr: cell.booking.channel_booking_nbr,
-    origin: cell.booking.origin,
-    is_direct: cell.booking.is_direct,
-    GUEST: cell.booking.guest,
     BOOKING_NUMBER: cell.booking.booking_nbr,
-    cancelation: cell.room.rateplan.cancelation,
-    guarantee: cell.room.rateplan.guarantee,
-    TOTAL_PRICE: cell.room.total,
-    COUNTRY: cell.booking.guest.country_id,
-    FROM_DATE_STR: cell.booking.format.from_date,
-    TO_DATE_STR: cell.booking.format.to_date,
-    adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
-    NOTES: cell.booking.remark,
-    SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
+    ///from here
+    //ENTRY_DATE: cell.booking.booked_on.date,
+    // IS_EDITABLE: cell.booking.is_editable,
+    // ARRIVAL: cell.booking.arrival,
+    // PHONE: cell.booking.guest.mobile ?? '',
+    // RATE: cell.room.total,
+    // RATE_PLAN: cell.room.rateplan.name,
+    // SPLIT_BOOKING: false,
+    // RATE_PLAN_ID: cell.room.rateplan.id,
+    // RATE_TYPE: 1,
+    // ADULTS_COUNT: cell.room.occupancy.adult_nbr,
+    // CHILDREN_COUNT: cell.room.occupancy.children_nbr,
+    // channel_booking_nbr: cell.booking.channel_booking_nbr,
+    // origin: cell.booking.origin,
+    // is_direct: cell.booking.is_direct,
+    // GUEST: cell.booking.guest,
+    // ROOMS: cell.booking.rooms,
+    // cancelation: cell.room.rateplan.cancelation,
+    // guarantee: cell.room.rateplan.guarantee,
+    // TOTAL_PRICE: cell.room.total,
+    // COUNTRY: cell.booking.guest.country_id,
+    // FROM_DATE_STR: cell.booking.format.from_date,
+    // TO_DATE_STR: cell.booking.format.to_date,
+    // adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
+    // NOTES: cell.booking.remark,
+    // SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
 function updateBookingWithStayData(data, cell) {
@@ -3464,6 +3475,7 @@ function transformNewBooking(data) {
       TO_DATE: room.to_date,
       FROM_DATE: room.from_date,
       NO_OF_DAYS: room.days.length,
+      ARRIVAL: data.arrival,
       IS_EDITABLE: true,
       STATUS: status['001'],
       NAME: formatName(room.guest.first_name, room.guest.last_name),
@@ -3480,6 +3492,7 @@ function transformNewBooking(data) {
       PR_ID: +room.unit.id,
       POOL: room['assigned_units_pool'],
       GUEST: data.guest,
+      ROOMS: data.rooms,
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
       guarantee: room.rateplan.guarantee,
@@ -3504,7 +3517,11 @@ async function transformNewBLockedRooms(data) {
     ID: data.POOL,
     NOTES: '',
     BALANCE: '',
-    NAME: data.NOTES !== '' ? data.NOTES : stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
+    NAME: data.NOTES !== ''
+      ? data.NOTES
+      : data.STAY_STATUS_CODE === '003'
+        ? renderBlock003Date(data.BLOCKED_TILL_DATE, data.BLOCKED_TILL_HOUR, data.BLOCKED_TILL_MINUTE)
+        : stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
     RELEASE_AFTER_HOURS: data.DESCRIPTION,
     PR_ID: data.pr_id,
     ENTRY_DATE: data.BLOCKED_TILL_DATE,
@@ -3783,7 +3800,7 @@ class BookingService {
       throw new Error(error);
     }
   }
-  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
+  async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, rooms, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -3830,50 +3847,52 @@ class BookingService {
               code: arrivalTime || bookedByInfoData.selectedArrivalTime,
             },
             guest: defaultGuest || guest,
-            rooms: guestData.map(data => ({
-              identifier: identifier || null,
-              roomtype: {
-                id: data.roomCategoryId,
-                name: data.roomCategoryName,
-                physicalrooms: null,
-                rateplans: null,
-                availabilities: null,
-                inventory: data.inventory,
-                rate: data.rate / totalNights,
-              },
-              rateplan: {
-                id: data.ratePlanId,
-                name: data.ratePlanName,
-                rate_restrictions: null,
-                variations: null,
-                cancelation: data.cancelation,
-                guarantee: data.guarantee,
-              },
-              unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: +pr_id || +data.roomId },
-              occupancy: {
-                adult_nbr: data.adultCount,
-                children_nbr: data.childrenCount,
-                infant_nbr: null,
-              },
-              from_date: fromDateStr,
-              to_date: toDateStr,
-              notes: null,
-              days: this.generateDays(fromDateStr, toDateStr, this.calculateTotalRate(data.rate, totalNights, data.isRateModified, data.rateType)),
-              guest: {
-                email: null,
-                first_name: data.guestName,
-                last_name: null,
-                country_id: null,
-                city: null,
-                mobile: null,
-                address: null,
-                dob: null,
-                subscribe_to_news_letter: null,
-              },
-            })),
+            rooms: [
+              ...guestData.map(data => ({
+                identifier: identifier || null,
+                roomtype: {
+                  id: data.roomCategoryId,
+                  name: data.roomCategoryName,
+                  physicalrooms: null,
+                  rateplans: null,
+                  availabilities: null,
+                  inventory: data.inventory,
+                  rate: data.rate / totalNights,
+                },
+                rateplan: {
+                  id: data.ratePlanId,
+                  name: data.ratePlanName,
+                  rate_restrictions: null,
+                  variations: null,
+                  cancelation: data.cancelation,
+                  guarantee: data.guarantee,
+                },
+                unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: +pr_id || +data.roomId },
+                occupancy: {
+                  adult_nbr: data.adultCount,
+                  children_nbr: data.childrenCount,
+                  infant_nbr: null,
+                },
+                from_date: fromDateStr,
+                to_date: toDateStr,
+                notes: null,
+                days: this.generateDays(fromDateStr, toDateStr, this.calculateTotalRate(data.rate, totalNights, data.isRateModified, data.rateType)),
+                guest: {
+                  email: null,
+                  first_name: data.guestName,
+                  last_name: null,
+                  country_id: null,
+                  city: null,
+                  mobile: null,
+                  address: null,
+                  dob: null,
+                  subscribe_to_news_letter: null,
+                },
+              })),
+              ...rooms,
+            ],
           },
         };
-        console.log('body', body);
         const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -3908,4 +3927,4 @@ exports.getReleaseHoursString = getReleaseHoursString;
 exports.transformNewBLockedRooms = transformNewBLockedRooms;
 exports.transformNewBooking = transformNewBooking;
 
-//# sourceMappingURL=booking.service-7baa627d.js.map
+//# sourceMappingURL=booking.service-3926f922.js.map

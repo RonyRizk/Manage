@@ -1,4 +1,5 @@
 import { Host, h } from "@stencil/core";
+import moment from "moment";
 export class IglBookPropertyHeader {
   constructor() {
     this.sourceOption = {
@@ -8,6 +9,7 @@ export class IglBookPropertyHeader {
     };
     this.splitBookingId = '';
     this.bookingData = '';
+    this.minDate = undefined;
     this.sourceOptions = [];
     this.message = undefined;
     this.bookingDataDefaultDateRange = undefined;
@@ -15,16 +17,18 @@ export class IglBookPropertyHeader {
     this.adultChildConstraints = undefined;
     this.splitBookings = undefined;
     this.adultChildCount = undefined;
+    this.dateRangeData = undefined;
+    this.defaultDaterange = undefined;
   }
   getSplitBookings() {
     return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
   }
   getSelectedSplitBookingName(bookingId) {
     let splitBooking = this.splitBookings.find(booking => booking.ID === bookingId);
-    return splitBooking.ID + ' ' + splitBooking.NAME;
+    return splitBooking.BOOKING_NUMBER + ' ' + splitBooking.NAME;
   }
   getSplitBookingList() {
-    return (h("fieldset", { class: "form-group col-12 text-left" }, h("label", { class: "h5" }, "To booking# "), h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.splitBookingDropDownChange.emit(evt) }, h("option", { value: "", selected: this.splitBookingId != '' }, "Select"), this.splitBookings.map(option => (h("option", { value: option.ID, selected: this.splitBookingId === option.ID }, this.getSelectedSplitBookingName(option.ID))))))));
+    return (h("fieldset", { class: "form-group col-12 text-left" }, h("label", { class: "h5" }, "To booking# "), h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.splitBookingDropDownChange.emit(evt) }, h("option", { value: "", selected: this.splitBookingId != '' }, "Select"), this.splitBookings.map(option => (h("option", { value: option.BOOKING_NUMBER, selected: this.splitBookingId === option.BOOKING_NUMBER }, this.getSelectedSplitBookingName(option.ID))))))));
   }
   getSourceNode() {
     return (h("fieldset", { class: "d-flex flex-column text-left flex-lg-row align-items-lg-center" }, h("label", { class: "h5 mr-lg-1" }, "Source "), h("div", { class: "btn-group mt-1 mt-lg-0 sourceContainer" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.sourceDropDownChange.emit(evt.target.value) }, this.sourceOptions.map(option => {
@@ -46,10 +50,18 @@ export class IglBookPropertyHeader {
     this.adultChild.emit(obj);
   }
   getAdultChildConstraints() {
-    return (h("div", { class: "mt-1 d-flex flex-column text-left" }, h("label", { class: "h5 d-lg-none" }, "Number of Guests "), h("div", { class: "form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start" }, h("fieldset", null, h("div", { class: "btn-group " }, h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, h("option", { value: "" }, "Ad.."), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (h("fieldset", { class: 'ml-1' }, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, h("option", { value: '' }, `Ch... < ${this.adultChildConstraints.child_max_age} years`), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option))))))), h("button", { class: 'btn btn-primary btn-sm ml-2 ', onClick: () => this.handleButtonClicked() }, "Check"))));
+    return (h("div", { class: 'mt-1 d-flex flex-column text-left' }, h("label", { class: "h5 d-lg-none" }, "Number of Guests "), h("div", { class: "form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start" }, h("fieldset", null, h("div", { class: "btn-group " }, h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, h("option", { value: "" }, "Ad.."), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (h("fieldset", { class: 'ml-1' }, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, h("option", { value: '' }, `Ch... < ${this.adultChildConstraints.child_max_age} years`), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option))))))), h("button", { class: 'btn btn-primary btn-sm ml-2 ', onClick: () => this.handleButtonClicked() }, "Check"))));
   }
   handleButtonClicked() {
-    if (this.adultChildCount.adult === 0) {
+    if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.defaultDaterange.to_date).getTime()) {
+      this.toast.emit({
+        type: 'error',
+        title: `Check-in date should be max ${moment(new Date(this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
+        description: '',
+        position: 'top-right',
+      });
+    }
+    else if (this.adultChildCount.adult === 0) {
       this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
     }
     else {
@@ -60,7 +72,7 @@ export class IglBookPropertyHeader {
     return this.bookingData.event_type === key;
   }
   render() {
-    return (h(Host, null, this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode(), h("div", { class: 'd-lg-flex align-items-center' }, h("fieldset", { class: " mt-1 mt-lg-0  " }, h("igl-date-range", { disabled: this.isEventType('BAR_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-left mt-1" }, this.message)));
+    return (h(Host, null, this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode(), h("div", { class: 'd-lg-flex align-items-center' }, h("fieldset", { class: " mt-1 mt-lg-0  " }, h("igl-date-range", { minDate: this.minDate, disabled: this.isEventType('BAR_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-left mt-1" }, this.message)));
   }
   static get is() { return "igl-book-property-header"; }
   static get encapsulation() { return "scoped"; }
@@ -111,6 +123,23 @@ export class IglBookPropertyHeader {
         "attribute": "booking-data",
         "reflect": false,
         "defaultValue": "''"
+      },
+      "minDate": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "min-date",
+        "reflect": false
       },
       "sourceOptions": {
         "type": "unknown",
@@ -226,6 +255,38 @@ export class IglBookPropertyHeader {
         "complexType": {
           "original": "{ adult: number; child: number }",
           "resolved": "{ adult: number; child: number; }",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        }
+      },
+      "dateRangeData": {
+        "type": "any",
+        "mutable": false,
+        "complexType": {
+          "original": "any",
+          "resolved": "any",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "date-range-data",
+        "reflect": false
+      },
+      "defaultDaterange": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "{ from_date: string; to_date: string }",
+          "resolved": "{ from_date: string; to_date: string; }",
           "references": {}
         },
         "required": false,

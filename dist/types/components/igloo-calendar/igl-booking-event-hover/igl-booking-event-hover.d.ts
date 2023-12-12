@@ -16,10 +16,16 @@ export declare class IglBookingEventHover {
     pool?: string;
     data: any[];
   }>;
+  element: any;
   private fromTimeStamp;
   private toTimeStamp;
   private todayTimeStamp;
   private eventService;
+  componentWillLoad(): void;
+  handleKeyDown(event: KeyboardEvent): void;
+  hideBubble(): void;
+  componentDidLoad(): void;
+  disconnectedCallback(): void;
   getBookingId(): any;
   getTotalOccupants(): any;
   getPhoneNumber(): any;

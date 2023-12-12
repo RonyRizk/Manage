@@ -1,3 +1,4 @@
+//import { BookingService } from '../../../services/booking.service';
 export class IglBookPropertyService {
   onDataRoomUpdate(event, selectedUnits, isEditBooking, name) {
     let units = selectedUnits;
@@ -62,10 +63,17 @@ export class IglBookPropertyService {
     selectedUnits.clear();
     selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, Object.assign(Object.assign({}, data), { guestName: name, roomId: '' })));
   }
-  prepareBookUserServiceParams(context, check_in, sourceOption) {
-    const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : '';
+  async prepareBookUserServiceParams(context, check_in, sourceOption) {
+    const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : context.isEventType('ADD_ROOM') ? context.bookingData.ARRIVAL.code : '';
     const pr_id = context.isEventType('BAR_BOOKING') ? context.bookingData.PR_ID : undefined;
-    const bookingNumber = context.isEventType('EDIT_BOOKING') ? context.bookingData.BOOKING_NUMBER : undefined;
+    const bookingNumber = context.isEventType('EDIT_BOOKING') || context.isEventType('ADD_ROOM') ? context.bookingData.BOOKING_NUMBER : undefined;
+    let rooms = [];
+    if (context.isEventType('ADD_ROOM')) {
+      // const result = await (context.bookingService as BookingService).getExoposedBooking(bookingNumber, context.language);
+      //rooms = result.rooms;
+      rooms = context.bookingData.ROOMS;
+    }
+    console.log('rooms', rooms);
     return [
       context.bookedByInfoData,
       check_in,
@@ -75,6 +83,7 @@ export class IglBookPropertyService {
       context.dateRangeData.dateDifference,
       sourceOption,
       context.propertyid,
+      rooms,
       context.currency,
       bookingNumber,
       context.bookingData.GUEST,

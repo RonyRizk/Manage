@@ -1,4 +1,4 @@
-import { Booking, IFormat, Room, Origin } from './booking.dto';
+import { Booking, IFormat, Room, Origin, Arrival } from './booking.dto';
 import { IRoomService } from './property-types';
 export default interface IBooking {
   ID: string;
@@ -205,6 +205,7 @@ export interface RoomUpdateEvent {
 export interface RoomBookingDetails {
   ID: string;
   TO_DATE: string;
+  ARRIVAL: Arrival;
   FROM_DATE: string;
   NO_OF_DAYS: number;
   IS_EDITABLE: boolean;
@@ -237,6 +238,7 @@ export interface RoomBookingDetails {
   ARRIVAL_TIME: string;
   NOTES: string;
   SOURCE: ISource;
+  ROOMS: Room[];
 }
 export interface ISource {
   code: string;

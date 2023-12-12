@@ -8,11 +8,13 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
     super();
     this.__registerHost();
     this.dateSelectEvent = createEvent(this, "dateSelectEvent", 7);
+    this.toast = createEvent(this, "toast", 7);
     this.totalNights = 0;
     this.fromDateStr = 'from';
     this.toDateStr = 'to';
     this.defaultData = undefined;
     this.disabled = false;
+    this.minDate = undefined;
     this.renderAgain = false;
   }
   getStringDateFormat(dt) {
@@ -69,7 +71,7 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("h5", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, "Dates"), h("div", { class: "d-flex align-items-center mr-lg-1" }, h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: evt => {
+    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("h5", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, "Dates"), h("div", { class: 'd-flex align-items-center mr-lg-1' }, h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
       } })), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : ''))));
   }
@@ -77,6 +79,7 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
 }, [2, "igl-date-range", {
     "defaultData": [16],
     "disabled": [516],
+    "minDate": [1, "min-date"],
     "renderAgain": [32]
   }]);
 function defineCustomElement() {

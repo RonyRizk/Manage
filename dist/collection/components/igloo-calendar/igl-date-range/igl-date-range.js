@@ -6,6 +6,7 @@ export class IglDateRange {
     this.toDateStr = 'to';
     this.defaultData = undefined;
     this.disabled = false;
+    this.minDate = undefined;
     this.renderAgain = false;
   }
   getStringDateFormat(dt) {
@@ -62,7 +63,7 @@ export class IglDateRange {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("h5", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, "Dates"), h("div", { class: "d-flex align-items-center mr-lg-1" }, h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, autoApply: true, onDateChanged: evt => {
+    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("h5", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, "Dates"), h("div", { class: 'd-flex align-items-center mr-lg-1' }, h("div", { class: "iglRangePicker" }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
       } })), this.totalNights ? h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')) : ''))));
   }
@@ -112,6 +113,23 @@ export class IglDateRange {
         "attribute": "disabled",
         "reflect": true,
         "defaultValue": "false"
+      },
+      "minDate": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "min-date",
+        "reflect": false
       }
     };
   }
@@ -135,6 +153,27 @@ export class IglDateRange {
           "original": "{ [key: string]: any }",
           "resolved": "{ [key: string]: any; }",
           "references": {}
+        }
+      }, {
+        "method": "toast",
+        "name": "toast",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "IToast",
+          "resolved": "ICustomToast & Partial<IToastWithButton> | IDefaultToast & Partial<IToastWithButton>",
+          "references": {
+            "IToast": {
+              "location": "import",
+              "path": "../../ir-toast/toast",
+              "id": "src/components/ir-toast/toast.ts::IToast"
+            }
+          }
         }
       }];
   }

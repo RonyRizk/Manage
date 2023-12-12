@@ -9,6 +9,10 @@ export declare class IglBookingOverviewPage {
   adultChildConstraints: TAdultChildConstraints;
   ratePricingMode: any;
   dateRangeData: any;
+  defaultDaterange: {
+    from_date: string;
+    to_date: string;
+  };
   selectedRooms: Map<string, Map<string, any>>;
   adultChildCount: {
     adult: number;

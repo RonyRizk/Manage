@@ -22,6 +22,7 @@ const IglBookingOverviewPage = /*@__PURE__*/ proxyCustomElement(class IglBooking
     this.adultChildConstraints = undefined;
     this.ratePricingMode = undefined;
     this.dateRangeData = undefined;
+    this.defaultDaterange = undefined;
     this.selectedRooms = undefined;
     this.adultChildCount = undefined;
     this.sourceOptions = undefined;
@@ -34,7 +35,8 @@ const IglBookingOverviewPage = /*@__PURE__*/ proxyCustomElement(class IglBooking
   }
   render() {
     var _a, _b;
-    return (h(Host, null, h("igl-book-property-header", { adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings() }), h("div", { class: " text-left" }, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
+    //console.log(this.bookingData);
+    return (h(Host, null, h("igl-book-property-header", { defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData, minDate: this.isEventType('ADD_ROOM') ? this.bookingData.FROM_DATE : undefined, adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings() }), h("div", { class: " text-left" }, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
       return (h("igl-booking-rooms", { key: `room-info-${roomInfo.id}`, currency: this.currency, ratePricingMode: this.ratePricingMode, dateDifference: this.dateRangeData.dateDifference, bookingType: this.bookingData.event_type, roomTypeData: roomInfo, class: "mt-2 mb-1 p-0", defaultData: this.selectedRooms.get(`c_${roomInfo.id}`), onDataUpdateEvent: evt => this.roomsDataUpdate.emit(evt.detail) }));
     })), h("igl-book-property-footer", { class: 'p-0 mb-1 mt-3', eventType: this.bookingData.event_type, disabled: this.selectedRooms.size === 0 })));
   }
@@ -48,6 +50,7 @@ const IglBookingOverviewPage = /*@__PURE__*/ proxyCustomElement(class IglBooking
     "adultChildConstraints": [16],
     "ratePricingMode": [8, "rate-pricing-mode"],
     "dateRangeData": [8, "date-range-data"],
+    "defaultDaterange": [16],
     "selectedRooms": [16],
     "adultChildCount": [16],
     "sourceOptions": [16]

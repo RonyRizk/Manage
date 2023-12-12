@@ -89,8 +89,8 @@ function convertDMYToISO(date) {
 function addTwoMonthToDate(date) {
   return hooks(date).add(2, 'months').format('YYYY-MM-DD');
 }
-function formatDate(dateString) {
-  const formattedDate = hooks(dateString, 'DD MMM YYYY').format('ddd, DD MMM YYYY');
+function formatDate(dateString, option = 'DD MMM YYYY') {
+  const formattedDate = hooks(dateString, option).format('ddd, DD MMM YYYY');
   return formattedDate;
 }
 function getNextDay(date) {
