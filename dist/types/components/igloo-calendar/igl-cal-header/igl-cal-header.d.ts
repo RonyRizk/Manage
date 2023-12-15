@@ -14,7 +14,7 @@ export declare class IglCalHeader {
   };
   today: String;
   propertyid: number;
-  unassignedDates: {};
+  unassignedDates: any;
   to_date: string;
   renderAgain: boolean;
   unassignedRoomsNumber: any;
@@ -28,7 +28,8 @@ export declare class IglCalHeader {
   private fetchAndAssignUnassignedRooms;
   private assignRoomsToDate;
   handleReduceAvailableUnitEvent(event: CustomEvent<{
-    [key: string]: any;
+    fromDate: string;
+    toDate: string;
   }>): void;
   showToBeAssigned(dayInfo: any): void;
   handleOptionEvent(key: any, data?: any): void;

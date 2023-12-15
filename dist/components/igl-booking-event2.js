@@ -42,10 +42,17 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     window.addEventListener('click', this.handleClickOutsideBind);
   }
   async fetchAndAssignBookingData() {
-    if (this.bookingEvent.STATUS === 'IN-HOUSE') {
-      const data = await this.bookingService.getExoposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
-      this.bookingEvent = Object.assign(Object.assign({}, this.bookingEvent), transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0]);
-      this.showEventInfo(true);
+    try {
+      if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+        const data = await this.bookingService.getExoposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
+        let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
+        data.rooms = dataForTransformation;
+        this.bookingEvent = Object.assign(Object.assign({}, this.bookingEvent), transformNewBooking(data)[0]);
+        this.showEventInfo(true);
+      }
+    }
+    catch (error) {
+      console.error(error);
     }
   }
   componentDidLoad() {

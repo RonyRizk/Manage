@@ -1,4 +1,4 @@
-import { Host, h } from "@stencil/core";
+import { Host, h, Fragment } from "@stencil/core";
 import { v4 } from "uuid";
 import { BookingService } from "../../services/booking.service";
 export class IrAutocomplete {
@@ -7,12 +7,15 @@ export class IrAutocomplete {
     this.duration = 300;
     this.placeholder = '';
     this.propertyId = undefined;
+    this.isSplitBooking = false;
     this.type = 'text';
     this.name = '';
     this.inputId = v4();
     this.required = false;
     this.disabled = false;
     this.value = undefined;
+    this.from_date = '';
+    this.to_date = '';
     this.inputValue = '';
     this.data = [];
     this.selectedIndex = -1;
@@ -70,11 +73,6 @@ export class IrAutocomplete {
       });
     }
   }
-  setInputValue(item) {
-    if (item && item.email) {
-      this.inputValue = item.email;
-    }
-  }
   selectItem(index) {
     if (this.data[index]) {
       this.isItemSelected = true;
@@ -91,7 +89,15 @@ export class IrAutocomplete {
   }
   async fetchData() {
     try {
-      const data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
+      let data = [];
+      if (!this.isSplitBooking) {
+        data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
+      }
+      else {
+        if (this.inputValue.split(' ').length === 1) {
+          data = await this.bookingService.fetchExposedBookings(this.inputValue, this.propertyId, this.from_date, this.to_date);
+        }
+      }
       if (data) {
         this.data = data;
         if (!this.isComboBoxVisible) {
@@ -162,7 +168,7 @@ export class IrAutocomplete {
   }
   renderDropdown() {
     if (this.data.length > 0) {
-      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`))))));
+      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, this.isSplitBooking ? (h(Fragment, null, `${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`)) : (h(Fragment, null, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`))))))));
     }
   }
   handleFocus() {
@@ -251,6 +257,24 @@ export class IrAutocomplete {
         },
         "attribute": "property-id",
         "reflect": false
+      },
+      "isSplitBooking": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "is-split-booking",
+        "reflect": false,
+        "defaultValue": "false"
       },
       "type": {
         "type": "string",
@@ -358,6 +382,42 @@ export class IrAutocomplete {
         },
         "attribute": "value",
         "reflect": false
+      },
+      "from_date": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "from_date",
+        "reflect": false,
+        "defaultValue": "''"
+      },
+      "to_date": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "to_date",
+        "reflect": false,
+        "defaultValue": "''"
       }
     };
   }

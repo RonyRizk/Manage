@@ -2,6 +2,7 @@ import { EventEmitter } from '../../../../stencil-public-runtime';
 import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
 export declare class IglBookingOverviewPage {
   bookingData: any;
+  propertyId: number;
   message: string;
   showSplitBookingOption: boolean;
   eventType: string;
@@ -20,6 +21,7 @@ export declare class IglBookingOverviewPage {
   };
   sourceOptions: TSourceOptions[];
   roomsDataUpdate: EventEmitter;
+  bookedByInfoData: any;
   getSplitBookings(): any;
   isEventType(event: string): boolean;
   render(): any;

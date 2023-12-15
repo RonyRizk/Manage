@@ -91,7 +91,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     return 'room_' + roomId + '_' + selectedDay.currentDate;
   }
   getSplitBookingEvents(newEvent) {
-    return this.getBookingData().filter(bookingEvent => newEvent.FROM_DATE === bookingEvent.TO_DATE);
+    return this.getBookingData().some(bookingEvent => !['003', '002', '004'].includes(bookingEvent.STATUS_CODE) && newEvent.FROM_DATE === bookingEvent.FROM_DATE);
   }
   closeWindow() {
     let ind = this.getBookingData().findIndex(ev => ev.ID === 'NEW_TEMP_EVENT');
@@ -159,7 +159,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     this.newEvent.ENTRY_DATE = new Date().toISOString();
     this.newEvent.legendData = this.calendarData.formattedLegendData;
     let splitBookingEvents = this.getSplitBookingEvents(this.newEvent);
-    if (splitBookingEvents.length) {
+    if (splitBookingEvents) {
       this.newEvent.splitBookingEvents = splitBookingEvents;
     }
     this.getBookingData().push(this.newEvent);

@@ -2,6 +2,7 @@ import { Host, h } from "@stencil/core";
 export class IglBookingOverviewPage {
   constructor() {
     this.bookingData = undefined;
+    this.propertyId = undefined;
     this.message = undefined;
     this.showSplitBookingOption = undefined;
     this.eventType = undefined;
@@ -13,6 +14,7 @@ export class IglBookingOverviewPage {
     this.selectedRooms = undefined;
     this.adultChildCount = undefined;
     this.sourceOptions = undefined;
+    this.bookedByInfoData = undefined;
   }
   getSplitBookings() {
     return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
@@ -23,8 +25,8 @@ export class IglBookingOverviewPage {
   render() {
     var _a, _b;
     //console.log(this.bookingData);
-    return (h(Host, null, h("igl-book-property-header", { defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData, minDate: this.isEventType('ADD_ROOM') ? this.bookingData.FROM_DATE : undefined, adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings() }), h("div", { class: " text-left" }, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
-      return (h("igl-booking-rooms", { key: `room-info-${roomInfo.id}`, currency: this.currency, ratePricingMode: this.ratePricingMode, dateDifference: this.dateRangeData.dateDifference, bookingType: this.bookingData.event_type, roomTypeData: roomInfo, class: "mt-2 mb-1 p-0", defaultData: this.selectedRooms.get(`c_${roomInfo.id}`), onDataUpdateEvent: evt => this.roomsDataUpdate.emit(evt.detail) }));
+    return (h(Host, null, h("igl-book-property-header", { bookedByInfoData: this.bookedByInfoData, defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData, minDate: this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined, adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings(), propertyId: this.propertyId }), h("div", { class: " text-left" }, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
+      return (h("igl-booking-rooms", { isBookDisabled: Object.keys(this.bookedByInfoData).length <= 1, key: `room-info-${roomInfo.id}`, currency: this.currency, ratePricingMode: this.ratePricingMode, dateDifference: this.dateRangeData.dateDifference, bookingType: this.bookingData.event_type, roomTypeData: roomInfo, class: "mt-2 mb-1 p-0", defaultData: this.selectedRooms.get(`c_${roomInfo.id}`), onDataUpdateEvent: evt => this.roomsDataUpdate.emit(evt.detail) }));
     })), h("igl-book-property-footer", { class: 'p-0 mb-1 mt-3', eventType: this.bookingData.event_type, disabled: this.selectedRooms.size === 0 })));
   }
   static get is() { return "igl-booking-overview-page"; }
@@ -56,6 +58,23 @@ export class IglBookingOverviewPage {
           "text": ""
         },
         "attribute": "booking-data",
+        "reflect": false
+      },
+      "propertyId": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "property-id",
         "reflect": false
       },
       "message": {
@@ -185,7 +204,7 @@ export class IglBookingOverviewPage {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "{from_date:string,to_date:string}",
+          "original": "{ from_date: string; to_date: string }",
           "resolved": "{ from_date: string; to_date: string; }",
           "references": {}
         },
@@ -251,6 +270,23 @@ export class IglBookingOverviewPage {
           "tags": [],
           "text": ""
         }
+      },
+      "bookedByInfoData": {
+        "type": "any",
+        "mutable": false,
+        "complexType": {
+          "original": "any",
+          "resolved": "any",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "booked-by-info-data",
+        "reflect": false
       }
     };
   }

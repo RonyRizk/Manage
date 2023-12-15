@@ -94,8 +94,8 @@ export class IglooCalendar {
           }, 200);
           if (!this.calendarData.is_vacation_rental) {
             const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-            this.unassignedDates = Object.assign(Object.assign({}, this.unassignedDates), data);
-            this.calendarData.unassignedDates = data;
+            this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: Object.assign(Object.assign({}, this.unassignedDates), data) };
+            this.calendarData = Object.assign(Object.assign({}, this.calendarData), { unassignedDates: data });
           }
           this.socket = io('https://realtime.igloorooms.com/');
           this.socket.on('MSG', async (msg) => {
@@ -141,7 +141,17 @@ export class IglooCalendar {
                     new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate) {
                     const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                     this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
-                    this.unassignedDates = data;
+                    this.unassignedDates = {
+                      fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+                      toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
+                      data,
+                    };
+                    if (Object.keys(data).length === 0) {
+                      this.reduceAvailableUnitEvent.emit({
+                        fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+                        toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
+                      });
+                    }
                   }
                 }
                 else {
@@ -373,7 +383,11 @@ export class IglooCalendar {
     }
     const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
     this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
-    this.unassignedDates = Object.assign({}, data);
+    this.unassignedDates = {
+      fromDate,
+      toDate,
+      data,
+    };
   }
   async handleDateSearch(dates) {
     const startDate = moment(dates.start).toDate();
@@ -547,7 +561,7 @@ export class IglooCalendar {
   }
   render() {
     return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("ir-common", null), h("div", { id: "iglooCalendar", class: "igl-calendar" }, this.shouldRenderCalendarView() ? ([
-      this.showToBeAssigned ? (h("igl-to-be-assigned", { loadingMessage: 'Fetching unassigned units', to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
+      this.showToBeAssigned ? (h("igl-to-be-assigned", { unassignedDatesProp: this.unassignedDates, loadingMessage: 'Fetching unassigned units', to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       this.showLegend ? (h("igl-legends", { class: "legendContainer", legendData: this.calendarData.legendData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, h("div", { id: "calendarContainer" }, h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }), h("igl-cal-body", { language: this.language, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), h("igl-cal-footer", { today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
     ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, adultChildConstraints: this.calendarData.adultChildConstraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: _ => (this.bookingItem = null) }))));
@@ -761,6 +775,21 @@ export class IglooCalendar {
         "complexType": {
           "original": "any",
           "resolved": "any",
+          "references": {}
+        }
+      }, {
+        "method": "reduceAvailableUnitEvent",
+        "name": "reduceAvailableUnitEvent",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "{ fromDate: string; toDate: string }",
+          "resolved": "{ fromDate: string; toDate: string; }",
           "references": {}
         }
       }];

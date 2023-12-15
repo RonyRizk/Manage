@@ -1,6 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { h as hooks } from './moment.js';
-import { d as defineCustomElement$2 } from './igl-date-range2.js';
+import { d as defineCustomElement$3 } from './igl-date-range2.js';
+import { d as defineCustomElement$2 } from './ir-autocomplete2.js';
 import { d as defineCustomElement$1 } from './ir-date-picker2.js';
 
 const iglBookPropertyHeaderCss = ".sc-igl-book-property-header-h{display:block}.row.sc-igl-book-property-header{padding:0 0 0 15px;margin:0}.sourceContainer.sc-igl-book-property-header{max-width:350px}";
@@ -15,6 +16,7 @@ const IglBookPropertyHeader = /*@__PURE__*/ proxyCustomElement(class IglBookProp
     this.checkClicked = createEvent(this, "checkClicked", 7);
     this.buttonClicked = createEvent(this, "buttonClicked", 7);
     this.toast = createEvent(this, "toast", 7);
+    this.spiltBookingSelected = createEvent(this, "spiltBookingSelected", 7);
     this.sourceOption = {
       code: '',
       description: '',
@@ -31,17 +33,15 @@ const IglBookPropertyHeader = /*@__PURE__*/ proxyCustomElement(class IglBookProp
     this.splitBookings = undefined;
     this.adultChildCount = undefined;
     this.dateRangeData = undefined;
+    this.bookedByInfoData = undefined;
     this.defaultDaterange = undefined;
-  }
-  getSplitBookings() {
-    return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
-  }
-  getSelectedSplitBookingName(bookingId) {
-    let splitBooking = this.splitBookings.find(booking => booking.ID === bookingId);
-    return splitBooking.BOOKING_NUMBER + ' ' + splitBooking.NAME;
+    this.propertyId = undefined;
   }
   getSplitBookingList() {
-    return (h("fieldset", { class: "form-group col-12 text-left" }, h("label", { class: "h5" }, "To booking# "), h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.splitBookingDropDownChange.emit(evt) }, h("option", { value: "", selected: this.splitBookingId != '' }, "Select"), this.splitBookings.map(option => (h("option", { value: option.BOOKING_NUMBER, selected: this.splitBookingId === option.BOOKING_NUMBER }, this.getSelectedSplitBookingName(option.ID))))))));
+    return (h("fieldset", { class: "form-group  text-left" }, h("label", { class: "h5" }, "To booking# "), h("div", { class: "btn-group ml-1" }, h("ir-autocomplete", { value: Object.keys(this.bookedByInfoData).length > 1 ? `${this.bookedByInfoData.bookingNumber} ${this.bookedByInfoData.firstName} ${this.bookedByInfoData.lastName}` : '', from_date: hooks(this.bookingDataDefaultDateRange.fromDate).format('YYYY-MM-DD'), to_date: hooks(this.bookingDataDefaultDateRange.toDate).format('YYYY-MM-DD'), propertyId: this.propertyId, placeholder: "Booking number", onComboboxValue: e => {
+        e.stopImmediatePropagation();
+        this.spiltBookingSelected.emit(e.detail);
+      }, isSplitBooking: true }))));
   }
   getSourceNode() {
     return (h("fieldset", { class: "d-flex flex-column text-left flex-lg-row align-items-lg-center" }, h("label", { class: "h5 mr-lg-1" }, "Source "), h("div", { class: "btn-group mt-1 mt-lg-0 sourceContainer" }, h("select", { class: "form-control input-sm", id: "xSmallSelect", onChange: evt => this.sourceDropDownChange.emit(evt.target.value) }, this.sourceOptions.map(option => {
@@ -66,10 +66,19 @@ const IglBookPropertyHeader = /*@__PURE__*/ proxyCustomElement(class IglBookProp
     return (h("div", { class: 'mt-1 d-flex flex-column text-left' }, h("label", { class: "h5 d-lg-none" }, "Number of Guests "), h("div", { class: "form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start" }, h("fieldset", null, h("div", { class: "btn-group " }, h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, h("option", { value: "" }, "Ad.."), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (h("fieldset", { class: 'ml-1' }, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, h("option", { value: '' }, `Ch... < ${this.adultChildConstraints.child_max_age} years`), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option))))))), h("button", { class: 'btn btn-primary btn-sm ml-2 ', onClick: () => this.handleButtonClicked() }, "Check"))));
   }
   handleButtonClicked() {
-    if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.defaultDaterange.to_date).getTime()) {
+    console.log(this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1);
+    if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1) {
       this.toast.emit({
         type: 'error',
-        title: `Check-in date should be max ${hooks(new Date(this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
+        title: `Choose a booking number.`,
+        description: '',
+        position: 'top-right',
+      });
+    }
+    else if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date).getTime()) {
+      this.toast.emit({
+        type: 'error',
+        title: `Check-in date should be max ${hooks(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
         description: '',
         position: 'top-right',
       });
@@ -100,13 +109,15 @@ const IglBookPropertyHeader = /*@__PURE__*/ proxyCustomElement(class IglBookProp
     "splitBookings": [16],
     "adultChildCount": [16],
     "dateRangeData": [8, "date-range-data"],
-    "defaultDaterange": [16]
+    "bookedByInfoData": [8, "booked-by-info-data"],
+    "defaultDaterange": [16],
+    "propertyId": [2, "property-id"]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["igl-book-property-header", "igl-date-range", "ir-date-picker"];
+  const components = ["igl-book-property-header", "igl-date-range", "ir-autocomplete", "ir-date-picker"];
   components.forEach(tagName => { switch (tagName) {
     case "igl-book-property-header":
       if (!customElements.get(tagName)) {
@@ -114,6 +125,11 @@ function defineCustomElement() {
       }
       break;
     case "igl-date-range":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$3();
+      }
+      break;
+    case "ir-autocomplete":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

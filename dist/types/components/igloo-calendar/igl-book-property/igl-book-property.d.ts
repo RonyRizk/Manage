@@ -52,6 +52,11 @@ export declare class IglBookProperty {
   handleKeyDown(e: KeyboardEvent): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  clearBooking(e: CustomEvent): void;
+  handleSpiltBookingSelected(e: CustomEvent<{
+    key: string;
+    data: unknown;
+  }>): Promise<void>;
   componentWillLoad(): Promise<void>;
   fetchSetupEntries(): Promise<import("../../../models/IBooking").ISetupEntries>;
   setSourceOptions(bookingSource: any[]): void;

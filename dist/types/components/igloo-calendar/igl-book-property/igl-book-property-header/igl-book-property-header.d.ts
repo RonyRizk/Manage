@@ -18,10 +18,12 @@ export declare class IglBookPropertyHeader {
     child: number;
   };
   dateRangeData: any;
+  bookedByInfoData: any;
   defaultDaterange: {
     from_date: string;
     to_date: string;
   };
+  propertyId: number;
   splitBookingDropDownChange: EventEmitter<any>;
   sourceDropDownChange: EventEmitter<string>;
   adultChild: EventEmitter<any>;
@@ -30,9 +32,11 @@ export declare class IglBookPropertyHeader {
     key: TPropertyButtonsTypes;
   }>;
   toast: EventEmitter<IToast>;
+  spiltBookingSelected: EventEmitter<{
+    key: string;
+    data: unknown;
+  }>;
   private sourceOption;
-  getSplitBookings(): any;
-  getSelectedSplitBookingName(bookingId: any): string;
   getSplitBookingList(): any;
   getSourceNode(): any;
   handleAdultChildChange(key: string, event: Event): void;

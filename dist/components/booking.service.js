@@ -487,6 +487,30 @@ class BookingService {
       throw new Error(error);
     }
   }
+  async fetchExposedBookings(booking_nbr, property_id, from_date, to_date) {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token) {
+        const { data } = await axios.post(`/Fetch_Exposed_Bookings?Ticket=${token}`, {
+          booking_nbr,
+          property_id,
+          from_date,
+          to_date,
+        });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data['My_Result'];
+      }
+      else {
+        throw new Error("Token doesn't exist");
+      }
+    }
+    catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
   async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, rooms, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
@@ -580,6 +604,7 @@ class BookingService {
             ],
           },
         };
+        console.log('book user payload', body);
         const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);

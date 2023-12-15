@@ -10,6 +10,7 @@ export class IglBookingRooms {
     this.currency = undefined;
     this.selectedRooms = [];
     this.totalRooms = undefined;
+    this.isBookDisabled = undefined;
     this.roomsDistributions = [];
   }
   componentWillLoad() {
@@ -95,7 +96,7 @@ export class IglBookingRooms {
     const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
     return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
       if (ratePlan.variations !== null) {
-        return (h("igl-booking-room-rate-plan", { index: index, key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? '' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
+        return (h("igl-booking-room-rate-plan", { index: index, isBookDisabled: this.isBookDisabled, key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? '' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
       }
       else {
         return null;
@@ -217,6 +218,23 @@ export class IglBookingRooms {
           "text": ""
         },
         "attribute": "currency",
+        "reflect": false
+      },
+      "isBookDisabled": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "is-book-disabled",
         "reflect": false
       }
     };

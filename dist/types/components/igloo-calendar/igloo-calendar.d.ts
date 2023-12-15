@@ -27,6 +27,10 @@ export declare class IglooCalendar {
   showPaymentDetails: boolean;
   showToBeAssigned: boolean;
   unassignedDates: {};
+  reduceAvailableUnitEvent: EventEmitter<{
+    fromDate: string;
+    toDate: string;
+  }>;
   private bookingService;
   private countryNodeList;
   private visibleCalendarCells;

@@ -1,4 +1,6 @@
-import { h as hooks } from './moment-7d60e5ef.js';
+'use strict';
+
+const moment = require('./moment-f96595e5.js');
 
 function convertDateToCustomFormat(dayWithWeekday, monthWithYear) {
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -78,23 +80,23 @@ function getReleaseHoursString(releaseDate) {
   };
 }
 function computeEndDate(startDate, numberOfDays) {
-  const dateObj = hooks(startDate, 'D_M_YYYY');
+  const dateObj = moment.hooks(startDate, 'D_M_YYYY');
   dateObj.add(numberOfDays, 'days');
   return dateObj.format('YYYY-MM-DD');
 }
 function convertDMYToISO(date) {
-  const dateObj = hooks(date, 'D_M_YYYY');
+  const dateObj = moment.hooks(date, 'D_M_YYYY');
   return dateObj.format('YYYY-MM-DD');
 }
 function addTwoMonthToDate(date) {
-  return hooks(date).add(2, 'months').format('YYYY-MM-DD');
+  return moment.hooks(date).add(2, 'months').format('YYYY-MM-DD');
 }
 function formatDate(dateString, option = 'DD MMM YYYY') {
-  const formattedDate = hooks(dateString, option).format('ddd, DD MMM YYYY');
+  const formattedDate = moment.hooks(dateString, option).format('ddd, DD MMM YYYY');
   return formattedDate;
 }
 function getNextDay(date) {
-  return hooks(date).add(1, 'days').format('YYYY-MM-DD');
+  return moment.hooks(date).add(1, 'days').format('YYYY-MM-DD');
 }
 
 function bind(fn, thisArg) {
@@ -3372,7 +3374,7 @@ function renderBlock003Date(date, hour, minute) {
   const dt = new Date(date);
   dt.setHours(hour);
   dt.setMinutes(minute);
-  return `Blocked till ${hooks(dt).format('MMM DD, HH:mm')}`;
+  return `Blocked till ${moment.hooks(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell, stayStatus) {
   if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
@@ -3538,8 +3540,8 @@ async function transformNewBLockedRooms(data) {
   };
 }
 function calculateDaysBetweenDates(from_date, to_date) {
-  const startDate = hooks(from_date, 'YYYY-MM-DD');
-  const endDate = hooks(to_date, 'YYYY-MM-DD');
+  const startDate = moment.hooks(from_date, 'YYYY-MM-DD');
+  const endDate = moment.hooks(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
   return daysDiff;
 }
@@ -3798,6 +3800,30 @@ class BookingService {
       throw new Error(error);
     }
   }
+  async fetchExposedBookings(booking_nbr, property_id, from_date, to_date) {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token) {
+        const { data } = await axios.post(`/Fetch_Exposed_Bookings?Ticket=${token}`, {
+          booking_nbr,
+          property_id,
+          from_date,
+          to_date,
+        });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data['My_Result'];
+      }
+      else {
+        throw new Error("Token doesn't exist");
+      }
+    }
+    catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
   async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, rooms, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
@@ -3891,6 +3917,7 @@ class BookingService {
             ],
           },
         };
+        console.log('book user payload', body);
         const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -3909,6 +3936,20 @@ class BookingService {
   }
 }
 
-export { BookingService as B, axios as a, getReleaseHoursString as b, transformNewBooking as c, dateToFormattedString as d, findCountry as e, formatDate as f, getCurrencySymbol as g, dateDifference as h, formatLegendColors as i, getNextDay as j, addTwoMonthToDate as k, convertDMYToISO as l, computeEndDate as m, transformNewBLockedRooms as t };
+exports.BookingService = BookingService;
+exports.addTwoMonthToDate = addTwoMonthToDate;
+exports.axios = axios;
+exports.computeEndDate = computeEndDate;
+exports.convertDMYToISO = convertDMYToISO;
+exports.dateDifference = dateDifference;
+exports.dateToFormattedString = dateToFormattedString;
+exports.findCountry = findCountry;
+exports.formatDate = formatDate;
+exports.formatLegendColors = formatLegendColors;
+exports.getCurrencySymbol = getCurrencySymbol;
+exports.getNextDay = getNextDay;
+exports.getReleaseHoursString = getReleaseHoursString;
+exports.transformNewBLockedRooms = transformNewBLockedRooms;
+exports.transformNewBooking = transformNewBooking;
 
-//# sourceMappingURL=booking.service-3c326f7a.js.map
+//# sourceMappingURL=booking.service-2c012a3d.js.map
