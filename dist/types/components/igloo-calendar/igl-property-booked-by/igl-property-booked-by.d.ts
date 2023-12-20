@@ -2,6 +2,7 @@ import { EventEmitter } from '../../../stencil-public-runtime';
 import { ICountry } from '../../../models/IBooking';
 export declare class IglPropertyBookedBy {
   language: string;
+  defaultTexts: any;
   showPaymentDetails: boolean;
   defaultData: {
     [key: string]: any;

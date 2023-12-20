@@ -3,6 +3,7 @@ import { TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 export declare class IglBookPropertyFooter {
   eventType: string;
   disabled: boolean;
+  defaultTexts: any;
   buttonClicked: EventEmitter<{
     key: TPropertyButtonsTypes;
   }>;

@@ -1,6 +1,7 @@
 import moment from "moment";
 import { dateDifference } from "./utils";
 import axios from "axios";
+import { store } from "../redux/store";
 export async function getMyBookings(months) {
   const myBookings = [];
   const stayStatus = await getStayStatus();
@@ -57,10 +58,11 @@ async function getStayStatus() {
   }
 }
 function renderBlock003Date(date, hour, minute) {
+  const { languages } = store.getState();
   const dt = new Date(date);
   dt.setHours(hour);
   dt.setMinutes(minute);
-  return `Blocked till ${moment(dt).format('MMM DD, HH:mm')}`;
+  return `${languages.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell, stayStatus) {
   if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
@@ -102,6 +104,7 @@ function getDefaultData(cell, stayStatus) {
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
+    NOTES: cell.booking.remark,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -126,7 +129,6 @@ function getDefaultData(cell, stayStatus) {
     // FROM_DATE_STR: cell.booking.format.from_date,
     // TO_DATE_STR: cell.booking.format.to_date,
     // adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
-    // NOTES: cell.booking.remark,
     // SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }

@@ -3,6 +3,7 @@ export class IglBookPropertyFooter {
   constructor() {
     this.eventType = undefined;
     this.disabled = true;
+    this.defaultTexts = undefined;
   }
   isEventType(event) {
     return event === this.eventType;
@@ -25,7 +26,7 @@ export class IglBookPropertyFooter {
     return this.isEventType('PLUS_BOOKING') || this.isEventType('ADD_ROOM') || this.isEventType('EDIT_BOOKING');
   }
   render() {
-    return (h(Host, null, h("div", { class: "d-flex justify-content-between gap-30 align-items-center" }, this.isEventType('EDIT_BOOKING') ? (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>'))) : (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>', this.disabled))))));
+    return (h(Host, null, h("div", { class: "d-flex justify-content-between gap-30 align-items-center" }, this.isEventType('EDIT_BOOKING') ? (h(Fragment, null, this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`))) : (h(Fragment, null, this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`, this.disabled))))));
   }
   static get is() { return "igl-book-property-footer"; }
   static get encapsulation() { return "scoped"; }
@@ -75,6 +76,23 @@ export class IglBookPropertyFooter {
         "attribute": "disabled",
         "reflect": false,
         "defaultValue": "true"
+      },
+      "defaultTexts": {
+        "type": "any",
+        "mutable": false,
+        "complexType": {
+          "original": "any",
+          "resolved": "any",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "default-texts",
+        "reflect": false
       }
     };
   }

@@ -2,6 +2,7 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from 
 import { T as ToBeAssignedService } from './toBeAssigned.service.js';
 import { b as dateToFormattedString } from './utils.js';
 import { h as hooks } from './moment.js';
+import { s as store } from './store.js';
 import { d as defineCustomElement$2 } from './igl-tba-booking-view2.js';
 import { d as defineCustomElement$1 } from './igl-tba-category-view2.js';
 
@@ -24,10 +25,11 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     this.categoriesData = {};
     this.toBeAssignedService = new ToBeAssignedService();
     this.unassignedDatesProp = undefined;
+    this.defaultTexts = undefined;
     this.propertyid = undefined;
     this.from_date = undefined;
     this.to_date = undefined;
-    this.loadingMessage = 'Fetching unassigned units';
+    this.loadingMessage = undefined;
     this.calendarData = undefined;
     this.showDatesList = false;
     this.renderAgain = false;
@@ -35,6 +37,16 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
   }
   componentWillLoad() {
     this.reArrangeData();
+    this.updateFromStore();
+    this.unsubscribe = store.subscribe(() => this.updateFromStore());
+    this.loadingMessage = this.defaultTexts.entries.Lcz_FetchingUnAssignedUnits;
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+  }
+  disconnectedCallback() {
+    this.unsubscribe();
   }
   handleUnassignedDatesToBeAssignedChange(newValue) {
     const { fromDate, toDate, data } = newValue;
@@ -91,6 +103,7 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
   }
   async updateCategories(key, calendarData) {
     try {
+      //console.log("called")
       let categorisedRooms = {};
       const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(+key)), calendarData.roomsInfo, calendarData.formattedLegendData);
       result.forEach(room => {
@@ -136,7 +149,7 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
   async componentDidLoad() {
     setTimeout(() => {
       if (!this.isGotoToBeAssignedDate && Object.keys(this.unassignedDates).length > 0) {
-        console.log(this.isGotoToBeAssignedDate);
+        //console.log(this.isGotoToBeAssignedDate);
         const firstKey = Object.keys(this.unassignedDates)[0];
         this.showForDate(firstKey);
       }
@@ -211,7 +224,7 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
   }
   render() {
     var _a;
-    return (h(Host, { class: "tobeAssignedContainer pr-1 text-left" }, h("div", null, h("div", null, h("div", { class: "stickyHeader" }, h("div", { class: "tobeAssignedHeader pt-1" }, "Assignments"), h("div", { class: "closeBtn pt-1", onClick: () => this.handleOptionEvent('closeSideMenu') }, h("i", { class: "ft-chevrons-left" })), h("hr", null), Object.keys(this.data).length === 0 ? (h("p", null, "All Bookings Are Assigned")) : this.isLoading ? (h("p", null, this.loadingMessage)) : (h(Fragment, null, this.orderedDatesList.length ? (h("div", { class: `custom-dropdown border border-light rounded text-center ` + (this.showDatesList ? 'show' : ''), id: "dropdownMenuButton", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" }, h("div", { class: 'dropdown-toggle' }, h("span", { class: "font-weight-bold" }, this.data[this.selectedDate].dateStr)), h("div", { class: "dropdown-menu dropdown-menu-right full-width", "aria-labelledby": "dropdownMenuButton" }, (_a = this.orderedDatesList) === null || _a === void 0 ? void 0 : _a.map(ordDate => (h("div", { class: "dropdown-item pointer", onClick: () => this.showForDate(ordDate) }, this.data[ordDate].dateStr)))))) : ('All bookings assigned')))), !this.isLoading && (h("div", { class: "scrollabledArea" }, this.orderedDatesList.length ? (Object.keys(this.data[this.selectedDate].categories).length ? (this.getCategoryView()) : (h("div", { class: "mt-1" }, "All assigned for this day."))) : null))))));
+    return (h(Host, { class: "tobeAssignedContainer pr-1 text-left" }, h("div", null, h("div", null, h("div", { class: "stickyHeader" }, h("div", { class: "tobeAssignedHeader pt-1" }, this.defaultTexts.entries.Lcz_Assignments), h("div", { class: "closeBtn pt-1", onClick: () => this.handleOptionEvent('closeSideMenu') }, h("i", { class: "ft-chevrons-left" })), h("hr", null), Object.keys(this.data).length === 0 ? (h("p", null, this.defaultTexts.entries.Lcz_AllBookingsAreAssigned)) : this.isLoading ? (h("p", null, this.loadingMessage)) : (h(Fragment, null, this.orderedDatesList.length ? (h("div", { class: `custom-dropdown border border-light rounded text-center ` + (this.showDatesList ? 'show' : ''), id: "dropdownMenuButton", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" }, h("div", { class: 'dropdown-toggle' }, h("span", { class: "font-weight-bold" }, this.data[this.selectedDate].dateStr)), h("div", { class: "dropdown-menu dropdown-menu-right full-width", "aria-labelledby": "dropdownMenuButton" }, (_a = this.orderedDatesList) === null || _a === void 0 ? void 0 : _a.map(ordDate => (h("div", { class: "dropdown-item pointer", onClick: () => this.showForDate(ordDate) }, this.data[ordDate].dateStr)))))) : (this.defaultTexts.entries.Lcz_AllBookingsAreAssigned)))), !this.isLoading && (h("div", { class: "scrollabledArea" }, this.orderedDatesList.length ? (Object.keys(this.data[this.selectedDate].categories).length ? (this.getCategoryView()) : (h("div", { class: "mt-1" }, this.defaultTexts.entries.Lcz_AllAssignForThisDay))) : null))))));
   }
   static get watchers() { return {
     "unassignedDatesProp": ["handleUnassignedDatesToBeAssignedChange"]
@@ -222,8 +235,9 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     "propertyid": [2],
     "from_date": [1],
     "to_date": [1],
-    "loadingMessage": [1, "loading-message"],
     "calendarData": [1040],
+    "defaultTexts": [32],
+    "loadingMessage": [32],
     "showDatesList": [32],
     "renderAgain": [32],
     "orderedDatesList": [32]

@@ -1,4 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
+import { IToast } from '../ir-toast/toast';
 export declare class IrAutocomplete {
   duration: number;
   placeholder: string;
@@ -21,6 +22,7 @@ export declare class IrAutocomplete {
     data: unknown;
   }>;
   inputCleared: EventEmitter<null>;
+  toast: EventEmitter<IToast>;
   isItemSelected: boolean;
   el: HTMLElement;
   private inputRef;

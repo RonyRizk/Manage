@@ -130,13 +130,38 @@ export class IrAutocomplete {
       if (this.isDropdownItem(document.activeElement)) {
         return;
       }
-      if (!this.isItemSelected) {
-        this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
-        this.inputValue = '';
-        this.resetCombobox();
+      if (this.isSplitBooking) {
+        if (!this.isItemSelected) {
+          if (this.data.length > 0) {
+            this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
+          }
+          else {
+            if (this.inputValue !== '') {
+              this.toast.emit({
+                type: 'error',
+                description: '',
+                title: `The Booking #${this.inputValue} is not Available`,
+                position: 'top-right',
+              });
+              this.inputCleared.emit();
+            }
+          }
+          this.inputValue = '';
+          this.resetCombobox();
+        }
+        else {
+          this.isItemSelected = false;
+        }
       }
       else {
-        this.isItemSelected = false;
+        if (!this.isItemSelected) {
+          this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
+          this.inputValue = '';
+          this.resetCombobox();
+        }
+        else {
+          this.isItemSelected = false;
+        }
       }
     }, 200);
   }
@@ -460,6 +485,27 @@ export class IrAutocomplete {
           "original": "null",
           "resolved": "null",
           "references": {}
+        }
+      }, {
+        "method": "toast",
+        "name": "toast",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "IToast",
+          "resolved": "ICustomToast & Partial<IToastWithButton> | IDefaultToast & Partial<IToastWithButton>",
+          "references": {
+            "IToast": {
+              "location": "import",
+              "path": "../ir-toast/toast",
+              "id": "src/components/ir-toast/toast.ts::IToast"
+            }
+          }
         }
       }];
   }

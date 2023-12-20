@@ -1,5 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
+import { Languages } from '../../../../redux/features/languages';
 export declare class IglBookingOverviewPage {
   bookingData: any;
   propertyId: number;
@@ -20,8 +21,13 @@ export declare class IglBookingOverviewPage {
     child: number;
   };
   sourceOptions: TSourceOptions[];
-  roomsDataUpdate: EventEmitter;
   bookedByInfoData: any;
+  roomsDataUpdate: EventEmitter;
+  defaultTexts: Languages;
+  private unsubscribe;
+  componentWillLoad(): void;
+  updateFormStore(): void;
+  disconnectedCallback(): void;
   getSplitBookings(): any;
   isEventType(event: string): boolean;
   render(): any;

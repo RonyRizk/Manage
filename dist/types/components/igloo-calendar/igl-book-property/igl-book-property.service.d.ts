@@ -1,6 +1,8 @@
 import { BookUserParams } from '../../../models/igl-book-property';
 export declare class IglBookPropertyService {
-  onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEditBooking: boolean, name: string): Map<string, Map<string, any>>;
+  setBookingInfoFromAutoComplete(context: any, res: any): void;
+  resetRoomsInfoAndMessage(context: any): void;
+  onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEdit: boolean, isEditBooking: boolean, name: string): Map<string, Map<string, any>>;
   private shouldClearData;
   private initializeRoomCategoryIfNeeded;
   private setSelectedRoomData;

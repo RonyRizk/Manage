@@ -10,6 +10,7 @@ export declare class IglTbaBookingView {
     [key: string]: any;
   };
   selectedDate: any;
+  defaultTexts: any;
   eventData: {
     [key: string]: any;
   };
@@ -24,9 +25,12 @@ export declare class IglTbaBookingView {
   private highlightSection;
   private allRoomsList;
   private toBeAssignedService;
+  private unsubscribe;
   onSelectRoom(evt: any): void;
   componentShouldUpdate(newValue: string, oldValue: string, propName: string): boolean;
   componentWillLoad(): void;
+  updateFromStore(): void;
+  disconnectedCallback(): void;
   handleAssignUnit(event: any): Promise<void>;
   handleHighlightAvailability(): void;
   handleCloseAssignment(event: any): void;

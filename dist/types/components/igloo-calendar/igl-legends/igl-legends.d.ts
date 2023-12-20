@@ -6,6 +6,7 @@ export declare class IglLegends {
   legendData: {
     [key: string]: any;
   };
+  defaultTexts: any;
   handleOptionEvent(key: any, data?: string): void;
   render(): any;
 }

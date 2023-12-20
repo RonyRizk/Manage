@@ -7,6 +7,11 @@ export declare class IglCalFooter {
     [key: string]: any;
   };
   today: String;
+  defaultTexts: any;
+  private unsubscribe;
   handleOptionEvent(key: any, data?: string): void;
+  componentWillLoad(): void;
+  updateFromStore(): void;
+  disconnectedCallback(): void;
   render(): any;
 }

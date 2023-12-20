@@ -9,6 +9,7 @@ export declare class IglBookingEventHover {
   countryNodeList: ICountry[];
   is_vacation_rental: boolean;
   isLoading: string;
+  defaultTexts: any;
   showBookingPopup: EventEmitter;
   hideBubbleInfo: EventEmitter;
   deleteButton: EventEmitter<string>;
@@ -21,7 +22,9 @@ export declare class IglBookingEventHover {
   private toTimeStamp;
   private todayTimeStamp;
   private eventService;
+  private unsubscribe;
   componentWillLoad(): void;
+  updateFromStore(): void;
   handleKeyDown(event: KeyboardEvent): void;
   hideBubble(): void;
   componentDidLoad(): void;
@@ -62,6 +65,7 @@ export declare class IglBookingEventHover {
   handleUpdateBlockedDates(): Promise<void>;
   handleConvertBlockedDateToBooking(): void;
   getRoomInfo(): any;
+  renderTitle(eventType: any, roomInfo: any): string;
   handleBookingOption(eventType: any, roomData?: any): void;
   getInfoElement(): any;
   getNewBookingOptions(): any;

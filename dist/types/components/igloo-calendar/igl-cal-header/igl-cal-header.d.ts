@@ -16,13 +16,17 @@ export declare class IglCalHeader {
   propertyid: number;
   unassignedDates: any;
   to_date: string;
+  defaultTexts: any;
   renderAgain: boolean;
   unassignedRoomsNumber: any;
   private searchValue;
   private searchList;
   private roomsList;
   private toBeAssignedService;
+  private unsubscribe;
   componentWillLoad(): void;
+  updateFromStore(): void;
+  disconnectedCallback(): void;
   handleCalendarDataChanged(): void;
   private initializeRoomsList;
   private fetchAndAssignUnassignedRooms;
@@ -47,7 +51,7 @@ export declare class IglCalHeader {
     FROM_DATE: string;
     TO_DATE: string;
     roomsInfo: any;
-    TITLE: string;
+    TITLE: any;
     event_type: string;
     legendData: any;
     defaultDateRange: {

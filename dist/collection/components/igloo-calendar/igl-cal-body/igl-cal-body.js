@@ -1,4 +1,5 @@
 import { Host, h } from "@stencil/core";
+import { store } from "../../../redux/store";
 export class IglCalBody {
   constructor() {
     this.selectedRooms = {};
@@ -10,11 +11,21 @@ export class IglCalBody {
     this.currency = undefined;
     this.language = undefined;
     this.countryNodeList = undefined;
+    this.defaultTexts = undefined;
     this.dragOverElement = '';
     this.renderAgain = false;
   }
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
+    this.updateFromStore();
+    this.unsubscribe = store.subscribe(() => this.updateFromStore());
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+  }
+  disconnectedCallback() {
+    this.unsubscribe();
   }
   dragOverHighlightElementHandler(event) {
     this.dragOverElement = event.detail.dragOverElement;
@@ -123,7 +134,7 @@ export class IglCalBody {
       TOTAL_PRICE: '',
       RATE_PLAN: '',
       ARRIVAL_TIME: '',
-      TITLE: 'New Booking for ',
+      TITLE: this.defaultTexts.entries.Lcz_NewBookingFor,
       roomsInfo: [roomCategory],
       CATEGORY: roomCategory.name,
       event_type: 'BAR_BOOKING',
@@ -139,7 +150,7 @@ export class IglCalBody {
       },
     };
     let popupTitle = roomCategory.name + ' ' + this.getRoomName(this.getRoomById(this.getCategoryRooms(roomCategory), this.selectedRooms[keys[0]].roomId));
-    this.newEvent.BLOCK_DATES_TITLE = 'Block Dates for ' + popupTitle;
+    this.newEvent.BLOCK_DATES_TITLE = this.defaultTexts.entries.Lcz_BlockDatesFor + popupTitle;
     this.newEvent.TITLE += popupTitle;
     this.newEvent.defaultDateRange.toDate = new Date(this.newEvent.TO_DATE + 'T00:00:00');
     this.newEvent.defaultDateRange.fromDate = new Date(this.newEvent.FROM_DATE + 'T00:00:00');
@@ -353,6 +364,7 @@ export class IglCalBody {
   }
   static get states() {
     return {
+      "defaultTexts": {},
       "dragOverElement": {},
       "renderAgain": {}
     };

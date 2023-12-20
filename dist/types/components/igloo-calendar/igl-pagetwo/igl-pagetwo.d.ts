@@ -4,6 +4,7 @@ import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
 export declare class IglPagetwo {
   showPaymentDetails: boolean;
   currency: any;
+  defaultTexts: any;
   isEditOrAddRoomEvent: boolean;
   dateRangeData: {
     [key: string]: any;
@@ -32,7 +33,10 @@ export declare class IglPagetwo {
   selectedUnits: {
     [key: string]: any;
   };
+  private unsubscribe;
   componentWillLoad(): void;
+  updateFromStore(): void;
+  disconnectedCallback(): void;
   initializeGuestData(): void;
   handleOnApplicationInfoDataUpdateEvent(event: CustomEvent, index: number): void;
   handleEventData(event: any, key: string, index: number): void;

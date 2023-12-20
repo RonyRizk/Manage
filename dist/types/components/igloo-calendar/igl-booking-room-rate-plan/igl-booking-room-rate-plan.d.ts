@@ -1,5 +1,6 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IglBookingRoomRatePlan {
+  defaultTexts: any;
   defaultData: {
     [key: string]: any;
   };

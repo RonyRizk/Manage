@@ -10,6 +10,7 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
     this.__registerHost();
     this.comboboxValue = createEvent(this, "comboboxValue", 7);
     this.inputCleared = createEvent(this, "inputCleared", 7);
+    this.toast = createEvent(this, "toast", 7);
     this.bookingService = new BookingService();
     this.duration = 300;
     this.placeholder = '';
@@ -137,13 +138,38 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
       if (this.isDropdownItem(document.activeElement)) {
         return;
       }
-      if (!this.isItemSelected) {
-        this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
-        this.inputValue = '';
-        this.resetCombobox();
+      if (this.isSplitBooking) {
+        if (!this.isItemSelected) {
+          if (this.data.length > 0) {
+            this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
+          }
+          else {
+            if (this.inputValue !== '') {
+              this.toast.emit({
+                type: 'error',
+                description: '',
+                title: `The Booking #${this.inputValue} is not Available`,
+                position: 'top-right',
+              });
+              this.inputCleared.emit();
+            }
+          }
+          this.inputValue = '';
+          this.resetCombobox();
+        }
+        else {
+          this.isItemSelected = false;
+        }
       }
       else {
-        this.isItemSelected = false;
+        if (!this.isItemSelected) {
+          this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
+          this.inputValue = '';
+          this.resetCombobox();
+        }
+        else {
+          this.isItemSelected = false;
+        }
       }
     }, 200);
   }

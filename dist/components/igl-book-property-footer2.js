@@ -9,6 +9,7 @@ const IglBookPropertyFooter = /*@__PURE__*/ proxyCustomElement(class IglBookProp
     this.buttonClicked = createEvent(this, "buttonClicked", 7);
     this.eventType = undefined;
     this.disabled = true;
+    this.defaultTexts = undefined;
   }
   isEventType(event) {
     return event === this.eventType;
@@ -31,12 +32,13 @@ const IglBookPropertyFooter = /*@__PURE__*/ proxyCustomElement(class IglBookProp
     return this.isEventType('PLUS_BOOKING') || this.isEventType('ADD_ROOM') || this.isEventType('EDIT_BOOKING');
   }
   render() {
-    return (h(Host, null, h("div", { class: "d-flex justify-content-between gap-30 align-items-center" }, this.isEventType('EDIT_BOOKING') ? (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>'))) : (h(Fragment, null, this.renderButton('cancel', 'Cancel'), this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>', this.disabled))))));
+    return (h(Host, null, h("div", { class: "d-flex justify-content-between gap-30 align-items-center" }, this.isEventType('EDIT_BOOKING') ? (h(Fragment, null, this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`))) : (h(Fragment, null, this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`, this.disabled))))));
   }
   static get style() { return iglBookPropertyFooterCss; }
 }, [2, "igl-book-property-footer", {
     "eventType": [1, "event-type"],
-    "disabled": [4]
+    "disabled": [4],
+    "defaultTexts": [8, "default-texts"]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
