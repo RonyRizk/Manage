@@ -17,17 +17,21 @@ export declare class IrAutocomplete {
   data: any[];
   selectedIndex: number;
   isComboBoxVisible: boolean;
+  isLoading: boolean;
+  isItemSelected: boolean;
   comboboxValue: EventEmitter<{
     key: string;
     data: unknown;
   }>;
   inputCleared: EventEmitter<null>;
   toast: EventEmitter<IToast>;
-  isItemSelected: boolean;
   el: HTMLElement;
   private inputRef;
   private debounceTimer;
   private bookingService;
+  private no_result_found;
+  componentWillLoad(): void;
+  updateFromStore(): void;
   handleKeyDown(event: KeyboardEvent): void;
   getHeightOfPElement(): number;
   adjustScrollPosition(itemHeight: any, visibleHeight?: number): void;

@@ -1,9 +1,11 @@
 import { Host, h, Fragment } from "@stencil/core";
 import { v4 } from "uuid";
 import { BookingService } from "../../services/booking.service";
+import { store } from "../../redux/store";
 export class IrAutocomplete {
   constructor() {
     this.bookingService = new BookingService();
+    this.no_result_found = '';
     this.duration = 300;
     this.placeholder = '';
     this.propertyId = undefined;
@@ -20,7 +22,14 @@ export class IrAutocomplete {
     this.data = [];
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
+    this.isLoading = true;
     this.isItemSelected = undefined;
+  }
+  componentWillLoad() {
+    this.updateFromStore();
+  }
+  updateFromStore() {
+    this.no_result_found = store.getState().languages.entries.Lcz_NoResultsFound;
   }
   handleKeyDown(event) {
     var _a;
@@ -89,6 +98,7 @@ export class IrAutocomplete {
   }
   async fetchData() {
     try {
+      this.isLoading = true;
       let data = [];
       if (!this.isSplitBooking) {
         data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
@@ -98,15 +108,16 @@ export class IrAutocomplete {
           data = await this.bookingService.fetchExposedBookings(this.inputValue, this.propertyId, this.from_date, this.to_date);
         }
       }
-      if (data) {
-        this.data = data;
-        if (!this.isComboBoxVisible) {
-          this.isComboBoxVisible = true;
-        }
+      this.data = data;
+      if (!this.isComboBoxVisible) {
+        this.isComboBoxVisible = true;
       }
     }
     catch (error) {
       console.log('error', error);
+    }
+    finally {
+      this.isLoading = false;
     }
   }
   handleInputChange(event) {
@@ -192,8 +203,10 @@ export class IrAutocomplete {
     }
   }
   renderDropdown() {
-    if (this.data.length > 0) {
-      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, this.isSplitBooking ? (h(Fragment, null, `${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`)) : (h(Fragment, null, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`))))))));
+    var _a;
+    if (this.inputValue !== '') {
+      return (h("div", { class: "position-absolute border rounded border-light combobox" }, (_a = this.data) === null || _a === void 0 ? void 0 :
+        _a.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, this.isSplitBooking ? (h(Fragment, null, `${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`)) : (h(Fragment, null, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`)))))), this.isLoading && (h("div", { class: "loader-container d-flex align-items-center justify-content-center" }, h("div", { class: "loader" }))), this.data.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, this.no_result_found)));
     }
   }
   handleFocus() {
@@ -452,6 +465,7 @@ export class IrAutocomplete {
       "data": {},
       "selectedIndex": {},
       "isComboBoxVisible": {},
+      "isLoading": {},
       "isItemSelected": {}
     };
   }

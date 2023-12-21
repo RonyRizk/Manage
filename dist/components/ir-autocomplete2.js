@@ -1,8 +1,9 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Fragment, Host } from '@stencil/core/internal/client';
 import { B as BookingService } from './booking.service.js';
+import { s as store } from './store.js';
 import { v as v4 } from './v4.js';
 
-const irAutocompleteCss = ".sc-ir-autocomplete-h{display:block;position:relative}.selected.sc-ir-autocomplete{color:#fff;text-decoration:none;background-color:#666ee8}input.sc-ir-autocomplete{width:100%;position:relative}.combobox.sc-ir-autocomplete{margin:0;top:30px;min-width:100%;width:max-content;display:block;z-index:10000;padding:1px;background:white;box-shadow:0px 8px 16px 0px rgba(0, 0, 0, 0.2);padding:5px 0;max-height:250px;overflow-y:auto}.dropdown-item.sc-ir-autocomplete{cursor:pointer}button.sc-ir-autocomplete{all:unset;right:4px}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete{padding:5px 16px;margin:0px;margin-top:2px;cursor:pointer}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete:hover{background:#f4f5fa}.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete,.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete:hover{color:#fff;text-decoration:none;background-color:#666ee8}";
+const irAutocompleteCss = ".sc-ir-autocomplete-h{display:block;position:relative}.selected.sc-ir-autocomplete{color:#fff;text-decoration:none;background-color:#666ee8}input.sc-ir-autocomplete{width:100%;position:relative}.combobox.sc-ir-autocomplete{margin:0;top:30px;min-width:100%;width:max-content;display:block;z-index:10000;padding:1px;background:white;box-shadow:0px 8px 16px 0px rgba(0, 0, 0, 0.2);padding:5px 0;max-height:250px;overflow-y:auto}.dropdown-item.sc-ir-autocomplete{cursor:pointer}button.sc-ir-autocomplete{all:unset;right:4px}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete,span.sc-ir-autocomplete,loader-container.sc-ir-autocomplete{padding:5px 16px;margin:0px;margin-top:2px;width:100%}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete{cursor:pointer}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete:hover{background:#f4f5fa}.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete,.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete:hover{color:#fff;text-decoration:none;background-color:#666ee8}.loader.sc-ir-autocomplete{width:14px;height:14px;border:2px solid #0f0f0f;border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}";
 
 const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete extends HTMLElement {
   constructor() {
@@ -12,6 +13,7 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
     this.inputCleared = createEvent(this, "inputCleared", 7);
     this.toast = createEvent(this, "toast", 7);
     this.bookingService = new BookingService();
+    this.no_result_found = '';
     this.duration = 300;
     this.placeholder = '';
     this.propertyId = undefined;
@@ -28,7 +30,14 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
     this.data = [];
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
+    this.isLoading = true;
     this.isItemSelected = undefined;
+  }
+  componentWillLoad() {
+    this.updateFromStore();
+  }
+  updateFromStore() {
+    this.no_result_found = store.getState().languages.entries.Lcz_NoResultsFound;
   }
   handleKeyDown(event) {
     var _a;
@@ -97,6 +106,7 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
   }
   async fetchData() {
     try {
+      this.isLoading = true;
       let data = [];
       if (!this.isSplitBooking) {
         data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
@@ -106,15 +116,16 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
           data = await this.bookingService.fetchExposedBookings(this.inputValue, this.propertyId, this.from_date, this.to_date);
         }
       }
-      if (data) {
-        this.data = data;
-        if (!this.isComboBoxVisible) {
-          this.isComboBoxVisible = true;
-        }
+      this.data = data;
+      if (!this.isComboBoxVisible) {
+        this.isComboBoxVisible = true;
       }
     }
     catch (error) {
       console.log('error', error);
+    }
+    finally {
+      this.isLoading = false;
     }
   }
   handleInputChange(event) {
@@ -200,8 +211,10 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
     }
   }
   renderDropdown() {
-    if (this.data.length > 0) {
-      return (h("div", { class: "position-absolute border rounded border-light combobox" }, this.data.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, this.isSplitBooking ? (h(Fragment, null, `${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`)) : (h(Fragment, null, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`))))))));
+    var _a;
+    if (this.inputValue !== '') {
+      return (h("div", { class: "position-absolute border rounded border-light combobox" }, (_a = this.data) === null || _a === void 0 ? void 0 :
+        _a.map((d, index) => (h("p", { role: "button", onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, this.isSplitBooking ? (h(Fragment, null, `${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`)) : (h(Fragment, null, `${d.email}`, h("span", { class: 'd-none d-sm-inline-flex' }, ` - ${d.first_name} ${d.last_name}`)))))), this.isLoading && (h("div", { class: "loader-container d-flex align-items-center justify-content-center" }, h("div", { class: "loader" }))), this.data.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, this.no_result_found)));
     }
   }
   handleFocus() {
@@ -243,6 +256,7 @@ const IrAutocomplete = /*@__PURE__*/ proxyCustomElement(class IrAutocomplete ext
     "data": [32],
     "selectedIndex": [32],
     "isComboBoxVisible": [32],
+    "isLoading": [32],
     "isItemSelected": [32]
   }, [[4, "click", "handleDocumentClick"]]]);
 function defineCustomElement() {
