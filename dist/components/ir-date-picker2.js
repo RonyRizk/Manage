@@ -37,7 +37,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
       opens: this.opens,
       startDate: hooks(this.fromDate),
       endDate: hooks(this.toDate),
-      minDate: hooks(this.minDate || '2000-01-01'),
+      minDate: hooks(this.minDate || hooks(new Date()).format('YYYY-MM-DD')),
       maxSpan: this.maxSpan,
       autoApply: this.autoApply,
       locale: {

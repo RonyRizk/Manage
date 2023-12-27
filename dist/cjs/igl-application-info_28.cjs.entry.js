@@ -8300,7 +8300,7 @@ const IrDatePicker = class {
       opens: this.opens,
       startDate: moment.hooks(this.fromDate),
       endDate: moment.hooks(this.toDate),
-      minDate: moment.hooks(this.minDate || '2000-01-01'),
+      minDate: moment.hooks(this.minDate || moment.hooks(new Date()).format('YYYY-MM-DD')),
       maxSpan: this.maxSpan,
       autoApply: this.autoApply,
       locale: {
