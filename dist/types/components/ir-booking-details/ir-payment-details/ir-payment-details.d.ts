@@ -1,22 +1,34 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
+import { Booking, IDueDate, IPayment } from "../../../models/booking.dto";
+import moment from 'moment';
+import { Languages } from "../../../components";
 export declare class IrPaymentDetails {
   item: any;
+  bookingDetails: Booking;
+  defaultTexts: Languages;
   newTableRow: boolean;
   collapsedPayment: boolean;
   collapsedGuarantee: boolean;
   flag: boolean;
   confirmModal: boolean;
-  toBeDeletedItem: any;
+  toBeDeletedItem: IPayment;
   paymentDetailsUrl: string;
   paymentExceptionMessage: string;
-  handlePaymentItemChange: EventEmitter<any>;
+  resetBookingData: EventEmitter<null>;
   creditCardPressHandler: EventEmitter<any>;
-  itemToBeAdded: any;
-  _handleSave(): void;
-  handleConfirmModal(e: any): void;
-  wandler(): void;
-  _renderTableRow(item: any, rowMode?: 'add' | 'normal'): any;
+  private itemToBeAdded;
+  private paymentService;
+  componentWillLoad(): Promise<void>;
+  initializeItemToBeAdded(): void;
+  _handleSave(): Promise<void>;
+  handlePaymentInputChange(key: keyof IPayment, value: any): void;
+  handleConfirmModal(e: CustomEvent): Promise<void>;
+  handleDateChange(e: CustomEvent<{
+    start: moment.Moment;
+    end: moment.Moment;
+  }>): void;
+  _renderTableRow(item: IPayment, rowMode?: 'add' | 'normal'): any;
   bookingGuarantee(): any;
-  _renderDueDate(item: any): any;
+  _renderDueDate(item: IDueDate): any;
   render(): any[];
 }

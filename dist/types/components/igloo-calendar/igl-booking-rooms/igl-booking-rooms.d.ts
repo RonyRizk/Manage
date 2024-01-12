@@ -8,10 +8,12 @@ export declare class IglBookingRooms {
   bookingType: string;
   dateDifference: number;
   ratePricingMode: any[];
+  roomInfoId: number | null;
   currency: any;
   selectedRooms: number[];
   totalRooms: number;
   isBookDisabled: boolean;
+  initialRoomIds: any;
   roomsDistributions: number[];
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;

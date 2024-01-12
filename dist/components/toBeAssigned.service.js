@@ -1,5 +1,5 @@
 import { a as axios } from './axios.js';
-import { b as dateToFormattedString, d as dateDifference } from './utils.js';
+import { d as dateToFormattedString, b as dateDifference } from './utils.js';
 
 class ToBeAssignedService {
   async getUnassignedDates(propertyid, from_date, to_date) {

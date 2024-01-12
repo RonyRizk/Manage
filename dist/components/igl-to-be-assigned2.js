@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
 import { T as ToBeAssignedService } from './toBeAssigned.service.js';
-import { b as dateToFormattedString } from './utils.js';
+import { d as dateToFormattedString } from './utils.js';
 import { h as hooks } from './moment.js';
 import { s as store } from './store.js';
 import { d as defineCustomElement$2 } from './igl-tba-booking-view2.js';

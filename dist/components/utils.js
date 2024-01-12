@@ -1,16 +1,12 @@
 import { h as hooks } from './moment.js';
 
 function convertDateToCustomFormat(dayWithWeekday, monthWithYear) {
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-  const [_, day] = dayWithWeekday.split(' ');
-  const [month, year] = monthWithYear.split(' ');
-  const monthIndex = months.indexOf(month);
-  if (monthIndex !== -1) {
-    return `${day}_${monthIndex + 1}_${year}`;
+  const dateStr = `${dayWithWeekday.split(' ')[1]} ${monthWithYear}`;
+  const date = hooks(dateStr, 'DD MMM YYYY');
+  if (!date.isValid()) {
+    throw new Error('Invalid Date');
   }
-  else {
-    throw new Error('Invalid Month');
-  }
+  return date.format('D_M_YYYY');
 }
 function convertDateToTime(dayWithWeekday, monthWithYear) {
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -57,6 +53,9 @@ function formatLegendColors(legendData) {
   });
   return formattedLegendData;
 }
+function isBlockUnit(status_code) {
+  return ['003', '002', '004'].includes(status_code);
+}
 function getCurrencySymbol(currencyCode) {
   const formatter = new Intl.NumberFormat(undefined, {
     style: 'currency',
@@ -96,7 +95,20 @@ function formatDate(dateString, option = 'DD MMM YYYY') {
 function getNextDay(date) {
   return hooks(date).add(1, 'days').format('YYYY-MM-DD');
 }
+function convertDatePrice(date) {
+  return hooks(date, 'YYYY-MM-DD').format('DD/MM ddd');
+}
+function getDaysArray(date1, date2) {
+  let dates = [];
+  let start = hooks.min(hooks(date1).add(1, 'days'), hooks(date2));
+  let end = hooks.max(hooks(date1), hooks(date2));
+  while (start < end) {
+    dates.push(start.format('YYYY-MM-DD'));
+    start = start.clone().add(1, 'days');
+  }
+  return dates;
+}
 
-export { convertDateToTime as a, dateToFormattedString as b, convertDateToCustomFormat as c, dateDifference as d, getReleaseHoursString as e, formatDate as f, getCurrencySymbol as g, findCountry as h, formatLegendColors as i, getNextDay as j, addTwoMonthToDate as k, convertDMYToISO as l, computeEndDate as m };
+export { convertDateToTime as a, dateDifference as b, convertDateToCustomFormat as c, dateToFormattedString as d, getReleaseHoursString as e, formatDate as f, getCurrencySymbol as g, findCountry as h, isBlockUnit as i, formatLegendColors as j, getNextDay as k, addTwoMonthToDate as l, convertDMYToISO as m, computeEndDate as n, getDaysArray as o, convertDatePrice as p };
 
 //# sourceMappingURL=utils.js.map

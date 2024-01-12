@@ -5,8 +5,8 @@ export class IrModal {
     this.modalBody = 'Modal Body';
     this.rightBtnActive = true;
     this.leftBtnActive = true;
-    this.rightBtnText = 'Close';
-    this.leftBtnText = 'Confirm';
+    this.rightBtnText = 'Confirm';
+    this.leftBtnText = 'Close';
     this.rightBtnColor = 'primary';
     this.leftBtnColor = 'secondary';
     this.btnPosition = 'right';
@@ -25,12 +25,12 @@ export class IrModal {
     let target = event.target;
     let name = target.name;
     if (name === this.leftBtnText) {
-      this.confirmModal.emit(this.item);
+      this.cancelModal.emit();
       this.item = {};
       this.closeModal();
     }
     else if (name === this.rightBtnText) {
-      this.cancelModal.emit();
+      this.confirmModal.emit(this.item);
       this.item = {};
       this.closeModal();
     }
@@ -40,7 +40,10 @@ export class IrModal {
       h("div", { class: `backdropModal ${this.isOpen ? 'active' : ''}`, onClick: () => {
           this.closeModal();
         } }),
-      h("div", { class: `ir-modal  ${this.isOpen ? 'active' : ''}`, tabindex: "-1" }, h("div", { class: "modal-dialog" }, h("div", { class: ` modal-content` }, h("div", { class: `modal-header align-items-center` }, h("div", { class: "font-weight-bold d-flex align-items-center" }, this.iconAvailable && h("ir-icon", { class: "mr-1", icon: this.icon }), " ", this.modalTitle), h("div", { class: "font-weight-bold d-flex align-items-center font-size-large" }, h("ir-icon", { icon: "ft-x", style: { cursor: 'pointer' }, onClick: () => this.closeModal() }))), h("div", { class: "modal-body" }, h("div", null, this.modalBody)), h("div", { class: `modal-footer d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}` }, this.leftBtnActive && h("ir-button", { icon: '', btn_color: this.leftBtnColor, btn_block: true, text: this.leftBtnText, name: this.leftBtnText }), this.rightBtnActive && h("ir-button", { icon: '', btn_color: this.rightBtnColor, btn_block: true, text: this.rightBtnText, name: this.rightBtnText }))))),
+      h("div", { class: `ir-modal  ${this.isOpen ? 'active' : ''}`, tabindex: "-1" }, h("div", { class: "modal-dialog" }, h("div", { class: ` modal-content` }, h("div", { class: `modal-header align-items-center` }, h("div", { class: "font-weight-bold d-flex align-items-center" }, this.iconAvailable && h("ir-icon", { class: "mr-1", icon: this.icon }), " ", this.modalTitle), h("div", { class: "font-weight-bold d-flex align-items-center font-size-large" }, h("ir-icon", { icon: "ft-x", style: { cursor: 'pointer' }, onClick: () => {
+          this.closeModal();
+          this.cancelModal.emit();
+        } }))), h("div", { class: "modal-body text-left" }, h("div", null, this.modalBody)), h("div", { class: `modal-footer d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}` }, this.leftBtnActive && h("ir-button", { icon: '', btn_color: this.leftBtnColor, btn_block: true, text: this.leftBtnText, name: this.leftBtnText }), this.rightBtnActive && h("ir-button", { icon: '', btn_color: this.rightBtnColor, btn_block: true, text: this.rightBtnText, name: this.rightBtnText }))))),
     ];
   }
   static get is() { return "ir-modal"; }
@@ -144,7 +147,7 @@ export class IrModal {
         },
         "attribute": "right-btn-text",
         "reflect": false,
-        "defaultValue": "'Close'"
+        "defaultValue": "'Confirm'"
       },
       "leftBtnText": {
         "type": "string",
@@ -162,7 +165,7 @@ export class IrModal {
         },
         "attribute": "left-btn-text",
         "reflect": false,
-        "defaultValue": "'Confirm'"
+        "defaultValue": "'Close'"
       },
       "rightBtnColor": {
         "type": "string",
@@ -256,7 +259,7 @@ export class IrModal {
       },
       "item": {
         "type": "any",
-        "mutable": false,
+        "mutable": true,
         "complexType": {
           "original": "any",
           "resolved": "any",

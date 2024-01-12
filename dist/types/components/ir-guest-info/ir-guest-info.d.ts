@@ -1,18 +1,23 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { selectOption, guestInfo, guestInfoValidation } from '../../common/models';
-import { Guest } from '../../models/booking.dto';
+import { selectOption } from "../../common/models";
+import { Guest } from "../../models/booking.dto";
+import { ICountry, Languages } from "../../components";
 export declare class GuestInfo {
-  Model: guestInfoValidation;
-  gotdata: boolean;
-  submit: boolean;
-  submitForm: EventEmitter<guestInfo>;
-  getSetupData: EventEmitter;
   setupDataCountries: selectOption[];
   setupDataCountriesCode: selectOption[];
-  data: Guest;
-  componentWillLoad(): void;
-  watchHandler(): void;
-  handleInputChange(event: any): void;
-  handleSubmit(e: any): void;
+  defaultTexts: Languages;
+  language: string;
+  email: string;
+  booking_nbr: string;
+  countries: ICountry[];
+  submit: boolean;
+  guest: Guest | null;
+  isLoading: boolean;
+  closeSideBar: EventEmitter<null>;
+  private bookingService;
+  componentWillLoad(): Promise<void>;
+  init(): Promise<void>;
+  handleInputChange(key: keyof Guest, value: any): void;
+  editGuest(): Promise<void>;
   render(): any[];
 }

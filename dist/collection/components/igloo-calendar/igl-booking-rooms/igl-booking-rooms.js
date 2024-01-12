@@ -8,10 +8,12 @@ export class IglBookingRooms {
     this.bookingType = 'PLUS_BOOKING';
     this.dateDifference = undefined;
     this.ratePricingMode = [];
+    this.roomInfoId = null;
     this.currency = undefined;
     this.selectedRooms = [];
     this.totalRooms = undefined;
     this.isBookDisabled = undefined;
+    this.initialRoomIds = undefined;
     this.roomsDistributions = [];
   }
   componentWillLoad() {
@@ -75,7 +77,6 @@ export class IglBookingRooms {
       this.selectedRooms[index] = newValue;
       this.updateRatePlanTotalRooms(index);
     }
-    //console.log(this.roomsDistributions, this.selectedRooms);
   }
   updateRatePlanTotalRooms(ratePlanIndex) {
     const calculateTotalSelectedRoomsExcludingIndex = excludedIndex => {
@@ -97,7 +98,12 @@ export class IglBookingRooms {
     const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
     return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
       if (ratePlan.variations !== null) {
-        return (h("igl-booking-room-rate-plan", { defaultTexts: this.defaultTexts, index: index, isBookDisabled: this.isBookDisabled, key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? '' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index) }));
+        let shouldBeDisabled = this.roomInfoId && this.roomInfoId === this.roomTypeData.id;
+        let roomId = -1;
+        if (shouldBeDisabled && this.initialRoomIds) {
+          roomId = this.initialRoomIds.roomId;
+        }
+        return (h("igl-booking-room-rate-plan", { defaultTexts: this.defaultTexts, index: index, isBookDisabled: this.isBookDisabled, key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? '' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, shouldBeDisabled: shouldBeDisabled, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index), physicalrooms: this.roomTypeData.physicalrooms, defaultRoomId: roomId, selectedRoom: this.initialRoomIds }));
       }
       else {
         return null;
@@ -221,6 +227,24 @@ export class IglBookingRooms {
         },
         "defaultValue": "[]"
       },
+      "roomInfoId": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number|null",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "room-info-id",
+        "reflect": false,
+        "defaultValue": "null"
+      },
       "currency": {
         "type": "any",
         "mutable": false,
@@ -253,6 +277,23 @@ export class IglBookingRooms {
           "text": ""
         },
         "attribute": "is-book-disabled",
+        "reflect": false
+      },
+      "initialRoomIds": {
+        "type": "any",
+        "mutable": false,
+        "complexType": {
+          "original": "any",
+          "resolved": "any",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "initial-room-ids",
         "reflect": false
       }
     };

@@ -120,6 +120,9 @@ export class IglBookPropertyService {
       else if (context.isEventType('SPLIT_BOOKING')) {
         rooms = context.bookedByInfoData.rooms;
       }
+      else if (context.isEventType('EDIT_BOOKING')) {
+        rooms = context.defaultData.ROOMS.filter(room => room.identifier !== context.bookingData.IDENTIFIER);
+      }
       console.log('rooms', rooms);
       return [
         context.bookedByInfoData,

@@ -1,4 +1,4 @@
-import { h } from "@stencil/core";
+import { h, Fragment } from "@stencil/core";
 export class IrButton {
   constructor() {
     this.name = undefined;
@@ -20,7 +20,7 @@ export class IrButton {
     }
     return (h("button", { onClick: () => {
         this.clickHanlder.emit();
-      }, class: `btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`, type: this.btn_type }, h("i", { class: this.icon }), "\u00A0", this.text));
+      }, class: `m-0 btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`, type: this.btn_type }, this.icon && (h(Fragment, null, h("i", { class: this.icon }), "\u00A0")), this.text));
   }
   static get is() { return "ir-button"; }
   static get originalStyleUrls() {

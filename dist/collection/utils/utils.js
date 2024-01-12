@@ -1,15 +1,11 @@
 import moment from "moment";
 export function convertDateToCustomFormat(dayWithWeekday, monthWithYear) {
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-  const [_, day] = dayWithWeekday.split(' ');
-  const [month, year] = monthWithYear.split(' ');
-  const monthIndex = months.indexOf(month);
-  if (monthIndex !== -1) {
-    return `${day}_${monthIndex + 1}_${year}`;
+  const dateStr = `${dayWithWeekday.split(' ')[1]} ${monthWithYear}`;
+  const date = moment(dateStr, 'DD MMM YYYY');
+  if (!date.isValid()) {
+    throw new Error('Invalid Date');
   }
-  else {
-    throw new Error('Invalid Month');
-  }
+  return date.format('D_M_YYYY');
 }
 export function convertDateToTime(dayWithWeekday, monthWithYear) {
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -76,6 +72,9 @@ export function formatLegendColors(legendData) {
   });
   return formattedLegendData;
 }
+export function isBlockUnit(status_code) {
+  return ['003', '002', '004'].includes(status_code);
+}
 export function getCurrencySymbol(currencyCode) {
   const formatter = new Intl.NumberFormat(undefined, {
     style: 'currency',
@@ -114,5 +113,18 @@ export function formatDate(dateString, option = 'DD MMM YYYY') {
 }
 export function getNextDay(date) {
   return moment(date).add(1, 'days').format('YYYY-MM-DD');
+}
+export function convertDatePrice(date) {
+  return moment(date, 'YYYY-MM-DD').format('DD/MM ddd');
+}
+export function getDaysArray(date1, date2) {
+  let dates = [];
+  let start = moment.min(moment(date1).add(1, 'days'), moment(date2));
+  let end = moment.max(moment(date1), moment(date2));
+  while (start < end) {
+    dates.push(start.format('YYYY-MM-DD'));
+    start = start.clone().add(1, 'days');
+  }
+  return dates;
 }
 //# sourceMappingURL=utils.js.map

@@ -22,6 +22,7 @@ export declare class IglBookingOverviewPage {
   };
   sourceOptions: TSourceOptions[];
   bookedByInfoData: any;
+  initialRoomIds: any;
   roomsDataUpdate: EventEmitter;
   defaultTexts: Languages;
   private unsubscribe;

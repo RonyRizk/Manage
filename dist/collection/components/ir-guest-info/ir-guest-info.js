@@ -1,93 +1,61 @@
 import { h } from "@stencil/core";
-import { guestInfoValidation } from "../../common/models";
-import moment from "moment";
+import { BookingService } from "../../../../src/services/booking.service";
 export class GuestInfo {
   constructor() {
-    this.Model = new guestInfoValidation();
-    this.gotdata = false;
-    this.submit = false;
+    this.bookingService = new BookingService();
     this.setupDataCountries = null;
     this.setupDataCountriesCode = null;
-    this.data = null;
-  }
-  componentWillLoad() {
-    this.getSetupData.emit();
+    this.defaultTexts = undefined;
+    this.language = undefined;
+    this.email = undefined;
+    this.booking_nbr = undefined;
+    this.countries = undefined;
     this.submit = false;
-    if (this.data !== null) {
-      this.Model = Object.assign(Object.assign({}, this.Model), this.data);
-      this.Model.firstNameValid = this.data.first_name.trim() !== '' && this.data.first_name !== null ? true : false;
-      this.Model.lastNameValid = this.data.last_name.trim() !== '' && this.data.last_name !== null ? true : false;
-      this.Model.emailValid = this.data.email.trim() !== '' && this.data.email !== null ? true : false;
-      this.Model.countryValid = this.data.country_id !== null ? true : false;
-      //this.Model.passwordValid = this.data.password.trim() !== '' && this.data.password !== null ? true : false;
-      this.Model.passwordValid = true;
+    this.guest = null;
+    this.isLoading = false;
+  }
+  async componentWillLoad() {
+    await this.init();
+  }
+  async init() {
+    try {
+      const [guest, countries] = await Promise.all([this.bookingService.fetchGuest(this.email), this.bookingService.getCountries(this.language)]);
+      this.countries = countries;
+      this.guest = guest;
     }
-    else {
-      this.Model = new guestInfoValidation();
+    catch (error) {
+      console.log(error);
     }
   }
-  watchHandler() {
-    console.log('The new value of data is: ', this.data);
-    this.submit = false;
-    if (this.data !== null) {
-      this.Model = Object.assign(Object.assign({}, this.Model), this.data);
-      this.Model.firstNameValid = this.data.first_name.trim() !== '' && this.data.first_name !== null ? true : false;
-      this.Model.lastNameValid = this.data.last_name.trim() !== '' && this.data.last_name !== null ? true : false;
-      this.Model.emailValid = this.data.email.trim() !== '' && this.data.email !== null ? true : false;
-      this.Model.countryValid = this.data.last_name !== null ? true : false;
-      this.Model.passwordValid = true;
-      //this.Model.passwordValid = this.data.password.trim() !== '' && this.data.password !== null ? true : false;
-    }
-    else {
-      this.Model = new guestInfoValidation();
-    }
+  handleInputChange(key, value) {
+    this.guest = Object.assign(Object.assign({}, this.guest), { [key]: value });
   }
-  handleInputChange(event) {
-    this.submit = false;
-    const target = event.target;
-    const name = target.name;
-    if (target.required !== undefined) {
-      const nameValid = `${name}Valid`;
-      if (name === 'country') {
-        this.Model[name] = parseInt(event.detail);
-      }
-      this.Model[name] = event.detail;
-      this.Model[nameValid] = event.detail !== -1 || (event.detail.trim() !== '' && event.detail !== null) ? true : false;
+  async editGuest() {
+    try {
+      this.isLoading = true;
+      await this.bookingService.editExposedGuest(this.guest, this.booking_nbr);
+      this.closeSideBar.emit(null);
     }
-    else {
-      this.Model[name] = event.detail;
+    catch (error) {
+      console.log(error);
     }
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    this.submit = true;
-    if (this.Model.firstNameValid && this.Model.lastNameValid && this.Model.emailValid && this.Model.countryValid && this.Model.passwordValid) {
-      //let data: guestInfo = { ...this.Model };
-      //this.submitForm.emit(data);
+    finally {
+      this.isLoading = false;
+      console.log('done');
     }
   }
   render() {
-    let countries = null;
-    let countryPrefix = null;
-    if (this.setupDataCountries !== null && this.setupDataCountriesCode !== null) {
-      countries = (h("ir-select", { required: true, name: "country", submited: this.submit, label: 'Country', selectedValue: this.Model.country_id.toString(), data: this.setupDataCountries.map(item => {
-          return {
-            value: item.value.toString(),
-            text: item.text,
-          };
-        }), firstOption: '...' }));
-      countryPrefix = (h("ir-select", { name: "prefix", label: 'Mobile', submited: this.submit,
-        //selectedValue={this.Model.prefix}
-        data: this.setupDataCountriesCode.map(item => {
-          return {
-            value: item.value.toString(),
-            text: item.text,
-          };
-        }), firstOption: '...', selectStyle: false, required: true }));
+    if (!this.guest) {
+      return null;
     }
     return [
-      h("h3", null, h("strong", null, "Guest Details")),
-      h("div", { class: "card" }, h("div", { class: "card-header" }, h("h4", { class: "card-title" }, "Registration date : ", h("strong", null, moment().format('DD-MMM-YYYY')))), h("div", { class: "card-content collapse show" }, h("div", { class: "card-body pt-0" }, h("ir-input-text", { placeholder: "", label: "First Name", name: "firstName", submited: this.submit, value: this.Model.first_name, required: true }), h("ir-input-text", { placeholder: "", label: "Last Name", name: "lastName", submited: this.submit, value: this.Model.last_name, required: true }), h("ir-input-text", { placeholder: "", label: "Email", name: "email", submited: this.submit, value: this.Model.email, required: true }), h("ir-input-text", { placeholder: "", label: "Alternative email", name: "altEmail", value: this.Model.email }), countries, h("ir-input-text", { placeholder: "", label: "City", name: "city", value: this.Model.city }), h("ir-input-text", { placeholder: "", label: "Address", name: "address", value: this.Model.address }), countryPrefix, h("ir-input-text", { "put-text": true, LabelAvailable: false, name: "mobile", placeholder: "", submited: this.submit, value: this.Model.mobile, required: true }), h("ir-checkbox", { label: "NewsLetter", name: "newsletter", checked: this.Model.subscribe_to_news_letter }), h("p", null, h("strong", null, "Last used:"), " Language:"), h("hr", null), h("ir-button", { text: "Save", color: "btn-primary" })))),
+      h("h3", null, h("strong", null, this.defaultTexts.entries.Lcz_GuestDetails)),
+      h("div", { class: "card" }, h("div", { class: "card-content collapse show" }, h("div", { class: "card-body pt-0" }, h("ir-input-text", { placeholder: "", label: this.defaultTexts.entries.Lcz_FirstName, name: "firstName", submited: this.submit, value: this.guest.first_name, required: true, onTextChange: e => this.handleInputChange('first_name', e.detail) }), h("ir-input-text", { placeholder: "", label: this.defaultTexts.entries.Lcz_LastName, name: "lastName", submited: this.submit, value: this.guest.last_name, required: true, onTextChange: e => this.handleInputChange('last_name', e.detail) }), h("ir-input-text", { placeholder: "", label: this.defaultTexts.entries.Lcz_Email, name: "email", submited: this.submit, value: this.guest.email, required: true, onTextChange: e => this.handleInputChange('email', e.detail) }), h("ir-input-text", { placeholder: "", label: this.defaultTexts.entries.Lcz_AlternativeEmail, name: "altEmail", value: this.guest.alternative_email, onTextChange: e => this.handleInputChange('alternative_email', e.detail) }), h("ir-select", { required: true, name: "country", submited: this.submit, label: this.defaultTexts.entries.Lcz_Country, selectedValue: this.guest.country_id.toString(), data: this.countries.map(item => {
+          return {
+            value: item.id.toString(),
+            text: item.name,
+          };
+        }), firstOption: '...', onSelectChange: e => this.handleInputChange('country_id', e.detail) }), h("ir-input-text", { placeholder: "", label: this.defaultTexts.entries.Lcz_City, name: "city", value: this.guest.city, onTextChange: e => this.handleInputChange('city', e.detail) }), h("ir-input-text", { placeholder: "", label: this.defaultTexts.entries.Lcz_Address, name: "address", value: this.guest.address, onTextChange: e => this.handleInputChange('address', e.detail) }), h("div", { class: "form-group mr-0" }, h("div", { class: "input-group row m-0 p-0" }, h("div", { class: `input-group-prepend col-3 p-0 text-dark border-none` }, h("label", { class: `input-group-text  bg-light flex-grow-1 text-dark border-0 ` }, this.defaultTexts.entries.Lcz_MobilePhone, '*')), h("select", { class: ` form-control text-md  col-2 py-0 mobilePrefixSelect`, onInput: e => this.handleInputChange('country_id', e.target.value), required: true }, h("option", { value: null }, "..."), this.countries.map(item => (h("option", { selected: this.guest.country_id.toString() === item.id.toString(), value: item.id }, item.phone_prefix)))), h("input", { type: "text", required: true, value: this.guest.mobile, class: 'form-control flex-fill mobilePrefixInput', onInput: e => this.handleInputChange('mobile', e.target.value) }))), h("div", { class: 'p-0 m-0' }, h("label", { class: `check-container  m-0 p-0` }, h("input", { class: 'm-0 p-0', type: "checkbox", name: "newsletter", checked: this.guest.subscribe_to_news_letter, onInput: e => this.handleInputChange('subscribe_to_news_letter', e.target.checked) }), h("span", { class: "checkmark m-0 p-0" }), h("span", { class: 'm-0 p-0 ' }, this.defaultTexts.entries.Lcz_Newsletter))), h("hr", null), h("ir-button", { text: this.defaultTexts.entries.Lcz_Save, onClickHanlder: this.editGuest.bind(this), color: "btn-primary" })))),
     ];
   }
   static get is() { return "ir-guest-info"; }
@@ -112,7 +80,7 @@ export class GuestInfo {
           "references": {
             "selectOption": {
               "location": "import",
-              "path": "../../common/models",
+              "path": "@/common/models",
               "id": "src/common/models.ts::selectOption"
             }
           }
@@ -134,7 +102,7 @@ export class GuestInfo {
           "references": {
             "selectOption": {
               "location": "import",
-              "path": "../../common/models",
+              "path": "@/common/models",
               "id": "src/common/models.ts::selectOption"
             }
           }
@@ -147,17 +115,17 @@ export class GuestInfo {
         },
         "defaultValue": "null"
       },
-      "data": {
+      "defaultTexts": {
         "type": "unknown",
-        "mutable": true,
+        "mutable": false,
         "complexType": {
-          "original": "Guest",
-          "resolved": "Guest",
+          "original": "Languages",
+          "resolved": "Languages",
           "references": {
-            "Guest": {
+            "Languages": {
               "location": "import",
-              "path": "../../models/booking.dto",
-              "id": "src/models/booking.dto.ts::Guest"
+              "path": "@/components",
+              "id": "src/components.d.ts::Languages"
             }
           }
         },
@@ -166,22 +134,73 @@ export class GuestInfo {
         "docs": {
           "tags": [],
           "text": ""
+        }
+      },
+      "language": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
         },
-        "defaultValue": "null"
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "language",
+        "reflect": false
+      },
+      "email": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "email",
+        "reflect": false
+      },
+      "booking_nbr": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "booking_nbr",
+        "reflect": false
       }
     };
   }
   static get states() {
     return {
-      "Model": {},
-      "gotdata": {},
-      "submit": {}
+      "countries": {},
+      "submit": {},
+      "guest": {},
+      "isLoading": {}
     };
   }
   static get events() {
     return [{
-        "method": "submitForm",
-        "name": "submitForm",
+        "method": "closeSideBar",
+        "name": "closeSideBar",
         "bubbles": true,
         "cancelable": true,
         "composed": true,
@@ -190,64 +209,10 @@ export class GuestInfo {
           "text": ""
         },
         "complexType": {
-          "original": "guestInfo",
-          "resolved": "guestInfo",
-          "references": {
-            "guestInfo": {
-              "location": "import",
-              "path": "../../common/models",
-              "id": "src/common/models.ts::guestInfo"
-            }
-          }
-        }
-      }, {
-        "method": "getSetupData",
-        "name": "getSetupData",
-        "bubbles": true,
-        "cancelable": true,
-        "composed": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "complexType": {
-          "original": "any",
-          "resolved": "any",
+          "original": "null",
+          "resolved": "null",
           "references": {}
         }
-      }];
-  }
-  static get watchers() {
-    return [{
-        "propName": "data",
-        "methodName": "watchHandler"
-      }];
-  }
-  static get listeners() {
-    return [{
-        "name": "textChange",
-        "method": "handleInputChange",
-        "target": undefined,
-        "capture": false,
-        "passive": false
-      }, {
-        "name": "checkboxChange",
-        "method": "handleInputChange",
-        "target": undefined,
-        "capture": false,
-        "passive": false
-      }, {
-        "name": "selectChange",
-        "method": "handleInputChange",
-        "target": undefined,
-        "capture": false,
-        "passive": false
-      }, {
-        "name": "clickHanlder",
-        "method": "handleSubmit",
-        "target": undefined,
-        "capture": false,
-        "passive": false
       }];
   }
 }

@@ -1,5 +1,7 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { Moment } from 'moment';
+import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from '../../models/property-types';
+import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 export declare class IglooCalendar {
   propertyid: number;
   from_date: string;
@@ -10,9 +12,6 @@ export declare class IglooCalendar {
   currencyName: string;
   ticket: string;
   private element;
-  dragOverHighlightElement: EventEmitter;
-  moveBookingTo: EventEmitter;
-  calculateUnassignedDates: EventEmitter;
   calendarData: {
     [key: string]: any;
   };
@@ -20,17 +19,24 @@ export declare class IglooCalendar {
     [key: string]: any;
   }[];
   scrollViewDragging: boolean;
-  bookingItem: {
-    [key: string]: any;
-  };
+  dialogData: IReallocationPayload | null;
+  bookingItem: TIglBookPropertyPayload | null;
+  editBookingItem: TIglBookPropertyPayload | null;
   showLegend: boolean;
   showPaymentDetails: boolean;
   showToBeAssigned: boolean;
   unassignedDates: {};
+  roomNightsData: IRoomNightsData | null;
+  renderAgain: boolean;
+  showBookProperty: boolean;
+  dragOverHighlightElement: EventEmitter;
+  moveBookingTo: EventEmitter;
+  calculateUnassignedDates: EventEmitter;
   reduceAvailableUnitEvent: EventEmitter<{
     fromDate: string;
     toDate: string;
   }>;
+  revertBooking: EventEmitter;
   private bookingService;
   private countryNodeList;
   private visibleCalendarCells;
@@ -44,6 +50,7 @@ export declare class IglooCalendar {
   private defaultTexts;
   ticketChanged(): void;
   componentWillLoad(): void;
+  setUpCalendarData(roomResp: any, bookingResp: any): void;
   initializeApp(): Promise<void>;
   componentDidLoad(): void;
   handleDeleteEvent(ev: CustomEvent): Promise<void>;
@@ -51,16 +58,13 @@ export declare class IglooCalendar {
   updateBookingEventsDateRange(eventData: any): void;
   setRoomsData(roomServiceResp: any): void;
   getLegendData(aData: any): any;
-  getStartingDateOfCalendar(): any;
-  getEndingDateOfCalendar(): any;
-  getDay(dt: any): string;
-  getLocalizedDayOfWeek(date: any, locale: any): any;
-  getLocalizedMonth(date: any, locale?: string): string;
   getDateStr(date: any, locale?: string): string;
   scrollToElement(goToDate: any): void;
   private AddOrUpdateRoomBookings;
   private transformDateForScroll;
   scrollPageToRoom(event: CustomEvent): void;
+  handleShowDialog(event: CustomEvent): void;
+  handleShowRoomNightsDialog(event: CustomEvent<IRoomNightsData>): void;
   handleBookingDatasChange(event: CustomEvent): void;
   shouldRenderCalendarView(): any;
   onOptionSelect(event: CustomEvent<{
@@ -87,5 +91,10 @@ export declare class IglooCalendar {
   updateEventDataHandler(event: CustomEvent): void;
   dragOverEventDataHandler(event: CustomEvent): void;
   highlightDragOver(hightLightElement: any, currentPosition: any): Promise<void>;
+  handleModalConfirm(): void;
+  handleModalCancel(): void;
+  handleRoomNightsDialogClose(e: CustomEvent<IRoomNightsDataEventPayload>): void;
+  handleSideBarToggle(e: CustomEvent<boolean>): void;
+  handleCloseBookingWindow(): void;
   render(): any;
 }

@@ -14,8 +14,8 @@ const IrModal = /*@__PURE__*/ proxyCustomElement(class IrModal extends HTMLEleme
     this.modalBody = 'Modal Body';
     this.rightBtnActive = true;
     this.leftBtnActive = true;
-    this.rightBtnText = 'Close';
-    this.leftBtnText = 'Confirm';
+    this.rightBtnText = 'Confirm';
+    this.leftBtnText = 'Close';
     this.rightBtnColor = 'primary';
     this.leftBtnColor = 'secondary';
     this.btnPosition = 'right';
@@ -34,12 +34,12 @@ const IrModal = /*@__PURE__*/ proxyCustomElement(class IrModal extends HTMLEleme
     let target = event.target;
     let name = target.name;
     if (name === this.leftBtnText) {
-      this.confirmModal.emit(this.item);
+      this.cancelModal.emit();
       this.item = {};
       this.closeModal();
     }
     else if (name === this.rightBtnText) {
-      this.cancelModal.emit();
+      this.confirmModal.emit(this.item);
       this.item = {};
       this.closeModal();
     }
@@ -49,7 +49,10 @@ const IrModal = /*@__PURE__*/ proxyCustomElement(class IrModal extends HTMLEleme
       h("div", { class: `backdropModal ${this.isOpen ? 'active' : ''}`, onClick: () => {
           this.closeModal();
         } }),
-      h("div", { class: `ir-modal  ${this.isOpen ? 'active' : ''}`, tabindex: "-1" }, h("div", { class: "modal-dialog" }, h("div", { class: ` modal-content` }, h("div", { class: `modal-header align-items-center` }, h("div", { class: "font-weight-bold d-flex align-items-center" }, this.iconAvailable && h("ir-icon", { class: "mr-1", icon: this.icon }), " ", this.modalTitle), h("div", { class: "font-weight-bold d-flex align-items-center font-size-large" }, h("ir-icon", { icon: "ft-x", style: { cursor: 'pointer' }, onClick: () => this.closeModal() }))), h("div", { class: "modal-body" }, h("div", null, this.modalBody)), h("div", { class: `modal-footer d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}` }, this.leftBtnActive && h("ir-button", { icon: '', btn_color: this.leftBtnColor, btn_block: true, text: this.leftBtnText, name: this.leftBtnText }), this.rightBtnActive && h("ir-button", { icon: '', btn_color: this.rightBtnColor, btn_block: true, text: this.rightBtnText, name: this.rightBtnText }))))),
+      h("div", { class: `ir-modal  ${this.isOpen ? 'active' : ''}`, tabindex: "-1" }, h("div", { class: "modal-dialog" }, h("div", { class: ` modal-content` }, h("div", { class: `modal-header align-items-center` }, h("div", { class: "font-weight-bold d-flex align-items-center" }, this.iconAvailable && h("ir-icon", { class: "mr-1", icon: this.icon }), " ", this.modalTitle), h("div", { class: "font-weight-bold d-flex align-items-center font-size-large" }, h("ir-icon", { icon: "ft-x", style: { cursor: 'pointer' }, onClick: () => {
+          this.closeModal();
+          this.cancelModal.emit();
+        } }))), h("div", { class: "modal-body text-left" }, h("div", null, this.modalBody)), h("div", { class: `modal-footer d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}` }, this.leftBtnActive && h("ir-button", { icon: '', btn_color: this.leftBtnColor, btn_block: true, text: this.leftBtnText, name: this.leftBtnText }), this.rightBtnActive && h("ir-button", { icon: '', btn_color: this.rightBtnColor, btn_block: true, text: this.rightBtnText, name: this.rightBtnText }))))),
     ];
   }
   static get style() { return irModalCss; }
@@ -65,7 +68,7 @@ const IrModal = /*@__PURE__*/ proxyCustomElement(class IrModal extends HTMLEleme
     "btnPosition": [1, "btn-position"],
     "iconAvailable": [4, "icon-available"],
     "icon": [1],
-    "item": [8],
+    "item": [1032],
     "isOpen": [32],
     "closeModal": [64],
     "openModal": [64]

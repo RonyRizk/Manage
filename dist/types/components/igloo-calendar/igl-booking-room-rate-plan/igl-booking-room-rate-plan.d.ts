@@ -11,10 +11,14 @@ export declare class IglBookingRoomRatePlan {
   index: number;
   ratePricingMode: any[];
   currency: any;
+  physicalrooms: any;
+  shouldBeDisabled: boolean;
   dateDifference: number;
   bookingType: string;
   fullyBlocked: boolean;
   isBookDisabled: boolean;
+  defaultRoomId: any;
+  selectedRoom: any;
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;
   }>;
@@ -24,10 +28,12 @@ export declare class IglBookingRoomRatePlan {
   selectedData: {
     [key: string]: any;
   };
+  ratePlanChangedState: boolean;
   private initialRateValue;
   getAvailableRooms(assignable_units: any[]): any[];
   componentWillLoad(): void;
   disableForm(): any;
+  setAvailableRooms(data: any): any[];
   getSelectedOffering(value: any): any;
   updateSelectedRatePlan(data: any): void;
   ratePlanDataChanged(newData: any): Promise<void>;

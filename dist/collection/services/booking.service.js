@@ -52,6 +52,38 @@ export class BookingService {
       console.error(error);
     }
   }
+  async fetchGuest(email) {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data.My_Result;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+  async editExposedGuest(guest, book_nbr) {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`, Object.assign(Object.assign({}, guest), { book_nbr }));
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data.My_Result;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
   async getBookingAvailability(from_date, to_date, propertyid, adultChildCount, language, room_type_ids, currency) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
@@ -193,7 +225,7 @@ export class BookingService {
       throw new Error(error);
     }
   }
-  async getExoposedBooking(booking_nbr, language) {
+  async getExposedBooking(booking_nbr, language) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -264,6 +296,27 @@ export class BookingService {
           property_id,
           from_date,
           to_date,
+        });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data['My_Result'];
+      }
+      else {
+        throw new Error("Token doesn't exist");
+      }
+    }
+    catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
+  async getPCICardInfoURL(BOOK_NBR) {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token) {
+        const { data } = await axios.post(`/Get_PCI_Card_Info_URL?Ticket=${token}`, {
+          BOOK_NBR,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);

@@ -24,6 +24,7 @@ export declare class IglBookProperty {
   renderAgain: boolean;
   defaultData: any;
   isLoading: string;
+  private initialRoomIds;
   private message;
   private sourceOption;
   dateRangeData: {
@@ -51,6 +52,7 @@ export declare class IglBookProperty {
     data: RoomBookingDetails[];
   }>;
   blockedCreated: EventEmitter<RoomBlockDetails>;
+  resetBookingData: EventEmitter<null>;
   handleKeyDown(e: KeyboardEvent): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;

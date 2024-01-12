@@ -1491,13 +1491,13 @@ function formatProdErrorMessage(code) {
   return `Minified Redux Toolkit error #${code}; visit https://redux-toolkit.js.org/Errors?code=${code} for the full message or use the non-minified dev environment for full errors. `;
 }
 
-const initialState = {
+const initialState$2 = {
   entries: {},
   direction: 'ltr',
 };
 const languagesSlice = createSlice({
   name: 'languages',
-  initialState,
+  initialState: initialState$2,
   reducers: {
     addLanguages: (state, action) => {
       const { direction, entries } = action.payload;
@@ -1509,12 +1509,75 @@ const languagesSlice = createSlice({
 const { addLanguages } = languagesSlice.actions;
 const languagesSlice$1 = languagesSlice.reducer;
 
+const initialState$1 = {
+  adultChildConstraints: {
+    adult_max_nbr: 0,
+    child_max_nbr: 0,
+    child_max_age: 0,
+  },
+  allowedBookingSources: [],
+  currency: undefined,
+  endingDate: 0,
+  formattedLegendData: undefined,
+  is_vacation_rental: false,
+  legendData: [],
+  roomsInfo: [],
+  startingDate: 0,
+  language: '',
+  toBeAssignedEvents: [],
+};
+const calendarDataSlice = createSlice({
+  name: 'calendar_data',
+  initialState: initialState$1,
+  reducers: {
+    addCalendarData: (state, action) => {
+      return Object.assign(Object.assign({}, state), action.payload);
+    },
+    updateCalendarData: (state, action) => {
+      const updates = action.payload;
+      for (const key in updates) {
+        if (updates.hasOwnProperty(key)) {
+          state[key] = Object.assign(Object.assign({}, state[key]), updates[key]);
+        }
+      }
+      return state;
+    },
+  },
+});
+const calendarDataSlice$1 = calendarDataSlice.reducer;
+
+const initialState = {
+  days: [],
+  months: [],
+};
+const calendarDatesSlice = createSlice({
+  name: 'calendar_dates',
+  initialState,
+  reducers: {
+    addCalendarDates: (state, action) => {
+      return Object.assign(Object.assign({}, state), action.payload);
+    },
+    updateCalendarDates: (state, action) => {
+      const updates = action.payload;
+      for (const key in updates) {
+        if (updates.hasOwnProperty(key)) {
+          state[key] = Object.assign(Object.assign({}, state[key]), updates[key]);
+        }
+      }
+      return state;
+    },
+  },
+});
+const calendarDatesSlice$1 = calendarDatesSlice.reducer;
+
 const store = configureStore({
   reducer: {
     languages: languagesSlice$1,
+    calendar_data: calendarDataSlice$1,
+    calendar_dates: calendarDatesSlice$1,
   },
 });
 
-export { addLanguages as a, store as s };
+export { calendarDataSlice$1 as a, calendarDatesSlice$1 as b, configureStore as c, createSlice as d, addLanguages as e, languagesSlice$1 as l, store as s };
 
 //# sourceMappingURL=store.js.map
