@@ -149,7 +149,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
       roomsInfo: [roomCategory],
       CATEGORY: roomCategory.name,
       event_type: 'BAR_BOOKING',
-      STATUS: 'PENDING-CONFIRMATION',
+      STATUS: 'TEMP-EVENT',
       defaultDateRange: {
         fromDate: null,
         fromDateStr: '',

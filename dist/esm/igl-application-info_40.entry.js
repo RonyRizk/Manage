@@ -5723,6 +5723,7 @@ function formatLegendColors(legendData) {
     'BLOCKED-WITH-DATES': { id: 7, clsName: 'BLOCKED_WITH_DATES' },
     'NOTES': { id: 8, clsName: 'NOTES' },
     'OUTSTANDING-BALANCE': { id: 9, clsName: 'OUTSTANDING_BALANCE' },
+    'TEMP-EVENT': { id: 10, clsName: 'PENDING_CONFIRMATION' },
   };
   legendData.forEach(legend => {
     formattedLegendData[legend.id] = legend;
@@ -14138,7 +14139,7 @@ const IglCalBody = class {
       roomsInfo: [roomCategory],
       CATEGORY: roomCategory.name,
       event_type: 'BAR_BOOKING',
-      STATUS: 'PENDING-CONFIRMATION',
+      STATUS: 'TEMP-EVENT',
       defaultDateRange: {
         fromDate: null,
         fromDateStr: '',

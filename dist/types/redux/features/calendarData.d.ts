@@ -67,6 +67,10 @@ export declare const calendarDataSlice: import("@reduxjs/toolkit").Slice<Calenda
           id: number;
           clsName: string;
         };
+        "TEMP-EVENT": {
+          id: number;
+          clsName: string;
+        };
       };
     };
     is_vacation_rental: boolean;
@@ -190,6 +194,10 @@ export declare const calendarDataSlice: import("@reduxjs/toolkit").Slice<Calenda
           id: number;
           clsName: string;
         };
+        "TEMP-EVENT": {
+          id: number;
+          clsName: string;
+        };
       };
     };
     is_vacation_rental: boolean;
@@ -297,6 +305,10 @@ export declare const calendarDataSlice: import("@reduxjs/toolkit").Slice<Calenda
           clsName: string;
         };
         "OUTSTANDING-BALANCE": {
+          id: number;
+          clsName: string;
+        };
+        "TEMP-EVENT": {
           id: number;
           clsName: string;
         };
