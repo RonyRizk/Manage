@@ -50,7 +50,7 @@ export class IrRoomNights {
         const lastDay = (_a = this.selectedRoom) === null || _a === void 0 ? void 0 : _a.days[this.selectedRoom.days.length - 1];
         let first_rate = this.selectedRoom.days[0].amount;
         if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
-          this.fetchBookingAvailability(this.fromDate, this.bookingEvent.from_date);
+          this.fetchBookingAvailability(this.fromDate, this.selectedRoom.days[0].date);
           const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
           this.isEndDateBeforeFromDate = true;
           this.rates;
@@ -63,7 +63,7 @@ export class IrRoomNights {
           ];
         }
         else {
-          this.fetchBookingAvailability(this.bookingEvent.to_date, this.toDate);
+          this.fetchBookingAvailability(lastDay.date, moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'));
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
@@ -120,10 +120,10 @@ export class IrRoomNights {
     }
   }
   renderInputField(index, currency_symbol, day) {
-    return (h("fieldset", { class: "col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container" }, h("input", { disabled: this.inventory === 0 || this.inventory === null, type: "text", class: "form-control input-sm rate-input py-0 m-0 rateInputBorder", id: v4(), value: day.amount > 0 ? day.amount : '', placeholder: this.defaultTexts.entries.Lcz_Rate || 'Rate', onInput: event => this.handleInput(event, index) }), h("span", { class: "currency" }, currency_symbol)));
+    return (h("fieldset", { class: "col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container" }, h("input", { disabled: this.inventory === 0 || this.inventory === null, type: "text", class: "form-control input-sm rate-input py-0 m-0 rateInputBorder", id: v4(), value: day.amount > 0 ? Number(day.amount).toFixed(2) : '', placeholder: this.defaultTexts.entries.Lcz_Rate || 'Rate', onInput: event => this.handleInput(event, index) }), h("span", { class: "currency" }, currency_symbol)));
   }
   renderReadOnlyField(currency_symbol, day) {
-    return h("p", { class: "col-9 ml-1 m-0 p-0" }, `${currency_symbol}${day.amount}`);
+    return h("p", { class: "col-9 ml-1 m-0 p-0" }, `${currency_symbol}${Number(day.amount).toFixed(2)}`);
   }
   renderRateFields(index, currency_symbol, day) {
     if (this.isEndDateBeforeFromDate) {
@@ -188,8 +188,8 @@ export class IrRoomNights {
       return h("p", null, this.defaultTexts.entries.Lcz_Loading);
     }
     return (h(Host, null, h("div", { class: "card position-sticky mb-0 shadow-none p-0 " }, h("div", { class: "d-flex mt-2 align-items-center justify-content-between " }, h("h3", { class: "card-title text-left pb-1 font-medium-2 px-2" }, this.defaultTexts.entries.Lcz_AddingRoomNightsTo, " ", (_b = (_a = this.selectedRoom) === null || _a === void 0 ? void 0 : _a.roomtype) === null || _b === void 0 ? void 0 :
-      _b.name, " ", ((_c = this.selectedRoom) === null || _c === void 0 ? void 0 : _c.unit).name), h("button", { type: "button", class: "close close-icon", onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, h("ir-icon", { icon: "ft-x", class: 'm-0' })))), h("section", { class: 'text-left px-2' }, h("p", null, `${this.defaultTexts.entries.Lcz_Booking}#`, " ", this.bookingNumber), h("p", { class: 'font-weight-bold font-medium-1' }, `${formatDate(this.bookingEvent.from_date, 'YYYY-MM-DD')} - ${formatDate(this.bookingEvent.to_date, 'YYYY-MM-DD')}`), this.initialLoading ? (h("p", { class: 'mt-2 text-secondary' }, this.defaultTexts.entries['Lcz_CheckingRoomAvailability '])) : (h(Fragment, null, h("p", { class: 'font-medium-1 mb-0' }, `${this.selectedRoom.rateplan.name}`, ' ', this.selectedRoom.rateplan.is_non_refundable && h("span", { class: 'irfontgreen' }, this.defaultTexts.entries.Lcz_NonRefundable)), this.selectedRoom.rateplan.custom_text && h("p", { class: 'text-secondary mt-0' }, this.selectedRoom.rateplan.custom_text), this.renderDates()))), h("section", { class: 'd-flex align-items-center mt-2 px-2' }, h("button", { disabled: this.isLoading, type: "button", class: 'btn btn-secondary full-width', onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, (_d = this.defaultTexts) === null || _d === void 0 ? void 0 : _d.entries.Lcz_Cancel), h("button", { disabled: this.isButtonDisabled(), type: "button", class: 'btn btn-primary ml-2 full-width', onClick: this.handleRoomConfirmation.bind(this) }, this.isLoading && h("i", { class: "la la-circle-o-notch spinner mx-1" }), (_e = this.defaultTexts) === null || _e === void 0 ? void 0 :
-      _e.entries.Lcz_Confirmation))));
+      _b.name, " ", ((_c = this.selectedRoom) === null || _c === void 0 ? void 0 : _c.unit).name), h("button", { type: "button", class: "close close-icon", onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, h("ir-icon", { icon: "ft-x", class: 'm-0' })))), h("section", { class: 'text-left px-2' }, h("p", { class: 'font-medium-1' }, `${this.defaultTexts.entries.Lcz_Booking}#`, " ", this.bookingNumber), h("p", { class: 'font-weight-bold font-medium-1' }, `${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`), this.initialLoading ? (h("p", { class: 'mt-2 text-secondary' }, this.defaultTexts.entries['Lcz_CheckingRoomAvailability '])) : (h(Fragment, null, h("p", { class: 'font-medium-1 mb-0' }, `${this.selectedRoom.rateplan.name}`, ' ', this.selectedRoom.rateplan.is_non_refundable && h("span", { class: 'irfontgreen' }, this.defaultTexts.entries.Lcz_NonRefundable)), (this.inventory === 0 || this.inventory === null) && h("p", { class: "font-medium-1 text danger" }, this.defaultTexts.entries.Lcz_NoAvailabilityForAdditionalNights), this.selectedRoom.rateplan.custom_text && h("p", { class: 'text-secondary mt-0' }, this.selectedRoom.rateplan.custom_text), this.renderDates()))), h("section", { class: 'd-flex align-items-center mt-2 px-2' }, h("button", { disabled: this.isLoading, type: "button", class: 'btn btn-secondary full-width', onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, (_d = this.defaultTexts) === null || _d === void 0 ? void 0 : _d.entries.Lcz_Cancel), h("button", { disabled: this.isButtonDisabled(), type: "button", class: 'btn btn-primary ml-2 full-width', onClick: this.handleRoomConfirmation.bind(this) }, this.isLoading && h("i", { class: "la la-circle-o-notch spinner mx-1" }), (_e = this.defaultTexts) === null || _e === void 0 ? void 0 :
+      _e.entries.Lcz_Confirm))));
   }
   static get is() { return "ir-room-nights"; }
   static get encapsulation() { return "scoped"; }

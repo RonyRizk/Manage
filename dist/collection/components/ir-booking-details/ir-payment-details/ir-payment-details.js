@@ -51,8 +51,24 @@ export class IrPaymentDetails {
       console.log(error);
     }
   }
-  handlePaymentInputChange(key, value) {
-    this.itemToBeAdded = Object.assign(Object.assign({}, this.itemToBeAdded), { [key]: value });
+  handlePaymentInputChange(key, value, event) {
+    if (key === 'amount') {
+      if (!isNaN(value)) {
+        this.itemToBeAdded = Object.assign(Object.assign({}, this.itemToBeAdded), { [key]: value });
+      }
+      else {
+        let inputElement = event.target;
+        let inputValue = inputElement.value;
+        inputValue = inputValue.replace(/[^0-9]/g, '');
+        inputElement.value = inputValue;
+        if (inputValue === '') {
+          this.itemToBeAdded = Object.assign(Object.assign({}, this.itemToBeAdded), { [key]: 0 });
+        }
+      }
+    }
+    else {
+      this.itemToBeAdded = Object.assign(Object.assign({}, this.itemToBeAdded), { [key]: value });
+    }
   }
   async handleConfirmModal(e) {
     e.stopImmediatePropagation();
@@ -74,7 +90,7 @@ export class IrPaymentDetails {
     this.handlePaymentInputChange('date', e.detail.end.format('YYYY-MM-DD'));
   }
   _renderTableRow(item, rowMode = 'normal') {
-    return (h(Fragment, null, h("tr", null, h("td", { class: 'border border-light border-bottom-0 text-center' }, rowMode === 'normal' ? (h("span", { class: "sm-padding-left" }, _formatDate(item.date))) : (h("ir-date-picker", { singleDatePicker: true, autoApply: true, onDateChanged: this.handleDateChange.bind(this) }))), h("td", { class: 'border border-light border-bottom-0 text-center ' }, rowMode === 'normal' ? (h("span", { class: "sm-padding-right" }, "$", item.amount)) : (h("input", { class: "border-0  form-control py-0 m-0 w-100", onInput: event => this.handlePaymentInputChange('amount', +event.target.value), type: "number" }))), h("td", { class: 'border border-light border-bottom-0 text-center' }, rowMode === 'normal' ? (h("span", { class: "sm-padding-left" }, item.designation)) : (h("input", { class: "border-0 w-100 form-control py-0 m-0", onInput: event => this.handlePaymentInputChange('designation', event.target.value), type: "text" }))), h("td", { rowSpan: 2, class: 'border border-light border-bottom-0 text-center' }, h("ir-icon", { icon: "ft-save color-ir-light-blue-hover h5 pointer sm-margin-right", onClick: rowMode === 'add'
+    return (h(Fragment, null, h("tr", null, h("td", { class: 'border border-light border-bottom-0 text-center' }, rowMode === 'normal' ? (h("span", { class: "sm-padding-left" }, _formatDate(item.date))) : (h("ir-date-picker", { minDate: moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD'), singleDatePicker: true, autoApply: true, onDateChanged: this.handleDateChange.bind(this) }))), h("td", { class: 'border border-light border-bottom-0 text-center ' }, rowMode === 'normal' ? (h("span", { class: "sm-padding-right" }, "$", Number(item.amount).toFixed(2))) : (h("input", { class: "border-0  form-control py-0 m-0 w-100", value: this.itemToBeAdded.amount === 0 ? '' : Number(this.itemToBeAdded.amount).toFixed(2), onInput: event => this.handlePaymentInputChange('amount', +event.target.value, event), type: "text" }))), h("td", { class: 'border border-light border-bottom-0 text-center' }, rowMode === 'normal' ? (h("span", { class: "sm-padding-left" }, item.designation)) : (h("input", { class: "border-0 w-100 form-control py-0 m-0", onInput: event => this.handlePaymentInputChange('designation', event.target.value), type: "text" }))), h("td", { rowSpan: 2, class: 'border border-light border-bottom-0 text-center' }, h("ir-icon", { icon: "ft-save color-ir-light-blue-hover h5 pointer sm-margin-right", onClick: rowMode === 'add'
         ? () => {
           this.newTableRow = false;
           this._handleSave();

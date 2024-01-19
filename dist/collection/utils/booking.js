@@ -27,7 +27,12 @@ const status = {
   '004': 'BLOCKED',
   '003': 'BLOCKED-WITH-DATES',
   '002': 'BLOCKED',
-  '001': 'IN-HOUSE',
+};
+const bookingStatus = {
+  '000': 'IN-HOUSE',
+  '001': 'PENDING-CONFIRMATION',
+  '002': 'CONFIRMED',
+  '013': 'CHECKED-OUT',
 };
 export function formatName(firstName, lastName) {
   if (firstName === null && lastName === null)
@@ -65,6 +70,7 @@ function renderBlock003Date(date, hour, minute) {
   return `${languages.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell, stayStatus) {
+  var _a, _b;
   if (isBlockUnit(cell.STAY_STATUS_CODE)) {
     return {
       ID: cell.POOL,
@@ -92,13 +98,12 @@ function getDefaultData(cell, stayStatus) {
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  //console.log('booked cells', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
-    STATUS: status[cell.STAY_STATUS_CODE],
+    STATUS: bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : (_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
@@ -106,6 +111,7 @@ function getDefaultData(cell, stayStatus) {
     BOOKING_NUMBER: cell.booking.booking_nbr,
     NOTES: cell.booking.remark,
     is_direct: cell.booking.is_direct,
+    BALANCE: (_b = cell.booking.financial) === null || _b === void 0 ? void 0 : _b.due_amount,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -156,8 +162,9 @@ function addOrUpdateBooking(cell, myBookings, stayStatus) {
 }
 export function transformNewBooking(data) {
   let bookings = [];
+  console.log(data);
   data.rooms.forEach(room => {
-    var _a;
+    var _a, _b;
     bookings.push({
       ID: room['assigned_units_pool'],
       TO_DATE: room.to_date,
@@ -165,9 +172,10 @@ export function transformNewBooking(data) {
       NO_OF_DAYS: room.days.length,
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
-      STATUS: status['001'],
+      BALANCE: (_a = data.financial) === null || _a === void 0 ? void 0 : _a.due_amount,
+      STATUS: bookingStatus[moment(room.from_date, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : (data === null || data === void 0 ? void 0 : data.status.code) || '001'],
       NAME: formatName(room.guest.first_name, room.guest.last_name),
-      PHONE: (_a = data.guest.mobile) !== null && _a !== void 0 ? _a : '',
+      PHONE: (_b = data.guest.mobile) !== null && _b !== void 0 ? _b : '',
       ENTRY_DATE: '12-12-2023',
       RATE: room.total,
       RATE_PLAN: room.rateplan.name,

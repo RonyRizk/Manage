@@ -34,7 +34,7 @@ export declare class IglBookingEvent {
   private showInfoPopup;
   private bubbleInfoTopSide;
   private isStreatch;
-  private isBlockedUnit;
+  private eventsService;
   private bookingService;
   resizeSide: string;
   isDragging: boolean;

@@ -226,6 +226,7 @@ export interface RoomBookingDetails {
   RATE_PLAN_ID: number;
   IDENTIFIER: string;
   RATE_TYPE: number;
+  BALANCE: number | null;
   ADULTS_COUNT: number;
   CHILDREN_COUNT: number;
   PR_ID: number;

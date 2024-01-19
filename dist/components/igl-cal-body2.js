@@ -221,7 +221,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
   }
   getGeneralCategoryDayColumns(addClass, isCategory = false, index) {
     return this.calendarData.days.map(dayInfo => {
-      return (h("div", { class: `cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (h("span", null, dayInfo.rate[index].exposed_inventory.total, h("br", null), dayInfo.rate[index].exposed_inventory.offline)) : ('')));
+      return (h("div", { class: `cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (h("span", null, dayInfo.rate[index].exposed_inventory.total)) : ('')));
     });
   }
   getGeneralRoomDayColumns(roomId, roomCategory) {

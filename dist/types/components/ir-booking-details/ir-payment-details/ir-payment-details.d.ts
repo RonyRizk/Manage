@@ -21,7 +21,7 @@ export declare class IrPaymentDetails {
   componentWillLoad(): Promise<void>;
   initializeItemToBeAdded(): void;
   _handleSave(): Promise<void>;
-  handlePaymentInputChange(key: keyof IPayment, value: any): void;
+  handlePaymentInputChange(key: keyof IPayment, value: any, event?: InputEvent): void;
   handleConfirmModal(e: CustomEvent): Promise<void>;
   handleDateChange(e: CustomEvent<{
     start: moment.Moment;
