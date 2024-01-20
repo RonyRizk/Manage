@@ -10744,6 +10744,7 @@ function getDefaultData(cell, stayStatus) {
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
+  //console.log('booking', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
@@ -12889,7 +12890,6 @@ const IglBookingEvent = class {
         return;
       }
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
-        console.log('revert');
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
@@ -12899,6 +12899,11 @@ const IglBookingEvent = class {
           else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
             await this.fetchAndAssignBookingData();
           }
+        }
+        else {
+          this.animationFrameId = requestAnimationFrame(() => {
+            this.resetBookingToInitialPosition();
+          });
         }
       }
       else {
@@ -12914,8 +12919,9 @@ const IglBookingEvent = class {
           const { pool, to_date, from_date, toRoomId } = event.detail;
           if (pool) {
             if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
-              const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
-              this.bookingEvent.POOL = result.My_Result.POOL;
+              await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
+                this.resetBookingToInitialPosition();
+              });
             }
             else {
               if (this.isShrinking || !this.isStreatch) {
@@ -12973,13 +12979,15 @@ const IglBookingEvent = class {
           hooks(to_date, 'YYYY-MM-DD').isSame(hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))) {
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
-          if (initialRT !== targetRT) {
+          if (initialRT === targetRT) {
+            return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+          }
+          else {
             return {
               description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`,
               status: '200',
             };
           }
-          return { description: '', status: '400' };
         }
         return { description: this.defaultText.entries.Lcz_CannotChangeCHBookings, status: '400' };
       }
@@ -19975,12 +19983,12 @@ const IglooCalendar = class {
     this.bookingItem = null;
   }
   render() {
-    var _a, _b, _c;
+    var _a, _b;
     return (index.h(index.Host, null, index.h("ir-toast", null), index.h("ir-interceptor", null), index.h("ir-common", null), index.h("div", { id: "iglooCalendar", class: "igl-calendar" }, this.shouldRenderCalendarView() ? ([
       this.showToBeAssigned ? (index.h("igl-to-be-assigned", { unassignedDatesProp: this.unassignedDates, to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       this.showLegend ? (index.h("igl-legends", { defaultTexts: this.defaultTexts, class: "legendContainer", legendData: this.calendarData.legendData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       index.h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, index.h("div", { id: "calendarContainer" }, index.h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }), index.h("igl-cal-body", { language: this.language, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), index.h("igl-cal-footer", { today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
-    ]) : (index.h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (index.h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, adultChildConstraints: this.calendarData.adultChildConstraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() })), index.h("ir-sidebar", { onIrSidebarToggle: this.handleSideBarToggle.bind(this), open: this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING'), showCloseButton: this.editBookingItem !== null, sidebarStyles: { width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)' } }, this.roomNightsData && (index.h("ir-room-nights", { pool: this.roomNightsData.pool, onCloseRoomNightsDialog: this.handleRoomNightsDialogClose.bind(this), language: this.language, bookingNumber: this.roomNightsData.bookingNumber, identifier: this.roomNightsData.identifier, toDate: this.roomNightsData.to_date, fromDate: this.roomNightsData.from_date, ticket: this.ticket, propertyId: this.propertyid })), this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (index.h("ir-booking-details", { propertyid: this.propertyid, hasRoomEdit: true, hasRoomDelete: true, bookingNumber: this.editBookingItem.BOOKING_NUMBER, ticket: this.ticket, baseurl: this.baseurl, language: this.language }))), index.h("ir-modal", { modalTitle: `${(_a = this.defaultTexts) === null || _a === void 0 ? void 0 : _a.entries.Lcz_Confirmation}!`, rightBtnActive: this.dialogData ? !this.dialogData.hideConfirmButton : true, leftBtnText: (_b = this.defaultTexts) === null || _b === void 0 ? void 0 : _b.entries.Lcz_Cancel, rightBtnText: (_c = this.defaultTexts) === null || _c === void 0 ? void 0 : _c.entries.Lcz_Ok, modalBody: this.dialogData ? this.dialogData.description : '', onConfirmModal: this.handleModalConfirm.bind(this), onCancelModal: this.handleModalCancel.bind(this) })));
+    ]) : (index.h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (index.h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, adultChildConstraints: this.calendarData.adultChildConstraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() })), index.h("ir-sidebar", { onIrSidebarToggle: this.handleSideBarToggle.bind(this), open: this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING'), showCloseButton: this.editBookingItem !== null, sidebarStyles: { width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)' } }, this.roomNightsData && (index.h("ir-room-nights", { pool: this.roomNightsData.pool, onCloseRoomNightsDialog: this.handleRoomNightsDialogClose.bind(this), language: this.language, bookingNumber: this.roomNightsData.bookingNumber, identifier: this.roomNightsData.identifier, toDate: this.roomNightsData.to_date, fromDate: this.roomNightsData.from_date, ticket: this.ticket, propertyId: this.propertyid })), this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (index.h("ir-booking-details", { propertyid: this.propertyid, hasRoomEdit: true, hasRoomDelete: true, bookingNumber: this.editBookingItem.BOOKING_NUMBER, ticket: this.ticket, baseurl: this.baseurl, language: this.language }))), index.h("ir-modal", { modalTitle: '', rightBtnActive: this.dialogData ? !this.dialogData.hideConfirmButton : true, leftBtnText: (_a = this.defaultTexts) === null || _a === void 0 ? void 0 : _a.entries.Lcz_Cancel, rightBtnText: (_b = this.defaultTexts) === null || _b === void 0 ? void 0 : _b.entries.Lcz_Ok, modalBody: this.dialogData ? this.dialogData.description : '', onConfirmModal: this.handleModalConfirm.bind(this), onCancelModal: this.handleModalCancel.bind(this) })));
   }
   get element() { return index.getElement(this); }
   static get watchers() { return {
@@ -20989,7 +20997,7 @@ const IrLoadingScreen = class {
 };
 IrLoadingScreen.style = irLoadingScreenCss;
 
-const irModalCss = ".backdropModal{background-color:rgba(0, 0, 0, 0.5);z-index:1000;position:fixed;top:0;left:0;height:100vh;width:100%;opacity:0;transition:opacity 0.3s ease-in-out;pointer-events:none}.backdropModal.active{cursor:pointer;opacity:1 !important;pointer-events:all}.modal{z-index:1001 !important}.modal-dialog{height:100vh;display:flex;align-items:center}.ir-modal{position:fixed;top:0;left:0;z-index:1050;width:100%;height:100%;overflow:hidden;outline:0;opacity:0;transform:translateY(-20%);transition:transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;visibility:hidden;pointer-events:none;}.ir-modal.active{opacity:1;transform:translateY(0);visibility:visible;pointer-events:all;transition:all 0.3s ease-in-out}";
+const irModalCss = ".backdropModal{background-color:rgba(0, 0, 0, 0.5);z-index:1000;position:fixed;top:0;left:0;height:100vh;width:100%;opacity:0;transition:opacity 0.3s ease-in-out;pointer-events:none}.backdropModal.active{cursor:pointer;opacity:1 !important;pointer-events:all}.modal{z-index:1001 !important}.modal-dialog{height:100vh;display:flex;align-items:center}.ir-modal{position:fixed;top:0;left:50%;z-index:1050;width:32rem;height:100%;overflow:hidden;outline:0;opacity:0;transform:translateY(-50%, -20%);transition:transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;visibility:hidden;pointer-events:none;}.ir-modal.active{opacity:1;transform:translate(-50%, 0);visibility:visible;pointer-events:all;transition:all 0.3s ease-in-out}";
 
 const IrModal = class {
   constructor(hostRef) {
@@ -21035,10 +21043,10 @@ const IrModal = class {
       index.h("div", { class: `backdropModal ${this.isOpen ? 'active' : ''}`, onClick: () => {
           this.closeModal();
         } }),
-      index.h("div", { class: `ir-modal  ${this.isOpen ? 'active' : ''}`, tabindex: "-1" }, index.h("div", { class: "modal-dialog" }, index.h("div", { class: ` modal-content` }, index.h("div", { class: `modal-header align-items-center` }, index.h("div", { class: "font-weight-bold d-flex align-items-center" }, this.iconAvailable && index.h("ir-icon", { class: "mr-1", icon: this.icon }), " ", this.modalTitle), index.h("div", { class: "font-weight-bold d-flex align-items-center font-size-large" }, index.h("ir-icon", { icon: "ft-x", style: { cursor: 'pointer' }, onClick: () => {
+      index.h("div", { class: `ir-modal  ${this.isOpen ? 'active' : ''}`, tabindex: "-1" }, index.h("div", { class: "modal-dialog" }, index.h("div", { class: ` modal-content` }, index.h("div", { class: `modal-header align-items-center border-0 ` }, index.h("div", { class: "font-weight-bold d-flex align-items-center" }, this.iconAvailable && index.h("ir-icon", { class: "mr-1", icon: this.icon }), " ", this.modalBody), index.h("div", { class: "font-weight-bold d-flex align-items-center font-size-large" }, index.h("ir-icon", { icon: "ft-x", style: { cursor: 'pointer' }, onClick: () => {
           this.closeModal();
           this.cancelModal.emit();
-        } }))), index.h("div", { class: "modal-body text-left" }, index.h("div", null, this.modalBody)), index.h("div", { class: `modal-footer d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}` }, this.leftBtnActive && index.h("ir-button", { icon: '', btn_color: this.leftBtnColor, btn_block: true, text: this.leftBtnText, name: this.leftBtnText }), this.rightBtnActive && index.h("ir-button", { icon: '', btn_color: this.rightBtnColor, btn_block: true, text: this.rightBtnText, name: this.rightBtnText }))))),
+        } }))), index.h("div", { class: `modal-footer border-0 d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}` }, this.leftBtnActive && index.h("ir-button", { icon: '', btn_color: this.leftBtnColor, btn_block: true, text: this.leftBtnText, name: this.leftBtnText }), this.rightBtnActive && index.h("ir-button", { icon: '', btn_color: this.rightBtnColor, btn_block: true, text: this.rightBtnText, name: this.rightBtnText }))))),
     ];
   }
 };
@@ -21587,8 +21595,8 @@ const IrRoomNights = class {
       return index.h("p", null, this.defaultTexts.entries.Lcz_Loading);
     }
     return (index.h(index.Host, null, index.h("div", { class: "card position-sticky mb-0 shadow-none p-0 " }, index.h("div", { class: "d-flex mt-2 align-items-center justify-content-between " }, index.h("h3", { class: "card-title text-left pb-1 font-medium-2 px-2" }, this.defaultTexts.entries.Lcz_AddingRoomNightsTo, " ", (_b = (_a = this.selectedRoom) === null || _a === void 0 ? void 0 : _a.roomtype) === null || _b === void 0 ? void 0 :
-      _b.name, " ", ((_c = this.selectedRoom) === null || _c === void 0 ? void 0 : _c.unit).name), index.h("button", { type: "button", class: "close close-icon", onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, index.h("ir-icon", { icon: "ft-x", class: 'm-0' })))), index.h("section", { class: 'text-left px-2' }, index.h("p", { class: 'font-medium-1' }, `${this.defaultTexts.entries.Lcz_Booking}#`, " ", this.bookingNumber), index.h("p", { class: 'font-weight-bold font-medium-1' }, `${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`), this.initialLoading ? (index.h("p", { class: 'mt-2 text-secondary' }, this.defaultTexts.entries['Lcz_CheckingRoomAvailability '])) : (index.h(index.Fragment, null, index.h("p", { class: 'font-medium-1 mb-0' }, `${this.selectedRoom.rateplan.name}`, ' ', this.selectedRoom.rateplan.is_non_refundable && index.h("span", { class: 'irfontgreen' }, this.defaultTexts.entries.Lcz_NonRefundable)), (this.inventory === 0 || this.inventory === null) && index.h("p", { class: "font-medium-1 text danger" }, this.defaultTexts.entries.Lcz_NoAvailabilityForAdditionalNights), this.selectedRoom.rateplan.custom_text && index.h("p", { class: 'text-secondary mt-0' }, this.selectedRoom.rateplan.custom_text), this.renderDates()))), index.h("section", { class: 'd-flex align-items-center mt-2 px-2' }, index.h("button", { disabled: this.isLoading, type: "button", class: 'btn btn-secondary full-width', onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, (_d = this.defaultTexts) === null || _d === void 0 ? void 0 : _d.entries.Lcz_Cancel), index.h("button", { disabled: this.isButtonDisabled(), type: "button", class: 'btn btn-primary ml-2 full-width', onClick: this.handleRoomConfirmation.bind(this) }, this.isLoading && index.h("i", { class: "la la-circle-o-notch spinner mx-1" }), (_e = this.defaultTexts) === null || _e === void 0 ? void 0 :
-      _e.entries.Lcz_Confirm))));
+      _b.name, " ", ((_c = this.selectedRoom) === null || _c === void 0 ? void 0 : _c.unit).name), index.h("button", { type: "button", class: "close close-icon", onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, index.h("ir-icon", { icon: "ft-x", class: 'm-0' })))), index.h("section", { class: 'text-left px-2' }, index.h("p", { class: 'font-medium-1' }, `${this.defaultTexts.entries.Lcz_Booking}#`, " ", this.bookingNumber), index.h("p", { class: 'font-weight-bold font-medium-1' }, `${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`), this.initialLoading ? (index.h("p", { class: 'mt-2 text-secondary' }, this.defaultTexts.entries['Lcz_CheckingRoomAvailability '])) : (index.h(index.Fragment, null, index.h("p", { class: 'font-medium-1 mb-0' }, `${this.selectedRoom.rateplan.name}`, ' ', this.selectedRoom.rateplan.is_non_refundable && index.h("span", { class: 'irfontgreen' }, this.defaultTexts.entries.Lcz_NonRefundable)), (this.inventory === 0 || this.inventory === null) && index.h("p", { class: "font-medium-1 text danger" }, this.defaultTexts.entries.Lcz_NoAvailabilityForAdditionalNights), this.selectedRoom.rateplan.custom_text && index.h("p", { class: 'text-secondary mt-0' }, this.selectedRoom.rateplan.custom_text), this.renderDates()))), index.h("section", { class: 'd-flex align-items-center mt-2 px-2' }, index.h("button", { disabled: this.isLoading, type: "button", class: 'btn btn-secondary full-width', onClick: () => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool }) }, (_d = this.defaultTexts) === null || _d === void 0 ? void 0 : _d.entries.Lcz_Cancel), this.inventory > 0 && this.inventory !== null && (index.h("button", { disabled: this.isButtonDisabled(), type: "button", class: 'btn btn-primary ml-2 full-width', onClick: this.handleRoomConfirmation.bind(this) }, this.isLoading && index.h("i", { class: "la la-circle-o-notch spinner mx-1" }), (_e = this.defaultTexts) === null || _e === void 0 ? void 0 :
+      _e.entries.Lcz_Confirm)))));
   }
 };
 IrRoomNights.style = irRoomNightsCss;

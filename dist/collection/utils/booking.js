@@ -98,6 +98,7 @@ function getDefaultData(cell, stayStatus) {
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
+  //console.log('booking', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,

@@ -118,7 +118,6 @@ export class IglBookingEvent {
         return;
       }
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
-        console.log('revert');
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
@@ -128,6 +127,11 @@ export class IglBookingEvent {
           else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
             await this.fetchAndAssignBookingData();
           }
+        }
+        else {
+          this.animationFrameId = requestAnimationFrame(() => {
+            this.resetBookingToInitialPosition();
+          });
         }
       }
       else {
@@ -143,8 +147,9 @@ export class IglBookingEvent {
           const { pool, to_date, from_date, toRoomId } = event.detail;
           if (pool) {
             if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
-              const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
-              this.bookingEvent.POOL = result.My_Result.POOL;
+              await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
+                this.resetBookingToInitialPosition();
+              });
             }
             else {
               if (this.isShrinking || !this.isStreatch) {
@@ -202,13 +207,15 @@ export class IglBookingEvent {
           moment(to_date, 'YYYY-MM-DD').isSame(moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))) {
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
-          if (initialRT !== targetRT) {
+          if (initialRT === targetRT) {
+            return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+          }
+          else {
             return {
               description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`,
               status: '200',
             };
           }
-          return { description: '', status: '400' };
         }
         return { description: this.defaultText.entries.Lcz_CannotChangeCHBookings, status: '400' };
       }
