@@ -4494,3 +4494,6 @@ readers do not read off random characters that represent icons */
 .releaseTime {
   padding-left: 5px;
 }
+.out-of-service-label {
+  margin-left: 5px !important;
+}

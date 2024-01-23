@@ -103,7 +103,7 @@ const IglBookPropertyHeader = /*@__PURE__*/ proxyCustomElement(class IglBookProp
     return this.bookingData.event_type === key;
   }
   render() {
-    return (h(Host, null, this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode(), h("div", { class: 'd-lg-flex align-items-center' }, h("fieldset", { class: " mt-1 mt-lg-0  " }, h("igl-date-range", { dateLabel: this.defaultTexts.entries.Lcz_Dates, minDate: this.minDate, disabled: this.isEventType('BAR_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-left mt-1" }, this.message)));
+    return (h(Host, null, this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode(), h("div", { class: 'd-lg-flex align-items-center' }, h("fieldset", { class: " mt-1 mt-lg-0  " }, h("igl-date-range", { dateLabel: this.defaultTexts.entries.Lcz_Dates, minDate: this.minDate, disabled: this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-left mt-1" }, this.message)));
   }
   static get style() { return iglBookPropertyHeaderCss; }
 }, [2, "igl-book-property-header", {
