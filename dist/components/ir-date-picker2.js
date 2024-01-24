@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
 import { h as hooks } from './moment.js';
 
-const irDatePickerCss = "input.sc-ir-date-picker{all:unset;width:100%}";
+const irDatePickerCss = "input.sc-ir-date-picker{all:unset;box-sizing:border-box;padding:0;margin:0;width:100%;text-align:center}input.sc-ir-date-picker:disabled{text-align:start}";
 
 const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends HTMLElement {
   constructor() {
@@ -15,8 +15,8 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     this.firstDay = 1;
     this.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-    this.format = 'MMM DD,YYYY';
-    this.separator = '-';
+    this.format = 'MMM DD, YYYY';
+    this.separator = ' - ';
     this.applyLabel = 'Apply';
     this.cancelLabel = 'Cancel';
     this.fromLabel = 'Form';

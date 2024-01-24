@@ -32,7 +32,7 @@ const bookingStatus = {
   '000': 'IN-HOUSE',
   '001': 'PENDING-CONFIRMATION',
   '002': 'CONFIRMED',
-  '013': 'CHECKED-OUT',
+  '003': 'CHECKED-OUT',
 };
 export function formatName(firstName, lastName) {
   if (firstName === null && lastName === null)
@@ -140,8 +140,19 @@ function getDefaultData(cell, stayStatus) {
   };
 }
 function updateBookingWithStayData(data, cell) {
+  var _a;
   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
   data.TO_DATE = cell.DATE;
+  if (!isBlockUnit(cell.STAY_STATUS_CODE)) {
+    const now = moment();
+    const toDate = moment(data.TO_DATE, 'YYYY-MM-DD');
+    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+      data.STATUS = bookingStatus['003'];
+    }
+    else {
+      data.STATUS = bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : (_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code];
+    }
+  }
   if (cell.booking) {
     const { arrival } = cell.booking;
     Object.assign(data, {
@@ -164,6 +175,17 @@ function addOrUpdateBooking(cell, myBookings, stayStatus) {
 export function transformNewBooking(data) {
   let bookings = [];
   console.log(data);
+  const renderStatus = room => {
+    const now = moment();
+    const toDate = moment(room.to_date, 'YYYY-MM-DD');
+    const fromDate = moment(room.from_date, 'YYYY-MM-DD');
+    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+      return bookingStatus['003'];
+    }
+    else {
+      return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : (data === null || data === void 0 ? void 0 : data.status.code) || '001'];
+    }
+  };
   data.rooms.forEach(room => {
     var _a, _b;
     bookings.push({
@@ -174,7 +196,7 @@ export function transformNewBooking(data) {
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
       BALANCE: (_a = data.financial) === null || _a === void 0 ? void 0 : _a.due_amount,
-      STATUS: bookingStatus[moment(room.from_date, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : (data === null || data === void 0 ? void 0 : data.status.code) || '001'],
+      STATUS: renderStatus(room),
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: (_b = data.guest.mobile) !== null && _b !== void 0 ? _b : '',
       ENTRY_DATE: '12-12-2023',
@@ -236,7 +258,7 @@ export async function transformNewBLockedRooms(data) {
     TO_DATE_STR: data.format.to_date,
   };
 }
-function calculateDaysBetweenDates(from_date, to_date) {
+export function calculateDaysBetweenDates(from_date, to_date) {
   const startDate = moment(from_date, 'YYYY-MM-DD');
   const endDate = moment(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');

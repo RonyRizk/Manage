@@ -6,7 +6,7 @@ import { a as axios } from './axios.js';
 import { E as EventsService } from './events.service.js';
 import { h as hooks } from './moment.js';
 import { T as ToBeAssignedService } from './toBeAssigned.service.js';
-import { t as transformNewBLockedRooms, a as transformNewBooking } from './booking.js';
+import { t as transformNewBLockedRooms, a as transformNewBooking, c as calculateDaysBetweenDates } from './booking.js';
 import { s as store, d as defineCustomElement$z } from './igl-booking-event2.js';
 import { d as createSlice } from './store.js';
 import { d as defineCustomElement$E } from './igl-application-info2.js';
@@ -4279,7 +4279,17 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
         this.calendarData.monthsInfo[0].daysCount = this.calendarData.monthsInfo[0].daysCount + results.months[results.months.length - 1].daysCount;
         newMonths.pop();
       }
-      this.calendarData = Object.assign(Object.assign({}, this.calendarData), { days: this.days, monthsInfo: [...newMonths, ...this.calendarData.monthsInfo], bookingEvents: [...this.calendarData.bookingEvents, ...newBookings] });
+      let bookings = JSON.parse(JSON.stringify(newBookings));
+      bookings = bookings.filter(newBooking => {
+        const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
+        if (existingBookingIndex !== -1) {
+          this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE = newBooking.FROM_DATE;
+          this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(newBooking.FROM_DATE, this.calendarData.bookingEvents[existingBookingIndex].TO_DATE);
+          return false;
+        }
+        return true;
+      });
+      this.calendarData = Object.assign(Object.assign({}, this.calendarData), { days: this.days, monthsInfo: [...newMonths, ...this.calendarData.monthsInfo], bookingEvents: [...this.calendarData.bookingEvents, ...bookings] });
     }
     else {
       this.calendarData.endingDate = new Date(toDate).getTime();
@@ -4290,6 +4300,16 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
           this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount + results.months[0].daysCount;
         newMonths.shift();
       }
+      let bookings = JSON.parse(JSON.stringify(newBookings));
+      bookings = bookings.filter(newBooking => {
+        const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
+        if (existingBookingIndex !== -1) {
+          this.calendarData.bookingEvents[existingBookingIndex].TO_DATE = newBooking.TO_DATE;
+          this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE, newBooking.TO_DATE);
+          return false;
+        }
+        return true;
+      });
       this.calendarData = Object.assign(Object.assign({}, this.calendarData), { days: this.days, monthsInfo: [...this.calendarData.monthsInfo, ...newMonths], bookingEvents: [...this.calendarData.bookingEvents, ...newBookings] });
     }
     const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);

@@ -9,8 +9,8 @@ export class IrDatePicker {
     this.firstDay = 1;
     this.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-    this.format = 'MMM DD,YYYY';
-    this.separator = '-';
+    this.format = 'MMM DD, YYYY';
+    this.separator = ' - ';
     this.applyLabel = 'Apply';
     this.cancelLabel = 'Cancel';
     this.fromLabel = 'Form';
@@ -208,7 +208,7 @@ export class IrDatePicker {
         },
         "attribute": "format",
         "reflect": false,
-        "defaultValue": "'MMM DD,YYYY'"
+        "defaultValue": "'MMM DD, YYYY'"
       },
       "separator": {
         "type": "string",
@@ -226,7 +226,7 @@ export class IrDatePicker {
         },
         "attribute": "separator",
         "reflect": false,
-        "defaultValue": "'-'"
+        "defaultValue": "' - '"
       },
       "applyLabel": {
         "type": "string",
