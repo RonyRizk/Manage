@@ -15,6 +15,7 @@ let useNativeShadowDom = false;
 let checkSlotFallbackVisibility = false;
 let checkSlotRelocate = false;
 let isSvgMode = false;
+let renderingRef = null;
 let queuePending = false;
 const createTime = (fnName, tagName = '') => {
     {
@@ -1466,6 +1467,7 @@ const updateComponent = async (hostRef, instance, isInitialLoad) => {
 };
 const callRender = (hostRef, instance, elm) => {
     try {
+        renderingRef = instance;
         instance = instance.render() ;
         {
             hostRef.$flags$ &= ~16 /* HOST_FLAGS.isQueuedForUpdate */;
@@ -1487,8 +1489,10 @@ const callRender = (hostRef, instance, elm) => {
     catch (e) {
         consoleError(e, hostRef.$hostElement$);
     }
+    renderingRef = null;
     return null;
 };
+const getRenderingRef = () => renderingRef;
 const postUpdateComponent = (hostRef) => {
     const tagName = hostRef.$cmpMeta$.$tagName$;
     const elm = hostRef.$hostElement$;
@@ -1536,6 +1540,18 @@ const postUpdateComponent = (hostRef) => {
     // ( •_•)
     // ( •_•)>⌐■-■
     // (⌐■_■)
+};
+const forceUpdate = (ref) => {
+    {
+        const hostRef = getHostRef(ref);
+        const isConnected = hostRef.$hostElement$.isConnected;
+        if (isConnected &&
+            (hostRef.$flags$ & (2 /* HOST_FLAGS.hasRendered */ | 16 /* HOST_FLAGS.isQueuedForUpdate */)) === 2 /* HOST_FLAGS.hasRendered */) {
+            scheduleUpdate(hostRef, false);
+        }
+        // Returns "true" when the forced update was successfully scheduled
+        return isConnected;
+    }
 };
 const appDidLoad = (who) => {
     // on appload
@@ -2139,6 +2155,6 @@ const flush = () => {
 const nextTick = /*@__PURE__*/ (cb) => promiseResolve().then(cb);
 const writeTask = /*@__PURE__*/ queueTask(queueDomWrites, true);
 
-export { Fragment as F, Host as H, bootstrapLazy as b, createEvent as c, getElement as g, h, promiseResolve as p, registerInstance as r, setNonce as s };
+export { Fragment as F, Host as H, getElement as a, bootstrapLazy as b, createEvent as c, forceUpdate as f, getRenderingRef as g, h, promiseResolve as p, registerInstance as r, setNonce as s };
 
-//# sourceMappingURL=index-44eee748.js.map
+//# sourceMappingURL=index-518b8b68.js.map

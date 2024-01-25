@@ -1,5 +1,4 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
-import { Languages } from '../../../redux/features/languages';
 export declare class IglBlockDatesView {
   defaultData: {
     [key: string]: any;
@@ -10,7 +9,6 @@ export declare class IglBlockDatesView {
   entryHour: number;
   isEventHover: boolean;
   entryMinute: number;
-  defaultTexts: Languages;
   renderAgain: boolean;
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;
@@ -18,10 +16,7 @@ export declare class IglBlockDatesView {
   private blockDatesData;
   private releaseList;
   private bookingService;
-  private unsubscribe;
   componentWillLoad(): Promise<void>;
-  updateFromStore(): void;
-  disconnectedCallback(): void;
   handleOptionalReason(event: any): void;
   handleReleaseAfterChange(evt: any): void;
   emitData(): void;

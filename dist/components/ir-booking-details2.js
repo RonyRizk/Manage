@@ -3,7 +3,6 @@ import { h as hooks } from './moment.js';
 import { _ as _formatDate, a as _formatTime } from './functions.js';
 import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
-import { s as store, e as addLanguages } from './store.js';
 import { d as defineCustomElement$p } from './igl-application-info2.js';
 import { d as defineCustomElement$o } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$n } from './igl-book-property2.js';
@@ -56,7 +55,6 @@ class RoomService {
           throw new Error(data.ExceptionMsg);
         }
         let entries = this.transformArrayToObject(data.My_Result.entries);
-        store.dispatch(addLanguages({ entries, direction: data.My_Result.direction }));
         return { entries, direction: data.My_Result.direction };
       }
     }

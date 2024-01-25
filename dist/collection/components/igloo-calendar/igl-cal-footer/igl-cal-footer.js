@@ -1,27 +1,16 @@
+import locales from "../../../../../src/stores/locales.store";
 import { Host, h } from "@stencil/core";
-import { store } from "../../../redux/store";
 export class IglCalFooter {
   constructor() {
     this.calendarData = undefined;
     this.today = undefined;
-    this.defaultTexts = undefined;
   }
-  handleOptionEvent(key, data = "") {
+  // private isOnline:boolean = false;
+  handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
-  componentWillLoad() {
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
-  }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent("showLegend") }, h("i", { class: "la la-square" }), h("u", null, this.defaultTexts.entries.Lcz_Legend))), this.calendarData.days.map((dayInfo) => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? "currentDay" : ""}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
   static get is() { return "igl-cal-footer"; }
   static get encapsulation() { return "scoped"; }
@@ -72,11 +61,6 @@ export class IglCalFooter {
           "text": ""
         }
       }
-    };
-  }
-  static get states() {
-    return {
-      "defaultTexts": {}
     };
   }
   static get events() {

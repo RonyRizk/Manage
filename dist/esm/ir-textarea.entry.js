@@ -1,4 +1,4 @@
-import { r as registerInstance, h } from './index-44eee748.js';
+import { r as registerInstance, h } from './index-518b8b68.js';
 
 const IrTextArea = class {
   constructor(hostRef) {

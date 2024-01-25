@@ -1,7 +1,7 @@
 import { Host, h } from "@stencil/core";
 import { BookingService } from "../../../services/booking.service";
 import { formatDate } from "../../../utils/utils";
-import { store } from "../../../redux/store";
+import locales from "../../../../../src/stores/locales.store";
 export class IglBlockDatesView {
   constructor() {
     this.blockDatesData = {
@@ -18,13 +18,10 @@ export class IglBlockDatesView {
     this.entryHour = undefined;
     this.isEventHover = false;
     this.entryMinute = undefined;
-    this.defaultTexts = undefined;
     this.renderAgain = false;
   }
   async componentWillLoad() {
     try {
-      this.updateFromStore();
-      this.unsubscribe = store.subscribe(() => this.updateFromStore());
       this.releaseList = await this.bookingService.getBlockedInfo();
       if (this.defaultData) {
         this.blockDatesData = Object.assign({}, this.defaultData);
@@ -37,14 +34,6 @@ export class IglBlockDatesView {
     catch (error) {
       // toastr.error(error);
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-    console.log('default', this.defaultTexts);
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
   handleOptionalReason(event) {
     this.blockDatesData.OPTIONAL_REASON = event.target.value;
@@ -91,7 +80,7 @@ export class IglBlockDatesView {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: `m-0 p-0 mb-1` }, h("div", { class: "text-left p-0" }, h("span", { class: "pr-1" }, h("span", { class: "text-bold-700 font-medium-1" }, this.defaultTexts.entries.Lcz_From, ": "), formatDate(this.fromDate)), h("span", { class: "text-bold-700 font-medium-1" }, this.defaultTexts.entries.Lcz_To, ": "), formatDate(this.toDate))), h("div", { class: ` mb-1 text-left ${this.isEventHover && 'p-0'}` }, h("div", { class: "mb-1 " }, h("label", { class: "p-0 text-bold-700 font-medium-1 m-0 align-middle" }, this.defaultTexts.entries.Lcz_Reason, ":"), h("div", { class: "p-0 m-0 pr-1  controlContainer checkBoxContainer d-inline-block align-middle" }, h("input", { class: "form-control", type: "checkbox", checked: this.blockDatesData.OUT_OF_SERVICE, id: "userinput6", onChange: event => this.handleOutOfService(event) })), h("span", { class: "align-middle out-of-service-label" }, this.defaultTexts.entries.Lcz_OutOfservice)), !this.blockDatesData.OUT_OF_SERVICE ? (h("div", null, h("div", { class: "mb-1 d-flex  align-items-center" }, h("span", { class: "align-middle" }, this.defaultTexts.entries.Lcz_Or, " "), h("div", { class: "d-inline-flex col pr-0 align-middle" }, h("input", { class: "form-control", type: "text", placeholder: this.defaultTexts.entries.Lcz_OptionalReason, id: "optReason", value: this.blockDatesData.OPTIONAL_REASON, onInput: event => this.handleOptionalReason(event) }))), h("div", { class: "mb-1 w-100 pr-0 " }, h("span", { class: "text-bold-700 font-medium-1" }, this.defaultTexts.entries.Lcz_AutomaticReleaseIn, ": "), h("div", { class: "d-inline-block" }, h("select", { class: "form-control input-sm", id: "zSmallSelect", onChange: evt => this.handleReleaseAfterChange(evt) }, this.releaseList.map(releaseItem => (h("option", { value: +releaseItem.CODE_NAME, selected: this.blockDatesData.RELEASE_AFTER_HOURS == +releaseItem.CODE_NAME }, releaseItem.CODE_VALUE_EN))))), this.blockDatesData.RELEASE_AFTER_HOURS ? (h("div", { class: "d-inline-block releaseTime" }, h("em", null, this.defaultTexts.entries.Lcz_On, " ", this.getReleaseHoursString()))) : null))) : null)));
+    return (h(Host, null, h("div", { class: `m-0 p-0 mb-1` }, h("div", { class: "text-left p-0" }, h("span", { class: "pr-1" }, h("span", { class: "text-bold-700 font-medium-1" }, locales.entries.Lcz_From, ": "), formatDate(this.fromDate)), h("span", { class: "text-bold-700 font-medium-1" }, locales.entries.Lcz_To, ": "), formatDate(this.toDate))), h("div", { class: ` mb-1 text-left ${this.isEventHover && 'p-0'}` }, h("div", { class: "mb-1 " }, h("label", { class: "p-0 text-bold-700 font-medium-1 m-0 align-middle" }, locales.entries.Lcz_Reason, ":"), h("div", { class: "p-0 m-0 pr-1  controlContainer checkBoxContainer d-inline-block align-middle" }, h("input", { class: "form-control", type: "checkbox", checked: this.blockDatesData.OUT_OF_SERVICE, id: "userinput6", onChange: event => this.handleOutOfService(event) })), h("span", { class: "align-middle out-of-service-label" }, locales.entries.Lcz_OutOfservice)), !this.blockDatesData.OUT_OF_SERVICE ? (h("div", null, h("div", { class: "mb-1 d-flex  align-items-center" }, h("span", { class: "align-middle" }, locales.entries.Lcz_Or, " "), h("div", { class: "d-inline-flex col pr-0 align-middle" }, h("input", { class: "form-control", type: "text", placeholder: locales.entries.Lcz_OptionalReason, id: "optReason", value: this.blockDatesData.OPTIONAL_REASON, onInput: event => this.handleOptionalReason(event) }))), h("div", { class: "mb-1 w-100 pr-0 " }, h("span", { class: "text-bold-700 font-medium-1" }, locales.entries.Lcz_AutomaticReleaseIn, ": "), h("div", { class: "d-inline-block" }, h("select", { class: "form-control input-sm", id: "zSmallSelect", onChange: evt => this.handleReleaseAfterChange(evt) }, this.releaseList.map(releaseItem => (h("option", { value: +releaseItem.CODE_NAME, selected: this.blockDatesData.RELEASE_AFTER_HOURS == +releaseItem.CODE_NAME }, releaseItem.CODE_VALUE_EN))))), this.blockDatesData.RELEASE_AFTER_HOURS ? (h("div", { class: "d-inline-block releaseTime" }, h("em", null, locales.entries.Lcz_On, " ", this.getReleaseHoursString()))) : null))) : null)));
   }
   static get is() { return "igl-block-dates-view"; }
   static get encapsulation() { return "scoped"; }
@@ -229,7 +218,6 @@ export class IglBlockDatesView {
   }
   static get states() {
     return {
-      "defaultTexts": {},
       "renderAgain": {}
     };
   }

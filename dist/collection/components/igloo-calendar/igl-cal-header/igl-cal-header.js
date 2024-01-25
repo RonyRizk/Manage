@@ -2,7 +2,7 @@ import { Host, h } from "@stencil/core";
 import { ToBeAssignedService } from "../../../services/toBeAssigned.service";
 import { dateToFormattedString } from "../../../utils/utils";
 import moment from "moment";
-import { store } from "../../../redux/store";
+import locales from "../../../../../src/stores/locales.store";
 export class IglCalHeader {
   constructor() {
     this.searchValue = '';
@@ -14,7 +14,6 @@ export class IglCalHeader {
     this.propertyid = undefined;
     this.unassignedDates = undefined;
     this.to_date = undefined;
-    this.defaultTexts = undefined;
     this.renderAgain = false;
     this.unassignedRoomsNumber = {};
   }
@@ -24,19 +23,10 @@ export class IglCalHeader {
       if (!this.calendarData.is_vacation_rental && Object.keys(this.unassignedDates).length > 0) {
         this.fetchAndAssignUnassignedRooms();
       }
-      this.updateFromStore();
-      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     }
     catch (error) {
       console.error('Error in componentWillLoad:', error);
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
   handleCalendarDataChanged() {
     this.fetchAndAssignUnassignedRooms();
@@ -150,7 +140,7 @@ export class IglCalHeader {
       FROM_DATE: from_date,
       TO_DATE: to_date,
       roomsInfo: this.calendarData.roomsInfo,
-      TITLE: this.defaultTexts.entries.Lcz_NewBooking,
+      TITLE: locales.entries.Lcz_NewBooking,
       event_type: 'PLUS_BOOKING',
       legendData: this.calendarData.formattedLegendData,
       defaultDateRange: {
@@ -168,10 +158,10 @@ export class IglCalHeader {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "stickyCell align-items-center topLeftCell preventPageScroll" }, h("div", { class: "row justify-content-around no-gutters" }, !this.calendarData.is_vacation_rental && (h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('showAssigned'), "data-toggle": "tooltip", "data-placement": "bottom", title: this.defaultTexts.entries.Lcz_UnassignedUnitsTooltip }, h("i", { class: "la la-tasks" }))), h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('calendar'), "data-toggle": "tooltip", "data-placement": "bottom", title: this.defaultTexts.entries.Lcz_Navigate }, h("i", { class: "la la-calendar-o" }), h("ir-date-picker", { minDate: moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD'), autoApply: true, singleDatePicker: true, onDateChanged: evt => {
+    return (h(Host, null, h("div", { class: "stickyCell align-items-center topLeftCell preventPageScroll" }, h("div", { class: "row justify-content-around no-gutters" }, !this.calendarData.is_vacation_rental && (h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('showAssigned'), "data-toggle": "tooltip", "data-placement": "bottom", title: locales.entries.Lcz_UnassignedUnitsTooltip }, h("i", { class: "la la-tasks" }))), h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('calendar'), "data-toggle": "tooltip", "data-placement": "bottom", title: locales.entries.Lcz_Navigate }, h("i", { class: "la la-calendar-o" }), h("ir-date-picker", { minDate: moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD'), autoApply: true, singleDatePicker: true, onDateChanged: evt => {
         console.log('evt', evt);
         this.handleDateSelect(evt);
-      }, class: "datePickerHidden" })), h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('gotoToday'), "data-toggle": "tooltip", "data-placement": "bottom", title: this.defaultTexts.entries.Lcz_Today }, h("i", { class: "la la-clock-o" })), h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('add', this.getNewBookingModel()), "data-toggle": "tooltip", "data-placement": "bottom", title: this.defaultTexts.entries.Lcz_CreateNewBooking }, h("i", { class: "la la-plus" }))), h("div", { class: "row justify-content-around no-gutters searchContiner" }, h("fieldset", { class: `form-group position-relative ${this.searchValue != '' ? 'show' : ''}` }, h("input", { type: "text", class: "form-control form-control-sm input-sm", id: "iconLeft7", value: this.searchValue, placeholder: this.defaultTexts.entries.Lcz_FindUnit, onInput: event => this.handleFilterRooms(event) }), this.searchValue !== '' ? (h("div", { class: "form-control-position pointer", onClick: () => this.handleClearSearch(), "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Clear Selection" }, h("i", { class: "la la-close font-small-4" }))) : null, this.searchList.length ? (h("div", { class: "position-absolute searchListContainer dropdown-menu dropdown-menu-left min-width-full" }, this.searchList.map(room => (h("div", { class: "searchListItem1 dropdown-item px-1 text-left pointer", onClick: () => this.handleScrollToRoom(room.id) }, room.name))))) : null))), h("div", { class: "stickyCell headersContainer" }, h("div", { class: "monthsContainer" }, this.calendarData.monthsInfo.map(monthInfo => (h("div", { class: "monthCell", style: { width: monthInfo.daysCount * 70 + 'px' } }, h("div", { class: "monthTitle" }, monthInfo.monthName))))), this.calendarData.days.map(dayInfo => (h("div", { class: `headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`, "data-day": dayInfo.day }, !this.calendarData.is_vacation_rental && (h("div", { class: "preventPageScroll" }, h("span", { class: `badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`, onClick: () => this.showToBeAssigned(dayInfo) }, this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr))), h("div", { class: "dayTitle" }, dayInfo.dayDisplayName), h("div", { class: "dayCapacityPercent" }, dayInfo.occupancy, "%")))))));
+      }, class: "datePickerHidden" })), h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('gotoToday'), "data-toggle": "tooltip", "data-placement": "bottom", title: locales.entries.Lcz_Today }, h("i", { class: "la la-clock-o" })), h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('add', this.getNewBookingModel()), "data-toggle": "tooltip", "data-placement": "bottom", title: locales.entries.Lcz_CreateNewBooking }, h("i", { class: "la la-plus" }))), h("div", { class: "row justify-content-around no-gutters searchContiner" }, h("fieldset", { class: `form-group position-relative ${this.searchValue != '' ? 'show' : ''}` }, h("input", { type: "text", class: "form-control form-control-sm input-sm", id: "iconLeft7", value: this.searchValue, placeholder: locales.entries.Lcz_FindUnit, onInput: event => this.handleFilterRooms(event) }), this.searchValue !== '' ? (h("div", { class: "form-control-position pointer", onClick: () => this.handleClearSearch(), "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Clear Selection" }, h("i", { class: "la la-close font-small-4" }))) : null, this.searchList.length ? (h("div", { class: "position-absolute searchListContainer dropdown-menu dropdown-menu-left min-width-full" }, this.searchList.map(room => (h("div", { class: "searchListItem1 dropdown-item px-1 text-left pointer", onClick: () => this.handleScrollToRoom(room.id) }, room.name))))) : null))), h("div", { class: "stickyCell headersContainer" }, h("div", { class: "monthsContainer" }, this.calendarData.monthsInfo.map(monthInfo => (h("div", { class: "monthCell", style: { width: monthInfo.daysCount * 70 + 'px' } }, h("div", { class: "monthTitle" }, monthInfo.monthName))))), this.calendarData.days.map(dayInfo => (h("div", { class: `headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`, "data-day": dayInfo.day }, !this.calendarData.is_vacation_rental && (h("div", { class: "preventPageScroll" }, h("span", { class: `badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`, onClick: () => this.showToBeAssigned(dayInfo) }, this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr))), h("div", { class: "dayTitle" }, dayInfo.dayDisplayName), h("div", { class: "dayCapacityPercent" }, dayInfo.occupancy, "%")))))));
   }
   static get is() { return "igl-cal-header"; }
   static get encapsulation() { return "scoped"; }
@@ -277,7 +267,6 @@ export class IglCalHeader {
   }
   static get states() {
     return {
-      "defaultTexts": {},
       "renderAgain": {},
       "unassignedRoomsNumber": {}
     };

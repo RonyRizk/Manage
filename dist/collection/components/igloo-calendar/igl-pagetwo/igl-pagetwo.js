@@ -1,11 +1,10 @@
 import { h, Host } from "@stencil/core";
 import { formatDate, getCurrencySymbol } from "../../../utils/utils";
-import { store } from "../../../redux/store";
+import locales from "../../../../../src/stores/locales.store";
 export class IglPagetwo {
   constructor() {
     this.showPaymentDetails = undefined;
     this.currency = undefined;
-    this.defaultTexts = undefined;
     this.isEditOrAddRoomEvent = undefined;
     this.dateRangeData = undefined;
     this.bookingData = undefined;
@@ -24,16 +23,7 @@ export class IglPagetwo {
   }
   componentWillLoad() {
     this.initializeGuestData();
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
     this.selectedBookedByData = this.bookedByInfoData;
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
   initializeGuestData() {
     let total = 0;
@@ -129,14 +119,14 @@ export class IglPagetwo {
     );
   }
   render() {
-    return (h(Host, null, h("div", { class: "d-flex flex-wrap" }, h("div", { class: "flex-fill text-left p-0" }, h("span", { class: "mr-1 font-weight-bold font-medium-1" }, formatDate(this.dateRangeData.fromDateStr), " - ", formatDate(this.dateRangeData.toDateStr)), this.dateRangeData.dateDifference, " ", +this.dateRangeData.dateDifference > 1 ? ` ${this.defaultTexts.entries.Lcz_Nights}` : ` ${this.defaultTexts.entries.Lcz_Night}`), this.guestData.length > 1 && (h("div", { class: "mt-1 mt-md-0 text-right" }, this.defaultTexts.entries.Lcz_TotalPrice, " ", h("span", { class: "font-weight-bold font-medium-1" }, getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00')))), this.guestData.map((roomInfo, index) => {
-      return (h("igl-application-info", { defaultTexts: this.defaultTexts, currency: this.currency, bedPreferenceType: this.bedPreferenceType, index: index, selectedUnits: this.selectedUnits[`c_${roomInfo.roomCategoryId}`], guestInfo: roomInfo, guestRefKey: index, bookingType: this.bookingData.event_type, roomsList: roomInfo.physicalRooms, onDataUpdateEvent: event => this.handleEventData(event, 'application-info', index) }));
-    }), this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (h("igl-property-booked-by", { defaultTexts: this.defaultTexts, propertyId: this.propertyId, countryNodeList: this.countryNodeList, language: this.language, showPaymentDetails: this.showPaymentDetails, defaultData: this.bookedByInfoData, onDataUpdateEvent: event => 
+    return (h(Host, null, h("div", { class: "d-flex flex-wrap" }, h("div", { class: "flex-fill text-left p-0" }, h("span", { class: "mr-1 font-weight-bold font-medium-1" }, formatDate(this.dateRangeData.fromDateStr), " - ", formatDate(this.dateRangeData.toDateStr)), this.dateRangeData.dateDifference, " ", +this.dateRangeData.dateDifference > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`), this.guestData.length > 1 && (h("div", { class: "mt-1 mt-md-0 text-right" }, locales.entries.Lcz_TotalPrice, " ", h("span", { class: "font-weight-bold font-medium-1" }, getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00')))), this.guestData.map((roomInfo, index) => {
+      return (h("igl-application-info", { currency: this.currency, bedPreferenceType: this.bedPreferenceType, index: index, selectedUnits: this.selectedUnits[`c_${roomInfo.roomCategoryId}`], guestInfo: roomInfo, guestRefKey: index, bookingType: this.bookingData.event_type, roomsList: roomInfo.physicalRooms, onDataUpdateEvent: event => this.handleEventData(event, 'application-info', index) }));
+    }), this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (h("igl-property-booked-by", { propertyId: this.propertyId, countryNodeList: this.countryNodeList, language: this.language, showPaymentDetails: this.showPaymentDetails, defaultData: this.bookedByInfoData, onDataUpdateEvent: event => 
       // this.dataUpdateEvent.emit({
       //   key: "propertyBookedBy",
       //   value: event.detail,
       // })
-      this.handleEventData(event, 'propertyBookedBy', 0) })), this.isEditOrAddRoomEvent ? (h("div", { class: "d-flex p-0 mb-1 mt-2" }, h("div", { class: "flex-fill mr-2" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'cancel' }) }, this.defaultTexts.entries.Lcz_Cancel)), h("div", { class: "flex-fill" }, h("button", { disabled: this.isLoading === 'save' || this.isGuestDataIncomplete(), type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'save' }) }, this.isLoading === 'save' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), this.defaultTexts.entries.Lcz_Save)))) : (h("div", { class: "d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center" }, h("div", { class: "flex-fill mr-md-1" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'back' }) }, h("span", { class: 'd-none d-md-inline-flex' }, " <<"), " ", this.defaultTexts.entries.Lcz_Back)), h("div", { class: "mt-1 mt-md-0 flex-fill mr-md-1" }, h("button", { disabled: this.isButtonDisabled('book'), type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'book' }) }, this.isLoading === 'book' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), this.defaultTexts.entries.Lcz_Book)), h("div", { class: "mt-1 mt-md-0 flex-fill" }, h("button", { disabled: this.isButtonDisabled('bookAndCheckIn'), type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'bookAndCheckIn' }) }, this.isLoading === 'bookAndCheckIn' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), this.defaultTexts.entries.Lcz_BookAndChekcIn))))));
+      this.handleEventData(event, 'propertyBookedBy', 0) })), this.isEditOrAddRoomEvent ? (h("div", { class: "d-flex p-0 mb-1 mt-2" }, h("div", { class: "flex-fill mr-2" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'cancel' }) }, locales.entries.Lcz_Cancel)), h("div", { class: "flex-fill" }, h("button", { disabled: this.isLoading === 'save' || this.isGuestDataIncomplete(), type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'save' }) }, this.isLoading === 'save' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), locales.entries.Lcz_Save)))) : (h("div", { class: "d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center" }, h("div", { class: "flex-fill mr-md-1" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'back' }) }, h("span", { class: 'd-none d-md-inline-flex' }, " <<"), " ", locales.entries.Lcz_Back)), h("div", { class: "mt-1 mt-md-0 flex-fill mr-md-1" }, h("button", { disabled: this.isButtonDisabled('book'), type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'book' }) }, this.isLoading === 'book' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), locales.entries.Lcz_Book)), h("div", { class: "mt-1 mt-md-0 flex-fill" }, h("button", { disabled: this.isButtonDisabled('bookAndCheckIn'), type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'bookAndCheckIn' }) }, this.isLoading === 'bookAndCheckIn' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), locales.entries.Lcz_BookAndChekcIn))))));
   }
   static get is() { return "igl-pagetwo"; }
   static get encapsulation() { return "scoped"; }
@@ -391,7 +381,6 @@ export class IglPagetwo {
   }
   static get states() {
     return {
-      "defaultTexts": {},
       "selectedBookedByData": {},
       "guestData": {},
       "selectedUnits": {}

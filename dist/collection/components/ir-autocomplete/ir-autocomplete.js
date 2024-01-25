@@ -1,7 +1,7 @@
 import { Host, h, Fragment } from "@stencil/core";
 import { v4 } from "uuid";
 import { BookingService } from "../../services/booking.service";
-import { store } from "../../redux/store";
+import locales from "../../../../src/stores/locales.store";
 export class IrAutocomplete {
   constructor() {
     this.bookingService = new BookingService();
@@ -26,10 +26,7 @@ export class IrAutocomplete {
     this.isItemSelected = undefined;
   }
   componentWillLoad() {
-    this.updateFromStore();
-  }
-  updateFromStore() {
-    this.no_result_found = store.getState().languages.entries.Lcz_NoResultsFound;
+    this.no_result_found = locales.entries.Lcz_NoResultsFound;
   }
   handleKeyDown(event) {
     var _a;

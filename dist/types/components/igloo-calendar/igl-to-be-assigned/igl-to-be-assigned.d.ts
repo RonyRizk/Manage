@@ -1,7 +1,6 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IglToBeAssigned {
   unassignedDatesProp: any;
-  defaultTexts: any;
   propertyid: number;
   from_date: string;
   to_date: string;
@@ -29,10 +28,7 @@ export declare class IglToBeAssigned {
   private categoriesData;
   private toBeAssignedService;
   private unassignedDates;
-  private unsubscribe;
   componentWillLoad(): void;
-  updateFromStore(): void;
-  disconnectedCallback(): void;
   handleUnassignedDatesToBeAssignedChange(newValue: any): void;
   handleAssignUnit(event: CustomEvent<{
     [key: string]: any;

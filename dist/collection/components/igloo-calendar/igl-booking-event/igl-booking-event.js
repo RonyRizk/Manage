@@ -14,9 +14,9 @@ import { Fragment, Host, h } from "@stencil/core";
 import { BookingService } from "../../../../../src/services/booking.service";
 import { transformNewBooking } from "../../../../../src/utils/booking";
 import { isBlockUnit } from "../../../../../src/utils/utils";
-import { store } from "../../../../../src/redux/store";
 import moment from "moment";
 import { EventsService } from "../../../../../src/services/events.service";
+import locales from "../../../../../src/stores/locales.store";
 export class IglBookingEvent {
   constructor() {
     this.dayWidth = 0;
@@ -44,17 +44,10 @@ export class IglBookingEvent {
     this.countryNodeList = undefined;
     this.renderElement = false;
     this.position = undefined;
-    this.defaultText = undefined;
     this.isShrinking = null;
   }
   componentWillLoad() {
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
     window.addEventListener('click', this.handleClickOutsideBind);
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultText = state.languages;
   }
   async fetchAndAssignBookingData() {
     try {
@@ -95,7 +88,6 @@ export class IglBookingEvent {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
-    this.unsubscribe();
   }
   handleClickOutside(event) {
     const clickedElement = event.target;
@@ -198,7 +190,7 @@ export class IglBookingEvent {
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
-          description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates}.`,
+          description: `${locales.entries.Lcz_YouWillLoseFutureUpdates}.`,
           status: '200',
         };
       }
@@ -208,16 +200,16 @@ export class IglBookingEvent {
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
           if (initialRT === targetRT) {
-            return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+            return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           }
           else {
             return {
-              description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`,
+              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${locales.entries.Lcz_SameRatesWillBeKept}`,
               status: '200',
             };
           }
         }
-        return { description: this.defaultText.entries.Lcz_CannotChangeCHBookings, status: '400' };
+        return { description: locales.entries.Lcz_CannotChangeCHBookings, status: '400' };
       }
     }
     else {
@@ -226,16 +218,16 @@ export class IglBookingEvent {
         const targetRT = findRoomType(toRoomId);
         if (initialRT === targetRT) {
           console.log('same rt');
-          return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+          return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         }
         else {
           return {
-            description: this.defaultText.entries.Lcz_SameRatesWillBeKept,
+            description: locales.entries.Lcz_SameRatesWillBeKept,
             status: '200',
           };
         }
       }
-      return { description: this.defaultText.entries.Lcz_BalanceWillBeCalculated, status: '200' };
+      return { description: locales.entries.Lcz_BalanceWillBeCalculated, status: '200' };
     }
   }
   resetBookingToInitialPosition() {
@@ -564,7 +556,11 @@ export class IglBookingEvent {
     let legend = this.getEventLegend();
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
-    return (h(Host, { class: `bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `, style: this.getPosition(), id: 'event_' + this.getBookingId() }, h("div", { class: `bookingEventBase ${!this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS !== 'TEMP-EVENT' && 'border border-dark'}  ${this.isSplitBooking() ? 'splitBooking' : ''}`, style: { backgroundColor: legend.color }, onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }), noteNode ? h("div", { class: "legend_circle noteIcon", style: { backgroundColor: noteNode.color } }) : null, balanceNode ? h("div", { class: "legend_circle balanceIcon", style: { backgroundColor: balanceNode.color } }) : null, h("div", { class: "bookingEventTitle", onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }, this.getBookedBy()), h(Fragment, null, h("div", { class: "bookingEventDragHandle leftSide", onTouchStart: event => this.startDragging(event, 'leftSide'), onMouseDown: event => this.startDragging(event, 'leftSide') }), h("div", { class: "bookingEventDragHandle rightSide", onTouchStart: event => this.startDragging(event, 'rightSide'), onMouseDown: event => this.startDragging(event, 'rightSide') })), this.showInfoPopup ? (h("igl-booking-event-hover", { is_vacation_rental: this.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, class: "top", bookingEvent: this.bookingEvent, bubbleInfoTop: this.bubbleInfoTopSide })) : null));
+    return (h(Host, { class: `bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `, style: this.getPosition(), id: 'event_' + this.getBookingId() }, h("div", { class: `bookingEventBase ${!this.bookingEvent.is_direct &&
+        !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
+        this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
+        this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
+        'border border-dark'}  ${this.isSplitBooking() ? 'splitBooking' : ''}`, style: { backgroundColor: legend.color }, onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }), noteNode ? h("div", { class: "legend_circle noteIcon", style: { backgroundColor: noteNode.color } }) : null, balanceNode ? h("div", { class: "legend_circle balanceIcon", style: { backgroundColor: balanceNode.color } }) : null, h("div", { class: "bookingEventTitle", onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }, this.getBookedBy()), h(Fragment, null, h("div", { class: "bookingEventDragHandle leftSide", onTouchStart: event => this.startDragging(event, 'leftSide'), onMouseDown: event => this.startDragging(event, 'leftSide') }), h("div", { class: "bookingEventDragHandle rightSide", onTouchStart: event => this.startDragging(event, 'rightSide'), onMouseDown: event => this.startDragging(event, 'rightSide') })), this.showInfoPopup ? (h("igl-booking-event-hover", { is_vacation_rental: this.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, class: "top", bookingEvent: this.bookingEvent, bubbleInfoTop: this.bubbleInfoTopSide })) : null));
   }
   static get is() { return "igl-booking-event"; }
   static get encapsulation() { return "scoped"; }
@@ -686,7 +682,6 @@ export class IglBookingEvent {
     return {
       "renderElement": {},
       "position": {},
-      "defaultText": {},
       "isShrinking": {}
     };
   }

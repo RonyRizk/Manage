@@ -2,7 +2,6 @@ import { Host, h } from "@stencil/core";
 export class IglBookingRooms {
   constructor() {
     this.validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
-    this.defaultTexts = undefined;
     this.roomTypeData = undefined;
     this.defaultData = undefined;
     this.bookingType = 'PLUS_BOOKING';
@@ -96,14 +95,14 @@ export class IglBookingRooms {
   }
   render() {
     const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
-    return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
+    return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1 mb-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
       if (ratePlan.variations !== null) {
         let shouldBeDisabled = this.roomInfoId && this.roomInfoId === this.roomTypeData.id;
         let roomId = -1;
         if (shouldBeDisabled && this.initialRoomIds) {
           roomId = this.initialRoomIds.roomId;
         }
-        return (h("igl-booking-room-rate-plan", { defaultTexts: this.defaultTexts, index: index, isBookDisabled: this.isBookDisabled, key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? '' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, shouldBeDisabled: shouldBeDisabled, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index), physicalrooms: this.roomTypeData.physicalrooms, defaultRoomId: roomId, selectedRoom: this.initialRoomIds }));
+        return (h("igl-booking-room-rate-plan", { index: index, isBookDisabled: this.isBookDisabled, key: `rate-plan-${ratePlan.id}`, ratePricingMode: this.ratePricingMode, class: isValidBookingType ? '' : '', currency: this.currency, dateDifference: this.dateDifference, ratePlanData: ratePlan, totalAvailableRooms: this.roomsDistributions[index], bookingType: this.bookingType, defaultData: (this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null, shouldBeDisabled: shouldBeDisabled, onDataUpdateEvent: evt => this.onRoomDataUpdate(evt, index), physicalrooms: this.roomTypeData.physicalrooms, defaultRoomId: roomId, selectedRoom: this.initialRoomIds }));
       }
       else {
         return null;
@@ -124,23 +123,6 @@ export class IglBookingRooms {
   }
   static get properties() {
     return {
-      "defaultTexts": {
-        "type": "any",
-        "mutable": false,
-        "complexType": {
-          "original": "any",
-          "resolved": "any",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "default-texts",
-        "reflect": false
-      },
       "roomTypeData": {
         "type": "unknown",
         "mutable": false,
@@ -231,7 +213,7 @@ export class IglBookingRooms {
         "type": "number",
         "mutable": false,
         "complexType": {
-          "original": "number|null",
+          "original": "number | null",
           "resolved": "number",
           "references": {}
         },

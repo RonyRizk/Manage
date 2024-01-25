@@ -1,6 +1,4 @@
 import axios from "axios";
-import { store } from "../redux/store";
-import { addLanguages } from "../redux/features/languages";
 export class RoomService {
   async fetchData(id, language) {
     try {
@@ -27,7 +25,6 @@ export class RoomService {
           throw new Error(data.ExceptionMsg);
         }
         let entries = this.transformArrayToObject(data.My_Result.entries);
-        store.dispatch(addLanguages({ entries, direction: data.My_Result.direction }));
         return { entries, direction: data.My_Result.direction };
       }
     }

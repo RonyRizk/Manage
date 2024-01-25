@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-e59d0388.js');
+const index = require('./index-d7fa4e74.js');
 
 const IrGeneralSettings = class {
   constructor(hostRef) {

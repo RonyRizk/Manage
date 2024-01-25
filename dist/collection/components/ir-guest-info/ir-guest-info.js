@@ -119,13 +119,13 @@ export class GuestInfo {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Languages",
-          "resolved": "Languages",
+          "original": "ILocale",
+          "resolved": "ILocale",
           "references": {
-            "Languages": {
+            "ILocale": {
               "location": "import",
-              "path": "@/components",
-              "id": "src/components.d.ts::Languages"
+              "path": "@/stores/locales.store",
+              "id": "src/stores/locales.store.ts::ILocale"
             }
           }
         },

@@ -4,7 +4,6 @@ export declare class IglApplicationInfo {
     [key: string]: any;
   };
   currency: any;
-  defaultTexts: any;
   roomsList: {
     [key: string]: any;
   }[];

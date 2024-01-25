@@ -197,13 +197,13 @@ export class IrPaymentDetails {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Languages",
-          "resolved": "Languages",
+          "original": "ILocale",
+          "resolved": "ILocale",
           "references": {
-            "Languages": {
+            "ILocale": {
               "location": "import",
               "path": "@/components",
-              "id": "src/components.d.ts::Languages"
+              "id": "src/components.d.ts::ILocale"
             }
           }
         },

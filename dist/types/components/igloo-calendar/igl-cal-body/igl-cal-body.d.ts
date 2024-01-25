@@ -10,7 +10,6 @@ export declare class IglCalBody {
   currency: any;
   language: string;
   countryNodeList: any;
-  defaultTexts: any;
   dragOverElement: string;
   renderAgain: boolean;
   addBookingDatasEvent: EventEmitter<any[]>;
@@ -18,10 +17,7 @@ export declare class IglCalBody {
   private fromRoomId;
   private newEvent;
   private currentDate;
-  private unsubscribe;
   componentWillLoad(): void;
-  updateFromStore(): void;
-  disconnectedCallback(): void;
   dragOverHighlightElementHandler(event: CustomEvent): void;
   gotoRoom(event: CustomEvent): void;
   addToBeAssignedEvents(event: CustomEvent): void;
@@ -48,7 +44,7 @@ export declare class IglCalBody {
   clickCell(roomId: any, selectedDay: any, roomCategory: any): void;
   showNewBookingPopup(data: any): void;
   renderElement(): void;
-  getGeneralCategoryDayColumns(addClass: string, isCategory: boolean, index: number): any;
+  getGeneralCategoryDayColumns(addClass: string, isCategory: boolean, index: number): any[];
   getGeneralRoomDayColumns(roomId: string, roomCategory: any): any;
   toggleCategory(roomCategory: any): void;
   getRoomCategoryRow(roomCategory: any, index: any): any;

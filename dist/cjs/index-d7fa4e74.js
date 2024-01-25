@@ -37,6 +37,7 @@ let useNativeShadowDom = false;
 let checkSlotFallbackVisibility = false;
 let checkSlotRelocate = false;
 let isSvgMode = false;
+let renderingRef = null;
 let queuePending = false;
 const createTime = (fnName, tagName = '') => {
     {
@@ -1488,6 +1489,7 @@ const updateComponent = async (hostRef, instance, isInitialLoad) => {
 };
 const callRender = (hostRef, instance, elm) => {
     try {
+        renderingRef = instance;
         instance = instance.render() ;
         {
             hostRef.$flags$ &= ~16 /* HOST_FLAGS.isQueuedForUpdate */;
@@ -1509,8 +1511,10 @@ const callRender = (hostRef, instance, elm) => {
     catch (e) {
         consoleError(e, hostRef.$hostElement$);
     }
+    renderingRef = null;
     return null;
 };
+const getRenderingRef = () => renderingRef;
 const postUpdateComponent = (hostRef) => {
     const tagName = hostRef.$cmpMeta$.$tagName$;
     const elm = hostRef.$hostElement$;
@@ -1558,6 +1562,18 @@ const postUpdateComponent = (hostRef) => {
     // ( •_•)
     // ( •_•)>⌐■-■
     // (⌐■_■)
+};
+const forceUpdate = (ref) => {
+    {
+        const hostRef = getHostRef(ref);
+        const isConnected = hostRef.$hostElement$.isConnected;
+        if (isConnected &&
+            (hostRef.$flags$ & (2 /* HOST_FLAGS.hasRendered */ | 16 /* HOST_FLAGS.isQueuedForUpdate */)) === 2 /* HOST_FLAGS.hasRendered */) {
+            scheduleUpdate(hostRef, false);
+        }
+        // Returns "true" when the forced update was successfully scheduled
+        return isConnected;
+    }
 };
 const appDidLoad = (who) => {
     // on appload
@@ -2165,10 +2181,12 @@ exports.Fragment = Fragment;
 exports.Host = Host;
 exports.bootstrapLazy = bootstrapLazy;
 exports.createEvent = createEvent;
+exports.forceUpdate = forceUpdate;
 exports.getElement = getElement;
+exports.getRenderingRef = getRenderingRef;
 exports.h = h;
 exports.promiseResolve = promiseResolve;
 exports.registerInstance = registerInstance;
 exports.setNonce = setNonce;
 
-//# sourceMappingURL=index-e59d0388.js.map
+//# sourceMappingURL=index-d7fa4e74.js.map

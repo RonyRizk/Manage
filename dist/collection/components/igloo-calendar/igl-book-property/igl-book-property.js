@@ -4,7 +4,7 @@ import { dateToFormattedString, getReleaseHoursString } from "../../../utils/uti
 import { transformNewBLockedRooms } from "../../../utils/booking";
 import { IglBookPropertyService } from "./igl-book-property.service";
 import { EventsService } from "../../../services/events.service";
-import { store } from "../../../redux/store";
+import locales from "../../../../../src/stores/locales.store";
 export class IglBookProperty {
   constructor() {
     this.initialRoomIds = null;
@@ -22,7 +22,6 @@ export class IglBookProperty {
     this.eventsService = new EventsService();
     this.propertyid = undefined;
     this.allowedBookingSources = undefined;
-    this.defaultTexts = undefined;
     this.language = undefined;
     this.countryNodeList = undefined;
     this.showPaymentDetails = false;
@@ -50,7 +49,6 @@ export class IglBookProperty {
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
-    this.unsubscribe();
   }
   clearBooking(e) {
     if (this.isEventType('SPLIT_BOOKING')) {
@@ -118,16 +116,10 @@ export class IglBookProperty {
       else {
         this.page = 'page_one';
       }
-      this.updateFromStore();
-      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     }
     catch (error) {
       console.error('Error fetching setup entries:', error);
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
   }
   async fetchSetupEntries() {
     return await this.bookingService.fetchSetupEntries();
@@ -259,7 +251,7 @@ export class IglBookProperty {
     this.gotoPage('page_one');
   }
   getPageBlockDatesView() {
-    return (h(Fragment, null, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between" }, h("button", { class: "btn btn-secondary flex-fill", onClick: () => this.closeWindow() }, this.defaultTexts.entries.Lcz_Cancel), h("button", { class: "btn btn-primary flex-fill", onClick: () => this.handleBlockDate() }, this.defaultTexts.entries.Lcz_Blockdates))));
+    return (h(Fragment, null, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between" }, h("button", { class: "btn btn-secondary flex-fill", onClick: () => this.closeWindow() }, locales.entries.Lcz_Cancel), h("button", { class: "btn btn-primary flex-fill", onClick: () => this.handleBlockDate() }, locales.entries.Lcz_Blockdates))));
   }
   handleButtonClicked(event) {
     event.stopImmediatePropagation();
@@ -516,7 +508,6 @@ export class IglBookProperty {
   }
   static get states() {
     return {
-      "defaultTexts": {},
       "adultChildCount": {},
       "renderAgain": {},
       "defaultData": {},

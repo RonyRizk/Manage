@@ -3,7 +3,8 @@ export declare class RoomService {
     [key: string]: any;
   }>;
   fetchLanguage(code: string): Promise<{
-    [key: string]: any;
+    entries: any;
+    direction: any;
   }>;
   private transformArrayToObject;
 }

@@ -1,7 +1,7 @@
 import { h as hooks } from './moment.js';
 import { i as isBlockUnit, b as dateDifference } from './utils.js';
 import { a as axios } from './axios.js';
-import { s as store } from './store.js';
+import { l as locales } from './locales.store.js';
 
 async function getMyBookings(months) {
   const myBookings = [];
@@ -64,11 +64,10 @@ async function getStayStatus() {
   }
 }
 function renderBlock003Date(date, hour, minute) {
-  const { languages } = store.getState();
   const dt = new Date(date);
   dt.setHours(hour);
   dt.setMinutes(minute);
-  return `${languages.entries.Lcz_BlockedTill} ${hooks(dt).format('MMM DD, HH:mm')}`;
+  return `${locales.entries.Lcz_BlockedTill} ${hooks(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell, stayStatus) {
   var _a, _b;

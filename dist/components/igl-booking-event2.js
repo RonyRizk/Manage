@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
 import { B as BookingService$1 } from './booking.service2.js';
 import { h as hooks } from './moment.js';
-import { c as configureStore, l as languagesSlice, a as calendarDataSlice, b as calendarDatesSlice } from './store.js';
+import { l as locales } from './locales.store.js';
 import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
 import { e as getReleaseHoursString } from './utils.js';
@@ -84,14 +84,6 @@ function transformNewBooking(data) {
 function isBlockUnit(status_code) {
   return ['003', '002', '004'].includes(status_code);
 }
-
-const store = configureStore({
-  reducer: {
-    languages: languagesSlice,
-    calendar_data: calendarDataSlice,
-    calendar_dates: calendarDatesSlice,
-  },
-});
 
 class EventsService {
   constructor() {
@@ -212,17 +204,10 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     this.countryNodeList = undefined;
     this.renderElement = false;
     this.position = undefined;
-    this.defaultText = undefined;
     this.isShrinking = null;
   }
   componentWillLoad() {
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
     window.addEventListener('click', this.handleClickOutsideBind);
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultText = state.languages;
   }
   async fetchAndAssignBookingData() {
     try {
@@ -263,7 +248,6 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
-    this.unsubscribe();
   }
   handleClickOutside(event) {
     const clickedElement = event.target;
@@ -366,7 +350,7 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
-          description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates}.`,
+          description: `${locales.entries.Lcz_YouWillLoseFutureUpdates}.`,
           status: '200',
         };
       }
@@ -376,16 +360,16 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
           if (initialRT === targetRT) {
-            return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+            return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           }
           else {
             return {
-              description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`,
+              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${locales.entries.Lcz_SameRatesWillBeKept}`,
               status: '200',
             };
           }
         }
-        return { description: this.defaultText.entries.Lcz_CannotChangeCHBookings, status: '400' };
+        return { description: locales.entries.Lcz_CannotChangeCHBookings, status: '400' };
       }
     }
     else {
@@ -394,16 +378,16 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
         const targetRT = findRoomType(toRoomId);
         if (initialRT === targetRT) {
           console.log('same rt');
-          return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+          return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         }
         else {
           return {
-            description: this.defaultText.entries.Lcz_SameRatesWillBeKept,
+            description: locales.entries.Lcz_SameRatesWillBeKept,
             status: '200',
           };
         }
       }
-      return { description: this.defaultText.entries.Lcz_BalanceWillBeCalculated, status: '200' };
+      return { description: locales.entries.Lcz_BalanceWillBeCalculated, status: '200' };
     }
   }
   resetBookingToInitialPosition() {
@@ -732,7 +716,11 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     let legend = this.getEventLegend();
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
-    return (h(Host, { class: `bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `, style: this.getPosition(), id: 'event_' + this.getBookingId() }, h("div", { class: `bookingEventBase ${!this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS !== 'TEMP-EVENT' && 'border border-dark'}  ${this.isSplitBooking() ? 'splitBooking' : ''}`, style: { backgroundColor: legend.color }, onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }), noteNode ? h("div", { class: "legend_circle noteIcon", style: { backgroundColor: noteNode.color } }) : null, balanceNode ? h("div", { class: "legend_circle balanceIcon", style: { backgroundColor: balanceNode.color } }) : null, h("div", { class: "bookingEventTitle", onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }, this.getBookedBy()), h(Fragment, null, h("div", { class: "bookingEventDragHandle leftSide", onTouchStart: event => this.startDragging(event, 'leftSide'), onMouseDown: event => this.startDragging(event, 'leftSide') }), h("div", { class: "bookingEventDragHandle rightSide", onTouchStart: event => this.startDragging(event, 'rightSide'), onMouseDown: event => this.startDragging(event, 'rightSide') })), this.showInfoPopup ? (h("igl-booking-event-hover", { is_vacation_rental: this.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, class: "top", bookingEvent: this.bookingEvent, bubbleInfoTop: this.bubbleInfoTopSide })) : null));
+    return (h(Host, { class: `bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `, style: this.getPosition(), id: 'event_' + this.getBookingId() }, h("div", { class: `bookingEventBase ${!this.bookingEvent.is_direct &&
+        !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
+        this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
+        this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
+        'border border-dark'}  ${this.isSplitBooking() ? 'splitBooking' : ''}`, style: { backgroundColor: legend.color }, onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }), noteNode ? h("div", { class: "legend_circle noteIcon", style: { backgroundColor: noteNode.color } }) : null, balanceNode ? h("div", { class: "legend_circle balanceIcon", style: { backgroundColor: balanceNode.color } }) : null, h("div", { class: "bookingEventTitle", onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }, this.getBookedBy()), h(Fragment, null, h("div", { class: "bookingEventDragHandle leftSide", onTouchStart: event => this.startDragging(event, 'leftSide'), onMouseDown: event => this.startDragging(event, 'leftSide') }), h("div", { class: "bookingEventDragHandle rightSide", onTouchStart: event => this.startDragging(event, 'rightSide'), onMouseDown: event => this.startDragging(event, 'rightSide') })), this.showInfoPopup ? (h("igl-booking-event-hover", { is_vacation_rental: this.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, class: "top", bookingEvent: this.bookingEvent, bubbleInfoTop: this.bubbleInfoTopSide })) : null));
   }
   get element() { return this; }
   static get style() { return iglBookingEventCss; }
@@ -745,7 +733,6 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     "countryNodeList": [8, "country-node-list"],
     "renderElement": [32],
     "position": [32],
-    "defaultText": [32],
     "isShrinking": [32]
   }, [[8, "click", "handleClickOutside"], [8, "hideBubbleInfo", "hideBubbleInfoPopup"], [8, "moveBookingTo", "moveBookingToHandler"], [8, "revertBooking", "handleRevertBooking"]]]);
 function defineCustomElement() {
@@ -772,6 +759,6 @@ function defineCustomElement() {
   } });
 }
 
-export { IglBookingEvent as I, defineCustomElement as d, store as s };
+export { IglBookingEvent as I, defineCustomElement as d };
 
 //# sourceMappingURL=igl-booking-event2.js.map

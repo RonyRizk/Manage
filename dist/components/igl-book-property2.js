@@ -3,7 +3,7 @@ import { B as BookingService } from './booking.service.js';
 import { d as dateToFormattedString, e as getReleaseHoursString } from './utils.js';
 import { t as transformNewBLockedRooms } from './booking.js';
 import { E as EventsService } from './events.service.js';
-import { s as store } from './store.js';
+import { l as locales } from './locales.store.js';
 import { d as defineCustomElement$d } from './igl-application-info2.js';
 import { d as defineCustomElement$c } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$b } from './igl-book-property-footer2.js';
@@ -223,7 +223,6 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     this.eventsService = new EventsService();
     this.propertyid = undefined;
     this.allowedBookingSources = undefined;
-    this.defaultTexts = undefined;
     this.language = undefined;
     this.countryNodeList = undefined;
     this.showPaymentDetails = false;
@@ -251,7 +250,6 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
-    this.unsubscribe();
   }
   clearBooking(e) {
     if (this.isEventType('SPLIT_BOOKING')) {
@@ -318,16 +316,10 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
       else {
         this.page = 'page_one';
       }
-      this.updateFromStore();
-      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     }
     catch (error) {
       console.error('Error fetching setup entries:', error);
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
   }
   async fetchSetupEntries() {
     return await this.bookingService.fetchSetupEntries();
@@ -459,7 +451,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     this.gotoPage('page_one');
   }
   getPageBlockDatesView() {
-    return (h(Fragment, null, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between" }, h("button", { class: "btn btn-secondary flex-fill", onClick: () => this.closeWindow() }, this.defaultTexts.entries.Lcz_Cancel), h("button", { class: "btn btn-primary flex-fill", onClick: () => this.handleBlockDate() }, this.defaultTexts.entries.Lcz_Blockdates))));
+    return (h(Fragment, null, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between" }, h("button", { class: "btn btn-secondary flex-fill", onClick: () => this.closeWindow() }, locales.entries.Lcz_Cancel), h("button", { class: "btn btn-primary flex-fill", onClick: () => this.handleBlockDate() }, locales.entries.Lcz_Blockdates))));
   }
   handleButtonClicked(event) {
     event.stopImmediatePropagation();
@@ -569,7 +561,6 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     "currency": [16],
     "bookingData": [1040],
     "adultChildConstraints": [16],
-    "defaultTexts": [32],
     "adultChildCount": [32],
     "renderAgain": [32],
     "defaultData": [32],

@@ -4526,10 +4526,14 @@ readers do not read off random characters that represent icons */
 }
 
 .legend_skew,
+.legend_skew-bordered,
 .legend_skewsplit {
   transform: skew(-30deg);
   width: 15px;
   height: 16px;
+}
+.legend_skew-bordered {
+  border: 1px solid black;
 }
 
 .legend_circle {
@@ -4612,7 +4616,7 @@ readers do not read off random characters that represent icons */
 .highphenLegend::before {
   width: 12px;
   height: 0.5px;
-  content: " ";
+  content: ' ';
   background-color: #000000;
   vertical-align: middle;
   display: inline-block;

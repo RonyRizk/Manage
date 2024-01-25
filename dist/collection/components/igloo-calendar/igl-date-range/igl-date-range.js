@@ -1,5 +1,5 @@
 import { Host, h } from "@stencil/core";
-import { store } from "../../../redux/store";
+import locales from "../../../../../src/stores/locales.store";
 export class IglDateRange {
   constructor() {
     this.totalNights = 0;
@@ -10,14 +10,11 @@ export class IglDateRange {
     this.minDate = undefined;
     this.dateLabel = undefined;
     this.renderAgain = false;
-    this.defaultTexts = undefined;
   }
   getStringDateFormat(dt) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
   componentWillLoad() {
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
     let dt = new Date();
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() + 1);
@@ -43,13 +40,6 @@ export class IglDateRange {
         dateDifference: this.totalNights,
       });
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
   calculateTotalNights() {
     this.totalNights = Math.floor((this.toDate.getTime() - this.fromDate.getTime()) / 86400000);
@@ -77,7 +67,7 @@ export class IglDateRange {
   render() {
     return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("h5", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, this.dateLabel), h("div", { class: 'd-flex align-items-center mr-lg-1' }, h("div", { class: "iglRangePicker form-control input-sm", "data-state": this.disabled ? 'disabled' : 'active' }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
-      } })), this.totalNights ? (h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ` ${this.defaultTexts.entries.Lcz_Nights}` : ` ${this.defaultTexts.entries.Lcz_Night}`))) : ('')))));
+      } })), this.totalNights ? (h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`))) : ('')))));
   }
   static get is() { return "igl-date-range"; }
   static get encapsulation() { return "scoped"; }
@@ -164,8 +154,7 @@ export class IglDateRange {
   }
   static get states() {
     return {
-      "renderAgain": {},
-      "defaultTexts": {}
+      "renderAgain": {}
     };
   }
   static get events() {

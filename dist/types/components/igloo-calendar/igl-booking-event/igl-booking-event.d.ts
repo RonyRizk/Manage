@@ -1,7 +1,6 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 import { IReallocationPayload, IRoomNightsData } from "../../../models/property-types";
 import { IToast } from "../../ir-toast/toast";
-import { Languages } from "../../../components";
 export declare class IglBookingEvent {
   private element;
   currency: any;
@@ -25,9 +24,7 @@ export declare class IglBookingEvent {
   position: {
     [key: string]: any;
   };
-  defaultText: Languages;
   isShrinking: boolean | null;
-  private unsubscribe;
   dayWidth: number;
   eventSpace: number;
   vertSpace: number;
@@ -62,7 +59,6 @@ export declare class IglBookingEvent {
   handleMouseUpBind: any;
   handleClickOutsideBind: any;
   componentWillLoad(): void;
-  updateFromStore(): void;
   fetchAndAssignBookingData(): Promise<void>;
   componentDidLoad(): void;
   disconnectedCallback(): void;

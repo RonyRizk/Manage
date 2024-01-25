@@ -302,21 +302,25 @@ export class IrRoom {
         "reflect": false
       },
       "defaultTexts": {
-        "type": "any",
+        "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "any",
-          "resolved": "any",
-          "references": {}
+          "original": "ILocale",
+          "resolved": "ILocale",
+          "references": {
+            "ILocale": {
+              "location": "import",
+              "path": "@/stores/locales.store",
+              "id": "src/stores/locales.store.ts::ILocale"
+            }
+          }
         },
         "required": false,
         "optional": false,
         "docs": {
           "tags": [],
           "text": ""
-        },
-        "attribute": "default-texts",
-        "reflect": false
+        }
       },
       "ticket": {
         "type": "any",

@@ -31,7 +31,6 @@ export declare class IrAutocomplete {
   private bookingService;
   private no_result_found;
   componentWillLoad(): void;
-  updateFromStore(): void;
   handleKeyDown(event: KeyboardEvent): void;
   getHeightOfPElement(): number;
   adjustScrollPosition(itemHeight: any, visibleHeight?: number): void;

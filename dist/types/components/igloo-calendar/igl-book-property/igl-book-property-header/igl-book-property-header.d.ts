@@ -1,7 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from '../../../../models/igl-book-property';
 import { IToast } from '../../../ir-toast/toast';
-import { Languages } from '../../../../redux/features/languages';
 export declare class IglBookPropertyHeader {
   splitBookingId: any;
   bookingData: any;
@@ -25,7 +24,6 @@ export declare class IglBookPropertyHeader {
     to_date: string;
   };
   propertyId: number;
-  defaultTexts: Languages;
   splitBookingDropDownChange: EventEmitter<any>;
   sourceDropDownChange: EventEmitter<string>;
   adultChild: EventEmitter<any>;

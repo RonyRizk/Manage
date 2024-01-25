@@ -1,7 +1,7 @@
 import moment from "moment";
 import { dateDifference, isBlockUnit } from "./utils";
 import axios from "axios";
-import { store } from "../redux/store";
+import locales from "../../../src/stores/locales.store";
 export async function getMyBookings(months) {
   const myBookings = [];
   const stayStatus = await getStayStatus();
@@ -63,11 +63,10 @@ async function getStayStatus() {
   }
 }
 function renderBlock003Date(date, hour, minute) {
-  const { languages } = store.getState();
   const dt = new Date(date);
   dt.setHours(hour);
   dt.setMinutes(minute);
-  return `${languages.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
+  return `${locales.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell, stayStatus) {
   var _a, _b;

@@ -2,7 +2,7 @@ import { Host, h, Fragment } from "@stencil/core";
 import { ToBeAssignedService } from "../../../services/toBeAssigned.service";
 import { dateToFormattedString } from "../../../utils/utils";
 import moment from "moment";
-import { store } from "../../../redux/store";
+import locales from "../../../../../src/stores/locales.store";
 //import { updateCategories } from '../../../utils/events.utils';
 export class IglToBeAssigned {
   constructor() {
@@ -14,7 +14,6 @@ export class IglToBeAssigned {
     this.categoriesData = {};
     this.toBeAssignedService = new ToBeAssignedService();
     this.unassignedDatesProp = undefined;
-    this.defaultTexts = undefined;
     this.propertyid = undefined;
     this.from_date = undefined;
     this.to_date = undefined;
@@ -26,16 +25,7 @@ export class IglToBeAssigned {
   }
   componentWillLoad() {
     this.reArrangeData();
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
-    this.loadingMessage = this.defaultTexts.entries.Lcz_FetchingUnAssignedUnits;
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
+    this.loadingMessage = locales.entries.Lcz_FetchingUnAssignedUnits;
   }
   handleUnassignedDatesToBeAssignedChange(newValue) {
     const { fromDate, toDate, data } = newValue;
@@ -213,7 +203,7 @@ export class IglToBeAssigned {
   }
   render() {
     var _a;
-    return (h(Host, { class: "tobeAssignedContainer pr-1 text-left" }, h("div", null, h("div", null, h("div", { class: "stickyHeader" }, h("div", { class: "tobeAssignedHeader pt-1" }, this.defaultTexts.entries.Lcz_Assignments), h("div", { class: "closeBtn pt-1", onClick: () => this.handleOptionEvent('closeSideMenu') }, h("i", { class: "ft-chevrons-left" })), h("hr", null), Object.keys(this.data).length === 0 ? (h("p", null, this.defaultTexts.entries.Lcz_AllBookingsAreAssigned)) : this.isLoading ? (h("p", null, this.loadingMessage)) : (h(Fragment, null, this.orderedDatesList.length ? (h("div", { class: `custom-dropdown border border-light rounded text-center ` + (this.showDatesList ? 'show' : ''), id: "dropdownMenuButton", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" }, h("div", { class: 'dropdown-toggle' }, h("span", { class: "font-weight-bold" }, this.data[this.selectedDate].dateStr)), h("div", { class: "dropdown-menu dropdown-menu-right full-width", "aria-labelledby": "dropdownMenuButton" }, (_a = this.orderedDatesList) === null || _a === void 0 ? void 0 : _a.map(ordDate => (h("div", { class: "dropdown-item pointer", onClick: () => this.showForDate(ordDate) }, this.data[ordDate].dateStr)))))) : (this.defaultTexts.entries.Lcz_AllBookingsAreAssigned)))), !this.isLoading && (h("div", { class: "scrollabledArea" }, this.orderedDatesList.length ? (Object.keys(this.data[this.selectedDate].categories).length ? (this.getCategoryView()) : (h("div", { class: "mt-1" }, this.defaultTexts.entries.Lcz_AllAssignForThisDay))) : null))))));
+    return (h(Host, { class: "tobeAssignedContainer pr-1 text-left" }, h("div", null, h("div", null, h("div", { class: "stickyHeader" }, h("div", { class: "tobeAssignedHeader pt-1" }, locales.entries.Lcz_Assignments), h("div", { class: "closeBtn pt-1", onClick: () => this.handleOptionEvent('closeSideMenu') }, h("i", { class: "ft-chevrons-left" })), h("hr", null), Object.keys(this.data).length === 0 ? (h("p", null, locales.entries.Lcz_AllBookingsAreAssigned)) : this.isLoading ? (h("p", null, this.loadingMessage)) : (h(Fragment, null, this.orderedDatesList.length ? (h("div", { class: `custom-dropdown border border-light rounded text-center ` + (this.showDatesList ? 'show' : ''), id: "dropdownMenuButton", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" }, h("div", { class: 'dropdown-toggle' }, h("span", { class: "font-weight-bold" }, this.data[this.selectedDate].dateStr)), h("div", { class: "dropdown-menu dropdown-menu-right full-width", "aria-labelledby": "dropdownMenuButton" }, (_a = this.orderedDatesList) === null || _a === void 0 ? void 0 : _a.map(ordDate => (h("div", { class: "dropdown-item pointer", onClick: () => this.showForDate(ordDate) }, this.data[ordDate].dateStr)))))) : (locales.entries.Lcz_AllBookingsAreAssigned)))), !this.isLoading && (h("div", { class: "scrollabledArea" }, this.orderedDatesList.length ? (Object.keys(this.data[this.selectedDate].categories).length ? (this.getCategoryView()) : (h("div", { class: "mt-1" }, locales.entries.Lcz_AllAssignForThisDay))) : null))))));
   }
   static get is() { return "igl-to-be-assigned"; }
   static get encapsulation() { return "scoped"; }
@@ -316,7 +306,6 @@ export class IglToBeAssigned {
   }
   static get states() {
     return {
-      "defaultTexts": {},
       "loadingMessage": {},
       "showDatesList": {},
       "renderAgain": {},

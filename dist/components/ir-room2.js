@@ -190,7 +190,7 @@ const IrRoom = /*@__PURE__*/ proxyCustomElement(class IrRoom extends HTMLElement
     "currency": [1],
     "legendData": [8, "legend-data"],
     "roomsInfo": [8, "rooms-info"],
-    "defaultTexts": [8, "default-texts"],
+    "defaultTexts": [16],
     "ticket": [8],
     "hasRoomEdit": [4, "has-room-edit"],
     "hasRoomDelete": [4, "has-room-delete"],
