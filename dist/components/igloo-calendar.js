@@ -4081,7 +4081,7 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
               }
               this.availabilityTimeout = setTimeout(() => {
                 this.updateTotalAvailability();
-              }, 2000);
+              }, 1000);
               console.log(result);
             }
             else {

@@ -180,7 +180,7 @@ export class IglooCalendar {
               }
               this.availabilityTimeout = setTimeout(() => {
                 this.updateTotalAvailability();
-              }, 2000);
+              }, 1000);
               console.log(result);
             }
             else {
