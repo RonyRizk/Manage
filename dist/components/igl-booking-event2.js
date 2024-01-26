@@ -590,11 +590,11 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
         this.dragOverEventData.emit({ id: 'DRAG_OVER', data: this.dragEndPos });
       }
       else {
+        if (!this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
+          return;
+        }
         let newWidth = this.initialWidth;
         if (this.resizeSide == 'rightSide') {
-          if (distanceX > 0 && !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
-            return;
-          }
           newWidth = this.initialWidth + distanceX;
           newWidth = Math.min(newWidth, this.initialX + this.element.offsetWidth);
           newWidth = Math.max(this.dayWidth - this.eventSpace, newWidth);
@@ -603,9 +603,6 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
         }
         else if (this.resizeSide == 'leftSide') {
           this.isShrinking = distanceX > 0;
-          if (distanceX < 0 && !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
-            return;
-          }
           newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
           let newLeft = this.initialLeft + (this.initialWidth - newWidth);
           this.element.style.left = `${newLeft}px`;

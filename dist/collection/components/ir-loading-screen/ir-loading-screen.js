@@ -4,7 +4,7 @@ export class IrLoadingScreen {
     this.message = '';
   }
   render() {
-    return (h(Host, null, h("div", { class: "loaderContainer" }, h("span", { class: "loader" }), this.message && h("p", { class: 'm-0' }, this.message))));
+    return (h(Host, null, h("div", { class: "loaderContainer" }, h("span", { class: "loader" }))));
   }
   static get is() { return "ir-loading-screen"; }
   static get encapsulation() { return "scoped"; }
