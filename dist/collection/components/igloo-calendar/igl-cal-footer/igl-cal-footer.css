@@ -4536,7 +4536,7 @@ readers do not read off random characters that represent icons */
   font-size: 0.8em;
   font-weight: 600;
   display: grid;
-
+  user-select: none;
   /* height: 100%;
   
   align-items: center;

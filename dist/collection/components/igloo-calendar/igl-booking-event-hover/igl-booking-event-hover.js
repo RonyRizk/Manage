@@ -1,4 +1,4 @@
-import { Host, h } from "@stencil/core";
+import { Host, h, Fragment } from "@stencil/core";
 import { findCountry, formatDate, getCurrencySymbol } from "../../../utils/utils";
 import { EventsService } from "../../../services/events.service";
 import moment from "moment";
@@ -267,11 +267,12 @@ export class IglBookingEventHover {
       }, disabled: !this.bookingEvent.IS_EDITABLE || this.is_vacation_rental }, h("i", { class: "ft ft-trash-2 font-small-3" }), " ", locales.entries.Lcz_Unassign)))));
   }
   getNewBookingOptions() {
-    return (h("div", { class: `iglPopOver newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square", onClick: _ => {
+    const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
+    return (h("div", { class: `iglPopOver newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, shouldDisplayButtons ? (h(Fragment, null, h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square", onClick: _ => {
         this.handleBookingOption('BAR_BOOKING');
       } }, locales.entries.Lcz_CreateNewBooking), this.hasSplitBooking() ? (h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square", onClick: _ => {
         this.handleBookingOption('SPLIT_BOOKING');
-      } }, locales.entries.Lcz_AssignUnitToExistingBooking)) : null, h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary font-small-3 square", onClick: _ => {
+      } }, locales.entries.Lcz_AssignUnitToExistingBooking)) : null)) : (h("p", { class: 'text-danger' }, locales.entries.Lcz_NoRatePlanDefined)), h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary font-small-3 square", onClick: _ => {
         this.handleBookingOption('BLOCK_DATES');
       } }, locales.entries.Lcz_Blockdates)));
   }

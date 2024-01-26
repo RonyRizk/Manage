@@ -36,6 +36,7 @@ export class IglBookProperty {
     this.defaultData = undefined;
     this.isLoading = undefined;
     this.dateRangeData = undefined;
+    this.buttonName = '';
   }
   handleKeyDown(e) {
     if (e.key === 'Escape') {
@@ -123,6 +124,49 @@ export class IglBookProperty {
   }
   async fetchSetupEntries() {
     return await this.bookingService.fetchSetupEntries();
+  }
+  isGuestDataIncomplete() {
+    if (this.guestData.length !== this.guestData.length) {
+      return true;
+    }
+    for (const data of this.guestData) {
+      if (data.guestName === '' || data.preference === '' || data.roomId === '') {
+        return true;
+      }
+    }
+    return false;
+  }
+  isButtonDisabled(key) {
+    const isValidProperty = (property, key, comparedBy) => {
+      if (!property) {
+        return true;
+      }
+      if (property === this.guestData) {
+        return this.isGuestDataIncomplete();
+      }
+      // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
+      // if (!this.showPaymentDetails && isCardDetails) {
+      //   return false;
+      // }
+      if (key === 'selectedArrivalTime') {
+        if (property[key] !== undefined) {
+          return property[key].code === '';
+        }
+        else {
+          return true;
+        }
+      }
+      return property[key] === comparedBy || property[key] === undefined;
+    };
+    return (this.isLoading === key ||
+      isValidProperty(this.guestData, 'guestName', '') ||
+      isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
+      isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
+      isValidProperty(this.bookedByInfoData, 'firstName', '') ||
+      isValidProperty(this.bookedByInfoData, 'lastName', '') ||
+      isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
+      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
+      isValidProperty(this.bookedByInfoData, 'email', ''));
   }
   setSourceOptions(bookingSource) {
     this.sourceOptions = bookingSource.map(source => ({
@@ -254,25 +298,34 @@ export class IglBookProperty {
     return (h(Fragment, null, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between" }, h("button", { class: "btn btn-secondary flex-fill", onClick: () => this.closeWindow() }, locales.entries.Lcz_Cancel), h("button", { class: "btn btn-primary flex-fill", onClick: () => this.handleBlockDate() }, locales.entries.Lcz_Blockdates))));
   }
   handleButtonClicked(event) {
-    event.stopImmediatePropagation();
-    event.stopPropagation();
     switch (event.detail.key) {
       case 'save':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.bookUser(false);
+        this.buttonName === 'save';
         break;
       case 'cancel':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.closeWindow();
         break;
       case 'back':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.gotoPage('page_one');
         break;
       case 'book':
         this.bookUser(false);
+        this.buttonName = 'book';
         break;
       case 'bookAndCheckIn':
         this.bookUser(true);
+        this.buttonName = 'bookAndCheckIn';
         break;
       case 'next':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.gotoPage('page_two');
       case 'check':
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
@@ -298,8 +351,11 @@ export class IglBookProperty {
     this.closeWindow();
   }
   async bookUser(check_in) {
-    console.log('object');
     this.setLoadingState(check_in);
+    if (this.isButtonDisabled(this.buttonName)) {
+      this.isLoading = '';
+      return;
+    }
     try {
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
@@ -512,7 +568,8 @@ export class IglBookProperty {
       "renderAgain": {},
       "defaultData": {},
       "isLoading": {},
-      "dateRangeData": {}
+      "dateRangeData": {},
+      "buttonName": {}
     };
   }
   static get events() {

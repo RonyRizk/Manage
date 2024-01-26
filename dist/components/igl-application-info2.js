@@ -20,6 +20,8 @@ const IglApplicationInfo = /*@__PURE__*/ proxyCustomElement(class IglApplication
     this.bookingType = 'PLUS_BOOKING';
     this.index = undefined;
     this.filterdRoomList = [];
+    this.isButtonPressed = false;
+    this.guestData = undefined;
   }
   componentWillLoad() {
     this.guestData = this.guestInfo ? Object.assign({}, this.guestInfo) : {};
@@ -55,9 +57,18 @@ const IglApplicationInfo = /*@__PURE__*/ proxyCustomElement(class IglApplication
     this.guestData.guestName = event.target.value;
     this.updateData();
   }
+  handleButtonClicked(event) {
+    switch (event.detail.key) {
+      case 'book':
+      case 'bookAndCheckIn':
+      case 'save':
+        this.isButtonPressed = true;
+        break;
+    }
+  }
   render() {
     //console.log(this.guestInfo, this.roomsList);
-    return (h(Host, null, h("div", { class: "text-left mt-1 " }, h("div", { class: " mb-1 " }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("span", { class: "h5 mr-1" }, this.guestInfo.roomCategoryName)) : null, h("span", { class: " font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), h("ir-tooltip", { class: " mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), h("span", null, this.guestInfo.adult_child_offering)), h("div", { class: "d-flex m-0 p-0 align-items-center aplicationInfoContainer " }, h("div", { class: "mr-1 flex-fill" }, h("input", { id: v4(), type: "email", class: "form-control", placeholder: locales.entries.Lcz_GuestFirstnameAndLastname, name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: "mr-1 p-0 flex-fill" }, h("select", { class: "form-control input-sm pr-0", id: v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, h("option", { value: "", selected: this.guestData.roomId === '' }, locales.entries.Lcz_Assignunits), this.filterdRoomList.map(room => (h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, h("div", { class: "mr-1 flex-fill" }, h("select", { class: "form-control input-sm", id: v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, h("option", { value: "", selected: this.guestData.preference === '' }, locales.entries.Lcz_NoPreference), this.bedPreferenceType.map(data => (h("option", { value: data.CODE_NAME, selected: this.guestData.preference === data.CODE_NAME }, data.CODE_VALUE_EN))))), h("div", { class: "" }, getCurrencySymbol(this.currency.code) + this.guestInfo.rate)))));
+    return (h(Host, null, h("div", { class: "text-left mt-1 " }, h("div", { class: " mb-1 " }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("span", { class: "h5 mr-1" }, this.guestInfo.roomCategoryName)) : null, h("span", { class: " font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), h("ir-tooltip", { class: " mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), h("span", null, this.guestInfo.adult_child_offering)), h("div", { class: "d-flex m-0 p-0 align-items-center aplicationInfoContainer " }, h("div", { class: "mr-1 flex-fill" }, h("input", { id: v4(), type: "email", class: `form-control ${this.isButtonPressed && this.guestData.guestName === '' && 'border-danger'}`, placeholder: locales.entries.Lcz_GuestFirstnameAndLastname, name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: "mr-1 p-0 flex-fill" }, h("select", { class: `form-control input-sm pr-0 ${this.isButtonPressed && this.guestData.roomId === '' && 'border-danger'}`, id: v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, h("option", { value: "", selected: this.guestData.roomId === '' }, locales.entries.Lcz_Assignunits), this.filterdRoomList.map(room => (h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, h("div", { class: "mr-1 flex-fill" }, h("select", { class: `form-control input-sm ${this.isButtonPressed && this.guestData.preference === '' && 'border-danger'}`, id: v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, h("option", { value: "", selected: this.guestData.preference === '' }, locales.entries.Lcz_NoPreference), this.bedPreferenceType.map(data => (h("option", { value: data.CODE_NAME, selected: this.guestData.preference === data.CODE_NAME }, data.CODE_VALUE_EN))))), h("div", { class: "" }, getCurrencySymbol(this.currency.code) + this.guestInfo.rate)))));
   }
   static get watchers() { return {
     "selectedUnits": ["handleSelctedUnits"]
@@ -72,8 +83,10 @@ const IglApplicationInfo = /*@__PURE__*/ proxyCustomElement(class IglApplication
     "selectedUnits": [16],
     "bookingType": [1, "booking-type"],
     "index": [2],
-    "filterdRoomList": [32]
-  }]);
+    "filterdRoomList": [32],
+    "isButtonPressed": [32],
+    "guestData": [32]
+  }, [[16, "buttonClicked", "handleButtonClicked"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;

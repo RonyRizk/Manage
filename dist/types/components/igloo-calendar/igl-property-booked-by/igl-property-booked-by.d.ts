@@ -1,5 +1,6 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 import { ICountry } from '../../../models/IBooking';
+import { TPropertyButtonsTypes } from "../../../components";
 export declare class IglPropertyBookedBy {
   language: string;
   showPaymentDetails: boolean;
@@ -11,6 +12,7 @@ export declare class IglPropertyBookedBy {
   }>;
   countryNodeList: ICountry[];
   propertyId: number;
+  isButtonPressed: boolean;
   private bookingService;
   private arrivalTimeList;
   private expiryMonths;
@@ -32,5 +34,9 @@ export declare class IglPropertyBookedBy {
   isValidEmail(emailId: any): boolean;
   handleComboboxChange(e: CustomEvent): void;
   clearEvent(): void;
+  handleButtonClicked(event: CustomEvent<{
+    key: TPropertyButtonsTypes;
+    data?: CustomEvent;
+  }>): void;
   render(): any;
 }

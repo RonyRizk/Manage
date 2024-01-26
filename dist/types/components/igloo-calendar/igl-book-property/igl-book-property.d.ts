@@ -51,6 +51,7 @@ export declare class IglBookProperty {
   }>;
   blockedCreated: EventEmitter<RoomBlockDetails>;
   resetBookingData: EventEmitter<null>;
+  buttonName: string;
   handleKeyDown(e: KeyboardEvent): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
@@ -61,6 +62,8 @@ export declare class IglBookProperty {
   }>): Promise<void>;
   componentWillLoad(): Promise<void>;
   fetchSetupEntries(): Promise<import("../../../models/IBooking").ISetupEntries>;
+  isGuestDataIncomplete(): boolean;
+  isButtonDisabled(key: string): boolean;
   setSourceOptions(bookingSource: any[]): void;
   setOtherProperties(res: any): void;
   handleAdultChildChange(event: CustomEvent): void;

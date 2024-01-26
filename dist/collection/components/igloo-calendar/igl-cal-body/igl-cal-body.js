@@ -238,7 +238,6 @@ export class IglCalBody {
     return (_a = this.getCategoryRooms(roomCategory)) === null || _a === void 0 ? void 0 : _a.map(room => (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`, "data-room": this.getRoomId(room) }, h("div", null, this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room))), this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory))));
   }
   getRoomRows() {
-    console.log(this.calendarData.roomsInfo);
     return this.calendarData.roomsInfo.map((roomCategory, index) => {
       if (roomCategory.is_active) {
         return [this.getRoomCategoryRow(roomCategory, index), this.getRoomsByCategory(roomCategory)];

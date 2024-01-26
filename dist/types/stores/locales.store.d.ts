@@ -135,6 +135,7 @@ export type LocalizationStrings = {
   Lcz_YourArrivalTime: string;
   Lcz_Rate: string;
   Lcz_YouWillLoseFutureUpdates: string;
+  Lcz_NoRatePlanDefined: string;
 };
 export declare const locales: ILocale, onCalendarDatesChange: import("@stencil/store/dist/types").OnChangeHandler<ILocale>;
 export default locales;

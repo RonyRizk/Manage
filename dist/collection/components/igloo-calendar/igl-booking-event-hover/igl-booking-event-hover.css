@@ -4502,7 +4502,7 @@ readers do not read off random characters that represent icons */
 }
 
 .iglPopOver {
-  max-width: 350px;
+  /* max-width: 350px; */
   background-color: #fff;
   padding: 10px;
   border: 1px solid #656ee7;
@@ -4523,7 +4523,9 @@ readers do not read off random characters that represent icons */
 }
 
 .iglPopOver.newBookingOptions {
-  width: 230px;
+  overflow-wrap: break-word !important;
+  min-width: 230px;
+  width: fit-content;
 }
 
 .bubblePointer {

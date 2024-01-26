@@ -10,6 +10,7 @@ import { ToBeAssignedService } from "../../services/toBeAssigned.service";
 import { calculateDaysBetweenDates, transformNewBLockedRooms, transformNewBooking } from "../../utils/booking";
 import calendar_dates from "../../../../src/stores/calendar-dates.store";
 import locales from "../../../../src/stores/locales.store";
+import calendar_data from "../../../../src/stores/calendar-data";
 export class IglooCalendar {
   constructor() {
     this.bookingService = new BookingService();
@@ -253,6 +254,7 @@ export class IglooCalendar {
         roomCategory.expanded = true;
       });
     }
+    calendar_data.roomsInfo = roomsData;
     this.calendarData.roomsInfo = roomsData;
   }
   getLegendData(aData) {
