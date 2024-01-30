@@ -4546,8 +4546,7 @@ readers do not read off random characters that represent icons */
 .legend_skewsplit {
   border-right: 2px solid #000000;
 }
-
-.blueColor {
+.headerCell .blueColor {
   background-color: #31bef1;
 }
 .greenColor {
@@ -4579,23 +4578,36 @@ readers do not read off random characters that represent icons */
 .legendCalendar .legendRow div {
   display: inline-block;
   vertical-align: middle;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
-
+.total-availability {
+  font-size: 1em !important;
+}
 .legendCalendar .legendCal {
   width: 80px;
   height: 25px;
   text-align: center;
   display: inline-grid !important;
   align-content: center;
-  font-size: 0.9em;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .legendCalendar .legendCal .badge {
   margin-top: 0.2rem;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .legendCalendar .legendCal.legendCal-h2 {
   height: 40px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .br-t {
@@ -4611,6 +4623,9 @@ readers do not read off random characters that represent icons */
 
 .highphenLegend {
   font-size: 0.9em;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .highphenLegend::before {
@@ -4622,4 +4637,41 @@ readers do not read off random characters that represent icons */
   display: inline-block;
   margin-left: 5px;
   margin-right: 5px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* .badge-pill {
+  padding: 4px 1.1em;
+  font-size: 0.9em;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+} */
+.badge-pill {
+  padding: 3px 1em;
+  font-size: 0.8em;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.headerCell {
+  width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dayTitle {
+  font-size: 0.8em;
+  font-weight: 600;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.dayCapacityPercent {
+  font-size: 0.75em;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }

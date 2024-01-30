@@ -180,6 +180,7 @@ export class IglBookingEvent {
     }
   }
   setModalDescription(toRoomId, from_date, to_date) {
+    var _a, _b;
     const findRoomType = (roomId) => {
       let roomType = this.bookingEvent.roomsInfo.filter(room => room.physicalrooms.some(r => r.id === +roomId));
       if (roomType.length) {
@@ -204,7 +205,7 @@ export class IglBookingEvent {
           }
           else {
             return {
-              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${locales.entries.Lcz_SameRatesWillBeKept}`,
+              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${(_b = (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.origin) === null || _b === void 0 ? void 0 : _b.Label}. ${locales.entries.Lcz_SameRatesWillBeKept}`,
               status: '200',
             };
           }

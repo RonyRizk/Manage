@@ -1,7 +1,7 @@
 import { Host, h } from "@stencil/core";
 export class IglBookingRooms {
   constructor() {
-    this.validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
+    this.validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING', 'SPLIT_BOOKING'];
     this.roomTypeData = undefined;
     this.defaultData = undefined;
     this.bookingType = 'PLUS_BOOKING';

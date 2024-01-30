@@ -9,7 +9,7 @@ const IglBookingRooms = /*@__PURE__*/ proxyCustomElement(class IglBookingRooms e
     super();
     this.__registerHost();
     this.dataUpdateEvent = createEvent(this, "dataUpdateEvent", 7);
-    this.validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
+    this.validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING', 'SPLIT_BOOKING'];
     this.roomTypeData = undefined;
     this.defaultData = undefined;
     this.bookingType = 'PLUS_BOOKING';

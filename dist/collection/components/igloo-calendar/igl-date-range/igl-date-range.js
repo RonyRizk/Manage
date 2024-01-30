@@ -65,9 +65,9 @@ export class IglDateRange {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("h5", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, this.dateLabel), h("div", { class: 'd-flex align-items-center mr-lg-1' }, h("div", { class: "iglRangePicker form-control input-sm", "data-state": this.disabled ? 'disabled' : 'active' }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
+    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("span", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, this.dateLabel, ":"), h("div", { class: 'd-flex align-items-center mr-lg-1' }, h("div", { class: "iglRangePicker form-control input-sm ", "data-state": this.disabled ? 'disabled' : 'active' }, h("ir-date-picker", { class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
-      } })), this.totalNights ? (h("span", { class: "iglRangeNights" }, this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`))) : ('')))));
+      } })), this.totalNights ? (h("span", { class: "iglRangeNights ml-1" }, "(", this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`), ")")) : ('')))));
   }
   static get is() { return "igl-date-range"; }
   static get encapsulation() { return "scoped"; }

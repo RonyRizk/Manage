@@ -4481,8 +4481,15 @@ readers do not read off random characters that represent icons */
 :host {
   display: block;
 }
-@media only screen and   (min-width: 908px) { 
-  .aplicationInfoContainer{
+@media only screen and (min-width: 908px) {
+  .aplicationInfoContainer {
     max-width: 80%;
+  }
+  .guest-info-container {
+    max-width: 300px;
+  }
+
+  .preference-select-container {
+    max-width: 250px;
   }
 }

@@ -4490,9 +4490,7 @@ readers do not read off random characters that represent icons */
 .bookedByEmailContainer {
   flex: auto;
   max-width: 350px;
- 
 }
-
 
 .bookedDetailsForm label {
   min-width: 125px;
@@ -4517,15 +4515,14 @@ readers do not read off random characters that represent icons */
   height: 60px; 
   width: 100%;
 } */
-.controlContainer textarea{
-height: 60px !important;
-
+.controlContainer textarea {
+  height: 60px !important;
 }
-.margin3{
+.margin3 {
   margin-bottom: 5px !important;
 }
 @media (min-width: 768px) {
-  .bookedByEmailContainer{
-    margin-left:37px ;
+  .bookedByEmailContainer {
+    margin-left: 37px;
   }
 }
