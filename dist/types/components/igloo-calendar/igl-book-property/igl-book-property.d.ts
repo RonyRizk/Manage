@@ -63,7 +63,7 @@ export declare class IglBookProperty {
   componentWillLoad(): Promise<void>;
   fetchSetupEntries(): Promise<import("../../../models/IBooking").ISetupEntries>;
   isGuestDataIncomplete(): boolean;
-  isButtonDisabled(key: string): boolean;
+  isButtonDisabled(): boolean;
   setSourceOptions(bookingSource: any[]): void;
   setOtherProperties(res: any): void;
   handleAdultChildChange(event: CustomEvent): void;

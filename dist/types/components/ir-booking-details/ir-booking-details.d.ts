@@ -3,11 +3,13 @@ import { guestInfo, selectOption } from '../../common/models';
 import { Booking, Guest } from '../../models/booking.dto';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { ILocale } from "../../stores/locales.store";
+import { IToast } from '../ir-toast/toast';
 export declare class IrBookingDetails {
   element: HTMLElement;
   bookingDetails: any;
   editBookingItem: any;
   setupDataCountries: selectOption[];
+  show_header: boolean;
   setupDataCountriesCode: selectOption[];
   languageAbreviation: string;
   language: string;
@@ -48,6 +50,7 @@ export declare class IrBookingDetails {
   handleRoomEdit: EventEmitter;
   handleRoomDelete: EventEmitter;
   handleAddPayment: EventEmitter;
+  toast: EventEmitter<IToast>;
   private bookingService;
   private roomService;
   componentDidLoad(): void;
@@ -56,16 +59,17 @@ export declare class IrBookingDetails {
   initializeApp(): Promise<void>;
   handleIconClick(e: any): void;
   handleEditSidebar(): void;
-  handleSelectChange(e: any): void;
-  handleClick(e: any): void;
+  handleSelectChange(e: CustomEvent<any>): void;
+  handleClick(e: any): Promise<void>;
   watchDropdownStatuses(newValue: any, oldValue: any): void;
   openEditSidebar(): void;
   _calculateNights(fromDate: string, toDate: string): number;
   _getBookingStatus(statusCode: string, tableName: string): any;
-  updateStatus(): void;
+  updateStatus(): Promise<void>;
   handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>): void;
   handleCloseBookingWindow(): void;
   handleDeleteFinish(e: CustomEvent): void;
+  resetBookingData(): Promise<void>;
   handleResetBookingData(e: CustomEvent): Promise<void>;
   render(): any[];
 }

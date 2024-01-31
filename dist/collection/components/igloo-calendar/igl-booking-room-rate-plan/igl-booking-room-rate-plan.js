@@ -114,10 +114,12 @@ export class IglBookingRoomRatePlan {
   }
   handleInput(event) {
     const inputElement = event.target;
-    let inputValue = inputElement.value.replace(/[^0-9]/g, '');
-    if (inputValue !== inputElement.value) {
-      inputElement.value = inputValue;
+    let inputValue = inputElement.value.replace(/[^0-9.]/g, '');
+    const validDecimalNumber = /^\d*\.?\d*$/;
+    if (!validDecimalNumber.test(inputValue)) {
+      inputValue = inputValue.substring(0, inputValue.length - 1);
     }
+    inputElement.value = inputValue;
     if (inputValue) {
       this.selectedData.isRateModified = true;
       this.handleDataChange('rate', event);
@@ -157,7 +159,7 @@ export class IglBookingRoomRatePlan {
     }
   }
   updateRate(value) {
-    const numericValue = value === '' ? 0 : parseInt(value);
+    const numericValue = value === '' ? 0 : Number(value);
     this.selectedData = Object.assign(Object.assign({}, this.selectedData), { rate: numericValue, totalRooms: value === '' ? 0 : this.selectedData.totalRooms, defaultSelectedRate: this.selectedData.rateType === 1 ? numericValue / this.dateDifference : numericValue });
   }
   updateGenericData(key, value) {
@@ -172,7 +174,7 @@ export class IglBookingRoomRatePlan {
     if (this.selectedData.isRateModified) {
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
-    return this.selectedData.rateType === 1 ? this.selectedData.rate : this.initialRateValue;
+    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
   }
   render() {
     return (h(Host, null, h("div", { class: "d-flex flex-column m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between " }, h("div", { class: "rateplan-name-container" }, this.bookingType === 'BAR_BOOKING' ? (h(Fragment, null, h("span", { class: "font-weight-bold\t" }, this.ratePlanData.name.split('/')[0]), h("span", null, "/", this.ratePlanData.name.split('/')[1]))) : (h("span", null, this.ratePlanData.name)), h("ir-tooltip", { message: this.ratePlanData.cancelation + this.ratePlanData.guarantee })), h("div", { class: 'd-md-flex justify-content-md-end  align-items-md-center  flex-fill rateplan-container' }, h("div", { class: "mt-1 mt-lg-0 flex-fill max-w-300" }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.disableForm(), class: "form-control  input-sm", id: v4(), onChange: evt => this.handleDataChange('adult_child_offering', evt) }, this.ratePlanData.variations.map(variation => (h("option", { value: variation.adult_child_offering, selected: this.selectedData.adult_child_offering === variation.adult_child_offering }, variation.adult_child_offering)))))), h("div", { class: 'm-0 p-0 d-md-flex justify-content-between ml-md-1 ' }, h("div", { class: " d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   " }, h("fieldset", { class: "position-relative has-icon-left m-0 p-0 rate-input-container  " }, h("input", { disabled: this.disableForm(), type: "text", class: "form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder", value: this.renderRate(), id: v4(), placeholder: locales.entries.Lcz_Rate || 'Rate', onInput: (event) => this.handleInput(event) }), h("span", { class: "currency" }, getCurrencySymbol(this.currency.code))), h("fieldset", { class: "position-relative m-0 total-nights-container p-0 " }, h("select", { disabled: this.disableForm(), class: "form-control input-sm m-0 nightBorder rounded-0  py-0", id: v4(), onChange: evt => this.handleDataChange('rateType', evt) }, this.ratePricingMode.map(data => (h("option", { value: data.CODE_NAME, selected: this.selectedData.rateType === +data.CODE_NAME }, data.CODE_VALUE_EN)))))), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (h("div", { class: "flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0" }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.selectedData.rate === 0 || this.disableForm(), class: "form-control input-sm", id: v4(), onChange: evt => this.handleDataChange('totalRooms', evt) }, Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (h("option", { value: i, selected: this.selectedData.totalRooms === i }, i))))))) : null), this.bookingType === 'EDIT_BOOKING' ? (h(Fragment, null, h("div", { class: " m-0 p-0  mt-lg-0  ml-md-1 mt-md-1 d-none d-md-block" }, h("fieldset", { class: "position-relative" }, h("input", { disabled: this.disableForm(), type: "radio", name: "ratePlanGroup", value: "1", onChange: evt => this.handleDataChange('totalRooms', evt), checked: this.selectedData.totalRooms === 1 }))), h("button", { disabled: this.selectedData.rate === -1 || this.disableForm(), type: "button", class: "btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none ", onClick: () => this.bookProperty() }, this.selectedData.totalRooms === 1 ? locales.entries.Lcz_Current : locales.entries.Lcz_Select))) : null, this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (h("button", { disabled: this.selectedData.rate === -1 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled), type: "button", class: "btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 ", onClick: () => this.bookProperty() }, locales.entries.Lcz_Book)) : null))));

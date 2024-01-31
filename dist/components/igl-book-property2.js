@@ -326,7 +326,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     return await this.bookingService.fetchSetupEntries();
   }
   isGuestDataIncomplete() {
-    if (this.guestData.length !== this.guestData.length) {
+    if (this.guestData.length === 0) {
       return true;
     }
     for (const data of this.guestData) {
@@ -336,7 +336,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     }
     return false;
   }
-  isButtonDisabled(key) {
+  isButtonDisabled() {
     const isValidProperty = (property, key, comparedBy) => {
       if (!property) {
         return true;
@@ -358,8 +358,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
       }
       return property[key] === comparedBy || property[key] === undefined;
     };
-    return (this.isLoading === key ||
-      isValidProperty(this.guestData, 'guestName', '') ||
+    return (isValidProperty(this.guestData, 'guestName', '') ||
       isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
       isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
       isValidProperty(this.bookedByInfoData, 'firstName', '') ||
@@ -500,8 +499,6 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
   handleButtonClicked(event) {
     switch (event.detail.key) {
       case 'save':
-        event.stopImmediatePropagation();
-        event.stopPropagation();
         this.bookUser(false);
         break;
       case 'cancel':
@@ -549,9 +546,17 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
   }
   async bookUser(check_in) {
     this.setLoadingState(check_in);
-    if (this.isButtonDisabled(this.buttonName)) {
-      this.isLoading = '';
-      return;
+    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
+      if (this.isGuestDataIncomplete()) {
+        this.isLoading = '';
+        return;
+      }
+    }
+    else {
+      if (this.isButtonDisabled()) {
+        this.isLoading = '';
+        return;
+      }
     }
     try {
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {

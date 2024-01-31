@@ -40,7 +40,6 @@ export class IglPropertyBookedBy {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
-    console.log('default data', this.defaultData);
   }
   initializeExpiryYears() {
     const currentYear = new Date().getFullYear();
@@ -62,7 +61,6 @@ export class IglPropertyBookedBy {
     this.bookedByData = this.defaultData ? Object.assign(Object.assign({}, this.bookedByData), this.defaultData) : {};
     this.arrivalTimeList = ((_a = this.defaultData) === null || _a === void 0 ? void 0 : _a.arrivalTime) || [];
     this.bookedByData = Object.assign(Object.assign({}, this.bookedByData), { selectedArrivalTime: { code: this.arrivalTimeList[0].CODE_NAME, description: this.arrivalTimeList[0].CODE_VALUE_EN } });
-    console.log(this.bookedByData);
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
     }
@@ -138,7 +136,6 @@ export class IglPropertyBookedBy {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { key, data } = e.detail;
-    console.log(key, data);
     switch (key) {
       case 'blur':
         if (data !== '') {

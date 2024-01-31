@@ -29,12 +29,26 @@ function transformNewBooking(data) {
     const now = hooks();
     const toDate = hooks(room.to_date, 'YYYY-MM-DD');
     const fromDate = hooks(room.from_date, 'YYYY-MM-DD');
-    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+      return bookingStatus['000'];
+    }
+    else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+      return bookingStatus['000'];
+    }
+    else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+      return bookingStatus['000'];
+    }
+    else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
       return bookingStatus['003'];
     }
     else {
-      return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : (data === null || data === void 0 ? void 0 : data.status.code) || '001'];
+      return bookingStatus[(data === null || data === void 0 ? void 0 : data.status.code) || '001'];
     }
+    // if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    //   return bookingStatus['003'];
+    // } else {
+    //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
+    // }
   };
   data.rooms.forEach(room => {
     var _a, _b;

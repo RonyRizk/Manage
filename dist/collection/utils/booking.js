@@ -28,7 +28,7 @@ const status = {
   '003': 'BLOCKED-WITH-DATES',
   '002': 'BLOCKED',
 };
-const bookingStatus = {
+export const bookingStatus = {
   '000': 'IN-HOUSE',
   '001': 'PENDING-CONFIRMATION',
   '002': 'CONFIRMED',
@@ -103,7 +103,7 @@ function getDefaultData(cell, stayStatus) {
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
-    STATUS: bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : (_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code],
+    STATUS: bookingStatus[(_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
@@ -138,50 +138,9 @@ function getDefaultData(cell, stayStatus) {
     // SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
-// function updateBookingWithStayData(data: any, cell: CellType): any {
-//   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
-//   data.TO_DATE = cell.DATE;
-//   if (!isBlockUnit(cell.STAY_STATUS_CODE)) {
-//     const now = moment();
-//     const toDate = moment(data.TO_DATE, 'YYYY-MM-DD');
-//     if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
-//       data.STATUS = bookingStatus['003'];
-//     } else if (data.STATUS !== '000') {
-//       data.STATUS = bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : cell.booking?.status.code];
-//     }
-//   }
-//   if (cell.booking) {
-//     const { arrival } = cell.booking;
-//     Object.assign(data, {
-//       ARRIVAL_TIME: arrival.description,
-//     });
-//   }
-//   return data;
-// }
 function updateBookingWithStayData(data, cell) {
-  var _a, _b;
   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
   data.TO_DATE = cell.DATE;
-  if (data.status !== '000') {
-    if (!isBlockUnit(cell.STAY_STATUS_CODE)) {
-      const now = moment();
-      const toDate = moment(data.TO_DATE, 'YYYY-MM-DD');
-      if (toDate.isSame(now, 'day')) {
-        if (now.hour() >= 12) {
-          data.STATUS = '000';
-        }
-        else {
-          data.STATUS = data.STATUS === '000' ? '000' : bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(now) ? '000' : (_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code];
-        }
-      }
-      else if (toDate.isBefore(now, 'day')) {
-        data.STATUS = bookingStatus['003'];
-      }
-      else {
-        data.STATUS = bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(now) ? '000' : (_b = cell.booking) === null || _b === void 0 ? void 0 : _b.status.code];
-      }
-    }
-  }
   if (cell.booking) {
     const { arrival } = cell.booking;
     Object.assign(data, {
@@ -208,12 +167,26 @@ export function transformNewBooking(data) {
     const now = moment();
     const toDate = moment(room.to_date, 'YYYY-MM-DD');
     const fromDate = moment(room.from_date, 'YYYY-MM-DD');
-    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+      return bookingStatus['000'];
+    }
+    else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+      return bookingStatus['000'];
+    }
+    else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+      return bookingStatus['000'];
+    }
+    else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
       return bookingStatus['003'];
     }
     else {
-      return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : (data === null || data === void 0 ? void 0 : data.status.code) || '001'];
+      return bookingStatus[(data === null || data === void 0 ? void 0 : data.status.code) || '001'];
     }
+    // if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    //   return bookingStatus['003'];
+    // } else {
+    //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
+    // }
   };
   data.rooms.forEach(room => {
     var _a, _b;

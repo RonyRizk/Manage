@@ -6047,7 +6047,7 @@ const IglApplicationInfo = class {
   }
   render() {
     //console.log(this.guestInfo, this.roomsList);
-    return (h(Host, null, h("div", { class: "text-left mt-1 " }, h("div", { class: " mb-1 " }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("span", { class: "h5 mr-1" }, this.guestInfo.roomCategoryName)) : null, h("span", { class: " font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), h("ir-tooltip", { class: " mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), h("span", null, this.guestInfo.adult_child_offering)), h("div", { class: "d-flex flex-column flex-md-row m-0 p-0 align-items-md-center aplicationInfoContainer " }, h("div", { class: "mr-1 flex-fill guest-info-container" }, h("input", { id: v4(), type: "email", class: `form-control ${this.isButtonPressed && this.guestData.guestName === '' && 'border-danger'}`, placeholder: locales.entries.Lcz_GuestFirstnameAndLastname, name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), h("div", { class: 'mt-1 mt-md-0 d-flex align-items-center flex-fill' }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: "mr-1 p-0 flex-fill  preference-select-container" }, h("select", { class: `form-control  input-sm pr-0 ${this.isButtonPressed && this.guestData.roomId === '' && 'border-danger'}`, id: v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, h("option", { value: "", selected: this.guestData.roomId === '' }, locales.entries.Lcz_Assignunits), this.filterdRoomList.map(room => (h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, h("div", { class: "mr-1 flex-fill" }, h("select", { class: `form-control input-sm ${this.isButtonPressed && this.guestData.preference === '' && 'border-danger'}`, id: v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, h("option", { value: "", selected: this.guestData.preference === '' }, locales.entries.Lcz_BedConfiguration), this.bedPreferenceType.map(data => (h("option", { value: data.CODE_NAME, selected: this.guestData.preference === data.CODE_NAME }, data.CODE_VALUE_EN))))), h("div", { class: "" }, getCurrencySymbol(this.currency.code) + this.guestInfo.rate, "/", locales.entries.Lcz_Stay))))));
+    return (h(Host, null, h("div", { class: "text-left mt-1 " }, h("div", { class: " mb-1 " }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("span", { class: "h5 mr-1" }, this.guestInfo.roomCategoryName)) : null, h("span", { class: " font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), h("ir-tooltip", { class: " mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), h("span", null, this.guestInfo.adult_child_offering)), h("div", { class: "d-flex flex-column flex-md-row m-0 p-0 align-items-md-center aplicationInfoContainer " }, h("div", { class: "mr-1 flex-fill guest-info-container" }, h("input", { id: v4(), type: "email", class: `form-control ${this.isButtonPressed && this.guestData.guestName === '' && 'border-danger'}`, placeholder: locales.entries.Lcz_GuestFirstnameAndLastname, name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), h("div", { class: 'mt-1 mt-md-0 d-flex align-items-center flex-fill' }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (h("div", { class: "mr-1 p-0 flex-fill  preference-select-container" }, h("select", { class: `form-control  input-sm pr-0 ${this.isButtonPressed && this.guestData.roomId === '' && 'border-danger'}`, id: v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, h("option", { value: "", selected: this.guestData.roomId === '' }, locales.entries.Lcz_Assignunits), this.filterdRoomList.map(room => (h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, h("div", { class: "mr-1 flex-fill" }, h("select", { class: `form-control input-sm ${this.isButtonPressed && this.guestData.preference === '' && 'border-danger'}`, id: v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, h("option", { value: "", selected: this.guestData.preference === '' }, locales.entries.Lcz_BedConfiguration, "..."), this.bedPreferenceType.map(data => (h("option", { value: data.CODE_NAME, selected: this.guestData.preference === data.CODE_NAME }, data.CODE_VALUE_EN))))), h("div", { class: "" }, getCurrencySymbol(this.currency.code) + this.guestInfo.rate, "/", locales.entries.Lcz_Stay))))));
   }
   static get watchers() { return {
     "selectedUnits": ["handleSelctedUnits"]
@@ -9372,7 +9372,7 @@ function getDefaultData(cell, stayStatus) {
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
-    STATUS: bookingStatus$1[hooks(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(hooks()) ? '000' : (_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code],
+    STATUS: bookingStatus$1[(_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code],
     NAME: formatName$1(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
@@ -9407,50 +9407,9 @@ function getDefaultData(cell, stayStatus) {
     // SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
-// function updateBookingWithStayData(data: any, cell: CellType): any {
-//   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
-//   data.TO_DATE = cell.DATE;
-//   if (!isBlockUnit(cell.STAY_STATUS_CODE)) {
-//     const now = moment();
-//     const toDate = moment(data.TO_DATE, 'YYYY-MM-DD');
-//     if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
-//       data.STATUS = bookingStatus['003'];
-//     } else if (data.STATUS !== '000') {
-//       data.STATUS = bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : cell.booking?.status.code];
-//     }
-//   }
-//   if (cell.booking) {
-//     const { arrival } = cell.booking;
-//     Object.assign(data, {
-//       ARRIVAL_TIME: arrival.description,
-//     });
-//   }
-//   return data;
-// }
 function updateBookingWithStayData(data, cell) {
-  var _a, _b;
   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
   data.TO_DATE = cell.DATE;
-  if (data.status !== '000') {
-    if (!isBlockUnit$1(cell.STAY_STATUS_CODE)) {
-      const now = hooks();
-      const toDate = hooks(data.TO_DATE, 'YYYY-MM-DD');
-      if (toDate.isSame(now, 'day')) {
-        if (now.hour() >= 12) {
-          data.STATUS = '000';
-        }
-        else {
-          data.STATUS = data.STATUS === '000' ? '000' : bookingStatus$1[hooks(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(now) ? '000' : (_a = cell.booking) === null || _a === void 0 ? void 0 : _a.status.code];
-        }
-      }
-      else if (toDate.isBefore(now, 'day')) {
-        data.STATUS = bookingStatus$1['003'];
-      }
-      else {
-        data.STATUS = bookingStatus$1[hooks(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(now) ? '000' : (_b = cell.booking) === null || _b === void 0 ? void 0 : _b.status.code];
-      }
-    }
-  }
   if (cell.booking) {
     const { arrival } = cell.booking;
     Object.assign(data, {
@@ -9477,12 +9436,26 @@ function transformNewBooking$1(data) {
     const now = hooks();
     const toDate = hooks(room.to_date, 'YYYY-MM-DD');
     const fromDate = hooks(room.from_date, 'YYYY-MM-DD');
-    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+      return bookingStatus$1['000'];
+    }
+    else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+      return bookingStatus$1['000'];
+    }
+    else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+      return bookingStatus$1['000'];
+    }
+    else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
       return bookingStatus$1['003'];
     }
     else {
-      return bookingStatus$1[fromDate.isSameOrBefore(now, 'day') ? '000' : (data === null || data === void 0 ? void 0 : data.status.code) || '001'];
+      return bookingStatus$1[(data === null || data === void 0 ? void 0 : data.status.code) || '001'];
     }
+    // if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    //   return bookingStatus['003'];
+    // } else {
+    //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
+    // }
   };
   data.rooms.forEach(room => {
     var _a, _b;
@@ -10469,7 +10442,7 @@ const IglBookProperty = class {
     return await this.bookingService.fetchSetupEntries();
   }
   isGuestDataIncomplete() {
-    if (this.guestData.length !== this.guestData.length) {
+    if (this.guestData.length === 0) {
       return true;
     }
     for (const data of this.guestData) {
@@ -10479,7 +10452,7 @@ const IglBookProperty = class {
     }
     return false;
   }
-  isButtonDisabled(key) {
+  isButtonDisabled() {
     const isValidProperty = (property, key, comparedBy) => {
       if (!property) {
         return true;
@@ -10501,8 +10474,7 @@ const IglBookProperty = class {
       }
       return property[key] === comparedBy || property[key] === undefined;
     };
-    return (this.isLoading === key ||
-      isValidProperty(this.guestData, 'guestName', '') ||
+    return (isValidProperty(this.guestData, 'guestName', '') ||
       isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
       isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
       isValidProperty(this.bookedByInfoData, 'firstName', '') ||
@@ -10643,8 +10615,6 @@ const IglBookProperty = class {
   handleButtonClicked(event) {
     switch (event.detail.key) {
       case 'save':
-        event.stopImmediatePropagation();
-        event.stopPropagation();
         this.bookUser(false);
         break;
       case 'cancel':
@@ -10692,9 +10662,17 @@ const IglBookProperty = class {
   }
   async bookUser(check_in) {
     this.setLoadingState(check_in);
-    if (this.isButtonDisabled(this.buttonName)) {
-      this.isLoading = '';
-      return;
+    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
+      if (this.isGuestDataIncomplete()) {
+        this.isLoading = '';
+        return;
+      }
+    }
+    else {
+      if (this.isButtonDisabled()) {
+        this.isLoading = '';
+        return;
+      }
     }
     try {
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
@@ -10856,7 +10834,6 @@ const IglBookPropertyHeader = class {
     return `${locales.entries.Lcz_ChildCaption} < ${this.adultChildConstraints.child_max_age} ${years}`;
   }
   handleButtonClicked() {
-    console.log(this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1);
     if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length <= 1) {
       this.toast.emit({
         type: 'error',
@@ -11353,12 +11330,26 @@ function transformNewBooking(data) {
     const now = hooks();
     const toDate = hooks(room.to_date, 'YYYY-MM-DD');
     const fromDate = hooks(room.from_date, 'YYYY-MM-DD');
-    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+      return bookingStatus['000'];
+    }
+    else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+      return bookingStatus['000'];
+    }
+    else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+      return bookingStatus['000'];
+    }
+    else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
       return bookingStatus['003'];
     }
     else {
-      return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : (data === null || data === void 0 ? void 0 : data.status.code) || '001'];
+      return bookingStatus[(data === null || data === void 0 ? void 0 : data.status.code) || '001'];
     }
+    // if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    //   return bookingStatus['003'];
+    // } else {
+    //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
+    // }
   };
   data.rooms.forEach(room => {
     var _a, _b;
@@ -12498,10 +12489,12 @@ const IglBookingRoomRatePlan = class {
   }
   handleInput(event) {
     const inputElement = event.target;
-    let inputValue = inputElement.value.replace(/[^0-9]/g, '');
-    if (inputValue !== inputElement.value) {
-      inputElement.value = inputValue;
+    let inputValue = inputElement.value.replace(/[^0-9.]/g, '');
+    const validDecimalNumber = /^\d*\.?\d*$/;
+    if (!validDecimalNumber.test(inputValue)) {
+      inputValue = inputValue.substring(0, inputValue.length - 1);
     }
+    inputElement.value = inputValue;
     if (inputValue) {
       this.selectedData.isRateModified = true;
       this.handleDataChange('rate', event);
@@ -12541,7 +12534,7 @@ const IglBookingRoomRatePlan = class {
     }
   }
   updateRate(value) {
-    const numericValue = value === '' ? 0 : parseInt(value);
+    const numericValue = value === '' ? 0 : Number(value);
     this.selectedData = Object.assign(Object.assign({}, this.selectedData), { rate: numericValue, totalRooms: value === '' ? 0 : this.selectedData.totalRooms, defaultSelectedRate: this.selectedData.rateType === 1 ? numericValue / this.dateDifference : numericValue });
   }
   updateGenericData(key, value) {
@@ -12556,7 +12549,7 @@ const IglBookingRoomRatePlan = class {
     if (this.selectedData.isRateModified) {
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
-    return this.selectedData.rateType === 1 ? this.selectedData.rate : this.initialRateValue;
+    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
   }
   render() {
     return (h(Host, null, h("div", { class: "d-flex flex-column m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between " }, h("div", { class: "rateplan-name-container" }, this.bookingType === 'BAR_BOOKING' ? (h(Fragment, null, h("span", { class: "font-weight-bold\t" }, this.ratePlanData.name.split('/')[0]), h("span", null, "/", this.ratePlanData.name.split('/')[1]))) : (h("span", null, this.ratePlanData.name)), h("ir-tooltip", { message: this.ratePlanData.cancelation + this.ratePlanData.guarantee })), h("div", { class: 'd-md-flex justify-content-md-end  align-items-md-center  flex-fill rateplan-container' }, h("div", { class: "mt-1 mt-lg-0 flex-fill max-w-300" }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.disableForm(), class: "form-control  input-sm", id: v4(), onChange: evt => this.handleDataChange('adult_child_offering', evt) }, this.ratePlanData.variations.map(variation => (h("option", { value: variation.adult_child_offering, selected: this.selectedData.adult_child_offering === variation.adult_child_offering }, variation.adult_child_offering)))))), h("div", { class: 'm-0 p-0 d-md-flex justify-content-between ml-md-1 ' }, h("div", { class: " d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   " }, h("fieldset", { class: "position-relative has-icon-left m-0 p-0 rate-input-container  " }, h("input", { disabled: this.disableForm(), type: "text", class: "form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder", value: this.renderRate(), id: v4(), placeholder: locales.entries.Lcz_Rate || 'Rate', onInput: (event) => this.handleInput(event) }), h("span", { class: "currency" }, getCurrencySymbol(this.currency.code))), h("fieldset", { class: "position-relative m-0 total-nights-container p-0 " }, h("select", { disabled: this.disableForm(), class: "form-control input-sm m-0 nightBorder rounded-0  py-0", id: v4(), onChange: evt => this.handleDataChange('rateType', evt) }, this.ratePricingMode.map(data => (h("option", { value: data.CODE_NAME, selected: this.selectedData.rateType === +data.CODE_NAME }, data.CODE_VALUE_EN)))))), this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (h("div", { class: "flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0" }, h("fieldset", { class: "position-relative" }, h("select", { disabled: this.selectedData.rate === 0 || this.disableForm(), class: "form-control input-sm", id: v4(), onChange: evt => this.handleDataChange('totalRooms', evt) }, Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (h("option", { value: i, selected: this.selectedData.totalRooms === i }, i))))))) : null), this.bookingType === 'EDIT_BOOKING' ? (h(Fragment, null, h("div", { class: " m-0 p-0  mt-lg-0  ml-md-1 mt-md-1 d-none d-md-block" }, h("fieldset", { class: "position-relative" }, h("input", { disabled: this.disableForm(), type: "radio", name: "ratePlanGroup", value: "1", onChange: evt => this.handleDataChange('totalRooms', evt), checked: this.selectedData.totalRooms === 1 }))), h("button", { disabled: this.selectedData.rate === -1 || this.disableForm(), type: "button", class: "btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none ", onClick: () => this.bookProperty() }, this.selectedData.totalRooms === 1 ? locales.entries.Lcz_Current : locales.entries.Lcz_Select))) : null, this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (h("button", { disabled: this.selectedData.rate === -1 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled), type: "button", class: "btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 ", onClick: () => this.bookProperty() }, locales.entries.Lcz_Book)) : null))));
@@ -13523,10 +13516,10 @@ const IglPagetwo = class {
       //   key: "propertyBookedBy",
       //   value: event.detail,
       // })
-      this.handleEventData(event, 'propertyBookedBy', 0) })), this.isEditOrAddRoomEvent ? (h("div", { class: "d-flex p-0 mb-1 mt-2" }, h("div", { class: "flex-fill mr-2" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'cancel' }) }, locales.entries.Lcz_Cancel)), h("div", { class: "flex-fill" }, h("button", { disabled: this.isLoading === 'save' || this.isGuestDataIncomplete(), type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'save' }) }, this.isLoading === 'save' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), locales.entries.Lcz_Save)))) : (h("div", { class: "d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center" }, h("div", { class: "flex-fill mr-md-1" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'back' }) }, h("span", { class: 'd-none d-md-inline-flex' }, " <<"), " ", locales.entries.Lcz_Back)), h("div", { class: "mt-1 mt-md-0 flex-fill" }, h("button", {
-      //disabled={this.isButtonDisabled('book')}
-      type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'book' })
-    }, this.isLoading === 'book' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), locales.entries.Lcz_Book))))));
+      this.handleEventData(event, 'propertyBookedBy', 0) })), this.isEditOrAddRoomEvent ? (h("div", { class: "d-flex p-0 mb-1 mt-2" }, h("div", { class: "flex-fill mr-2" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'cancel' }) }, locales.entries.Lcz_Cancel)), h("div", { class: "flex-fill" }, h("button", { disabled: this.isLoading === 'save', type: "button", class: "btn btn-primary full-width", onClick: () => {
+        console.log('save button clicked');
+        this.buttonClicked.emit({ key: 'save' });
+      } }, this.isLoading === 'save' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), locales.entries.Lcz_Save)))) : (h("div", { class: "d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center" }, h("div", { class: "flex-fill mr-md-1" }, h("button", { type: "button", class: "btn btn-secondary full-width", onClick: () => this.buttonClicked.emit({ key: 'back' }) }, h("span", { class: 'd-none d-md-inline-flex' }, " <<"), " ", locales.entries.Lcz_Back)), h("div", { class: "mt-1 mt-md-0 flex-fill" }, h("button", { disabled: this.isLoading === 'book', type: "button", class: "btn btn-primary full-width", onClick: () => this.buttonClicked.emit({ key: 'book' }) }, this.isLoading === 'book' && h("i", { class: "la la-circle-o-notch spinner mx-1" }), locales.entries.Lcz_Book))))));
   }
 };
 IglPagetwo.style = iglPagetwoCss;
@@ -13573,7 +13566,6 @@ const IglPropertyBookedBy = class {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
-    console.log('default data', this.defaultData);
   }
   initializeExpiryYears() {
     const currentYear = new Date().getFullYear();
@@ -13595,7 +13587,6 @@ const IglPropertyBookedBy = class {
     this.bookedByData = this.defaultData ? Object.assign(Object.assign({}, this.bookedByData), this.defaultData) : {};
     this.arrivalTimeList = ((_a = this.defaultData) === null || _a === void 0 ? void 0 : _a.arrivalTime) || [];
     this.bookedByData = Object.assign(Object.assign({}, this.bookedByData), { selectedArrivalTime: { code: this.arrivalTimeList[0].CODE_NAME, description: this.arrivalTimeList[0].CODE_VALUE_EN } });
-    console.log(this.bookedByData);
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
     }
@@ -13671,7 +13662,6 @@ const IglPropertyBookedBy = class {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { key, data } = e.detail;
-    console.log(key, data);
     switch (key) {
       case 'blur':
         if (data !== '') {
@@ -14145,6 +14135,8 @@ class RoomService {
           throw new Error(data.ExceptionMsg);
         }
         let entries = this.transformArrayToObject(data.My_Result.entries);
+        locales.entries = entries;
+        locales.direction = data.My_Result.direction;
         return { entries, direction: data.My_Result.direction };
       }
     }
@@ -18119,14 +18111,12 @@ const IglooCalendar = class {
   }
   async initializeApp() {
     try {
-      const [defaultLocales, roomResp, bookingResp, countryNodeList] = await Promise.all([
+      const [_, roomResp, bookingResp, countryNodeList] = await Promise.all([
         this.roomService.fetchLanguage(this.language),
         this.roomService.fetchData(this.propertyid, this.language),
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
         this.bookingService.getCountries(this.language),
       ]);
-      locales.entries = defaultLocales.entries;
-      locales.direction = defaultLocales.direction;
       calendar_dates.days = bookingResp.days;
       calendar_dates.months = bookingResp.months;
       this.setRoomsData(roomResp);
@@ -18217,6 +18207,16 @@ const IglooCalendar = class {
               }, 1000);
               console.log(result);
             }
+            else if (REASON === 'NO_DUE_AMOUNT') {
+              this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: [
+                  ...this.calendarData.bookingEvents.map(event => {
+                    if (result.pools.includes(event.ID)) {
+                      return Object.assign(Object.assign({}, event), { BALANCE: 0 });
+                    }
+                    return event;
+                  }),
+                ] });
+            }
             else {
               return;
             }
@@ -18276,6 +18276,23 @@ const IglooCalendar = class {
       bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
       bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
+      if (!isBlockUnit$1(bookingEvent.STAY_STATUS_CODE)) {
+        const now = hooks();
+        const toDate = hooks(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+        const fromDate = hooks(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+        if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+          bookingEvent.STATUS = bookingStatus$1['000'];
+        }
+        else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+          bookingEvent.STATUS = bookingStatus$1['000'];
+        }
+        else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+          bookingEvent.STATUS = bookingStatus$1['000'];
+        }
+        else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+          bookingEvent.STATUS = bookingStatus$1['003'];
+        }
+      }
     });
   }
   setRoomsData(roomServiceResp) {
@@ -18685,7 +18702,7 @@ const IglooCalendar = class {
       this.showToBeAssigned ? (h("igl-to-be-assigned", { unassignedDatesProp: this.unassignedDates, to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       this.showLegend ? (h("igl-legends", { class: "legendContainer", legendData: this.calendarData.legendData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, h("div", { id: "calendarContainer" }, h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }), h("igl-cal-body", { language: this.language, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), h("igl-cal-footer", { today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
-    ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, adultChildConstraints: this.calendarData.adultChildConstraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() })), h("ir-sidebar", { onIrSidebarToggle: this.handleSideBarToggle.bind(this), open: this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING'), showCloseButton: this.editBookingItem !== null, sidebarStyles: { width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: this.roomNightsData ? 'white' : '#F2F3F8' } }, this.roomNightsData && (h("ir-room-nights", { pool: this.roomNightsData.pool, onCloseRoomNightsDialog: this.handleRoomNightsDialogClose.bind(this), language: this.language, bookingNumber: this.roomNightsData.bookingNumber, identifier: this.roomNightsData.identifier, toDate: this.roomNightsData.to_date, fromDate: this.roomNightsData.from_date, ticket: this.ticket, propertyId: this.propertyid })), this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (h("ir-booking-details", { propertyid: this.propertyid, hasRoomEdit: true, hasRoomDelete: true, bookingNumber: this.editBookingItem.BOOKING_NUMBER, ticket: this.ticket, baseurl: this.baseurl, language: this.language }))), h("ir-modal", { modalTitle: '', rightBtnActive: this.dialogData ? !this.dialogData.hideConfirmButton : true, leftBtnText: (_a = locales === null || locales === void 0 ? void 0 : locales.entries) === null || _a === void 0 ? void 0 : _a.Lcz_Cancel, rightBtnText: (_b = locales === null || locales === void 0 ? void 0 : locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_Confirm, modalBody: this.dialogData ? this.dialogData.description : '', onConfirmModal: this.handleModalConfirm.bind(this), onCancelModal: this.handleModalCancel.bind(this) })));
+    ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, adultChildConstraints: this.calendarData.adultChildConstraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() })), h("ir-sidebar", { onIrSidebarToggle: this.handleSideBarToggle.bind(this), open: this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING'), showCloseButton: this.editBookingItem !== null, sidebarStyles: { width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: this.roomNightsData ? 'white' : '#F2F3F8' } }, this.roomNightsData && (h("ir-room-nights", { pool: this.roomNightsData.pool, onCloseRoomNightsDialog: this.handleRoomNightsDialogClose.bind(this), language: this.language, bookingNumber: this.roomNightsData.bookingNumber, identifier: this.roomNightsData.identifier, toDate: this.roomNightsData.to_date, fromDate: this.roomNightsData.from_date, ticket: this.ticket, propertyId: this.propertyid })), this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (h("ir-booking-details", { hasPrint: true, hasReceipt: true, propertyid: this.propertyid, hasRoomEdit: true, hasRoomDelete: true, bookingNumber: this.editBookingItem.BOOKING_NUMBER, ticket: this.ticket, baseurl: this.baseurl, language: this.language }))), h("ir-modal", { modalTitle: '', rightBtnActive: this.dialogData ? !this.dialogData.hideConfirmButton : true, leftBtnText: (_a = locales === null || locales === void 0 ? void 0 : locales.entries) === null || _a === void 0 ? void 0 : _a.Lcz_Cancel, rightBtnText: (_b = locales === null || locales === void 0 ? void 0 : locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_Confirm, modalBody: this.dialogData ? this.dialogData.description : '', onConfirmModal: this.handleModalConfirm.bind(this), onCancelModal: this.handleModalCancel.bind(this) })));
   }
   get element() { return getElement(this); }
   static get watchers() { return {
@@ -18946,7 +18963,7 @@ const _formatTime = (hour, minute) => {
   return hooks(`${hour}:${minute}`, 'HH:mm').format('hh:mm A');
 };
 
-const irBookingDetailsCss = ".confirmed{color:#fff;display:flex;align-items:center}ir-select#update-status{transform:translateY(0.5rem)}.pointer{cursor:pointer}:root{--sidebar-width:50rem}.sm-padding-right{padding-right:0.2rem}.sm-padding-left{padding-left:0.2rem}.sm-padding-top{padding-top:0.2rem}.sm-padding-bottom{padding-bottom:0.2rem}.info-notes{list-style:none;padding-left:0}.light-blue-bg{background-color:#acecff;padding:0rem 0.1rem}.iframeHeight{height:17.5rem}";
+const irBookingDetailsCss = ".confirmed{color:#fff;display:flex;align-items:center}.bg-ir-green{background:#629a4c}.bg-ir-red{background:#ff4961}.bg-ir-orange{background:#ff9149}ir-select#update-status{transform:translateY(0.5rem)}.pointer{cursor:pointer}:root{--sidebar-width:50rem}.sm-padding-right{padding-right:0.2rem}.sm-padding-left{padding-left:0.2rem}.sm-padding-top{padding-top:0.2rem}.sm-padding-bottom{padding-bottom:0.2rem}.info-notes{list-style:none;padding-left:0}.light-blue-bg{background-color:#acecff;padding:0rem 0.1rem}.iframeHeight{height:17.5rem}";
 
 const IrBookingDetails = class {
   constructor(hostRef) {
@@ -18960,11 +18977,13 @@ const IrBookingDetails = class {
     this.handleRoomEdit = createEvent(this, "handleRoomEdit", 7);
     this.handleRoomDelete = createEvent(this, "handleRoomDelete", 7);
     this.handleAddPayment = createEvent(this, "handleAddPayment", 7);
+    this.toast = createEvent(this, "toast", 7);
     this.bookingService = new BookingService$1();
     this.roomService = new RoomService();
     this.bookingDetails = null;
     this.editBookingItem = undefined;
     this.setupDataCountries = null;
+    this.show_header = true;
     this.setupDataCountriesCode = null;
     this.languageAbreviation = '';
     this.language = '';
@@ -19028,6 +19047,10 @@ const IrBookingDetails = class {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
       this.defaultTexts = languageTexts;
       console.log(this.defaultTexts);
       this.countryNodeList = countriesList;
@@ -19049,10 +19072,10 @@ const IrBookingDetails = class {
     const target = e.target;
     switch (target.id) {
       case 'print':
-        this.handlePrintClick.emit();
+        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
         return;
       case 'receipt':
-        this.handleReceiptClick.emit();
+        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
         return;
       case 'book-delete':
         this.handleDeleteClick.emit();
@@ -19082,41 +19105,24 @@ const IrBookingDetails = class {
     this.isSidebarOpen = true;
   }
   handleSelectChange(e) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
     const target = e.target;
-    const targetID = target.id;
-    switch (targetID) {
-      case 'update-status':
-        this.tempStatus = e.detail;
-        break;
-    }
+    this.tempStatus = target.selectedValue;
   }
-  handleClick(e) {
+  async handleClick(e) {
     const target = e.target;
     const targetID = target.id;
     switch (targetID) {
       case 'update-status-btn':
-        this.updateStatus();
+        await this.updateStatus();
+        await this.resetBookingData();
         break;
     }
   }
   watchDropdownStatuses(newValue, oldValue) {
     console.log('The new value of dropdownStatuses is: ', newValue);
     console.log('The old value of dropdownStatuses is: ', oldValue);
-    // Make the newValue in way that can be handled by the dropdown
-    try {
-      const _newValue = newValue.map(item => {
-        return {
-          value: item.CODE_NAME,
-          text: this._getBookingStatus(item.CODE_NAME, '_BOOK_STATUS'),
-        };
-      });
-      this.statusData = _newValue;
-      console.log('The new value of statusData is: ', this.statusData);
-      this.rerenderFlag = !this.rerenderFlag;
-    }
-    catch (e) {
-      console.log('Error in watchDropdownStatuses: ', e);
-    }
   }
   openEditSidebar() {
     const sidebar = document.querySelector('ir-sidebar#editGuestInfo');
@@ -19135,12 +19141,26 @@ const IrBookingDetails = class {
     // return the status
     return value;
   }
-  updateStatus() {
-    const bookingDetails = this.bookingDetails;
-    bookingDetails.BOOK_STATUS_CODE = this.tempStatus;
-    this.bookingDetails = bookingDetails;
-    this.rerenderFlag = !this.rerenderFlag;
-    this.sendDataToServer.emit(this.bookingDetails);
+  async updateStatus() {
+    if (this.tempStatus !== 'Select' && this.tempStatus !== null) {
+      try {
+        await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
+          book_nbr: this.bookingNumber,
+          status: this.tempStatus,
+        });
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+    else {
+      this.toast.emit({
+        type: 'error',
+        description: '',
+        title: locales.entries.Lcz_SelectStatus,
+        position: 'top-right',
+      });
+    }
   }
   handleEditInitiated(e) {
     //console.log(e.detail);
@@ -19152,9 +19172,7 @@ const IrBookingDetails = class {
   handleDeleteFinish(e) {
     this.bookingData = Object.assign(Object.assign({}, this.bookingData), { rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) });
   }
-  async handleResetBookingData(e) {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
+  async resetBookingData() {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.bookingData = Object.assign({}, booking);
@@ -19163,32 +19181,37 @@ const IrBookingDetails = class {
       console.log(error);
     }
   }
+  async handleResetBookingData(e) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    await this.resetBookingData();
+  }
   render() {
     var _a;
     if (!this.bookingData) {
       return null;
     }
-    // let confirmationBG: string = '';
-    // switch (this.bookingData.status.code) {
-    //   case '001':
-    //     confirmationBG = 'bg-ir-orange';
-    //     break;
-    //   case '002':
-    //     confirmationBG = 'bg-ir-green';
-    //     break;
-    //   case '003':
-    //     confirmationBG = 'bg-ir-red';
-    //     break;
-    //   case '004':
-    //     confirmationBG = 'bg-ir-red';
-    //     break;
-    // }
+    let confirmationBG = '';
+    switch (this.bookingData.status.code) {
+      case '001':
+        confirmationBG = 'bg-ir-orange';
+        break;
+      case '002':
+        confirmationBG = 'bg-ir-green';
+        break;
+      case '003':
+        confirmationBG = 'bg-ir-red';
+        break;
+      case '004':
+        confirmationBG = 'bg-ir-red';
+        break;
+    }
     return [
       h("ir-common", null),
-      h("div", { class: "fluid-container pt-1 mr-2 ml-2" }, h("div", { class: "row" }, h("div", { class: "col-lg-7 col-md-12 d-flex justify-content-start align-items-end" }, h("div", { class: "font-size-large sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`), h("div", null, "@ ", _formatDate(this.bookingData.booked_on.date), " ", _formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString()))))),
-      h("div", { class: "fluid-container m-1 text-left" }, h("div", { class: "row m-0" }, h("div", { class: "col-lg-5 col-md-12 pl-0 pr-lg-1 p-0" }, h("div", { class: "card" }, h("div", { class: "p-1" }, this.bookingData.property.name || '', h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Source}:`, value: this.bookingData.origin.Label, imageSrc: this.bookingData.origin.Icon }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_BookedBy}:`, value: `${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`, iconShown: true }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Phone}:`, value: this.bookingData.guest.mobile }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Email}:`, value: this.bookingData.guest.email }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Address}:`, value: this.bookingData.guest.address }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_ArrivalTime}:`, value: this.bookingData.arrival.description }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Note}:`, value: this.bookingData.remark }))), h("div", { class: "font-size-large d-flex justify-content-between align-items-center ml-1 mb-1" }, `${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date)} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
+      h("div", { class: "fluid-container pt-1 mr-2 ml-2" }, h("div", { class: "row" }, h("div", { class: "col-lg-7 col-md-12 d-flex justify-content-start align-items-end" }, h("div", { class: "font-size-large sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`), h("div", null, "@ ", _formatDate(this.bookingData.booked_on.date), " ", _formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString()))), h("div", { class: "col-lg-5 col-md-12 d-flex justify-content-end align-items-center" }, h("span", { class: `confirmed btn-sm mr-2 ${confirmationBG}` }, this.bookingData.status.description), h("ir-select", { id: "update-status", size: "sm", "label-available": "false", data: this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code })), textSize: "sm", class: "sm-padding-right" }), h("ir-button", { id: "update-status-btn", size: "sm", text: "Update" }), this.hasReceipt && h("ir-icon", { id: "receipt", icon: "ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasPrint && h("ir-icon", { id: "print", icon: "ft-printer h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasDelete && h("ir-icon", { id: "book-delete", icon: "ft-trash-2 h1 danger ml-1 pointer" }), this.hasMenu && h("ir-icon", { id: "menu", icon: "ft-list h1 color-ir-dark-blue-hover ml-1 pointer" })))),
+      h("div", { class: "fluid-container p-1 text-left mx-0" }, h("div", { class: "row m-0" }, h("div", { class: "col-12 p-0 mx-0 pr-lg-1 col-lg-6" }, h("div", { class: "card" }, h("div", { class: "p-1" }, this.bookingData.property.name || '', h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Source}:`, value: this.bookingData.origin.Label, imageSrc: this.bookingData.origin.Icon }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_BookedBy}:`, value: `${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`, iconShown: true }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Phone}:`, value: this.bookingData.guest.mobile }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Email}:`, value: this.bookingData.guest.email }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Address}:`, value: this.bookingData.guest.address }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_ArrivalTime}:`, value: this.bookingData.arrival.description }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Note}:`, value: this.bookingData.remark }))), h("div", { class: "font-size-large d-flex justify-content-between align-items-center ml-1 mb-1" }, `${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date)} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
         ? ` ${this.defaultTexts.entries.Lcz_Nights}`
-        : ` ${this.defaultTexts.entries.Lcz_Night}`})`, this.hasRoomAdd && h("ir-icon", { id: "room-add", icon: "ft-plus h3 color-ir-dark-blue-hover pointer" })), h("div", { class: "card" }, this.bookingData.rooms.map((room, index) => {
+        : ` ${this.defaultTexts.entries.Lcz_Night}`})`, this.hasRoomAdd && h("ir-icon", { id: "room-add", icon: "ft-plus h3 color-ir-dark-blue-hover pointer" })), h("div", { class: "card p-0 mx-0" }, this.bookingData.rooms.map((room, index) => {
         const mealCodeName = room.rateplan.name;
         const myRoomTypeFoodCat = room.roomtype.name;
         return [
@@ -19196,7 +19219,7 @@ const IrBookingDetails = class {
           // add separator if not last item with marginHorizontal and alignCenter
           index !== this.bookingData.rooms.length - 1 && h("hr", { class: "mr-2 ml-2 mt-1 mb-1" }),
         ];
-      }))), h("div", { class: "col-lg-7 col-md-12 pr-0 pl-0 pl-md-1" }, h("ir-payment-details", { defaultTexts: this.defaultTexts, bookingDetails: this.bookingData, item: this.bookingDetails, paymentExceptionMessage: this.paymentExceptionMessage })))),
+      }))), h("div", { class: "col-12 p-0 m-0 pl-lg-1 col-lg-6" }, h("ir-payment-details", { defaultTexts: this.defaultTexts, bookingDetails: this.bookingData, item: this.bookingDetails, paymentExceptionMessage: this.paymentExceptionMessage })))),
       h("ir-sidebar", { open: this.isSidebarOpen, side: 'right', id: "editGuestInfo", onIrSidebarToggle: e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
@@ -19238,7 +19261,7 @@ const IrButton = class {
     }
     return (h("button", { onClick: () => {
         this.clickHanlder.emit();
-      }, class: `m-0 btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`, type: this.btn_type }, this.icon && (h(Fragment, null, h("i", { class: this.icon }), "\u00A0")), this.text));
+      }, class: `m-0 btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`, type: this.btn_type }, this.icon && (h(Fragment, null, h("i", { class: `${this.icon} font-small-3` }), "\u00A0")), this.text));
   }
 };
 IrButton.style = irButtonCss;
@@ -19916,7 +19939,7 @@ const IrPaymentDetails = class {
       return null;
     }
     return [
-      h("div", { class: "card" }, h("div", { class: "p-1" }, h("div", { class: "mb-2 h4" }, this.defaultTexts.entries.Lcz_DueBalance, ":", ' ', h("span", { class: "danger font-weight-bold" }, _formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code))), this.bookingGuarantee(), h("div", { class: "mt-2" }, h("div", null, h("div", { class: "d-flex align-items-center" }, h("strong", { class: "mr-1" }, this.defaultTexts.entries.Lcz_PaymentDueDates), h("ir-icon", { id: "drawer-icon", icon: `${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`, "data-toggle": "collapse", "data-target": `.roomName`, "aria-expanded": "false", "aria-controls": "myCollapse", class: "sm-padding-right pointer", onClick: () => {
+      h("div", { class: "card m-0" }, h("div", { class: "p-1" }, h("div", { class: "mb-2 h4" }, this.defaultTexts.entries.Lcz_DueBalance, ":", ' ', h("span", { class: "danger font-weight-bold" }, _formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code))), this.bookingGuarantee(), h("div", { class: "mt-2" }, h("div", null, h("div", { class: "d-flex align-items-center" }, h("strong", { class: "mr-1" }, this.defaultTexts.entries.Lcz_PaymentDueDates), h("ir-icon", { id: "drawer-icon", icon: `${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`, "data-toggle": "collapse", "data-target": `.roomName`, "aria-expanded": "false", "aria-controls": "myCollapse", class: "sm-padding-right pointer", onClick: () => {
           this.collapsedPayment = !this.collapsedPayment;
         } })), h("table", null, (_a = this.bookingDetails.financial.due_dates) === null || _a === void 0 ? void 0 : _a.map(item => this._renderDueDate(item))))), h("div", { class: "mt-2 d-flex  flex-column rounded" }, h("strong", null, this.defaultTexts.entries.Lcz_Payments), h("table", { class: "mt-1" }, h("thead", null, h("tr", null, h("th", { class: 'border border-light border-bottom-0 text-center payment_date' }, this.defaultTexts.entries.Lcz_Dates), h("th", { class: 'border border-light border-bottom-0 text-center w-60' }, this.defaultTexts.entries.Lcz_Amount), h("th", { class: 'border border-light border-bottom-0 text-center' }, this.defaultTexts.entries.Lcz_Designation), h("th", { class: 'border border-light border-bottom-0 text-center action_icons' }, h("span", { class: 'sr-only' }, "payment actions"), h("ir-icon", { id: "add-payment", icon: "ft-plus font-weight-bold color-ir-light-blue-hover pointer p-0", onClick: () => {
           this.newTableRow = true;
@@ -20181,15 +20204,23 @@ const IrRoomNights = class {
     let inputElement = event.target;
     let inputValue = inputElement.value;
     let days = [...this.rates];
+    inputValue = inputValue.replace(/[^0-9.]/g, '');
     if (inputValue === '') {
       days[index].amount = -1;
     }
-    else if (!isNaN(Number(inputValue))) {
-      days[index].amount = +inputValue;
-    }
     else {
-      inputValue = inputValue.replace(/[^0-9]/g, '');
-      inputElement.value = inputValue;
+      const decimalCheck = inputValue.split('.');
+      if (decimalCheck.length > 2) {
+        inputValue = inputValue.substring(0, inputValue.length - 1);
+        inputElement.value = inputValue;
+      }
+      else if (decimalCheck.length === 2 && decimalCheck[1].length > 2) {
+        inputValue = `${decimalCheck[0]}.${decimalCheck[1].substring(0, 2)}`;
+        inputElement.value = inputValue;
+      }
+      if (!isNaN(Number(inputValue))) {
+        days[index].amount = Number(inputValue);
+      }
     }
     this.rates = days;
     console.log(this.rates);

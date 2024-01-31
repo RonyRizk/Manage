@@ -264,6 +264,7 @@ export namespace Components {
         "propertyid": number;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
+        "show_header": boolean;
         "statusCodes": any;
         "ticket": string;
     }
@@ -1385,11 +1386,13 @@ declare namespace LocalJSX {
         "onHandleRoomDelete"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onHandleRoomEdit"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
+        "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "paymentDetailsUrl"?: string;
         "paymentExceptionMessage"?: string;
         "propertyid"?: number;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
+        "show_header"?: boolean;
         "statusCodes"?: any;
         "ticket"?: string;
     }
