@@ -11792,7 +11792,7 @@ const IglBookingEvent = class {
     return null;
   }
   getBalanceNode() {
-    if (this.bookingEvent.BALANCE) {
+    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE > 0) {
       return this.getLegendOfStatus('OUTSTANDING-BALANCE');
     }
     return null;
