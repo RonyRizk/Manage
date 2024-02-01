@@ -6010,7 +6010,7 @@ const IglApplicationInfo = class {
     if (this.defaultGuestRoomId && this.roomsList.filter(e => e.id.toString() === this.defaultGuestRoomId.toString()).length > 0) {
       this.guestData.roomId = this.defaultGuestRoomId;
     }
-    this.guestData.preference = +this.defaultGuestPreference;
+    this.guestData.preference = +this.defaultGuestPreference || '';
     this.updateRoomList();
   }
   async handleSelctedUnits() {
@@ -9918,9 +9918,9 @@ class BookingService$1 {
             },
             source,
             currency,
-            arrival: {
-              code: arrivalTime || bookedByInfoData.selectedArrivalTime,
-            },
+            arrival: arrivalTime
+              ? { code: arrivalTime }
+              : Object.assign({}, bookedByInfoData.selectedArrivalTime),
             guest: defaultGuest || guest,
             rooms: [
               ...guestData.map(data => ({
@@ -11247,9 +11247,9 @@ class BookingService {
             },
             source,
             currency,
-            arrival: {
-              code: arrivalTime || bookedByInfoData.selectedArrivalTime,
-            },
+            arrival: arrivalTime
+              ? { code: arrivalTime }
+              : Object.assign({}, bookedByInfoData.selectedArrivalTime),
             guest: defaultGuest || guest,
             rooms: [
               ...guestData.map(data => ({

@@ -375,9 +375,9 @@ export class BookingService {
             },
             source,
             currency,
-            arrival: {
-              code: arrivalTime || bookedByInfoData.selectedArrivalTime,
-            },
+            arrival: arrivalTime
+              ? { code: arrivalTime }
+              : Object.assign({}, bookedByInfoData.selectedArrivalTime),
             guest: defaultGuest || guest,
             rooms: [
               ...guestData.map(data => ({
