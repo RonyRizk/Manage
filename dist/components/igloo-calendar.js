@@ -4101,11 +4101,11 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
               }, 1000);
               console.log(result);
             }
-            else if (REASON === 'NO_DUE_AMOUNT') {
+            else if (REASON === 'CHANGE_IN_DUE_AMOUNT') {
               this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: [
                   ...this.calendarData.bookingEvents.map(event => {
                     if (result.pools.includes(event.ID)) {
-                      return Object.assign(Object.assign({}, event), { BALANCE: 0 });
+                      return Object.assign(Object.assign({}, event), { BALANCE: result.due_amount });
                     }
                     return event;
                   }),
