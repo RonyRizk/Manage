@@ -9974,12 +9974,12 @@ class BookingService$1 {
           },
         };
         console.log('book user payload', body);
-        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        // if (data.ExceptionMsg !== '') {
-        //   throw new Error(data.ExceptionMsg);
-        // }
-        // console.log(data['My_Result']);
-        // return data['My_Result'];
+        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        console.log(data['My_Result']);
+        return data['My_Result'];
       }
       else {
         throw new Error('Invalid token');
@@ -11303,12 +11303,12 @@ class BookingService {
           },
         };
         console.log('book user payload', body);
-        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        // if (data.ExceptionMsg !== '') {
-        //   throw new Error(data.ExceptionMsg);
-        // }
-        // console.log(data['My_Result']);
-        // return data['My_Result'];
+        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        console.log(data['My_Result']);
+        return data['My_Result'];
       }
       else {
         throw new Error('Invalid token');
@@ -19962,17 +19962,17 @@ const IrPaymentDetails = class {
     return (index.h("tr", null, index.h("td", { class: 'pr-1' }, _formatDate(item.date)), index.h("td", { class: 'pr-1' }, _formatAmount(item.amount, this.bookingDetails.currency.code)), index.h("td", { class: 'pr-1' }, item.description), index.h("td", { class: "collapse font-size-small roomName" }, item.room)));
   }
   render() {
-    var _a, _b;
+    var _a, _b, _c, _d;
     if (!this.bookingDetails.financial) {
       return null;
     }
     return [
-      index.h("div", { class: "card m-0" }, index.h("div", { class: "p-1" }, index.h("div", { class: "mb-2 h4" }, this.defaultTexts.entries.Lcz_DueBalance, ":", ' ', index.h("span", { class: "danger font-weight-bold" }, _formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code))), this.bookingGuarantee(), index.h("div", { class: "mt-2" }, index.h("div", null, this.bookingDetails.financial.due_dates.length > 0 && (index.h(index.Fragment, null, index.h("div", { class: "d-flex align-items-center" }, index.h("strong", { class: "mr-1" }, this.defaultTexts.entries.Lcz_PaymentDueDates), index.h("ir-icon", { id: "drawer-icon", icon: `${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`, "data-toggle": "collapse", "data-target": `.roomName`, "aria-expanded": "false", "aria-controls": "myCollapse", class: "sm-padding-right pointer", onClick: () => {
+      index.h("div", { class: "card m-0" }, index.h("div", { class: "p-1" }, index.h("div", { class: "mb-2 h4" }, this.defaultTexts.entries.Lcz_DueBalance, ":", ' ', index.h("span", { class: "danger font-weight-bold" }, _formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code))), this.bookingGuarantee(), index.h("div", { class: "mt-2" }, index.h("div", null, ((_b = (_a = this.bookingDetails.financial) === null || _a === void 0 ? void 0 : _a.due_dates) === null || _b === void 0 ? void 0 : _b.length) > 0 && (index.h(index.Fragment, null, index.h("div", { class: "d-flex align-items-center" }, index.h("strong", { class: "mr-1" }, this.defaultTexts.entries.Lcz_PaymentDueDates), index.h("ir-icon", { id: "drawer-icon", icon: `${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`, "data-toggle": "collapse", "data-target": `.roomName`, "aria-expanded": "false", "aria-controls": "myCollapse", class: "sm-padding-right pointer", onClick: () => {
           this.collapsedPayment = !this.collapsedPayment;
-        } })), index.h("table", null, (_a = this.bookingDetails.financial.due_dates) === null || _a === void 0 ? void 0 : _a.map(item => this._renderDueDate(item))))))), index.h("div", { class: "mt-2 d-flex  flex-column rounded" }, index.h("strong", null, this.defaultTexts.entries.Lcz_Payments), index.h("table", { class: "mt-1" }, index.h("thead", null, index.h("tr", null, index.h("th", { class: 'border border-light border-bottom-0 text-center payment_date' }, this.defaultTexts.entries.Lcz_Dates), index.h("th", { class: 'border border-light border-bottom-0 text-center w-60' }, this.defaultTexts.entries.Lcz_Amount), index.h("th", { class: 'border border-light border-bottom-0 text-center' }, this.defaultTexts.entries.Lcz_Designation), index.h("th", { class: 'border border-light border-bottom-0 text-center action_icons' }, index.h("span", { class: 'sr-only' }, "payment actions"), index.h("ir-icon", { id: "add-payment", icon: "ft-plus font-weight-bold color-ir-light-blue-hover pointer p-0", onClick: () => {
+        } })), index.h("table", null, (_c = this.bookingDetails.financial.due_dates) === null || _c === void 0 ? void 0 : _c.map(item => this._renderDueDate(item))))))), index.h("div", { class: "mt-2 d-flex  flex-column rounded" }, index.h("strong", null, this.defaultTexts.entries.Lcz_Payments), index.h("table", { class: "mt-1" }, index.h("thead", null, index.h("tr", null, index.h("th", { class: 'border border-light border-bottom-0 text-center payment_date' }, this.defaultTexts.entries.Lcz_Dates), index.h("th", { class: 'border border-light border-bottom-0 text-center w-60' }, this.defaultTexts.entries.Lcz_Amount), index.h("th", { class: 'border border-light border-bottom-0 text-center' }, this.defaultTexts.entries.Lcz_Designation), index.h("th", { class: 'border border-light border-bottom-0 text-center action_icons' }, index.h("span", { class: 'sr-only' }, "payment actions"), index.h("ir-icon", { id: "add-payment", icon: "ft-plus font-weight-bold color-ir-light-blue-hover pointer p-0", onClick: () => {
           this.newTableRow = true;
-        } })))), index.h("tbody", null, (_b = this.bookingDetails.financial.payments) === null || _b === void 0 ? void 0 :
-        _b.map((item) => this._renderTableRow(item)), this.newTableRow ? this._renderTableRow(null, 'add') : null))))),
+        } })))), index.h("tbody", null, (_d = this.bookingDetails.financial.payments) === null || _d === void 0 ? void 0 :
+        _d.map((item) => this._renderTableRow(item)), this.newTableRow ? this._renderTableRow(null, 'add') : null))))),
       index.h("ir-modal", { item: this.toBeDeletedItem, class: 'delete-record-modal', modalTitle: this.defaultTexts.entries.Lcz_Confirmation, modalBody: "If deleted it will be permnantly lost!", iconAvailable: true, icon: "ft-alert-triangle danger h1", leftBtnText: this.defaultTexts.entries.Lcz_Cancel, rightBtnText: this.defaultTexts.entries.Lcz_Delete, leftBtnColor: "secondary", rightBtnColor: "danger", onConfirmModal: this.handleConfirmModal.bind(this) }),
     ];
   }
