@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
-import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
+import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../models/igl-book-property';
 export declare class IglPagetwo {
   showPaymentDetails: boolean;
   currency: any;
@@ -22,6 +22,7 @@ export declare class IglPagetwo {
   isLoading: string;
   countryNodeList: any;
   selectedGuestData: any;
+  defaultGuestData: IglBookPropertyPayloadEditBooking;
   dataUpdateEvent: EventEmitter<IPageTwoDataUpdateProps>;
   buttonClicked: EventEmitter<{
     key: TPropertyButtonsTypes;

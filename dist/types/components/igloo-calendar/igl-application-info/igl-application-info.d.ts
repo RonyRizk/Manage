@@ -12,7 +12,9 @@ export declare class IglApplicationInfo {
   bedPreferenceType: any[];
   selectedUnits: number[];
   bookingType: string;
+  defaultGuestPreference: number | null;
   index: number;
+  defaultGuestRoomId: number;
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;
   }>;

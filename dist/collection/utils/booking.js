@@ -162,7 +162,7 @@ function addOrUpdateBooking(cell, myBookings, stayStatus) {
 }
 export function transformNewBooking(data) {
   let bookings = [];
-  console.log(data);
+  //console.log(data);
   const renderStatus = room => {
     const now = moment();
     const toDate = moment(room.to_date, 'YYYY-MM-DD');

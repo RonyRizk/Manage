@@ -163,7 +163,7 @@ function addOrUpdateBooking(cell, myBookings, stayStatus) {
 }
 function transformNewBooking(data) {
   let bookings = [];
-  console.log(data);
+  //console.log(data);
   const renderStatus = room => {
     const now = hooks();
     const toDate = hooks(room.to_date, 'YYYY-MM-DD');

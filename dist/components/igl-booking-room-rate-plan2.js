@@ -97,11 +97,12 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-      this.dataUpdateEvent.emit({
-        key: 'roomRatePlanUpdate',
-        changedKey: 'totalRooms',
-        data: this.selectedData,
-      });
+      (this.selectedData.rateType = 1),
+        this.dataUpdateEvent.emit({
+          key: 'roomRatePlanUpdate',
+          changedKey: 'totalRooms',
+          data: this.selectedData,
+        });
     }
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }

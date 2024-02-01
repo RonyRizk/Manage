@@ -24,7 +24,7 @@ function formatName(firstName, lastName) {
 }
 function transformNewBooking(data) {
   let bookings = [];
-  console.log(data);
+  //console.log(data);
   const renderStatus = room => {
     const now = hooks();
     const toDate = hooks(room.to_date, 'YYYY-MM-DD');
@@ -225,10 +225,19 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
   }
   async fetchAndAssignBookingData() {
     try {
+      console.log('clicked on book#', this.bookingEvent.BOOKING_NUMBER);
       if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
         const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
         let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
         data.rooms = dataForTransformation;
+        if (data.rooms.length === 0) {
+          throw new Error(`"booking#${this.bookingEvent.BOOKING_NUMBER} have empty array"`);
+        }
+        else {
+          if (data.rooms.some(r => r['assigned_units_pool'] === null)) {
+            throw new Error(`"booking#${this.bookingEvent.BOOKING_NUMBER} have empty pool"`);
+          }
+        }
         const _a = transformNewBooking(data)[0], others = __rest(_a, ["ID", "TO_DATE", "FROM_DATE", "NO_OF_DAYS", "STATUS", "NAME", "IDENTIFIER", "PR_ID", "POOL", "BOOKING_NUMBER", "NOTES", "is_direct", "BALANCE"]);
         this.bookingEvent = Object.assign(Object.assign({}, this.bookingEvent), others);
         this.showEventInfo(true);
