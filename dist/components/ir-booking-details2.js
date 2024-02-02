@@ -261,6 +261,12 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
           book_nbr: this.bookingNumber,
           status: this.tempStatus,
         });
+        this.toast.emit({
+          type: 'success',
+          description: '',
+          title: locales.entries.Lcz_StatusUpdatedSuccessfully,
+          position: 'top-right',
+        });
       }
       catch (error) {
         console.log(error);

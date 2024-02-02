@@ -138,6 +138,7 @@ export type LocalizationStrings = {
   Lcz_Stay: string;
   Lcz_BedConfiguration: string;
   Lcz_SelectStatus: string;
+  Lcz_StatusUpdatedSuccessfully: string;
 };
 export declare const locales: ILocale, onCalendarDatesChange: import("@stencil/store/dist/types").OnChangeHandler<ILocale>;
 export default locales;

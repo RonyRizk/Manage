@@ -100,6 +100,7 @@ export class IglBookingRoomRatePlan {
   }
   async ratePlanDataChanged(newData) {
     this.selectedData = Object.assign(Object.assign({}, this.selectedData), { adult_child_offering: newData.variations[newData.variations.length - 1].adult_child_offering, adultCount: newData.variations[newData.variations.length - 1].adult_nbr, childrenCount: newData.variations[newData.variations.length - 1].child_nbr, rate: this.handleRateDaysUpdate(), physicalRooms: this.setAvailableRooms(newData.assignable_units) });
+    this.initialRateValue = this.selectedData.rate / this.dateDifference;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',

@@ -9880,6 +9880,7 @@ class BookingService$1 {
     }
   }
   async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, rooms, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
+    console.log(arrivalTime);
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -9974,12 +9975,12 @@ class BookingService$1 {
           },
         };
         console.log('book user payload', body);
-        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data['My_Result']);
-        return data['My_Result'];
+        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        // if (data.ExceptionMsg !== '') {
+        //   throw new Error(data.ExceptionMsg);
+        // }
+        // console.log(data['My_Result']);
+        // return data['My_Result'];
       }
       else {
         throw new Error('Invalid token');
@@ -11209,6 +11210,7 @@ class BookingService {
     }
   }
   async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, rooms, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
+    console.log(arrivalTime);
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -11303,12 +11305,12 @@ class BookingService {
           },
         };
         console.log('book user payload', body);
-        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data['My_Result']);
-        return data['My_Result'];
+        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        // if (data.ExceptionMsg !== '') {
+        //   throw new Error(data.ExceptionMsg);
+        // }
+        // console.log(data['My_Result']);
+        // return data['My_Result'];
       }
       else {
         throw new Error('Invalid token');
@@ -12501,6 +12503,7 @@ const IglBookingRoomRatePlan = class {
   }
   async ratePlanDataChanged(newData) {
     this.selectedData = Object.assign(Object.assign({}, this.selectedData), { adult_child_offering: newData.variations[newData.variations.length - 1].adult_child_offering, adultCount: newData.variations[newData.variations.length - 1].adult_nbr, childrenCount: newData.variations[newData.variations.length - 1].child_nbr, rate: this.handleRateDaysUpdate(), physicalRooms: this.setAvailableRooms(newData.assignable_units) });
+    this.initialRateValue = this.selectedData.rate / this.dateDifference;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -18245,6 +18248,16 @@ const IglooCalendar = class {
                   }),
                 ] });
             }
+            else if (REASON === 'CHANGE_IN_BOOK_STATUS') {
+              this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: [
+                  ...this.calendarData.bookingEvents.map(event => {
+                    if (result.pools.includes(event.ID)) {
+                      return Object.assign(Object.assign({}, event), { STATUS: event.STATUS !== 'IN-HOUSE' ? bookingStatus$1[result.status_code] : result.status_code === '001' ? bookingStatus$1[result.status_code] : 'IN-HOUSE' });
+                    }
+                    return event;
+                  }),
+                ] });
+            }
             else {
               return;
             }
@@ -18308,14 +18321,16 @@ const IglooCalendar = class {
         const now = hooks();
         const toDate = hooks(bookingEvent.TO_DATE, 'YYYY-MM-DD');
         const fromDate = hooks(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-        if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
-          bookingEvent.STATUS = bookingStatus$1['000'];
-        }
-        else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-          bookingEvent.STATUS = bookingStatus$1['000'];
-        }
-        else if (toDate.isSame(now, 'day') && now.hour() < 12) {
-          bookingEvent.STATUS = bookingStatus$1['000'];
+        if (bookingEvent.STATUS !== 'PENDING') {
+          if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+            bookingEvent.STATUS = bookingStatus$1['000'];
+          }
+          else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+            bookingEvent.STATUS = bookingStatus$1['000'];
+          }
+          else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+            bookingEvent.STATUS = bookingStatus$1['000'];
+          }
         }
         else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
           bookingEvent.STATUS = bookingStatus$1['003'];
@@ -19175,6 +19190,12 @@ const IrBookingDetails = class {
         await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
           book_nbr: this.bookingNumber,
           status: this.tempStatus,
+        });
+        this.toast.emit({
+          type: 'success',
+          description: '',
+          title: locales.entries.Lcz_StatusUpdatedSuccessfully,
+          position: 'top-right',
         });
       }
       catch (error) {
