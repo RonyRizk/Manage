@@ -128,6 +128,7 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
     this.defaultTexts = undefined;
     this.rerenderFlag = false;
     this.isSidebarOpen = false;
+    this.isUpdateClicked = false;
   }
   componentDidLoad() {
     if (this.baseurl) {
@@ -257,6 +258,7 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
   async updateStatus() {
     if (this.tempStatus !== 'Select' && this.tempStatus !== null) {
       try {
+        this.isUpdateClicked = true;
         await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
           book_nbr: this.bookingNumber,
           status: this.tempStatus,
@@ -270,6 +272,9 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
       }
       catch (error) {
         console.log(error);
+      }
+      finally {
+        this.isUpdateClicked = false;
       }
     }
     else {
@@ -327,7 +332,7 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
     }
     return [
       h("ir-common", null),
-      h("div", { class: "fluid-container pt-1 mr-2 ml-2" }, h("div", { class: "row" }, h("div", { class: "col-lg-7 col-md-12 d-flex justify-content-start align-items-end" }, h("div", { class: "font-size-large sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`), h("div", null, "@ ", _formatDate(this.bookingData.booked_on.date), " ", _formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString()))), h("div", { class: "col-lg-5 col-md-12 d-flex justify-content-end align-items-center" }, h("span", { class: `confirmed btn-sm mr-2 ${confirmationBG}` }, this.bookingData.status.description), this.bookingData.allowed_actions.length > 0 && (h(Fragment, null, h("ir-select", { firstOption: locales.entries.Lcz_Select, id: "update-status", size: "sm", "label-available": "false", data: this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code })), textSize: "sm", class: "sm-padding-right" }), h("ir-button", { id: "update-status-btn", size: "sm", text: "Update" }))), this.hasReceipt && h("ir-icon", { id: "receipt", icon: "ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasPrint && h("ir-icon", { id: "print", icon: "ft-printer h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasDelete && h("ir-icon", { id: "book-delete", icon: "ft-trash-2 h1 danger ml-1 pointer" }), this.hasMenu && h("ir-icon", { id: "menu", icon: "ft-list h1 color-ir-dark-blue-hover ml-1 pointer" })))),
+      h("div", { class: "fluid-container pt-1 mr-2 ml-2" }, h("div", { class: "row" }, h("div", { class: "col-lg-7 col-md-12 d-flex justify-content-start align-items-end" }, h("div", { class: "font-size-large sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`), h("div", null, "@ ", _formatDate(this.bookingData.booked_on.date), " ", _formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString()))), h("div", { class: "col-lg-5 col-md-12 d-flex justify-content-end align-items-center" }, h("span", { class: `confirmed btn-sm mr-2 ${confirmationBG}` }, this.bookingData.status.description), this.bookingData.allowed_actions.length > 0 && (h(Fragment, null, h("ir-select", { firstOption: locales.entries.Lcz_Select, id: "update-status", size: "sm", "label-available": "false", data: this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code })), textSize: "sm", class: "sm-padding-right" }), h("ir-button", { isLoading: this.isUpdateClicked, btn_disabled: this.isUpdateClicked, id: "update-status-btn", size: "sm", text: "Update" }))), this.hasReceipt && h("ir-icon", { id: "receipt", icon: "ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasPrint && h("ir-icon", { id: "print", icon: "ft-printer h1 color-ir-dark-blue-hover ml-1 pointer" }), this.hasDelete && h("ir-icon", { id: "book-delete", icon: "ft-trash-2 h1 danger ml-1 pointer" }), this.hasMenu && h("ir-icon", { id: "menu", icon: "ft-list h1 color-ir-dark-blue-hover ml-1 pointer" })))),
       h("div", { class: "fluid-container p-1 text-left mx-0" }, h("div", { class: "row m-0" }, h("div", { class: "col-12 p-0 mx-0 pr-lg-1 col-lg-6" }, h("div", { class: "card" }, h("div", { class: "p-1" }, this.bookingData.property.name || '', h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Source}:`, value: this.bookingData.origin.Label, imageSrc: this.bookingData.origin.Icon }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_BookedBy}:`, value: `${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`, iconShown: true }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Phone}:`, value: this.bookingData.guest.mobile }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Email}:`, value: this.bookingData.guest.email }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Address}:`, value: this.bookingData.guest.address }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_ArrivalTime}:`, value: this.bookingData.arrival.description }), h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Note}:`, value: this.bookingData.remark }))), h("div", { class: "font-size-large d-flex justify-content-between align-items-center ml-1 mb-1" }, `${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date)} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
         ? ` ${this.defaultTexts.entries.Lcz_Nights}`
         : ` ${this.defaultTexts.entries.Lcz_Night}`})`, this.hasRoomAdd && h("ir-icon", { id: "room-add", icon: "ft-plus h3 color-ir-dark-blue-hover pointer" })), h("div", { class: "card p-0 mx-0" }, this.bookingData.rooms.map((room, index) => {
@@ -388,7 +393,8 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
     "guestData": [32],
     "defaultTexts": [32],
     "rerenderFlag": [32],
-    "isSidebarOpen": [32]
+    "isSidebarOpen": [32],
+    "isUpdateClicked": [32]
   }, [[0, "iconClickHandler", "handleIconClick"], [0, "editSidebar", "handleEditSidebar"], [0, "selectChange", "handleSelectChange"], [0, "clickHanlder", "handleClick"], [0, "editInitiated", "handleEditInitiated"], [0, "resetBookingData", "handleResetBookingData"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

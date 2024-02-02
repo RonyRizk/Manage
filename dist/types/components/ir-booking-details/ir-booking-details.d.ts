@@ -51,6 +51,7 @@ export declare class IrBookingDetails {
   handleRoomDelete: EventEmitter;
   handleAddPayment: EventEmitter;
   toast: EventEmitter<IToast>;
+  isUpdateClicked: boolean;
   private bookingService;
   private roomService;
   componentDidLoad(): void;
