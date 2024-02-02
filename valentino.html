@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <title>Igloo Calendar</title>
+    <link rel="stylesheet" href="dist/collection/assets/feather/style.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="dist/collection/assets/line-awesome/css/line-awesome.min.css">
+    <script src="dist/collection/assets/scripts/jquery.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
+    <script src="dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
+    <script src="dist/collection/assets/scripts//bootstrap.bundle.min.js"></script>
+
+    <script type="module" src="dist/ir-webcmp/ir-webcmp.esm.js"></script>
+</head>
+
+<body>
+    <igloo-calendar currency-name="USD"   language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <!-- <script src="assets/"></script> -->
+    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+    <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+    <script>
+        
+        var today = new Date();
+        today.setDate(today.getDate() -1);
+        var _FROM_DATE = today.toISOString().substring(0,10);
+        today.setDate(today.getDate() + 60);
+        var _TO_DATE = today.toISOString().substring(0,10);
+        const calendar = document.querySelector("igloo-calendar");
+      setTimeout(() => {
+          const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDgwODg4MjIsIkNMQUlNLTAxIjoiWFNWZUN4UHVBdm89IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiWUpPWXNPeHJVRDVGMGZpQ0QrOFczdz09In0.xp65R3AHOT5lHguRiAQNTPmTfJCRuD8z_lW95mUZfa4";
+          sessionStorage.removeItem('token');
+          sessionStorage.setItem('token', JSON.stringify(token))
+          calendar.from_date = _FROM_DATE;
+            calendar.to_date = _TO_DATE;
+          calendar.propertyid = "26";
+          calendar.ticket = token;
+      }, 300)
+      </script>      
+    
+  </body>
+
+</html>
