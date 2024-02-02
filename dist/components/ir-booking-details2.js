@@ -195,8 +195,7 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
         this.handleDeleteClick.emit();
         return;
       case 'menu':
-        this.element.querySelector('ir-sidebar').open = true;
-        this.handleMenuClick.emit();
+        window.location.href = 'https://x.igloorooms.com/manage/acbookinglist.aspx';
         return;
       case 'room-add':
         this.handleRoomAdd.emit();

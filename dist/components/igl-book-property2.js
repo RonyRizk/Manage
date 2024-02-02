@@ -324,11 +324,12 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     return await this.bookingService.fetchSetupEntries();
   }
   isGuestDataIncomplete() {
+    //|| data.roomId === '' || data.roomId === 0 if the roomId is required
     if (this.guestData.length === 0) {
       return true;
     }
     for (const data of this.guestData) {
-      if (data.guestName === '' || data.preference === '' || data.preference === 0 || data.roomId === '' || data.roomId === 0) {
+      if (data.guestName === '' || data.preference === '' || data.preference === 0) {
         return true;
       }
     }

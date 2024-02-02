@@ -31,5 +31,5 @@ export declare class BookingService {
   }, propertyid: number, rooms: any[], currency: {
     id: number;
     code: string;
-  }, bookingNumber?: string, defaultGuest?: any, arrivalTime?: any, pr_id?: number, identifier?: string): Promise<void>;
+  }, bookingNumber?: string, defaultGuest?: any, arrivalTime?: any, pr_id?: number, identifier?: string): Promise<any>;
 }
