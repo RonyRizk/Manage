@@ -3,7 +3,7 @@ import { h as hooks } from './moment.js';
 import { _ as _formatDate, a as _formatTime } from './functions.js';
 import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
-import { l as locales } from './locales.store.js';
+import { c as createStore, l as locales } from './locales.store.js';
 import { d as defineCustomElement$p } from './igl-application-info2.js';
 import { d as defineCustomElement$o } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$n } from './igl-book-property2.js';
@@ -30,6 +30,27 @@ import { d as defineCustomElement$3 } from './ir-select2.js';
 import { d as defineCustomElement$2 } from './ir-sidebar2.js';
 import { d as defineCustomElement$1 } from './ir-tooltip2.js';
 
+const initialState = {
+  adultChildConstraints: {
+    adult_max_nbr: 0,
+    child_max_nbr: 0,
+    child_max_age: 0,
+  },
+  allowedBookingSources: [],
+  currency: undefined,
+  endingDate: 0,
+  formattedLegendData: undefined,
+  is_vacation_rental: false,
+  legendData: [],
+  roomsInfo: [],
+  startingDate: 0,
+  language: '',
+  toBeAssignedEvents: [],
+  allowed_payment_methods: [],
+  pickup_service: undefined,
+};
+const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
+
 class RoomService {
   async fetchData(id, language) {
     try {
@@ -39,6 +60,13 @@ class RoomService {
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
+        const results = data.My_Result;
+        calendar_data.adultChildConstraints = results.adult_child_constraints;
+        calendar_data.allowedBookingSources = results.allowed_booking_sources;
+        calendar_data.allowed_payment_methods = results.allowed_booking_methods;
+        calendar_data.currency = results.currency;
+        calendar_data.is_vacation_rental = results.is_vacation_rental;
+        calendar_data.pickup_service = results.pickup_service;
         return data;
       }
     }
@@ -534,6 +562,6 @@ function defineCustomElement() {
   } });
 }
 
-export { IrBookingDetails as I, RoomService as R, defineCustomElement as d };
+export { IrBookingDetails as I, RoomService as R, calendar_data as c, defineCustomElement as d };
 
 //# sourceMappingURL=ir-booking-details2.js.map

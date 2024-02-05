@@ -15,6 +15,8 @@ const initialState = {
   startingDate: 0,
   language: '',
   toBeAssignedEvents: [],
+  allowed_payment_methods: [],
+  pickup_service: undefined,
 };
 export const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 export default calendar_data;
