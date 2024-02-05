@@ -4000,7 +4000,13 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
     this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
     this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
     this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
-    this.calendarData.bookingEvents = bookingResp.myBookings || [];
+    let bookings = bookingResp.myBookings || [];
+    bookings = bookings.filter(bookingEvent => {
+      const toDate = hooks(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+      const fromDate = hooks(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+      return !toDate.isSame(fromDate);
+    });
+    this.calendarData.bookingEvents = bookings;
     this.calendarData.toBeAssignedEvents = [];
   }
   async initializeApp() {
@@ -4169,6 +4175,7 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
     return this.calendarData.bookingEvents.some(booking => booking.ID === data.ID || (booking.FROM_DATE === data.FROM_DATE && booking.TO_DATE === data.TO_DATE && booking.PR_ID === data.PR_ID));
   }
   updateBookingEventsDateRange(eventData) {
+    const now = hooks();
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
       bookingEvent.defaultDateRange = {};
@@ -4180,8 +4187,7 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
       bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
       bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
-      if (!isBlockUnit(bookingEvent.STAY_STATUS_CODE)) {
-        const now = hooks();
+      if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
         const toDate = hooks(bookingEvent.TO_DATE, 'YYYY-MM-DD');
         const fromDate = hooks(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
         if (bookingEvent.STATUS !== 'PENDING') {
@@ -4194,9 +4200,9 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
           else if (toDate.isSame(now, 'day') && now.hour() < 12) {
             bookingEvent.STATUS = bookingStatus['000'];
           }
-        }
-        else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
-          bookingEvent.STATUS = bookingStatus['003'];
+          else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+            bookingEvent.STATUS = bookingStatus['003'];
+          }
         }
       }
     });

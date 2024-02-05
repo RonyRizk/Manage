@@ -22,6 +22,7 @@ export declare class IglBookingEventHover {
   private todayTimeStamp;
   private eventService;
   private hideButtons;
+  shouldHideUnassignUnit: boolean;
   componentWillLoad(): void;
   handleKeyDown(event: KeyboardEvent): void;
   hideBubble(): void;
