@@ -24,6 +24,7 @@
     "components/ir-autocomplete/ir-autocomplete.js",
     "components/ir-booking-details/ir-booking-details.js",
     "components/ir-booking-details/ir-payment-details/ir-payment-details.js",
+    "components/ir-booking-details/ir-pickup/ir-pickup.js",
     "components/ir-modal/ir-modal.js",
     "components/ir-booking-details/ir-room/ir-room.js",
     "components/ir-button/ir-button.js",
