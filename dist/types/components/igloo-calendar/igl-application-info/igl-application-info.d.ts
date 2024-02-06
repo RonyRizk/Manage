@@ -15,6 +15,7 @@ export declare class IglApplicationInfo {
   defaultGuestPreference: number | null;
   index: number;
   defaultGuestRoomId: number;
+  dateDifference: number;
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;
   }>;
@@ -23,6 +24,7 @@ export declare class IglApplicationInfo {
   guestData: {
     [key: string]: any;
   };
+  private userRate;
   componentWillLoad(): void;
   handleSelctedUnits(): Promise<void>;
   updateRoomList(): void;

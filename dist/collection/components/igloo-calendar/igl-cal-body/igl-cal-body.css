@@ -4507,7 +4507,6 @@ readers do not read off random characters that represent icons */
   border-top: 1px solid #e0e0e0;
   border-left: 1px solid #e0e0e0;
   vertical-align: top;
-  padding-left: 15px;
 }
 
 .cellData:nth-child(2) {

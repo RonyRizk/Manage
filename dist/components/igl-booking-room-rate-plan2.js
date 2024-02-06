@@ -40,6 +40,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
     return result;
   }
   componentWillLoad() {
+    console.log('default data', this.defaultData);
     this.updateSelectedRatePlan(this.ratePlanData);
   }
   disableForm() {
@@ -92,23 +93,32 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
       index: this.index,
       is_closed: data.is_closed,
       physicalRooms: this.setAvailableRooms(this.ratePlanData.assignable_units),
+      dateDifference: this.dateDifference,
     };
     if (this.defaultData) {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-      (this.selectedData.rateType = 1),
-        this.dataUpdateEvent.emit({
-          key: 'roomRatePlanUpdate',
-          changedKey: 'totalRooms',
-          data: this.selectedData,
-        });
     }
-    this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    if (this.defaultData && this.defaultData.isRateModified) {
+      console.log('object');
+      if (this.selectedData.rateType === 1) {
+        console.log('object1');
+        this.initialRateValue = this.selectedData.rate;
+      }
+      else {
+        console.log('object2');
+        this.initialRateValue = this.selectedData.rate * this.dateDifference;
+      }
+    }
+    else {
+      this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    }
+    console.log('initialRateValue', this.initialRateValue);
   }
   async ratePlanDataChanged(newData) {
     this.selectedData = Object.assign(Object.assign({}, this.selectedData), { adult_child_offering: newData.variations[newData.variations.length - 1].adult_child_offering, adultCount: newData.variations[newData.variations.length - 1].adult_nbr, childrenCount: newData.variations[newData.variations.length - 1].child_nbr, rate: this.handleRateDaysUpdate(), physicalRooms: this.setAvailableRooms(newData.assignable_units) });
-    this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    this.initialRateValue = this.selectedData.rateType === 2 ? this.selectedData.rate / this.dateDifference : this.selectedData.rate;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -170,7 +180,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
   }
   updateRate(value) {
     const numericValue = value === '' ? 0 : Number(value);
-    this.selectedData = Object.assign(Object.assign({}, this.selectedData), { rate: numericValue, totalRooms: value === '' ? 0 : this.selectedData.totalRooms, defaultSelectedRate: this.selectedData.rateType === 1 ? numericValue / this.dateDifference : numericValue });
+    this.selectedData = Object.assign(Object.assign({}, this.selectedData), { rate: numericValue, totalRooms: value === '' ? 0 : this.selectedData.totalRooms, defaultSelectedRate: this.selectedData.rateType === 2 ? numericValue / this.dateDifference : numericValue });
   }
   updateGenericData(key, value) {
     this.selectedData = Object.assign(Object.assign({}, this.selectedData), { [key]: value === '' ? 0 : parseInt(value) });
@@ -182,6 +192,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
   }
   renderRate() {
     if (this.selectedData.isRateModified) {
+      console.log('selectedData.rate', this.selectedData.rate);
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
     return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);

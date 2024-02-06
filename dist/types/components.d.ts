@@ -38,6 +38,7 @@ export namespace Components {
         "bedPreferenceType": any[];
         "bookingType": string;
         "currency": any;
+        "dateDifference": number;
         "defaultGuestPreference": number | null;
         "defaultGuestRoomId": number;
         "guestInfo": { [key: string]: any };
@@ -1102,6 +1103,7 @@ declare namespace LocalJSX {
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
         "currency"?: any;
+        "dateDifference"?: number;
         "defaultGuestPreference"?: number | null;
         "defaultGuestRoomId"?: number;
         "guestInfo"?: { [key: string]: any };
