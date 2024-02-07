@@ -62,7 +62,6 @@ export declare class IrBookingDetails {
   handleEditSidebar(): void;
   handleSelectChange(e: CustomEvent<any>): void;
   handleClick(e: any): Promise<void>;
-  watchDropdownStatuses(newValue: any, oldValue: any): void;
   openEditSidebar(): void;
   _calculateNights(fromDate: string, toDate: string): number;
   _getBookingStatus(statusCode: string, tableName: string): any;
