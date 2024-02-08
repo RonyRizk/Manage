@@ -1,4 +1,4 @@
-import { TPickupData } from './types';
+import { TDueParams, TPickupData } from './types';
 export declare class PickupService {
   token: string | null;
   constructor();
@@ -7,4 +7,6 @@ export declare class PickupService {
     error: boolean;
     cause?: keyof TPickupData;
   };
+  updateDue(params: TDueParams): number;
+  getNumberOfVehicles(): void;
 }

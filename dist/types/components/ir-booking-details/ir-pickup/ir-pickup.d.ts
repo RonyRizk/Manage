@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
-import { TDueParams, TPickupData } from './types';
+import { TPickupData } from './types';
 import { IAllowedOptions } from "../../../models/calendarData";
 export declare class IrPickup {
   el: HTMLElement;
@@ -16,7 +16,6 @@ export declare class IrPickup {
   handleLocationChange(event: CustomEvent): void;
   initializeInputMask(): void;
   handleVehicleTypeChange(e: CustomEvent): void;
-  updateDue(params: TDueParams): number;
   updatePickupData(key: keyof TPickupData, value: any): void;
   savePickup(): Promise<void>;
   render(): any;
