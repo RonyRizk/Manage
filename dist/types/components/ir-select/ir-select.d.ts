@@ -4,6 +4,7 @@ export declare class IrSelect {
   name: string;
   data: selectOption[];
   label: string;
+  selectStyles: string;
   selectedValue: any;
   required: boolean;
   LabelAvailable: boolean;

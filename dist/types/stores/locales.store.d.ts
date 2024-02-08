@@ -139,6 +139,14 @@ export type LocalizationStrings = {
   Lcz_BedConfiguration: string;
   Lcz_SelectStatus: string;
   Lcz_StatusUpdatedSuccessfully: string;
+  Lcz_Pickup: string;
+  Lcz_ArrivalDate: string;
+  Lcz_Time: string;
+  Lcz_FlightDetails: string;
+  Lcz_DueUponBooking: string;
+  Lcz_NbrOfVehicles: string;
+  Lcz_Pickup_YesFrom: string;
+  Lcz_Pickup_NoThankYou: string;
 };
 export declare const locales: ILocale, onCalendarDatesChange: import("@stencil/store/dist/types").OnChangeHandler<ILocale>;
 export default locales;

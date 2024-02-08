@@ -4,8 +4,10 @@ export declare class IrInputText {
   value: any;
   label: string;
   placeholder: string;
+  inputStyles: string;
   required: boolean;
   LabelAvailable: boolean;
+  readonly: boolean;
   type: string;
   submited: boolean;
   inputStyle: boolean;

@@ -10,6 +10,7 @@ export declare class IrButton {
   btn_disabled: boolean;
   btn_type: string;
   isLoading: boolean;
+  btn_styles: string;
   connectedCallback(): void;
   disconnectedCallback(): void;
   clickHanlder: EventEmitter<any>;

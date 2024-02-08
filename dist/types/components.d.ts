@@ -17,6 +17,7 @@ import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { Booking } from "./models/booking.dto";
 import { ILocale as ILocale1 } from "./components.d";
+import { TPickupData } from "./components/ir-booking-details/ir-pickup/types";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -31,6 +32,7 @@ export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { Booking } from "./models/booking.dto";
 export { ILocale as ILocale1 } from "./components.d";
+export { TPickupData } from "./components/ir-booking-details/ir-pickup/types";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -276,6 +278,7 @@ export namespace Components {
         "btn_block": boolean;
         "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "btn_disabled": boolean;
+        "btn_styles": string;
         "btn_type": string;
         "icon": string;
         "isLoading": boolean;
@@ -368,6 +371,7 @@ export namespace Components {
     interface IrInputText {
         "LabelAvailable": boolean;
         "inputStyle": boolean;
+        "inputStyles": string;
         "label": string;
         "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelBorder": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
@@ -376,6 +380,7 @@ export namespace Components {
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
         "name": string;
         "placeholder": string;
+        "readonly": boolean;
         "required": boolean;
         "size": 'sm' | 'md' | 'lg';
         "submited": boolean;
@@ -447,6 +452,9 @@ export namespace Components {
         "paymentExceptionMessage": string;
     }
     interface IrPickup {
+        "bookingNumber": string;
+        "defaultPickupData": TPickupData;
+        "numberOfPersons": number;
     }
     interface IrRoom {
         "bookingEvent": Booking1;
@@ -488,6 +496,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "selectStyle": boolean;
+        "selectStyles": string;
         "selectedValue": any;
         "size": 'sm' | 'md' | 'lg';
         "submited": boolean;
@@ -698,6 +707,10 @@ export interface IrModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentDetailsElement;
+}
+export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPickupElement;
 }
 export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1418,6 +1431,7 @@ declare namespace LocalJSX {
         "btn_block"?: boolean;
         "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "btn_disabled"?: boolean;
+        "btn_styles"?: string;
         "btn_type"?: string;
         "icon"?: string;
         "isLoading"?: boolean;
@@ -1525,6 +1539,7 @@ declare namespace LocalJSX {
     interface IrInputText {
         "LabelAvailable"?: boolean;
         "inputStyle"?: boolean;
+        "inputStyles"?: string;
         "label"?: string;
         "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelBorder"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
@@ -1534,6 +1549,7 @@ declare namespace LocalJSX {
         "name"?: string;
         "onTextChange"?: (event: IrInputTextCustomEvent<any>) => void;
         "placeholder"?: string;
+        "readonly"?: boolean;
         "required"?: boolean;
         "size"?: 'sm' | 'md' | 'lg';
         "submited"?: boolean;
@@ -1613,6 +1629,10 @@ declare namespace LocalJSX {
         "paymentExceptionMessage"?: string;
     }
     interface IrPickup {
+        "bookingNumber"?: string;
+        "defaultPickupData"?: TPickupData;
+        "numberOfPersons"?: number;
+        "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
     }
     interface IrRoom {
         "bookingEvent"?: Booking1;
@@ -1660,6 +1680,7 @@ declare namespace LocalJSX {
         "onSelectChange"?: (event: IrSelectCustomEvent<any>) => void;
         "required"?: boolean;
         "selectStyle"?: boolean;
+        "selectStyles"?: string;
         "selectedValue"?: any;
         "size"?: 'sm' | 'md' | 'lg';
         "submited"?: boolean;

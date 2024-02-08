@@ -40,7 +40,7 @@ export declare class IrBookingDetails {
   guestData: Guest;
   defaultTexts: ILocale;
   rerenderFlag: boolean;
-  isSidebarOpen: boolean;
+  sidebarState: 'guest' | 'pickup' | null;
   sendDataToServer: EventEmitter<guestInfo>;
   handlePrintClick: EventEmitter;
   handleReceiptClick: EventEmitter;

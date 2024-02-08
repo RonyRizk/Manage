@@ -1,2 +1,0 @@
-import{r as e,h as l,H as a}from"./p-3897ba3c.js";const s=".sc-ir-pickup-h{display:block}";const t=class{constructor(l){e(this,l)}render(){return l(a,{class:"card mt-1 p-1"},l("section",{class:"d-flex align-items-center"},l("h4",{class:"m-0 p-0"},"Pickup"),l("ir-select",{class:"m-0",LabelAvailable:false,data:[{text:"helo",value:"helklo"}]}),l("ir-select",{class:"m-0",label:"Arrival date",data:[{text:"helo",value:"helklo"}]}),l("ir-input-text",{label:"Time"})))}};t.style=s;export{t as ir_pickup};
-//# sourceMappingURL=p-5c590766.entry.js.map
