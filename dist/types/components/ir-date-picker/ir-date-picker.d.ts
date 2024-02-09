@@ -20,7 +20,6 @@ export declare class IrDatePicker {
   disabled: boolean;
   singleDatePicker: boolean;
   minDate: string;
-  maxDate: string;
   maxSpan: moment.DurationInputArg1;
   dateChanged: EventEmitter<{
     start: moment.Moment;

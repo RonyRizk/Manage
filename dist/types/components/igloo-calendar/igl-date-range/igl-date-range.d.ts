@@ -7,7 +7,6 @@ export declare class IglDateRange {
   disabled: boolean;
   minDate: string;
   dateLabel: any;
-  maxDate: string;
   dateSelectEvent: EventEmitter<{
     [key: string]: any;
   }>;
