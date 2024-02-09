@@ -15,9 +15,8 @@ import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { Booking } from "./models/booking.dto";
+import { Booking, IBookingPickupInfo } from "./models/booking.dto";
 import { ILocale as ILocale1 } from "./components.d";
-import { TPickupData } from "./components/ir-booking-details/ir-pickup/types";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -30,9 +29,8 @@ export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { Booking } from "./models/booking.dto";
+export { Booking, IBookingPickupInfo } from "./models/booking.dto";
 export { ILocale as ILocale1 } from "./components.d";
-export { TPickupData } from "./components/ir-booking-details/ir-pickup/types";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -170,6 +168,7 @@ export namespace Components {
         "dateLabel": any;
         "defaultData": { [key: string]: any };
         "disabled": boolean;
+        "maxDate": string;
         "minDate": string;
     }
     interface IglLegends {
@@ -328,6 +327,7 @@ export namespace Components {
         "format": string;
         "fromDate": Date;
         "fromLabel": string;
+        "maxDate": string;
         "maxSpan": moment.DurationInputArg1;
         "minDate": string;
         "monthNames": string[];
@@ -453,7 +453,7 @@ export namespace Components {
     }
     interface IrPickup {
         "bookingNumber": string;
-        "defaultPickupData": TPickupData;
+        "defaultPickupData": IBookingPickupInfo | null;
         "numberOfPersons": number;
     }
     interface IrRoom {
@@ -495,6 +495,7 @@ export namespace Components {
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
         "name": string;
         "required": boolean;
+        "selectContainerStyle": string;
         "selectStyle": boolean;
         "selectStyles": string;
         "selectedValue": any;
@@ -1286,6 +1287,7 @@ declare namespace LocalJSX {
         "dateLabel"?: any;
         "defaultData"?: { [key: string]: any };
         "disabled"?: boolean;
+        "maxDate"?: string;
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
@@ -1487,6 +1489,7 @@ declare namespace LocalJSX {
         "format"?: string;
         "fromDate"?: Date;
         "fromLabel"?: string;
+        "maxDate"?: string;
         "maxSpan"?: moment.DurationInputArg1;
         "minDate"?: string;
         "monthNames"?: string[];
@@ -1560,6 +1563,7 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "defaultMessage"?: { loadingMessage: string; errorMessage: string; };
         "handledEndpoints"?: string[];
+        "onFetchingIrInterceptorDataStatus"?: (event: IrInterceptorCustomEvent<'pending' | 'done'>) => void;
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
     interface IrLabel {
@@ -1630,9 +1634,10 @@ declare namespace LocalJSX {
     }
     interface IrPickup {
         "bookingNumber"?: string;
-        "defaultPickupData"?: TPickupData;
+        "defaultPickupData"?: IBookingPickupInfo | null;
         "numberOfPersons"?: number;
         "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IrPickupCustomEvent<null>) => void;
     }
     interface IrRoom {
         "bookingEvent"?: Booking1;
@@ -1679,6 +1684,7 @@ declare namespace LocalJSX {
         "name"?: string;
         "onSelectChange"?: (event: IrSelectCustomEvent<any>) => void;
         "required"?: boolean;
+        "selectContainerStyle"?: string;
         "selectStyle"?: boolean;
         "selectStyles"?: string;
         "selectedValue"?: any;
