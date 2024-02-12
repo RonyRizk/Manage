@@ -15,9 +15,9 @@ export class IrInputText {
     this.size = 'md';
     this.textSize = 'md';
     this.labelPosition = 'left';
-    this.labelBackground = 'light';
+    this.labelBackground = null;
     this.labelColor = 'dark';
-    this.labelBorder = 'none';
+    this.labelBorder = 'light';
     this.labelWidth = 3;
     this.valid = undefined;
     this.initial = true;
@@ -47,7 +47,7 @@ export class IrInputText {
   }
   render() {
     let className = 'form-control';
-    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor} border-${this.labelBorder}` }, h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} bg-${this.labelBackground} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
+    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}` }, h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${this.labelBackground ? 'bg-' + this.labelBackground : ''} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
     if (!this.LabelAvailable) {
       label = '';
     }
@@ -60,6 +60,7 @@ export class IrInputText {
     return (h("div", { class: "form-group" }, h("div", { class: "input-group row m-0" }, label, h("input", { readOnly: this.readonly, type: this.type, class: `${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${this.readonly && 'bg-white'} ${this.inputStyles}`, placeholder: this.placeholder, value: this.value, onInput: this.handleInputChange.bind(this), required: this.required }))));
   }
   static get is() { return "ir-input-text"; }
+  static get encapsulation() { return "scoped"; }
   static get properties() {
     return {
       "name": {
@@ -315,7 +316,7 @@ export class IrInputText {
         "type": "string",
         "mutable": false,
         "complexType": {
-          "original": "'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'",
+          "original": "'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null",
           "resolved": "\"danger\" | \"dark\" | \"info\" | \"light\" | \"primary\" | \"secondary\" | \"success\" | \"warning\"",
           "references": {}
         },
@@ -327,7 +328,7 @@ export class IrInputText {
         },
         "attribute": "label-background",
         "reflect": false,
-        "defaultValue": "'light'"
+        "defaultValue": "null"
       },
       "labelColor": {
         "type": "string",
@@ -363,7 +364,7 @@ export class IrInputText {
         },
         "attribute": "label-border",
         "reflect": false,
-        "defaultValue": "'none'"
+        "defaultValue": "'light'"
       },
       "labelWidth": {
         "type": "number",

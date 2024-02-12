@@ -18,6 +18,7 @@ const initialState = {
   toBeAssignedEvents: [],
   allowed_payment_methods: [],
   pickup_service: undefined,
+  max_nights: 0,
 };
 const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 

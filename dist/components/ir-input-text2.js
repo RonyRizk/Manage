@@ -19,9 +19,9 @@ const IrInputText = /*@__PURE__*/ proxyCustomElement(class IrInputText extends H
     this.size = 'md';
     this.textSize = 'md';
     this.labelPosition = 'left';
-    this.labelBackground = 'light';
+    this.labelBackground = null;
     this.labelColor = 'dark';
-    this.labelBorder = 'none';
+    this.labelBorder = 'light';
     this.labelWidth = 3;
     this.valid = undefined;
     this.initial = true;
@@ -51,7 +51,7 @@ const IrInputText = /*@__PURE__*/ proxyCustomElement(class IrInputText extends H
   }
   render() {
     let className = 'form-control';
-    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor} border-${this.labelBorder}` }, h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} bg-${this.labelBackground} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
+    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}` }, h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${this.labelBackground ? 'bg-' + this.labelBackground : ''} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
     if (!this.LabelAvailable) {
       label = '';
     }
@@ -67,7 +67,7 @@ const IrInputText = /*@__PURE__*/ proxyCustomElement(class IrInputText extends H
     "value": ["watchHandler"],
     "submited": ["watchHandler2"]
   }; }
-}, [0, "ir-input-text", {
+}, [2, "ir-input-text", {
     "name": [1],
     "value": [8],
     "label": [1],

@@ -10,6 +10,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     this.data = undefined;
     this.label = '<label>';
     this.selectStyles = undefined;
+    this.selectContainerStyle = undefined;
     this.selectedValue = null;
     this.required = undefined;
     this.LabelAvailable = true;
@@ -19,9 +20,9 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     this.size = 'md';
     this.textSize = 'md';
     this.labelPosition = 'left';
-    this.labelBackground = 'light';
+    this.labelBackground = null;
     this.labelColor = 'dark';
-    this.labelBorder = 'none';
+    this.labelBorder = 'light';
     this.labelWidth = 3;
     this.initial = true;
     this.valid = false;
@@ -52,7 +53,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
   }
   render() {
     let className = 'form-control';
-    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor} border-${this.labelBorder}` }, h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} bg-${this.labelBackground} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
+    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}` }, h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${this.labelBackground ? 'bg-' + this.labelBackground : ''} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
     if (this.selectStyle === false) {
       className = '';
     }
@@ -62,7 +63,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     if (!this.LabelAvailable) {
       label = '';
     }
-    return (h("div", { class: "form-group" }, h("div", { class: "input-group row m-0" }, label, h("select", { class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, h("option", { value: '' }, this.firstOption), this.data.map(item => {
+    return (h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, h("div", { class: "input-group row m-0" }, label, h("select", { class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, h("option", { value: '' }, this.firstOption), this.data.map(item => {
       if (this.selectedValue === item.value) {
         return (h("option", { selected: true, value: item.value }, item.text));
       }
@@ -75,11 +76,12 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     "selectedValue": ["watchHandler"],
     "submited": ["watchHandler2"]
   }; }
-}, [0, "ir-select", {
+}, [2, "ir-select", {
     "name": [1],
     "data": [16],
     "label": [1],
     "selectStyles": [1, "select-styles"],
+    "selectContainerStyle": [1, "select-container-style"],
     "selectedValue": [1544, "selected-value"],
     "required": [4],
     "LabelAvailable": [4, "label-available"],

@@ -26,6 +26,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     this.disabled = false;
     this.singleDatePicker = false;
     this.minDate = undefined;
+    this.maxDate = undefined;
     this.maxSpan = {
       days: 240,
     };
@@ -38,6 +39,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
       startDate: hooks(this.fromDate),
       endDate: hooks(this.toDate),
       minDate: hooks(this.minDate || hooks(new Date()).format('YYYY-MM-DD')),
+      maxDate: this.maxDate ? hooks(this.maxDate) : undefined,
       maxSpan: this.maxSpan,
       autoApply: this.autoApply,
       locale: {
@@ -81,6 +83,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     "disabled": [4],
     "singleDatePicker": [4, "single-date-picker"],
     "minDate": [1, "min-date"],
+    "maxDate": [1, "max-date"],
     "maxSpan": [8, "max-span"]
   }]);
 function defineCustomElement() {

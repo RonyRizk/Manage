@@ -4,11 +4,10 @@ export class IrIcon {
     this.icon = 'ft-check';
   }
   render() {
-    return (h("i", { onClick: () => {
-        this.iconClickHandler.emit();
-      }, class: this.icon }));
+    return (h("button", { class: "icon-button", onClick: () => this.iconClickHandler.emit() }, h("slot", { name: "icon" })));
   }
   static get is() { return "ir-icon"; }
+  static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
       "$": ["ir-icon.css"]

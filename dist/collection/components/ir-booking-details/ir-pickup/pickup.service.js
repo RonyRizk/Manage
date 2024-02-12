@@ -4,12 +4,12 @@ export class PickupService {
   constructor() {
     this.token = JSON.parse(sessionStorage.getItem('token'));
   }
-  async savePickup(params, booking_nbr) {
+  async savePickup(params, booking_nbr, is_remove) {
     try {
       const splitTime = params.arrival_time.split(':');
       await axios.post(`/Do_Pickup?Ticket=${this.token}`, {
         booking_nbr,
-        is_remove: false,
+        is_remove,
         currency: params.currency,
         date: params.arrival_date,
         details: params.flight_details,
@@ -17,12 +17,37 @@ export class PickupService {
         minute: splitTime[1],
         nbr_of_units: params.number_of_vehicles,
         selected_option: params.selected_option,
-        total: params.due_upon_booking,
+        total: +params.due_upon_booking,
       });
     }
     catch (error) {
       console.log(error);
     }
+  }
+  transformDefaultPickupData(data) {
+    return {
+      arrival_date: data.date,
+      arrival_time: data.hour + ':' + data.minute,
+      currency: data.currency,
+      due_upon_booking: data.total.toFixed(2),
+      flight_details: data.details,
+      location: data.selected_option.location.id,
+      number_of_vehicles: data.nbr_of_units,
+      selected_option: data.selected_option,
+      vehicle_type_code: data.selected_option.vehicle.code,
+    };
+  }
+  getAvailableLocations(message) {
+    let locations = [];
+    calendar_data.pickup_service.allowed_options.forEach(option => {
+      if (locations.filter(location => location.value === option.location.id).length === 0) {
+        locations.push({
+          text: message + ' ' + option.location.description,
+          value: option.location.id,
+        });
+      }
+    });
+    return locations;
   }
   validateForm(params) {
     if (params.arrival_time.split(':').length !== 2) {
@@ -51,25 +76,30 @@ export class PickupService {
     }
     return { error: false };
   }
-  // private getPickUpPersonStatus(code: string) {
-  //   const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
-  //   if (!getCodeDescription) {
-  //     return null;
-  //   }
-  //   return getCodeDescription.description;
-  // }
+  getNumberOfVehicles(capacity, numberOfPersons) {
+    let total_number_of_vehicles = Math.ceil(numberOfPersons / capacity);
+    let startNumber = total_number_of_vehicles > 1 ? total_number_of_vehicles : 1;
+    let bonus_number = total_number_of_vehicles > 1 ? 2 : 3;
+    return Array.from({ length: total_number_of_vehicles + bonus_number }, (_, i) => startNumber + i);
+  }
+  getPickUpPersonStatus(code) {
+    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
+    if (!getCodeDescription) {
+      return null;
+    }
+    return getCodeDescription.description;
+  }
   updateDue(params) {
-    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === params.code);
+    const getCodeDescription = this.getPickUpPersonStatus(params.code);
     if (!getCodeDescription) {
       return;
     }
-    if (getCodeDescription.description === 'Person') {
+    if (getCodeDescription === 'Person') {
       return params.amount * params.numberOfPersons;
     }
     else {
       return params.amount * params.number_of_vehicles;
     }
   }
-  getNumberOfVehicles() { }
 }
 //# sourceMappingURL=pickup.service.js.map

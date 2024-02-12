@@ -10,6 +10,7 @@ export declare class IrInterceptor {
   };
   handledEndpoints: string[];
   toast: EventEmitter<IToast>;
+  fetchingIrInterceptorDataStatus: EventEmitter<'pending' | 'done'>;
   componentWillLoad(): void;
   setupAxiosInterceptors(): void;
   extractEndpoint(url: string): string;

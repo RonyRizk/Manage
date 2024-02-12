@@ -20,6 +20,7 @@ export class IrDatePicker {
     this.disabled = false;
     this.singleDatePicker = false;
     this.minDate = undefined;
+    this.maxDate = undefined;
     this.maxSpan = {
       days: 240,
     };
@@ -32,6 +33,7 @@ export class IrDatePicker {
       startDate: moment(this.fromDate),
       endDate: moment(this.toDate),
       minDate: moment(this.minDate || moment(new Date()).format('YYYY-MM-DD')),
+      maxDate: this.maxDate ? moment(this.maxDate) : undefined,
       maxSpan: this.maxSpan,
       autoApply: this.autoApply,
       locale: {
@@ -387,6 +389,23 @@ export class IrDatePicker {
           "text": ""
         },
         "attribute": "min-date",
+        "reflect": false
+      },
+      "maxDate": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "max-date",
         "reflect": false
       },
       "maxSpan": {

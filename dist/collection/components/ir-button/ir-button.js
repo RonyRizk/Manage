@@ -1,4 +1,4 @@
-import { h, Fragment } from "@stencil/core";
+import { h } from "@stencil/core";
 export class IrButton {
   constructor() {
     this.name = undefined;
@@ -16,13 +16,8 @@ export class IrButton {
   connectedCallback() { }
   disconnectedCallback() { }
   render() {
-    let block = '';
-    if (this.btn_block) {
-      block = 'btn-block';
-    }
-    return (h("button", { onClick: () => {
-        this.clickHanlder.emit();
-      }, class: `m-0 btn btn-${this.btn_color} ${this.btn_styles} d-flex btn-${this.size} text-${this.textSize} ${block}`, type: this.btn_type }, this.icon && !this.isLoading && (h("span", null, h("i", { class: `${this.icon} font-small-3` }), "\u00A0")), this.isLoading && (h(Fragment, null, h("span", { class: 'm-0 p-0 loader' }), "\u00A0")), h("span", { class: 'm-0 p-0 button-text' }, this.text)));
+    let blockClass = this.btn_block ? 'btn-block' : '';
+    return (h("button", { onClick: () => this.clickHanlder.emit(), class: `btn btn-${this.btn_color} ${this.btn_styles} d-flex align-items-center btn-${this.size} text-${this.textSize} ${blockClass}`, type: this.btn_type, disabled: this.btn_disabled }, h("span", { class: "button-icon", "data-state": this.isLoading ? 'loading' : '' }, h("slot", { name: "icon" })), this.isLoading && h("span", { class: "loader m-0 p-0" }), this.text && h("span", { class: "button-text m-0" }, this.text)));
   }
   static get is() { return "ir-button"; }
   static get originalStyleUrls() {

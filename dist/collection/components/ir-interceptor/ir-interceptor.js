@@ -24,9 +24,28 @@ export class IrInterceptor {
   isHandledEndpoint(url) {
     return this.handledEndpoints.includes(this.extractEndpoint(url));
   }
+  /* HTML: <div class="loader"></div> */
+  // .loader {
+  //   width: 60px;
+  //   aspect-ratio: 2;
+  //   --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
+  //   background:
+  //     var(--_g) 0%   50%,
+  //     var(--_g) 50%  50%,
+  //     var(--_g) 100% 50%;
+  //   background-size: calc(100%/3) 50%;
+  //   animation: l3 1s infinite linear;
+  // }
+  // @keyframes l3 {
+  //     20%{background-position:0%   0%, 50%  50%,100%  50%}
+  //     40%{background-position:0% 100%, 50%   0%,100%  50%}
+  //     60%{background-position:0%  50%, 50% 100%,100%   0%}
+  //     80%{background-position:0%  50%, 50%  50%,100% 100%}
+  // }
   handleRequest(config) {
     if (this.isHandledEndpoint(config.url)) {
       this.isLoading = true;
+      this.fetchingIrInterceptorDataStatus.emit('pending');
       if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
         this.defaultMessage.loadingMessage = 'Updating Event';
       }
@@ -43,6 +62,7 @@ export class IrInterceptor {
   handleResponse(response) {
     var _a;
     this.isLoading = false;
+    this.fetchingIrInterceptorDataStatus.emit('done');
     if ((_a = response.data.ExceptionMsg) === null || _a === void 0 ? void 0 : _a.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);
@@ -162,6 +182,21 @@ export class IrInterceptor {
               "id": "src/components/ir-toast/toast.ts::IToast"
             }
           }
+        }
+      }, {
+        "method": "fetchingIrInterceptorDataStatus",
+        "name": "fetchingIrInterceptorDataStatus",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "'pending' | 'done'",
+          "resolved": "\"done\" | \"pending\"",
+          "references": {}
         }
       }];
   }

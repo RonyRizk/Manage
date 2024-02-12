@@ -3,7 +3,6 @@ import { Booking, IDueDate, IPayment } from "../../../models/booking.dto";
 import moment from 'moment';
 import { ILocale } from "../../../components";
 export declare class IrPaymentDetails {
-  item: any;
   bookingDetails: Booking;
   defaultTexts: ILocale;
   newTableRow: boolean;
@@ -15,7 +14,6 @@ export declare class IrPaymentDetails {
   paymentDetailsUrl: string;
   paymentExceptionMessage: string;
   resetBookingData: EventEmitter<null>;
-  creditCardPressHandler: EventEmitter<any>;
   private itemToBeAdded;
   private paymentService;
   componentWillLoad(): Promise<void>;
