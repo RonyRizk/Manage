@@ -3,6 +3,7 @@ import { ToBeAssignedService } from "../../../services/toBeAssigned.service";
 import { dateToFormattedString } from "../../../utils/utils";
 import moment from "moment";
 import locales from "../../../../../src/stores/locales.store";
+import { getUnassignedDates } from "../../../../../src/stores/unassigned_dates.store";
 //import { updateCategories } from '../../../utils/events.utils';
 export class IglToBeAssigned {
   constructor() {
@@ -113,7 +114,8 @@ export class IglToBeAssigned {
       });
       this.selectedDate = null;
       //this.unassignedDates = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-      this.unassignedDates = this.calendarData.unassignedDates;
+      this.unassignedDates = getUnassignedDates();
+      console.log(this.unassignedDates);
       this.data = this.unassignedDates;
       this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
       if (!this.selectedDate && this.orderedDatesList.length) {

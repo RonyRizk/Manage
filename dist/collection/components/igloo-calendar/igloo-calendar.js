@@ -11,6 +11,7 @@ import { bookingStatus, calculateDaysBetweenDates, transformNewBLockedRooms, tra
 import calendar_dates from "../../../../src/stores/calendar-dates.store";
 import locales from "../../../../src/stores/locales.store";
 import calendar_data from "../../../../src/stores/calendar-data";
+import { addUnassingedDates, removeUnassignedDates } from "../../../../src/stores/unassigned_dates.store";
 export class IglooCalendar {
   constructor() {
     this.bookingService = new BookingService();
@@ -120,6 +121,7 @@ export class IglooCalendar {
         const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
         this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: Object.assign(Object.assign({}, this.unassignedDates), data) };
         this.calendarData = Object.assign(Object.assign({}, this.calendarData), { unassignedDates: data });
+        addUnassingedDates(data);
       }
       this.socket = io('https://realtime.igloorooms.com/');
       this.socket.on('MSG', async (msg) => {
@@ -164,13 +166,16 @@ export class IglooCalendar {
                 new Date(parsedResult.FROM_DATE).getTime() >= this.calendarData.startingDate &&
                 new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate) {
                 const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
+                addUnassingedDates(data);
                 this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
                 this.unassignedDates = {
                   fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
+                console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
+                  removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                     toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),

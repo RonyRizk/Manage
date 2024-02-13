@@ -10,6 +10,7 @@ import { t as transformNewBLockedRooms, a as transformNewBooking, b as bookingSt
 import { c as calendar_dates, d as defineCustomElement$u } from './igl-cal-body2.js';
 import { l as locales } from './locales.store.js';
 import { c as calendar_data } from './calendar-data.js';
+import { a as addUnassingedDates, r as removeUnassignedDates, d as defineCustomElement$l } from './igl-to-be-assigned2.js';
 import { d as defineCustomElement$E } from './igl-application-info2.js';
 import { d as defineCustomElement$D } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$C } from './igl-book-property2.js';
@@ -28,7 +29,6 @@ import { d as defineCustomElement$p } from './igl-pagetwo2.js';
 import { d as defineCustomElement$o } from './igl-property-booked-by2.js';
 import { d as defineCustomElement$n } from './igl-tba-booking-view2.js';
 import { d as defineCustomElement$m } from './igl-tba-category-view2.js';
-import { d as defineCustomElement$l } from './igl-to-be-assigned2.js';
 import { d as defineCustomElement$k } from './ir-autocomplete2.js';
 import { d as defineCustomElement$i } from './ir-button2.js';
 import { d as defineCustomElement$h } from './ir-date-picker2.js';
@@ -4021,6 +4021,7 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
         const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
         this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: Object.assign(Object.assign({}, this.unassignedDates), data) };
         this.calendarData = Object.assign(Object.assign({}, this.calendarData), { unassignedDates: data });
+        addUnassingedDates(data);
       }
       this.socket = lookup('https://realtime.igloorooms.com/');
       this.socket.on('MSG', async (msg) => {
@@ -4065,13 +4066,16 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
                 new Date(parsedResult.FROM_DATE).getTime() >= this.calendarData.startingDate &&
                 new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate) {
                 const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
+                addUnassingedDates(data);
                 this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
                 this.unassignedDates = {
                   fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
+                console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
+                  removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                     toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),

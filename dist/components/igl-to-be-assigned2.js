@@ -2,10 +2,34 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from 
 import { T as ToBeAssignedService } from './toBeAssigned.service.js';
 import { d as dateToFormattedString } from './utils.js';
 import { h as hooks } from './moment.js';
-import { l as locales } from './locales.store.js';
+import { c as createStore, l as locales } from './locales.store.js';
 import { d as defineCustomElement$3 } from './igl-tba-booking-view2.js';
 import { d as defineCustomElement$2 } from './igl-tba-category-view2.js';
 import { d as defineCustomElement$1 } from './ir-icon2.js';
+
+const initialState = {};
+let { state: unassigned_dates } = createStore(initialState);
+function addUnassingedDates(data) {
+  unassigned_dates = Object.assign(Object.assign({}, unassigned_dates), data);
+}
+function getUnassignedDates() {
+  return unassigned_dates;
+}
+function removeUnassignedDates(from_date, to_date) {
+  const fromTimestamp = convertToDateTimestamp(from_date);
+  const toTimestamp = convertToDateTimestamp(to_date);
+  Object.keys(unassigned_dates).forEach(key => {
+    const keyTimestamp = parseInt(key);
+    if (fromTimestamp <= keyTimestamp && keyTimestamp <= toTimestamp) {
+      delete unassigned_dates[key];
+    }
+  });
+}
+function convertToDateTimestamp(dateStr) {
+  const date = new Date(dateStr);
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
+}
 
 const iglToBeAssignedCss = ".sc-igl-to-be-assigned-h{display:block}.custom-dropdown.sc-igl-to-be-assigned{cursor:pointer;padding:5px 10px;width:min-content;margin-left:auto;margin-right:auto}.dropdown-toggle.sc-igl-to-be-assigned{all:unset;display:flex;width:max-content;align-items:center;gap:10px}.dropdown-menu.sc-igl-to-be-assigned{max-height:250px;overflow-y:auto}.tobeAssignedHeader.sc-igl-to-be-assigned{font-weight:500;letter-spacing:0.05rem;font-size:1.12rem;padding-top:5px;margin-bottom:1rem}.closeBtn.sc-igl-to-be-assigned{position:absolute;top:0;right:0;cursor:pointer;line-height:1em;padding:0.4rem}.closeBtn.sc-igl-to-be-assigned:hover{background-color:#f6f6f6}.dropdown-toggle.sc-igl-to-be-assigned::after{content:none;display:none}.dropdown-toggle.sc-igl-to-be-assigned .caret-icon.sc-igl-to-be-assigned{transition:transform 0.2s ease}.show.sc-igl-to-be-assigned .caret-icon.sc-igl-to-be-assigned{transform:rotate(-180deg)}.stickyHeader.sc-igl-to-be-assigned{position:-webkit-sticky;position:sticky;top:0;background-color:#ffffff;z-index:1}.pointer.sc-igl-to-be-assigned{cursor:pointer}";
 
@@ -125,7 +149,8 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
       });
       this.selectedDate = null;
       //this.unassignedDates = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-      this.unassignedDates = this.calendarData.unassignedDates;
+      this.unassignedDates = getUnassignedDates();
+      console.log(this.unassignedDates);
       this.data = this.unassignedDates;
       this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
       if (!this.selectedDate && this.orderedDatesList.length) {
@@ -261,6 +286,6 @@ function defineCustomElement() {
   } });
 }
 
-export { IglToBeAssigned as I, defineCustomElement as d };
+export { IglToBeAssigned as I, addUnassingedDates as a, defineCustomElement as d, removeUnassignedDates as r };
 
 //# sourceMappingURL=igl-to-be-assigned2.js.map
