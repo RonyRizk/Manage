@@ -2,11 +2,12 @@ import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal
 import { c as calendar_data } from './calendar-data.js';
 import { l as locales } from './locales.store.js';
 import { a as axios } from './axios.js';
-import { d as defineCustomElement$8 } from './ir-button2.js';
-import { d as defineCustomElement$7 } from './ir-channel-editor2.js';
-import { d as defineCustomElement$6 } from './ir-channel-general2.js';
-import { d as defineCustomElement$5 } from './ir-channel-header2.js';
-import { d as defineCustomElement$4 } from './ir-channel-mapping2.js';
+import { d as defineCustomElement$9 } from './ir-button2.js';
+import { d as defineCustomElement$8 } from './ir-channel-editor2.js';
+import { d as defineCustomElement$7 } from './ir-channel-general2.js';
+import { d as defineCustomElement$6 } from './ir-channel-header2.js';
+import { d as defineCustomElement$5 } from './ir-channel-mapping2.js';
+import { d as defineCustomElement$4 } from './ir-combobox2.js';
 import { d as defineCustomElement$3 } from './ir-icon2.js';
 import { d as defineCustomElement$2 } from './ir-sidebar2.js';
 
@@ -87,7 +88,11 @@ const IrChannel$1 = /*@__PURE__*/ proxyCustomElement(class IrChannel extends HTM
   }
   async initializeApp() {
     try {
-      await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      const [_, languageTexts] = await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
     }
     catch (error) {
       console.error(error);
@@ -103,7 +108,7 @@ const IrChannel$1 = /*@__PURE__*/ proxyCustomElement(class IrChannel extends HTM
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.channel_status = null;
-      }, open: this.channel_status !== null }, h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
+      }, open: this.channel_status !== null }, this.channel_status && h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
   }
   get el() { return this; }
   static get watchers() { return {
@@ -121,7 +126,7 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-channel", "ir-button", "ir-channel-editor", "ir-channel-general", "ir-channel-header", "ir-channel-mapping", "ir-icon", "ir-sidebar"];
+  const components = ["ir-channel", "ir-button", "ir-channel-editor", "ir-channel-general", "ir-channel-header", "ir-channel-mapping", "ir-combobox", "ir-icon", "ir-sidebar"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-channel":
       if (!customElements.get(tagName)) {
@@ -130,25 +135,30 @@ function defineCustomElement$1() {
       break;
     case "ir-button":
       if (!customElements.get(tagName)) {
-        defineCustomElement$8();
+        defineCustomElement$9();
       }
       break;
     case "ir-channel-editor":
       if (!customElements.get(tagName)) {
-        defineCustomElement$7();
+        defineCustomElement$8();
       }
       break;
     case "ir-channel-general":
       if (!customElements.get(tagName)) {
-        defineCustomElement$6();
+        defineCustomElement$7();
       }
       break;
     case "ir-channel-header":
       if (!customElements.get(tagName)) {
-        defineCustomElement$5();
+        defineCustomElement$6();
       }
       break;
     case "ir-channel-mapping":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$5();
+      }
+      break;
+    case "ir-combobox":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }

@@ -1,7 +1,9 @@
 import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-795d2df3.js';
-import { l as locales$1, a as axios } from './axios-ad456acb.js';
+import { l as locales$1 } from './locales.store-de01ea13.js';
 import { v as v4 } from './v4-87f26972.js';
-import { c as calendar_data, a as createStore } from './calendar-data-ef3d2bda.js';
+import { a as axios } from './axios-3bd8531e.js';
+import { c as calendar_data } from './calendar-data-45d57a45.js';
+import { c as createStore } from './index-2bd379e0.js';
 
 //! moment.js
 //! version : 2.29.4
@@ -16597,15 +16599,15 @@ const IrPaymentDetails = class {
       if (this.itemToBeAdded.amount === null) {
         this.toast.emit({
           type: 'error',
-          title: '',
-          description: 'Select an amount',
+          title: this.defaultTexts.entries.Lcz_EnterAmount,
+          description: '',
           position: 'top-right',
         });
         return;
       }
-      // await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
-      // this.initializeItemToBeAdded();
-      // this.resetBookingData.emit(null);
+      await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
+      this.initializeItemToBeAdded();
+      this.resetBookingData.emit(null);
     }
     catch (error) {
       console.log(error);

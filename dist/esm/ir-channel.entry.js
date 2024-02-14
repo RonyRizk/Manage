@@ -1,6 +1,8 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-795d2df3.js';
-import { c as calendar_data } from './calendar-data-ef3d2bda.js';
-import { a as axios, l as locales } from './axios-ad456acb.js';
+import { c as calendar_data } from './calendar-data-45d57a45.js';
+import { l as locales } from './locales.store-de01ea13.js';
+import { a as axios } from './axios-3bd8531e.js';
+import './index-2bd379e0.js';
 
 class RoomService {
   async fetchData(id, language) {
@@ -78,7 +80,11 @@ const IrChannel = class {
   }
   async initializeApp() {
     try {
-      await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      const [_, languageTexts] = await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
     }
     catch (error) {
       console.error(error);
@@ -94,7 +100,7 @@ const IrChannel = class {
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.channel_status = null;
-      }, open: this.channel_status !== null }, h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
+      }, open: this.channel_status !== null }, this.channel_status && h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {

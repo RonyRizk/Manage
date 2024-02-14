@@ -1,5 +1,6 @@
 import { RoomService } from "../../../../src/services/room.service";
 import calendar_data from "../../../../src/stores/calendar-data";
+import locales from "../../../../src/stores/locales.store";
 import { Host, h } from "@stencil/core";
 import axios from "axios";
 export class IrChannel {
@@ -21,7 +22,11 @@ export class IrChannel {
   }
   async initializeApp() {
     try {
-      await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      const [_, languageTexts] = await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
     }
     catch (error) {
       console.error(error);
@@ -37,7 +42,7 @@ export class IrChannel {
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.channel_status = null;
-      }, open: this.channel_status !== null }, h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
+      }, open: this.channel_status !== null }, this.channel_status && h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
   }
   static get is() { return "ir-channel"; }
   static get encapsulation() { return "scoped"; }

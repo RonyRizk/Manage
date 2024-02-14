@@ -3,8 +3,10 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const calendarData = require('./calendar-data-c84e040a.js');
-const axios = require('./axios-59a0efad.js');
+const calendarData = require('./calendar-data-196585f7.js');
+const locales_store = require('./locales.store-e07a3298.js');
+const axios = require('./axios-5ba3068e.js');
+require('./index-d93aa7bb.js');
 
 class RoomService {
   async fetchData(id, language) {
@@ -41,8 +43,8 @@ class RoomService {
           throw new Error(data.ExceptionMsg);
         }
         let entries = this.transformArrayToObject(data.My_Result.entries);
-        axios.locales.entries = entries;
-        axios.locales.direction = data.My_Result.direction;
+        locales_store.locales.entries = entries;
+        locales_store.locales.direction = data.My_Result.direction;
         return { entries, direction: data.My_Result.direction };
       }
     }
@@ -82,7 +84,11 @@ const IrChannel = class {
   }
   async initializeApp() {
     try {
-      await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      const [_, languageTexts] = await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      if (!locales_store.locales.entries) {
+        locales_store.locales.entries = languageTexts.entries;
+        locales_store.locales.direction = languageTexts.direction;
+      }
     }
     catch (error) {
       console.error(error);
@@ -98,7 +104,7 @@ const IrChannel = class {
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.channel_status = null;
-      }, open: this.channel_status !== null }, index.h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
+      }, open: this.channel_status !== null }, this.channel_status && index.h("ir-channel-editor", { onCloseSideBar: () => (this.channel_status = null) }))));
   }
   get el() { return index.getElement(this); }
   static get watchers() { return {

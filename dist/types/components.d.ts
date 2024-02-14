@@ -13,10 +13,10 @@ import { IToast as IToast1 } from "./components/ir-toast/toast";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { checkboxes, selectOption } from "./common/models";
+import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { Booking, IBookingPickupInfo } from "./models/booking.dto";
-import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -27,10 +27,10 @@ export { IToast as IToast1 } from "./components/ir-toast/toast";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export { checkboxes, selectOption } from "./common/models";
+export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { Booking, IBookingPickupInfo } from "./models/booking.dto";
-export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -317,6 +317,10 @@ export namespace Components {
     }
     interface IrCheckboxes {
         "checkboxes": checkboxes[];
+    }
+    interface IrCombobox {
+        "data": { id: number; name: string }[];
+        "duration": number;
     }
     interface IrCommon {
         "extraResources": string;
@@ -672,6 +676,10 @@ export interface IrCheckboxesCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrCheckboxesElement;
 }
+export interface IrComboboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrComboboxElement;
+}
 export interface IrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDatePickerElement;
@@ -941,6 +949,12 @@ declare global {
         prototype: HTMLIrCheckboxesElement;
         new (): HTMLIrCheckboxesElement;
     };
+    interface HTMLIrComboboxElement extends Components.IrCombobox, HTMLStencilElement {
+    }
+    var HTMLIrComboboxElement: {
+        prototype: HTMLIrComboboxElement;
+        new (): HTMLIrComboboxElement;
+    };
     interface HTMLIrCommonElement extends Components.IrCommon, HTMLStencilElement {
     }
     var HTMLIrCommonElement: {
@@ -1130,6 +1144,7 @@ declare global {
         "ir-channel-mapping": HTMLIrChannelMappingElement;
         "ir-checkbox": HTMLIrCheckboxElement;
         "ir-checkboxes": HTMLIrCheckboxesElement;
+        "ir-combobox": HTMLIrComboboxElement;
         "ir-common": HTMLIrCommonElement;
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-dropdown": HTMLIrDropdownElement;
@@ -1519,6 +1534,13 @@ declare namespace LocalJSX {
         "checkboxes"?: checkboxes[];
         "onCheckboxesChange"?: (event: IrCheckboxesCustomEvent<checkboxes[]>) => void;
     }
+    interface IrCombobox {
+        "data"?: { id: number; name: string }[];
+        "duration"?: number;
+        "onComboboxValue"?: (event: IrComboboxCustomEvent<{ key: string; data: unknown }>) => void;
+        "onInputCleared"?: (event: IrComboboxCustomEvent<null>) => void;
+        "onToast"?: (event: IrComboboxCustomEvent<IToast>) => void;
+    }
     interface IrCommon {
         "extraResources"?: string;
     }
@@ -1816,6 +1838,7 @@ declare namespace LocalJSX {
         "ir-channel-mapping": IrChannelMapping;
         "ir-checkbox": IrCheckbox;
         "ir-checkboxes": IrCheckboxes;
+        "ir-combobox": IrCombobox;
         "ir-common": IrCommon;
         "ir-date-picker": IrDatePicker;
         "ir-dropdown": IrDropdown;
@@ -1880,6 +1903,7 @@ declare module "@stencil/core" {
             "ir-channel-mapping": LocalJSX.IrChannelMapping & JSXBase.HTMLAttributes<HTMLIrChannelMappingElement>;
             "ir-checkbox": LocalJSX.IrCheckbox & JSXBase.HTMLAttributes<HTMLIrCheckboxElement>;
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;
+            "ir-combobox": LocalJSX.IrCombobox & JSXBase.HTMLAttributes<HTMLIrComboboxElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;

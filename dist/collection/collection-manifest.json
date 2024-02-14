@@ -35,6 +35,7 @@
     "components/ir-channel/ir-channel-mapping/ir-channel-mapping.js",
     "components/ir-checkbox/ir-checlbox.js",
     "components/ir-checkboxes/ir-checkboxes.js",
+    "components/ir-combobox/ir-combobox.js",
     "components/ir-common/ir-common.js",
     "components/ir-date-picker/ir-date-picker.js",
     "components/ir-dropdown/ir-dropdown.js",
