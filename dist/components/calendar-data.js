@@ -1,4 +1,4 @@
-import { c as createStore } from './locales.store.js';
+import { c as createStore } from './index2.js';
 
 const initialState = {
   adultChildConstraints: {
@@ -19,6 +19,7 @@ const initialState = {
   allowed_payment_methods: [],
   pickup_service: undefined,
   max_nights: 0,
+  channels: [],
 };
 const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 

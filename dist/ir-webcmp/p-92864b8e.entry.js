@@ -1,2 +1,0 @@
-import{r as n,c as i,h as o}from"./p-05195efb.js";const c=".sc-ir-icon-h{margin:0;padding:0}.icon-button.sc-ir-icon{all:unset;margin:0;padding:0}.icon-button.sc-ir-icon:hover{cursor:pointer}";const t=class{constructor(o){n(this,o);this.iconClickHandler=i(this,"iconClickHandler",7);this.icon="ft-check"}render(){return o("button",{class:"icon-button",onClick:()=>this.iconClickHandler.emit()},o("slot",{name:"icon"}))}};t.style=c;export{t as ir_icon};
-//# sourceMappingURL=p-92864b8e.entry.js.map

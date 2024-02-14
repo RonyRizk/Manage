@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { c as createStore, l as locales } from './locales.store.js';
+import { c as createStore } from './index2.js';
+import { l as locales } from './locales.store.js';
 import { d as defineCustomElement$3 } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$2 } from './igl-booking-event2.js';
 import { d as defineCustomElement$1 } from './igl-booking-event-hover2.js';

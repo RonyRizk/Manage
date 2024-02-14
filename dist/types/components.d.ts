@@ -277,6 +277,17 @@ export namespace Components {
         "textSize": 'sm' | 'md' | 'lg';
     }
     interface IrChannel {
+        "baseurl": string;
+        "language": string;
+        "propertyid": number;
+        "ticket": string;
+    }
+    interface IrChannelEditor {
+    }
+    interface IrChannelGeneral {
+    }
+    interface IrChannelHeader {
+        "headerTitles": { id: string; name: string; disabled: boolean }[];
     }
     interface IrChannelManager {
         "allowed_MinStayTypes": selectOption[];
@@ -293,6 +304,8 @@ export namespace Components {
         "hostRoom": RoomType[];
         "listData": ChannelManager[];
         "mapReference": RoomType[];
+    }
+    interface IrChannelMapping {
     }
     interface IrCheckbox {
         "checked": boolean;
@@ -639,6 +652,14 @@ export interface IrButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrButtonElement;
 }
+export interface IrChannelEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrChannelEditorElement;
+}
+export interface IrChannelHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrChannelHeaderElement;
+}
 export interface IrChannelManagerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrChannelManagerElement;
@@ -878,11 +899,35 @@ declare global {
         prototype: HTMLIrChannelElement;
         new (): HTMLIrChannelElement;
     };
+    interface HTMLIrChannelEditorElement extends Components.IrChannelEditor, HTMLStencilElement {
+    }
+    var HTMLIrChannelEditorElement: {
+        prototype: HTMLIrChannelEditorElement;
+        new (): HTMLIrChannelEditorElement;
+    };
+    interface HTMLIrChannelGeneralElement extends Components.IrChannelGeneral, HTMLStencilElement {
+    }
+    var HTMLIrChannelGeneralElement: {
+        prototype: HTMLIrChannelGeneralElement;
+        new (): HTMLIrChannelGeneralElement;
+    };
+    interface HTMLIrChannelHeaderElement extends Components.IrChannelHeader, HTMLStencilElement {
+    }
+    var HTMLIrChannelHeaderElement: {
+        prototype: HTMLIrChannelHeaderElement;
+        new (): HTMLIrChannelHeaderElement;
+    };
     interface HTMLIrChannelManagerElement extends Components.IrChannelManager, HTMLStencilElement {
     }
     var HTMLIrChannelManagerElement: {
         prototype: HTMLIrChannelManagerElement;
         new (): HTMLIrChannelManagerElement;
+    };
+    interface HTMLIrChannelMappingElement extends Components.IrChannelMapping, HTMLStencilElement {
+    }
+    var HTMLIrChannelMappingElement: {
+        prototype: HTMLIrChannelMappingElement;
+        new (): HTMLIrChannelMappingElement;
     };
     interface HTMLIrCheckboxElement extends Components.IrCheckbox, HTMLStencilElement {
     }
@@ -1078,7 +1123,11 @@ declare global {
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-button": HTMLIrButtonElement;
         "ir-channel": HTMLIrChannelElement;
+        "ir-channel-editor": HTMLIrChannelEditorElement;
+        "ir-channel-general": HTMLIrChannelGeneralElement;
+        "ir-channel-header": HTMLIrChannelHeaderElement;
         "ir-channel-manager": HTMLIrChannelManagerElement;
+        "ir-channel-mapping": HTMLIrChannelMappingElement;
         "ir-checkbox": HTMLIrCheckboxElement;
         "ir-checkboxes": HTMLIrCheckboxesElement;
         "ir-common": HTMLIrCommonElement;
@@ -1422,6 +1471,19 @@ declare namespace LocalJSX {
         "textSize"?: 'sm' | 'md' | 'lg';
     }
     interface IrChannel {
+        "baseurl"?: string;
+        "language"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrChannelEditor {
+        "onCloseSideBar"?: (event: IrChannelEditorCustomEvent<null>) => void;
+    }
+    interface IrChannelGeneral {
+    }
+    interface IrChannelHeader {
+        "headerTitles"?: { id: string; name: string; disabled: boolean }[];
+        "onTabChanged"?: (event: IrChannelHeaderCustomEvent<string>) => void;
     }
     interface IrChannelManager {
         "allowed_MinStayTypes"?: selectOption[];
@@ -1441,6 +1503,8 @@ declare namespace LocalJSX {
         "onFetchApi"?: (event: IrChannelManagerCustomEvent<ChannelManager[]>) => void;
         "onRequestApiDelete"?: (event: IrChannelManagerCustomEvent<any>) => void;
         "onRequestApiDestinationHierarchy"?: (event: IrChannelManagerCustomEvent<string>) => void;
+    }
+    interface IrChannelMapping {
     }
     interface IrCheckbox {
         "checked"?: boolean;
@@ -1745,7 +1809,11 @@ declare namespace LocalJSX {
         "ir-booking-details": IrBookingDetails;
         "ir-button": IrButton;
         "ir-channel": IrChannel;
+        "ir-channel-editor": IrChannelEditor;
+        "ir-channel-general": IrChannelGeneral;
+        "ir-channel-header": IrChannelHeader;
         "ir-channel-manager": IrChannelManager;
+        "ir-channel-mapping": IrChannelMapping;
         "ir-checkbox": IrCheckbox;
         "ir-checkboxes": IrCheckboxes;
         "ir-common": IrCommon;
@@ -1805,7 +1873,11 @@ declare module "@stencil/core" {
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
+            "ir-channel-editor": LocalJSX.IrChannelEditor & JSXBase.HTMLAttributes<HTMLIrChannelEditorElement>;
+            "ir-channel-general": LocalJSX.IrChannelGeneral & JSXBase.HTMLAttributes<HTMLIrChannelGeneralElement>;
+            "ir-channel-header": LocalJSX.IrChannelHeader & JSXBase.HTMLAttributes<HTMLIrChannelHeaderElement>;
             "ir-channel-manager": LocalJSX.IrChannelManager & JSXBase.HTMLAttributes<HTMLIrChannelManagerElement>;
+            "ir-channel-mapping": LocalJSX.IrChannelMapping & JSXBase.HTMLAttributes<HTMLIrChannelMappingElement>;
             "ir-checkbox": LocalJSX.IrCheckbox & JSXBase.HTMLAttributes<HTMLIrCheckboxElement>;
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;

@@ -1,2 +1,0 @@
-import{e}from"./p-9501b0ae.js";const a={adultChildConstraints:{adult_max_nbr:0,child_max_nbr:0,child_max_age:0},allowedBookingSources:[],currency:undefined,endingDate:0,formattedLegendData:undefined,is_vacation_rental:false,legendData:[],roomsInfo:[],startingDate:0,language:"",toBeAssignedEvents:[],allowed_payment_methods:[],pickup_service:undefined,max_nights:0};const{state:n,onChange:t}=e(a);export{n as c};
-//# sourceMappingURL=p-e3870f97.js.map

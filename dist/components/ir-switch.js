@@ -11461,7 +11461,7 @@ const MyComponent = /*@__PURE__*/ proxyCustomElement(class MyComponent extends H
     this.wrapperClass = undefined;
   }
   componentDidLoad() {
-    this.testElement = $(`#${this.componentId}`);
+    this.testElement = jquery(`#${this.componentId}`);
     this.initializeSwitch();
   }
   initializeSwitch() {

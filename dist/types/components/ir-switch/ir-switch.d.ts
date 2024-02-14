@@ -1,4 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
+import 'jquery';
 import 'bootstrap-switch';
 import 'bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css';
 import './jquery-extensions';

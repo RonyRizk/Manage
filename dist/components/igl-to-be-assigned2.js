@@ -2,7 +2,8 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from 
 import { T as ToBeAssignedService } from './toBeAssigned.service.js';
 import { d as dateToFormattedString } from './utils.js';
 import { h as hooks } from './moment.js';
-import { c as createStore, l as locales } from './locales.store.js';
+import { l as locales } from './locales.store.js';
+import { c as createStore } from './index2.js';
 import { d as defineCustomElement$3 } from './igl-tba-booking-view2.js';
 import { d as defineCustomElement$2 } from './igl-tba-category-view2.js';
 import { d as defineCustomElement$1 } from './ir-icon2.js';

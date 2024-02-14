@@ -20,6 +20,7 @@ export class IrDropdown {
     return (h("ul", { class: "nav navbar-nav", id: "main-menu-navigation", "data-menu": "menu-navigation" }, content));
   }
   static get is() { return "ir-dropdown"; }
+  static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
       "$": ["ir-dropdown.css"]
