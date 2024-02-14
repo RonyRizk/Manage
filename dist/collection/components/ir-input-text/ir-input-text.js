@@ -17,7 +17,7 @@ export class IrInputText {
     this.labelPosition = 'left';
     this.labelBackground = null;
     this.labelColor = 'dark';
-    this.labelBorder = 'light';
+    this.labelBorder = 'theme';
     this.labelWidth = 3;
     this.valid = undefined;
     this.initial = true;
@@ -61,6 +61,16 @@ export class IrInputText {
   }
   static get is() { return "ir-input-text"; }
   static get encapsulation() { return "scoped"; }
+  static get originalStyleUrls() {
+    return {
+      "$": ["ir-input-text.css"]
+    };
+  }
+  static get styleUrls() {
+    return {
+      "$": ["ir-input-text.css"]
+    };
+  }
   static get properties() {
     return {
       "name": {
@@ -352,8 +362,8 @@ export class IrInputText {
         "type": "string",
         "mutable": false,
         "complexType": {
-          "original": "'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none'",
-          "resolved": "\"danger\" | \"dark\" | \"info\" | \"light\" | \"none\" | \"primary\" | \"secondary\" | \"success\" | \"warning\"",
+          "original": "'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none'",
+          "resolved": "\"danger\" | \"dark\" | \"info\" | \"light\" | \"none\" | \"primary\" | \"secondary\" | \"success\" | \"theme\" | \"warning\"",
           "references": {}
         },
         "required": false,
@@ -364,7 +374,7 @@ export class IrInputText {
         },
         "attribute": "label-border",
         "reflect": false,
-        "defaultValue": "'light'"
+        "defaultValue": "'theme'"
       },
       "labelWidth": {
         "type": "number",

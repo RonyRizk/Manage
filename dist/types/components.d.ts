@@ -16,7 +16,7 @@ import { checkboxes, selectOption } from "./common/models";
 import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { Booking, IBookingPickupInfo } from "./models/booking.dto";
-import { ILocale as ILocale1 } from "./components.d";
+import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -30,7 +30,7 @@ export { checkboxes, selectOption } from "./common/models";
 export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { Booking, IBookingPickupInfo } from "./models/booking.dto";
-export { ILocale as ILocale1 } from "./components.d";
+export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -276,6 +276,8 @@ export namespace Components {
         "text": any;
         "textSize": 'sm' | 'md' | 'lg';
     }
+    interface IrChannel {
+    }
     interface IrChannelManager {
         "allowed_MinStayTypes": selectOption[];
         "allowed_channels": selectOption[];
@@ -364,7 +366,7 @@ export namespace Components {
         "inputStyles": string;
         "label": string;
         "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
-        "labelBorder": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
+        "labelBorder": 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition": 'left' | 'right' | 'center';
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
@@ -477,7 +479,7 @@ export namespace Components {
         "firstOption": string;
         "label": string;
         "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
-        "labelBorder": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
+        "labelBorder": 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition": 'left' | 'right' | 'center';
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
@@ -870,6 +872,12 @@ declare global {
         prototype: HTMLIrButtonElement;
         new (): HTMLIrButtonElement;
     };
+    interface HTMLIrChannelElement extends Components.IrChannel, HTMLStencilElement {
+    }
+    var HTMLIrChannelElement: {
+        prototype: HTMLIrChannelElement;
+        new (): HTMLIrChannelElement;
+    };
     interface HTMLIrChannelManagerElement extends Components.IrChannelManager, HTMLStencilElement {
     }
     var HTMLIrChannelManagerElement: {
@@ -1069,6 +1077,7 @@ declare global {
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-button": HTMLIrButtonElement;
+        "ir-channel": HTMLIrChannelElement;
         "ir-channel-manager": HTMLIrChannelManagerElement;
         "ir-checkbox": HTMLIrCheckboxElement;
         "ir-checkboxes": HTMLIrCheckboxesElement;
@@ -1412,6 +1421,8 @@ declare namespace LocalJSX {
         "text"?: any;
         "textSize"?: 'sm' | 'md' | 'lg';
     }
+    interface IrChannel {
+    }
     interface IrChannelManager {
         "allowed_MinStayTypes"?: selectOption[];
         "allowed_channels"?: selectOption[];
@@ -1514,7 +1525,7 @@ declare namespace LocalJSX {
         "inputStyles"?: string;
         "label"?: string;
         "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
-        "labelBorder"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
+        "labelBorder"?: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition"?: 'left' | 'right' | 'center';
         "labelWidth"?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
@@ -1597,6 +1608,7 @@ declare namespace LocalJSX {
         "bookingDetails"?: Booking;
         "defaultTexts"?: ILocale;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
+        "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
     }
     interface IrPickup {
         "bookingNumber"?: string;
@@ -1643,7 +1655,7 @@ declare namespace LocalJSX {
         "firstOption"?: string;
         "label"?: string;
         "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
-        "labelBorder"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
+        "labelBorder"?: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition"?: 'left' | 'right' | 'center';
         "labelWidth"?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
@@ -1732,6 +1744,7 @@ declare namespace LocalJSX {
         "ir-autocomplete": IrAutocomplete;
         "ir-booking-details": IrBookingDetails;
         "ir-button": IrButton;
+        "ir-channel": IrChannel;
         "ir-channel-manager": IrChannelManager;
         "ir-checkbox": IrCheckbox;
         "ir-checkboxes": IrCheckboxes;
@@ -1791,6 +1804,7 @@ declare module "@stencil/core" {
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
+            "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
             "ir-channel-manager": LocalJSX.IrChannelManager & JSXBase.HTMLAttributes<HTMLIrChannelManagerElement>;
             "ir-checkbox": LocalJSX.IrCheckbox & JSXBase.HTMLAttributes<HTMLIrCheckboxElement>;
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;

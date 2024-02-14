@@ -1,5 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
 
+const irSelectCss = ".border-theme.sc-ir-select{border:1px solid #cacfe7}";
+
 const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLElement {
   constructor() {
     super();
@@ -22,7 +24,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     this.labelPosition = 'left';
     this.labelBackground = null;
     this.labelColor = 'dark';
-    this.labelBorder = 'light';
+    this.labelBorder = 'theme';
     this.labelWidth = 3;
     this.initial = true;
     this.valid = false;
@@ -76,6 +78,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     "selectedValue": ["watchHandler"],
     "submited": ["watchHandler2"]
   }; }
+  static get style() { return irSelectCss; }
 }, [2, "ir-select", {
     "name": [1],
     "data": [16],

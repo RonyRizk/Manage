@@ -7,7 +7,7 @@ import { d as defineCustomElement$3 } from './ir-icon2.js';
 import { d as defineCustomElement$2 } from './ir-label2.js';
 import { d as defineCustomElement$1 } from './ir-modal2.js';
 
-const irRoomCss = ".light-blue-bg.sc-ir-room{background:#acecff;padding:0rem 0.1rem}";
+const irRoomCss = ".light-blue-bg.sc-ir-room{background:#acecff;padding:0.2rem 0.3rem;border-radius:5px}";
 
 const IrRoom = /*@__PURE__*/ proxyCustomElement(class IrRoom extends HTMLElement {
   constructor() {

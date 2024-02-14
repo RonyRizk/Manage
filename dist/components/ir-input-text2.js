@@ -1,5 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
 
+const irInputTextCss = ".border-theme.sc-ir-input-text{border:1px solid #cacfe7}";
+
 const IrInputText = /*@__PURE__*/ proxyCustomElement(class IrInputText extends HTMLElement {
   constructor() {
     super();
@@ -21,7 +23,7 @@ const IrInputText = /*@__PURE__*/ proxyCustomElement(class IrInputText extends H
     this.labelPosition = 'left';
     this.labelBackground = null;
     this.labelColor = 'dark';
-    this.labelBorder = 'light';
+    this.labelBorder = 'theme';
     this.labelWidth = 3;
     this.valid = undefined;
     this.initial = true;
@@ -67,6 +69,7 @@ const IrInputText = /*@__PURE__*/ proxyCustomElement(class IrInputText extends H
     "value": ["watchHandler"],
     "submited": ["watchHandler2"]
   }; }
+  static get style() { return irInputTextCss; }
 }, [2, "ir-input-text", {
     "name": [1],
     "value": [8],

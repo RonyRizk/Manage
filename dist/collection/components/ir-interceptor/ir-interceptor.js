@@ -9,7 +9,7 @@ export class IrInterceptor {
       loadingMessage: 'Fetching Data',
       errorMessage: 'Something Went Wrong',
     };
-    this.handledEndpoints = ['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room'];
+    this.handledEndpoints = ['/ReAllocate_Exposed_Room'];
   }
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -43,9 +43,9 @@ export class IrInterceptor {
   //     80%{background-position:0%  50%, 50%  50%,100% 100%}
   // }
   handleRequest(config) {
+    this.fetchingIrInterceptorDataStatus.emit('pending');
     if (this.isHandledEndpoint(config.url)) {
       this.isLoading = true;
-      this.fetchingIrInterceptorDataStatus.emit('pending');
       if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
         this.defaultMessage.loadingMessage = 'Updating Event';
       }
@@ -150,7 +150,7 @@ export class IrInterceptor {
           "tags": [],
           "text": ""
         },
-        "defaultValue": "['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room']"
+        "defaultValue": "['/ReAllocate_Exposed_Room']"
       }
     };
   }

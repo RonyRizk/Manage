@@ -1,6 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
-import { d as defineCustomElement$5 } from './ir-button2.js';
-import { d as defineCustomElement$4 } from './ir-icon2.js';
+import { d as defineCustomElement$4 } from './ir-button2.js';
 import { d as defineCustomElement$3 } from './ir-input-text2.js';
 import { d as defineCustomElement$2 } from './ir-modal2.js';
 import { d as defineCustomElement$1 } from './ir-select2.js';
@@ -161,7 +160,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-general-settings", "ir-button", "ir-icon", "ir-input-text", "ir-modal", "ir-select"];
+  const components = ["ir-general-settings", "ir-button", "ir-input-text", "ir-modal", "ir-select"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-general-settings":
       if (!customElements.get(tagName)) {
@@ -169,11 +168,6 @@ function defineCustomElement() {
       }
       break;
     case "ir-button":
-      if (!customElements.get(tagName)) {
-        defineCustomElement$5();
-      }
-      break;
-    case "ir-icon":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }

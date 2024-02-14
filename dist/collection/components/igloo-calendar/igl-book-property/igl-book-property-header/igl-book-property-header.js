@@ -94,6 +94,9 @@ export class IglBookPropertyHeader {
         });
         return;
       }
+      else if (this.adultChildCount.adult === 0) {
+        this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
+      }
       else {
         this.buttonClicked.emit({ key: 'check' });
       }
@@ -117,8 +120,8 @@ export class IglBookPropertyHeader {
     return this.bookingData.event_type === key;
   }
   render() {
-    console.log(calendar_data.max_nights);
-    return (h(Host, null, this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode(), h("div", { class: 'd-flex flex-column flex-lg-row align-items-lg-center mt-1' }, h("fieldset", { class: " mt-1 mt-lg-0  " }, h("igl-date-range", { maxDate: moment().add(calendar_data.max_nights, 'days').format('YYYY-MM-DD'), dateLabel: locales.entries.Lcz_Dates, minDate: this.minDate, disabled: this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-right mt-1 message-label" }, this.message)));
+    const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
+    return (h(Host, null, showSourceNode && this.getSourceNode(), h("div", { class: `d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}` }, h("fieldset", { class: "mt-lg-0  " }, h("igl-date-range", { maxDate: moment().add(calendar_data.max_nights, 'days').format('YYYY-MM-DD'), dateLabel: locales.entries.Lcz_Dates, minDate: this.minDate, disabled: this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-right mt-1 message-label" }, this.message)));
   }
   static get is() { return "igl-book-property-header"; }
   static get encapsulation() { return "scoped"; }
