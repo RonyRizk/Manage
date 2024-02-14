@@ -259,6 +259,7 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
+        "is_from_front_desk": boolean;
         "language": string;
         "propertyid": number;
         "ticket": string;
@@ -550,9 +551,7 @@ export namespace Components {
         "text": string;
     }
     interface IrToast {
-        "hideToast": () => Promise<void>;
         "position": TPositions;
-        "showToast": () => Promise<void>;
     }
     interface IrTooltip {
         "message": string;
@@ -1466,6 +1465,7 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
+        "is_from_front_desk"?: boolean;
         "language"?: string;
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "propertyid"?: number;
@@ -1629,7 +1629,6 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "defaultMessage"?: { loadingMessage: string; errorMessage: string; };
         "handledEndpoints"?: string[];
-        "onFetchingIrInterceptorDataStatus"?: (event: IrInterceptorCustomEvent<'pending' | 'done'>) => void;
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
     interface IrLabel {

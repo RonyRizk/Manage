@@ -2,6 +2,7 @@ import { Host, h } from "@stencil/core";
 import moment from "moment";
 import locales from "../../../../../../src/stores/locales.store";
 import calendar_data from "../../../../../../src/stores/calendar-data";
+import interceptor_requests from "../../../../../../src/stores/ir-interceptor.store";
 export class IglBookPropertyHeader {
   constructor() {
     this.sourceOption = {
@@ -23,7 +24,6 @@ export class IglBookPropertyHeader {
     this.bookedByInfoData = undefined;
     this.defaultDaterange = undefined;
     this.propertyId = undefined;
-    this.isLoading = false;
   }
   getSplitBookingList() {
     return (h("fieldset", { class: "form-group  text-left" }, h("label", { class: "h5" }, locales.entries.Lcz_Tobooking, "# "), h("div", { class: "btn-group ml-1" }, h("ir-autocomplete", { value: Object.keys(this.bookedByInfoData).length > 1 ? `${this.bookedByInfoData.bookingNumber} ${this.bookedByInfoData.firstName} ${this.bookedByInfoData.lastName}` : '', from_date: moment(this.bookingDataDefaultDateRange.fromDate).format('YYYY-MM-DD'), to_date: moment(this.bookingDataDefaultDateRange.toDate).format('YYYY-MM-DD'), propertyId: this.propertyId, placeholder: locales.entries.Lcz_BookingNumber, onComboboxValue: e => {
@@ -51,17 +51,8 @@ export class IglBookPropertyHeader {
     }
     this.adultChild.emit(obj);
   }
-  handleFetchingDataStatus(e) {
-    const result = e.detail;
-    if (result === 'pending') {
-      this.isLoading = true;
-    }
-    else {
-      this.isLoading = false;
-    }
-  }
   getAdultChildConstraints() {
-    return (h("div", { class: 'mt-1 mt-lg-0 d-flex flex-column text-left' }, h("label", { class: "mb-1 d-lg-none" }, locales.entries.Lcz_NumberOfGuests, " "), h("div", { class: "form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start" }, h("fieldset", null, h("div", { class: "btn-group " }, h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, h("option", { value: "" }, locales.entries.Lcz_AdultsCaption), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (h("fieldset", null, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, h("option", { value: '' }, this.renderChildCaption()), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option))))))), h("ir-button", { isLoading: this.isLoading, icon: "", size: "sm", class: "ml-2", text: locales.entries.Lcz_Check, onClickHanlder: () => this.handleButtonClicked() }))));
+    return (h("div", { class: 'mt-1 mt-lg-0 d-flex flex-column text-left' }, h("label", { class: "mb-1 d-lg-none" }, locales.entries.Lcz_NumberOfGuests, " "), h("div", { class: "form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start" }, h("fieldset", null, h("div", { class: "btn-group " }, h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, h("option", { value: "" }, locales.entries.Lcz_AdultsCaption), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (h("fieldset", null, h("div", { class: "btn-group ml-1" }, h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, h("option", { value: '' }, this.renderChildCaption()), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (h("option", { value: option }, option))))))), h("ir-button", { isLoading: interceptor_requests.status === 'pending', icon: "", size: "sm", class: "ml-2", text: locales.entries.Lcz_Check, onClickHanlder: () => this.handleButtonClicked() }))));
   }
   renderChildCaption() {
     const maxAge = this.adultChildConstraints.child_max_age;
@@ -381,11 +372,6 @@ export class IglBookPropertyHeader {
       }
     };
   }
-  static get states() {
-    return {
-      "isLoading": {}
-    };
-  }
   static get events() {
     return [{
         "method": "splitBookingDropDownChange",
@@ -504,15 +490,6 @@ export class IglBookPropertyHeader {
           "resolved": "{ key: string; data: unknown; }",
           "references": {}
         }
-      }];
-  }
-  static get listeners() {
-    return [{
-        "name": "fetchingIrInterceptorDataStatus",
-        "method": "handleFetchingDataStatus",
-        "target": "body",
-        "capture": false,
-        "passive": false
       }];
   }
 }

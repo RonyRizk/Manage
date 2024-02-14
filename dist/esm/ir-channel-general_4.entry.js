@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, c as createEvent, g as getElement } from './index-795d2df3.js';
-import { c as calendar_data } from './calendar-data-45d57a45.js';
+import { c as calendar_data } from './calendar-data-95cbc8c6.js';
 import './index-2bd379e0.js';
 
 const irChannelGeneralCss = ".sc-ir-channel-general-h{display:block}";
@@ -61,6 +61,7 @@ const IrChannelHeader = class {
 };
 IrChannelHeader.style = irChannelHeaderCss;
 
+// import calendar_data from '@/stores/calendar-data';
 class IrMappingService {
   checkMappingExists(id, selected_channel) {
     return selected_channel.map.find(m => m.foreign_id === id);

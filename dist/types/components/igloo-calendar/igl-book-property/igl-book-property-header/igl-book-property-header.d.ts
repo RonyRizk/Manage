@@ -36,12 +36,10 @@ export declare class IglBookPropertyHeader {
     key: string;
     data: unknown;
   }>;
-  isLoading: boolean;
   private sourceOption;
   getSplitBookingList(): any;
   getSourceNode(): any;
   handleAdultChildChange(key: string, event: Event): void;
-  handleFetchingDataStatus(e: CustomEvent): void;
   getAdultChildConstraints(): any;
   renderChildCaption(): string;
   handleButtonClicked(): void;

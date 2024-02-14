@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { a as axios } from './axios.js';
+import { i as interceptor_requests } from './ir-interceptor.store.js';
 import { d as defineCustomElement$1 } from './ir-loading-screen2.js';
 
 const irInterceptorCss = ".sc-ir-interceptor-h{--viewport-padding:25px;position:fixed;top:0;right:0;display:flex;flex-direction:column;padding:var(--viewport-padding);gap:10px;max-width:60vw;margin:0;list-style:none;z-index:2147483647;outline:none;pointer-events:none}.toast-container.sc-ir-interceptor{background-color:white;border-radius:6px;box-shadow:hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;padding:15px 30px;display:grid;grid-template-areas:'title action';grid-template-columns:auto max-content;column-gap:15px;align-items:center;overflow:hidden}.toast-container[data-state='open'].sc-ir-interceptor{animation:slideIn 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards}.toast-container[data-state='closed'].sc-ir-interceptor{pointer-events:none;animation:fadeOut 150ms ease-in forwards}p.sc-ir-interceptor{margin:0;padding:0;grid-area:title;font-weight:500;color:#1c2024;font-size:15px}.x-mark-container.sc-ir-interceptor,.check-mark-container.sc-ir-interceptor{display:flex;align-items:center;justify-content:center;height:1.5rem;width:1.5rem;border-radius:50%}.x-mark-container.sc-ir-interceptor{background:red}.check-mark-container.sc-ir-interceptor{background:rgb(9, 153, 9)}.loadingScreenContainer.sc-ir-interceptor{position:fixed;top:0;left:0;height:100vh;width:100vw;z-index:100000;background:rgba(0, 0, 0, 0.2);pointer-events:all}@keyframes fadeOut{0%{opacity:1}100%{opacity:0}}@keyframes slideIn{0%{transform:translateX(calc(100% + var(--viewport-padding)));opacity:0}100%{transform:translateX(0);opacity:1}}";
@@ -9,7 +10,6 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
     super();
     this.__registerHost();
     this.toast = createEvent(this, "toast", 7);
-    this.fetchingIrInterceptorDataStatus = createEvent(this, "fetchingIrInterceptorDataStatus", 7);
     this.isShown = false;
     this.isLoading = false;
     this.isUnassignedUnit = false;
@@ -32,26 +32,8 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
   isHandledEndpoint(url) {
     return this.handledEndpoints.includes(this.extractEndpoint(url));
   }
-  /* HTML: <div class="loader"></div> */
-  // .loader {
-  //   width: 60px;
-  //   aspect-ratio: 2;
-  //   --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
-  //   background:
-  //     var(--_g) 0%   50%,
-  //     var(--_g) 50%  50%,
-  //     var(--_g) 100% 50%;
-  //   background-size: calc(100%/3) 50%;
-  //   animation: l3 1s infinite linear;
-  // }
-  // @keyframes l3 {
-  //     20%{background-position:0%   0%, 50%  50%,100%  50%}
-  //     40%{background-position:0% 100%, 50%   0%,100%  50%}
-  //     60%{background-position:0%  50%, 50% 100%,100%   0%}
-  //     80%{background-position:0%  50%, 50%  50%,100% 100%}
-  // }
   handleRequest(config) {
-    this.fetchingIrInterceptorDataStatus.emit('pending');
+    interceptor_requests.status = 'pending';
     if (this.isHandledEndpoint(config.url)) {
       this.isLoading = true;
       if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
@@ -70,7 +52,7 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
   handleResponse(response) {
     var _a;
     this.isLoading = false;
-    this.fetchingIrInterceptorDataStatus.emit('done');
+    interceptor_requests.status = 'done';
     if ((_a = response.data.ExceptionMsg) === null || _a === void 0 ? void 0 : _a.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);

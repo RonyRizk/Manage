@@ -6,6 +6,7 @@ export declare class IrChannelEditor {
     name: string;
     disabled: boolean;
   }[];
+  selectedRoomType: any[];
   closeSideBar: EventEmitter<null>;
   componentWillLoad(): void;
   handleTabChange(e: CustomEvent): void;

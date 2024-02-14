@@ -1,4 +1,6 @@
-import { c as createStore } from './index-2bd379e0.js';
+'use strict';
+
+const index = require('./index-d93aa7bb.js');
 
 const initialState = {
   adultChildConstraints: {
@@ -20,9 +22,10 @@ const initialState = {
   pickup_service: undefined,
   max_nights: 0,
   channels: [],
+  is_frontdesk_enabled: false,
 };
-const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
+const { state: calendar_data, onChange: onCalendarDatesChange } = index.createStore(initialState);
 
-export { calendar_data as c };
+exports.calendar_data = calendar_data;
 
-//# sourceMappingURL=calendar-data-45d57a45.js.map
+//# sourceMappingURL=calendar-data-9ed0f0c0.js.map

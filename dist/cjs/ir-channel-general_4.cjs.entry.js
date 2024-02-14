@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const calendarData = require('./calendar-data-196585f7.js');
+const calendarData = require('./calendar-data-9ed0f0c0.js');
 require('./index-d93aa7bb.js');
 
 const irChannelGeneralCss = ".sc-ir-channel-general-h{display:block}";
@@ -65,6 +65,7 @@ const IrChannelHeader = class {
 };
 IrChannelHeader.style = irChannelHeaderCss;
 
+// import calendar_data from '@/stores/calendar-data';
 class IrMappingService {
   checkMappingExists(id, selected_channel) {
     return selected_channel.map.find(m => m.foreign_id === id);

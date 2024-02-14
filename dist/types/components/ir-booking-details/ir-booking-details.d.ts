@@ -10,6 +10,7 @@ export declare class IrBookingDetails {
   bookingNumber: string;
   baseurl: string;
   propertyid: number;
+  is_from_front_desk: boolean;
   hasPrint: boolean;
   hasReceipt: boolean;
   hasDelete: boolean;
@@ -41,7 +42,6 @@ export declare class IrBookingDetails {
   handleIconClick(e: any): void;
   handleEditSidebar(): void;
   handleSelectChange(e: CustomEvent<any>): void;
-  handleClick(e: any): Promise<void>;
   openEditSidebar(): void;
   _calculateNights(fromDate: string, toDate: string): number;
   updateStatus(): Promise<void>;

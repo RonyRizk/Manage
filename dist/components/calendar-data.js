@@ -20,6 +20,7 @@ const initialState = {
   pickup_service: undefined,
   max_nights: 0,
   channels: [],
+  is_frontdesk_enabled: false,
 };
 const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 

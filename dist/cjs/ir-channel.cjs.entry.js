@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const calendarData = require('./calendar-data-196585f7.js');
+const calendarData = require('./calendar-data-9ed0f0c0.js');
 const locales_store = require('./locales.store-e07a3298.js');
 const axios = require('./axios-5ba3068e.js');
 require('./index-d93aa7bb.js');
@@ -26,6 +26,7 @@ class RoomService {
         calendarData.calendar_data.pickup_service = results.pickup_service;
         calendarData.calendar_data.max_nights = results.max_nights;
         calendarData.calendar_data.channels = results.channels;
+        calendarData.calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
     }

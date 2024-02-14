@@ -24,6 +24,7 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
       { id: 'mapping', name: 'Mapping', disabled: false },
       { id: 'channel_booking', name: 'Channel Booking', disabled: true },
     ];
+    this.selectedRoomType = [];
   }
   componentWillLoad() {
     this.selectedTab = this.headerTitles[0].id;
@@ -59,7 +60,8 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
   static get style() { return irChannelEditorCss; }
 }, [2, "ir-channel-editor", {
     "selectedTab": [32],
-    "headerTitles": [32]
+    "headerTitles": [32],
+    "selectedRoomType": [32]
   }, [[0, "tabChanged", "handleTabChange"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

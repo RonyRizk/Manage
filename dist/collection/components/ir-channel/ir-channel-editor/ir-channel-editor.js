@@ -12,6 +12,7 @@ export class IrChannelEditor {
       { id: 'mapping', name: 'Mapping', disabled: false },
       { id: 'channel_booking', name: 'Channel Booking', disabled: true },
     ];
+    this.selectedRoomType = [];
   }
   componentWillLoad() {
     this.selectedTab = this.headerTitles[0].id;
@@ -59,7 +60,8 @@ export class IrChannelEditor {
   static get states() {
     return {
       "selectedTab": {},
-      "headerTitles": {}
+      "headerTitles": {},
+      "selectedRoomType": {}
     };
   }
   static get events() {

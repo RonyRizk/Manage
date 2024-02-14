@@ -29,6 +29,7 @@ class RoomService {
         calendar_data.pickup_service = results.pickup_service;
         calendar_data.max_nights = results.max_nights;
         calendar_data.channels = results.channels;
+        calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
     }

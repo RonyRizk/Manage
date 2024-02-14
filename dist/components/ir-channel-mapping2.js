@@ -2,6 +2,7 @@ import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal
 import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$1 } from './ir-combobox2.js';
 
+// import calendar_data from '@/stores/calendar-data';
 class IrMappingService {
   checkMappingExists(id, selected_channel) {
     return selected_channel.map.find(m => m.foreign_id === id);
