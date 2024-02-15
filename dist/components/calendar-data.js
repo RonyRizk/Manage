@@ -19,7 +19,6 @@ const initialState = {
   allowed_payment_methods: [],
   pickup_service: undefined,
   max_nights: 0,
-  connected_channels: [],
   is_frontdesk_enabled: false,
 };
 const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);

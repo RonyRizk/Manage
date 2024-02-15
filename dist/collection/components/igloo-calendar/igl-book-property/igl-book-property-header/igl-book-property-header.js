@@ -1,7 +1,6 @@
 import { Host, h } from "@stencil/core";
 import moment from "moment";
 import locales from "../../../../../../src/stores/locales.store";
-import calendar_data from "../../../../../../src/stores/calendar-data";
 import interceptor_requests from "../../../../../../src/stores/ir-interceptor.store";
 export class IglBookPropertyHeader {
   constructor() {
@@ -112,7 +111,7 @@ export class IglBookPropertyHeader {
   }
   render() {
     const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
-    return (h(Host, null, showSourceNode && this.getSourceNode(), h("div", { class: `d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}` }, h("fieldset", { class: "mt-lg-0  " }, h("igl-date-range", { maxDate: moment().add(calendar_data.max_nights, 'days').format('YYYY-MM-DD'), dateLabel: locales.entries.Lcz_Dates, minDate: this.minDate, disabled: this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-right mt-1 message-label" }, this.message)));
+    return (h(Host, null, showSourceNode && this.getSourceNode(), h("div", { class: `d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}` }, h("fieldset", { class: "mt-lg-0  " }, h("igl-date-range", { dateLabel: locales.entries.Lcz_Dates, minDate: this.minDate, disabled: this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING'), defaultData: this.bookingDataDefaultDateRange })), !this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()), h("p", { class: "text-right mt-1 message-label" }, this.message)));
   }
   static get is() { return "igl-book-property-header"; }
   static get encapsulation() { return "scoped"; }

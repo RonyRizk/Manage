@@ -1,10 +1,11 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { o as onChannelChange } from './channel.store.js';
 import { l as locales } from './locales.store.js';
-import { d as defineCustomElement$6 } from './ir-button2.js';
-import { d as defineCustomElement$5 } from './ir-channel-general2.js';
-import { d as defineCustomElement$4 } from './ir-channel-header2.js';
-import { d as defineCustomElement$3 } from './ir-channel-mapping2.js';
+import { d as defineCustomElement$7 } from './ir-button2.js';
+import { d as defineCustomElement$6 } from './ir-channel-general2.js';
+import { d as defineCustomElement$5 } from './ir-channel-header2.js';
+import { d as defineCustomElement$4 } from './ir-channel-mapping2.js';
+import { d as defineCustomElement$3 } from './ir-combobox2.js';
 import { d as defineCustomElement$2 } from './ir-icon2.js';
 import { d as defineCustomElement$1 } from './ir-select2.js';
 
@@ -73,7 +74,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-channel-editor", "ir-button", "ir-channel-general", "ir-channel-header", "ir-channel-mapping", "ir-icon", "ir-select"];
+  const components = ["ir-channel-editor", "ir-button", "ir-channel-general", "ir-channel-header", "ir-channel-mapping", "ir-combobox", "ir-icon", "ir-select"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-channel-editor":
       if (!customElements.get(tagName)) {
@@ -82,20 +83,25 @@ function defineCustomElement() {
       break;
     case "ir-button":
       if (!customElements.get(tagName)) {
-        defineCustomElement$6();
+        defineCustomElement$7();
       }
       break;
     case "ir-channel-general":
       if (!customElements.get(tagName)) {
-        defineCustomElement$5();
+        defineCustomElement$6();
       }
       break;
     case "ir-channel-header":
       if (!customElements.get(tagName)) {
-        defineCustomElement$4();
+        defineCustomElement$5();
       }
       break;
     case "ir-channel-mapping":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$4();
+      }
+      break;
+    case "ir-combobox":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }

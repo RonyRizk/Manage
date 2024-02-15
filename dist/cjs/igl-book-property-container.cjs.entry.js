@@ -3,14 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const booking_service = require('./booking.service-2fe4746b.js');
-const room_service = require('./room.service-ed9c150c.js');
-const axios = require('./axios-394374e5.js');
-require('./utils-bfd564ee.js');
-require('./moment-f96595e5.js');
-require('./booking-1be13c43.js');
-require('./calendar-data-8b839379.js');
-require('./channel.store-0113fdbd.js');
+const booking_service = require('./booking.service-63f879ea.js');
+const room_service = require('./room.service-4c44d460.js');
+const locales_store = require('./locales.store-7a5809fe.js');
+const axios = require('./axios-01143d9d.js');
+require('./channel.store-9a8927a2.js');
 
 const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:block;margin:0;padding:0}.book-container.sc-igl-book-property-container{width:min-content;margin:0;padding:0}";
 
@@ -50,9 +47,9 @@ const IglBookPropertyContainer = class {
         this.bookingService.getCountries(this.language),
       ]);
       console.log(languageTexts);
-      if (!axios.locales.entries) {
-        axios.locales.entries = languageTexts.entries;
-        axios.locales.direction = languageTexts.direction;
+      if (!locales_store.locales.entries) {
+        locales_store.locales.entries = languageTexts.entries;
+        locales_store.locales.direction = languageTexts.direction;
       }
       this.countryNodeList = countriesList;
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
@@ -100,7 +97,7 @@ const IglBookPropertyContainer = class {
       NAME: '',
       PHONE: '',
       REFERENCE_TYPE: '',
-      TITLE: axios.locales.entries.Lcz_NewBooking,
+      TITLE: locales_store.locales.entries.Lcz_NewBooking,
     };
   }
   render() {
