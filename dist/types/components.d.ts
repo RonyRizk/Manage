@@ -66,6 +66,14 @@ export namespace Components {
         "propertyid": number;
         "showPaymentDetails": boolean;
     }
+    interface IglBookPropertyContainer {
+        "baseurl": string;
+        "from_date": string;
+        "language": string;
+        "propertyid": number;
+        "ticket": string;
+        "to_date": string;
+    }
     interface IglBookPropertyFooter {
         "disabled": boolean;
         "eventType": string;
@@ -774,6 +782,12 @@ declare global {
         prototype: HTMLIglBookPropertyElement;
         new (): HTMLIglBookPropertyElement;
     };
+    interface HTMLIglBookPropertyContainerElement extends Components.IglBookPropertyContainer, HTMLStencilElement {
+    }
+    var HTMLIglBookPropertyContainerElement: {
+        prototype: HTMLIglBookPropertyContainerElement;
+        new (): HTMLIglBookPropertyContainerElement;
+    };
     interface HTMLIglBookPropertyFooterElement extends Components.IglBookPropertyFooter, HTMLStencilElement {
     }
     var HTMLIglBookPropertyFooterElement: {
@@ -1114,6 +1128,7 @@ declare global {
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
         "igl-book-property": HTMLIglBookPropertyElement;
+        "igl-book-property-container": HTMLIglBookPropertyContainerElement;
         "igl-book-property-footer": HTMLIglBookPropertyFooterElement;
         "igl-book-property-header": HTMLIglBookPropertyHeaderElement;
         "igl-booking-event": HTMLIglBookingEventElement;
@@ -1210,6 +1225,14 @@ declare namespace LocalJSX {
         "onResetBookingData"?: (event: IglBookPropertyCustomEvent<null>) => void;
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;
+    }
+    interface IglBookPropertyContainer {
+        "baseurl"?: string;
+        "from_date"?: string;
+        "language"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+        "to_date"?: string;
     }
     interface IglBookPropertyFooter {
         "disabled"?: boolean;
@@ -1808,6 +1831,7 @@ declare namespace LocalJSX {
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
         "igl-book-property": IglBookProperty;
+        "igl-book-property-container": IglBookPropertyContainer;
         "igl-book-property-footer": IglBookPropertyFooter;
         "igl-book-property-header": IglBookPropertyHeader;
         "igl-booking-event": IglBookingEvent;
@@ -1873,6 +1897,7 @@ declare module "@stencil/core" {
             "igl-application-info": LocalJSX.IglApplicationInfo & JSXBase.HTMLAttributes<HTMLIglApplicationInfoElement>;
             "igl-block-dates-view": LocalJSX.IglBlockDatesView & JSXBase.HTMLAttributes<HTMLIglBlockDatesViewElement>;
             "igl-book-property": LocalJSX.IglBookProperty & JSXBase.HTMLAttributes<HTMLIglBookPropertyElement>;
+            "igl-book-property-container": LocalJSX.IglBookPropertyContainer & JSXBase.HTMLAttributes<HTMLIglBookPropertyContainerElement>;
             "igl-book-property-footer": LocalJSX.IglBookPropertyFooter & JSXBase.HTMLAttributes<HTMLIglBookPropertyFooterElement>;
             "igl-book-property-header": LocalJSX.IglBookPropertyHeader & JSXBase.HTMLAttributes<HTMLIglBookPropertyHeaderElement>;
             "igl-booking-event": LocalJSX.IglBookingEvent & JSXBase.HTMLAttributes<HTMLIglBookingEventElement>;
