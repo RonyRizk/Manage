@@ -98,6 +98,7 @@ export declare class IglBookingEvent {
   handleMouseMove(event: any): void;
   handleMouseUp(): void;
   updateData(data: any): void;
+  renderEventBookingNumber(): string;
   showEventInfo(showInfo: any): any;
   render(): any;
 }

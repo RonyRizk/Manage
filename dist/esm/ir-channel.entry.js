@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-795d2df3.js';
-import { R as RoomService } from './room.service-c4fb073f.js';
+import { R as RoomService } from './room.service-c4fb073f2.js';
 import { c as calendar_data } from './calendar-data-95cbc8c6.js';
 import { l as locales } from './locales.store-de01ea13.js';
 import { a as axios } from './axios-3bd8531e.js';

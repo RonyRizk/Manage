@@ -1,11 +1,12 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-795d2df3.js';
-import { R as RoomService, c as calendar_dates, a as addUnassingedDates, r as removeUnassignedDates } from './unassigned_dates.store-f15805a8.js';
+import { R as RoomService } from './room.service-c4fb073f.js';
 import { B as BookingService } from './booking.service-9af01f63.js';
 import { j as formatLegendColors, h as hooks, d as dateToFormattedString, i as isBlockUnit, k as getNextDay, l as addTwoMonthToDate, m as convertDMYToISO, n as computeEndDate } from './utils-70966be2.js';
 import { a as axios } from './axios-3bd8531e.js';
 import { E as EventsService } from './events.service-4c129bf5.js';
 import { T as ToBeAssignedService } from './toBeAssigned.service-50db902b.js';
 import { t as transformNewBLockedRooms, a as transformNewBooking, b as bookingStatus, c as calculateDaysBetweenDates } from './booking-2ddd6848.js';
+import { c as calendar_dates, a as addUnassingedDates, r as removeUnassignedDates } from './unassigned_dates.store-b22ec8f9.js';
 import { l as locales } from './locales.store-de01ea13.js';
 import { c as calendar_data } from './calendar-data-95cbc8c6.js';
 import './index-2bd379e0.js';

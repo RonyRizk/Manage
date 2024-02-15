@@ -3,13 +3,14 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const unassigned_dates_store = require('./unassigned_dates.store-7c0a16f7.js');
+const room_service = require('./room.service-936658f8.js');
 const booking_service = require('./booking.service-97c6d10a.js');
 const utils = require('./utils-cfac6d5b.js');
 const axios = require('./axios-5ba3068e.js');
 const events_service = require('./events.service-5bbb60e3.js');
 const toBeAssigned_service = require('./toBeAssigned.service-186e83cf.js');
 const booking = require('./booking-79482cd7.js');
+const unassigned_dates_store = require('./unassigned_dates.store-f121b5c0.js');
 const locales_store = require('./locales.store-e07a3298.js');
 const calendarData = require('./calendar-data-9ed0f0c0.js');
 require('./index-d93aa7bb.js');
@@ -3883,7 +3884,7 @@ const IglooCalendar = class {
     this.countryNodeList = [];
     this.visibleCalendarCells = { x: [], y: [] };
     this.today = '';
-    this.roomService = new unassigned_dates_store.RoomService();
+    this.roomService = new room_service.RoomService();
     this.eventsService = new events_service.EventsService();
     this.toBeAssignedService = new toBeAssigned_service.ToBeAssignedService();
     this.reachedEndOfCalendar = false;
