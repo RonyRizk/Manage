@@ -1,4 +1,4 @@
-import { IChannel } from "../../../models/calendarData";
+import { IExposedChannel } from "../../../models/calendarData";
 export declare class IrMappingService {
-  checkMappingExists(id: string, selected_channel: IChannel): import("@/models/calendarData").IMap;
+  checkMappingExists(id: string, selected_channel: IExposedChannel): void;
 }

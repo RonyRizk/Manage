@@ -1,9 +1,7 @@
-import { IChannel } from "../../../models/calendarData";
+import { IExposedChannel } from "../../../models/calendarData";
 export declare class IrChannelMapping {
-  selectedChannel: IChannel;
+  selectedChannel: IExposedChannel;
   activeMapField: string;
-  private mappingService;
   componentWillLoad(): void;
-  renderMappingStatus(id: string): any;
   render(): any;
 }

@@ -1,7 +1,6 @@
-// import calendar_data from '@/stores/calendar-data';
 export class IrMappingService {
   checkMappingExists(id, selected_channel) {
-    return selected_channel.map.find(m => m.foreign_id === id);
+    //return calendar_data.connected_channels.map.find(m => m.foreign_id === id);
   }
 }
 //# sourceMappingURL=ir-mapping.service.js.map

@@ -1,0 +1,2 @@
+import{c as n}from"./p-16d91b49.js";const s={channels:[],selectedChannel:null};const{state:a,onChange:e}=n(s);function o(n){if(n===""){a.selectedChannel=null}a.selectedChannel=a.channels.find((s=>s.id.toString()===n))}export{a as c,e as o,o as s};
+//# sourceMappingURL=p-12757717.js.map

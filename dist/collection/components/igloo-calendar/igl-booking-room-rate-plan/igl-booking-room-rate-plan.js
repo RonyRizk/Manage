@@ -2,6 +2,7 @@ import { Host, h, Fragment } from "@stencil/core";
 import { v4 } from "uuid";
 import { getCurrencySymbol } from "../../../utils/utils";
 import locales from "../../../../../src/stores/locales.store";
+import calendar_data from "../../../../../src/stores/calendar-data";
 export class IglBookingRoomRatePlan {
   constructor() {
     this.initialRateValue = 0;
@@ -40,7 +41,7 @@ export class IglBookingRoomRatePlan {
       return false;
     }
     else {
-      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || this.selectedData.physicalRooms.length === 0;
+      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || (calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0);
     }
   }
   setAvailableRooms(data) {

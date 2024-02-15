@@ -1,12 +1,15 @@
 import calendar_data from "../../../src/stores/calendar-data";
+import channels_data from "../../../src/stores/channel.store";
 import { locales } from "../../../src/stores/locales.store";
 import axios from "axios";
 export class RoomService {
+  constructor() {
+    this.token = JSON.parse(sessionStorage.getItem('token'));
+  }
   async fetchData(id, language) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${token}`, { id, language });
+      if (this.token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${this.token}`, { id, language });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -18,8 +21,25 @@ export class RoomService {
         calendar_data.is_vacation_rental = results.is_vacation_rental;
         calendar_data.pickup_service = results.pickup_service;
         calendar_data.max_nights = results.max_nights;
-        calendar_data.channels = results.channels;
+        calendar_data.connected_channels = results.connected_channels;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
+        return data;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+  async getExposedChannels() {
+    try {
+      if (this.token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${this.token}`, {});
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        const results = data.My_Result;
+        channels_data.channels = results;
         return data;
       }
     }
@@ -30,9 +50,8 @@ export class RoomService {
   }
   async fetchLanguage(code) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code });
+      if (this.token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${this.token}`, { code });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }

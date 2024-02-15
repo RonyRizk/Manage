@@ -6,7 +6,7 @@ export declare class IrChannel {
   baseurl: string;
   channel_status: 'create' | 'edit' | null;
   private roomService;
-  componentDidLoad(): void;
+  componentWillLoad(): void;
   initializeApp(): Promise<void>;
   ticketChanged(): Promise<void>;
   render(): any;

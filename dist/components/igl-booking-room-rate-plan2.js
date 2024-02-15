@@ -1,6 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
 import { g as getCurrencySymbol } from './utils.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$1 } from './ir-tooltip2.js';
 import { v as v4 } from './v4.js';
 
@@ -48,7 +49,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
       return false;
     }
     else {
-      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || this.selectedData.physicalRooms.length === 0;
+      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || (calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0);
     }
   }
   setAvailableRooms(data) {

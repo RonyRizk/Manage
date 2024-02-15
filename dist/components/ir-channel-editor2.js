@@ -1,11 +1,12 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { o as onChannelChange } from './channel.store.js';
 import { l as locales } from './locales.store.js';
 import { d as defineCustomElement$6 } from './ir-button2.js';
 import { d as defineCustomElement$5 } from './ir-channel-general2.js';
 import { d as defineCustomElement$4 } from './ir-channel-header2.js';
 import { d as defineCustomElement$3 } from './ir-channel-mapping2.js';
-import { d as defineCustomElement$2 } from './ir-combobox2.js';
-import { d as defineCustomElement$1 } from './ir-icon2.js';
+import { d as defineCustomElement$2 } from './ir-icon2.js';
+import { d as defineCustomElement$1 } from './ir-select2.js';
 
 const irChannelEditorCss = ".sc-ir-channel-editor-h{display:block}nav.sc-ir-channel-editor{z-index:10}";
 
@@ -21,13 +22,18 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
         name: 'General Settings',
         disabled: false,
       },
-      { id: 'mapping', name: 'Mapping', disabled: false },
+      { id: 'mapping', name: 'Mapping', disabled: true },
       { id: 'channel_booking', name: 'Channel Booking', disabled: true },
     ];
     this.selectedRoomType = [];
   }
   componentWillLoad() {
     this.selectedTab = this.headerTitles[0].id;
+    onChannelChange('selectedChannel', newValue => {
+      if (!!newValue) {
+        this.enableAllHeaders();
+      }
+    });
   }
   handleTabChange(e) {
     e.stopPropagation();
@@ -67,7 +73,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-channel-editor", "ir-button", "ir-channel-general", "ir-channel-header", "ir-channel-mapping", "ir-combobox", "ir-icon"];
+  const components = ["ir-channel-editor", "ir-button", "ir-channel-general", "ir-channel-header", "ir-channel-mapping", "ir-icon", "ir-select"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-channel-editor":
       if (!customElements.get(tagName)) {
@@ -94,12 +100,12 @@ function defineCustomElement() {
         defineCustomElement$3();
       }
       break;
-    case "ir-combobox":
+    case "ir-icon":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "ir-icon":
+    case "ir-select":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }
