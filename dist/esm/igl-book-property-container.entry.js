@@ -1,10 +1,8 @@
-import { r as registerInstance, h, H as Host } from './index-795d2df3.js';
-import { B as BookingService } from './booking.service-9af01f632.js';
-import { R as RoomService } from './room.service-c4fb073f2.js';
+import { r as registerInstance, c as createEvent, h, H as Host } from './index-795d2df3.js';
+import { B as BookingService } from './booking.service-909c53f0.js';
+import { R as RoomService } from './room.service-c4fb073f.js';
 import { l as locales } from './locales.store-de01ea13.js';
 import { a as axios } from './axios-3bd8531e.js';
-import './utils-70966be2.js';
-import './booking-2ddd6848.js';
 import './calendar-data-95cbc8c6.js';
 import './index-2bd379e0.js';
 
@@ -13,6 +11,7 @@ const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:b
 const IglBookPropertyContainer = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
+    this.resetBookingData = createEvent(this, "resetBookingData", 7);
     this.bookingService = new BookingService();
     this.roomService = new RoomService();
     this.language = '';
@@ -99,7 +98,11 @@ const IglBookPropertyContainer = class {
     };
   }
   render() {
-    return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
+    return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onResetBookingData: (e) => {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        this.resetBookingData.emit(null);
+      }, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
   }
   static get watchers() { return {
     "ticket": ["ticketChanged"]

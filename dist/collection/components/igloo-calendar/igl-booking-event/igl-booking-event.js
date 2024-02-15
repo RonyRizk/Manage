@@ -292,7 +292,11 @@ export class IglBookingEvent {
     return this.bookingEvent.STATUS;
   }
   getBookedBy() {
-    return this.bookingEvent.NAME;
+    var _a;
+    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
+      return h("p", null);
+    }
+    return (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.NAME;
   }
   getBookedRoomId() {
     return this.bookingEvent.PR_ID;
@@ -529,6 +533,9 @@ export class IglBookingEvent {
     this.updateEventData.emit(data);
   }
   renderEventBookingNumber() {
+    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
+      return '';
+    }
     if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
       return '';
     }

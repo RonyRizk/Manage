@@ -13,7 +13,7 @@ export class IrLabel {
     if (!this.value) {
       return null;
     }
-    return (h(Host, null, h("strong", null, this.label), this.imageSrc && h("img", { src: this.imageSrc }), h("p", null, this.value), this.iconShown && (h("div", { class: "icon-container" }, h("ir-icon", { class: "pointer icon", id: "pickup", onIconClickHandler: e => {
+    return (h(Host, { class: this.imageSrc ? 'align-items-center' : '' }, h("strong", null, this.label), this.imageSrc && h("img", { src: this.imageSrc, class: "p-0 m-0" }), h("p", null, this.value), this.iconShown && (h("div", { class: "icon-container" }, h("ir-icon", { class: "pointer icon", id: "pickup", onIconClickHandler: e => {
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.openEditSidebar();

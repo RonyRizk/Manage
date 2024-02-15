@@ -1,4 +1,4 @@
-import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { B as BookingService } from './booking.service2.js';
 import { R as RoomService } from './room.service.js';
 import { l as locales } from './locales.store.js';
@@ -29,6 +29,7 @@ const IglBookPropertyContainer$1 = /*@__PURE__*/ proxyCustomElement(class IglBoo
   constructor() {
     super();
     this.__registerHost();
+    this.resetBookingData = createEvent(this, "resetBookingData", 7);
     this.bookingService = new BookingService();
     this.roomService = new RoomService();
     this.language = '';
@@ -115,7 +116,11 @@ const IglBookPropertyContainer$1 = /*@__PURE__*/ proxyCustomElement(class IglBoo
     };
   }
   render() {
-    return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
+    return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onResetBookingData: (e) => {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        this.resetBookingData.emit(null);
+      }, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
   }
   static get watchers() { return {
     "ticket": ["ticketChanged"]

@@ -3,12 +3,10 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const booking_service = require('./booking.service-97c6d10a2.js');
-const room_service = require('./room.service-936658f82.js');
+const booking_service = require('./booking.service-5bb83712.js');
+const room_service = require('./room.service-936658f8.js');
 const locales_store = require('./locales.store-e07a3298.js');
 const axios = require('./axios-5ba3068e.js');
-require('./utils-cfac6d5b.js');
-require('./booking-79482cd7.js');
 require('./calendar-data-9ed0f0c0.js');
 require('./index-d93aa7bb.js');
 
@@ -17,6 +15,7 @@ const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:b
 const IglBookPropertyContainer = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
+    this.resetBookingData = index.createEvent(this, "resetBookingData", 7);
     this.bookingService = new booking_service.BookingService();
     this.roomService = new room_service.RoomService();
     this.language = '';
@@ -103,7 +102,11 @@ const IglBookPropertyContainer = class {
     };
   }
   render() {
-    return (index.h(index.Host, null, index.h("ir-toast", null), index.h("ir-interceptor", null), index.h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, index.h("slot", { name: "trigger" })), this.bookingItem && (index.h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
+    return (index.h(index.Host, null, index.h("ir-toast", null), index.h("ir-interceptor", null), index.h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, index.h("slot", { name: "trigger" })), this.bookingItem && (index.h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onResetBookingData: (e) => {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        this.resetBookingData.emit(null);
+      }, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
   }
   static get watchers() { return {
     "ticket": ["ticketChanged"]

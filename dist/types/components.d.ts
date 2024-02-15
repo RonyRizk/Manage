@@ -579,6 +579,10 @@ export interface IglBookPropertyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyElement;
 }
+export interface IglBookPropertyContainerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBookPropertyContainerElement;
+}
 export interface IglBookPropertyFooterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyFooterElement;
@@ -1230,6 +1234,7 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "from_date"?: string;
         "language"?: string;
+        "onResetBookingData"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;

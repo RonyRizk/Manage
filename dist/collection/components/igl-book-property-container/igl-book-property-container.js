@@ -91,7 +91,11 @@ export class IglBookPropertyContainer {
     };
   }
   render() {
-    return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
+    return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onResetBookingData: (e) => {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        this.resetBookingData.emit(null);
+      }, onCloseBookingWindow: () => this.handleCloseBookingWindow() }))));
   }
   static get is() { return "igl-book-property-container"; }
   static get encapsulation() { return "scoped"; }
@@ -221,6 +225,24 @@ export class IglBookPropertyContainer {
       "countryNodeList": {},
       "calendarData": {}
     };
+  }
+  static get events() {
+    return [{
+        "method": "resetBookingData",
+        "name": "resetBookingData",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "null",
+          "resolved": "null",
+          "references": {}
+        }
+      }];
   }
   static get watchers() {
     return [{

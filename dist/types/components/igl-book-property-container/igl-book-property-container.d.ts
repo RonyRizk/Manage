@@ -1,4 +1,5 @@
 import { IglBookPropertyPayloadPlusBooking } from "../../models/igl-book-property";
+import { EventEmitter } from '../../stencil-public-runtime';
 export declare class IglBookPropertyContainer {
   language: string;
   ticket: string;
@@ -10,6 +11,7 @@ export declare class IglBookPropertyContainer {
   showPaymentDetails: any;
   countryNodeList: any;
   calendarData: any;
+  resetBookingData: EventEmitter<null>;
   private bookingService;
   private roomService;
   setRoomsData(roomServiceResp: any): void;

@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { d as defineCustomElement$1 } from './ir-icon2.js';
 
-const irLabelCss = "*.sc-ir-label{margin:0;padding:0}.sc-ir-label-h{display:flex;margin-bottom:5px}.icon.sc-ir-label{margin-left:3px;padding:0;margin-top:0;display:flex;align-items:center}p.sc-ir-label{margin:0 3px;padding:0}.icon-container.sc-ir-label{margin:0;padding:0}svg.sc-ir-label{margin:0;padding:0}";
+const irLabelCss = "*.sc-ir-label{margin:0;padding:0}.sc-ir-label-h{display:flex;margin-bottom:5px;gap:5px}.icon.sc-ir-label{margin-left:3px;padding:0;margin-top:0;display:flex;align-items:center}p.sc-ir-label{margin:0 3px;padding:0}.icon-container.sc-ir-label{margin:0;padding:0}svg.sc-ir-label{margin:0;padding:0}";
 
 const IrLabel = /*@__PURE__*/ proxyCustomElement(class IrLabel extends HTMLElement {
   constructor() {
@@ -20,7 +20,7 @@ const IrLabel = /*@__PURE__*/ proxyCustomElement(class IrLabel extends HTMLEleme
     if (!this.value) {
       return null;
     }
-    return (h(Host, null, h("strong", null, this.label), this.imageSrc && h("img", { src: this.imageSrc }), h("p", null, this.value), this.iconShown && (h("div", { class: "icon-container" }, h("ir-icon", { class: "pointer icon", id: "pickup", onIconClickHandler: e => {
+    return (h(Host, { class: this.imageSrc ? 'align-items-center' : '' }, h("strong", null, this.label), this.imageSrc && h("img", { src: this.imageSrc, class: "p-0 m-0" }), h("p", null, this.value), this.iconShown && (h("div", { class: "icon-container" }, h("ir-icon", { class: "pointer icon", id: "pickup", onIconClickHandler: e => {
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.openEditSidebar();
