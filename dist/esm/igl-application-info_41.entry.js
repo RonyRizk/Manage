@@ -1910,11 +1910,7 @@ const IglBookingEvent = class {
     return this.bookingEvent.STATUS;
   }
   getBookedBy() {
-    var _a;
-    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
-      return h("p", null);
-    }
-    return (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.NAME;
+    return this.bookingEvent.NAME;
   }
   getBookedRoomId() {
     return this.bookingEvent.PR_ID;
@@ -2200,7 +2196,7 @@ const IglBookingEvent = class {
         !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
         this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
         this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
-        'border border-dark'}  ${this.isSplitBooking() ? 'splitBooking' : ''}`, style: { backgroundColor: legend.color }, onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }), noteNode ? h("div", { class: "legend_circle noteIcon", style: { backgroundColor: noteNode.color } }) : null, balanceNode ? h("div", { class: "legend_circle balanceIcon", style: { backgroundColor: balanceNode.color } }) : null, h("div", { class: "bookingEventTitle", onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }, `${this.getBookedBy()}${this.renderEventBookingNumber()}`), h(Fragment, null, h("div", { class: "bookingEventDragHandle leftSide", onTouchStart: event => this.startDragging(event, 'leftSide'), onMouseDown: event => this.startDragging(event, 'leftSide') }), h("div", { class: "bookingEventDragHandle rightSide", onTouchStart: event => this.startDragging(event, 'rightSide'), onMouseDown: event => this.startDragging(event, 'rightSide') })), this.showInfoPopup ? (h("igl-booking-event-hover", { is_vacation_rental: this.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, class: "top", bookingEvent: this.bookingEvent, bubbleInfoTop: this.bubbleInfoTopSide })) : null));
+        'border border-dark'}  ${this.isSplitBooking() ? 'splitBooking' : ''}`, style: { backgroundColor: legend.color }, onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }), noteNode ? h("div", { class: "legend_circle noteIcon", style: { backgroundColor: noteNode.color } }) : null, balanceNode ? h("div", { class: "legend_circle balanceIcon", style: { backgroundColor: balanceNode.color } }) : null, h("div", { class: "bookingEventTitle", onTouchStart: event => this.startDragging(event, 'move'), onMouseDown: event => this.startDragging(event, 'move') }, this.getBookedBy(), this.renderEventBookingNumber()), h(Fragment, null, h("div", { class: "bookingEventDragHandle leftSide", onTouchStart: event => this.startDragging(event, 'leftSide'), onMouseDown: event => this.startDragging(event, 'leftSide') }), h("div", { class: "bookingEventDragHandle rightSide", onTouchStart: event => this.startDragging(event, 'rightSide'), onMouseDown: event => this.startDragging(event, 'rightSide') })), this.showInfoPopup ? (h("igl-booking-event-hover", { is_vacation_rental: this.is_vacation_rental, countryNodeList: this.countryNodeList, currency: this.currency, class: "top", bookingEvent: this.bookingEvent, bubbleInfoTop: this.bubbleInfoTopSide })) : null));
   }
   get element() { return getElement(this); }
 };
