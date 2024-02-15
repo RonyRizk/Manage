@@ -50,7 +50,8 @@ function transformNewBooking(data) {
     //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
     // }
   };
-  data.rooms.forEach(room => {
+  const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
+  rooms.forEach(room => {
     var _a, _b;
     bookings.push({
       ID: room['assigned_units_pool'],
