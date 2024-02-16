@@ -19,6 +19,7 @@ export declare class IrRoomNights {
   inventory: number | null;
   isEndDateBeforeFromDate: boolean;
   defaultTotalNights: number;
+  isInputFocused: number;
   closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
   private bookingService;
   componentWillLoad(): void;
