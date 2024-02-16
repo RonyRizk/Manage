@@ -5,6 +5,7 @@ export interface CalendarDataDetails {
   allowedBookingSources: IAllowedBookingSources[];
   currency: IPickupCurrency;
   endingDate: number;
+  taxes: ITaxes[];
   formattedLegendData: IFormattedLegendData;
   is_vacation_rental: boolean;
   legendData: ILegendData[];
@@ -16,6 +17,11 @@ export interface CalendarDataDetails {
   allowed_payment_methods: IAllowedPaymentMethods[];
   pickup_service: IPickupService;
   is_frontdesk_enabled: boolean;
+}
+export interface ITaxes {
+  is_exlusive: boolean;
+  name: string;
+  pct: number;
 }
 export interface IChannel {
   channel: IExposedChannel;

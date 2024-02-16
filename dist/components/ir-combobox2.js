@@ -1,21 +1,34 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
+import { l as locales } from './locales.store.js';
 
-const irComboboxCss = ".sc-ir-combobox-h{display:block;position:relative;padding:0;margin:0}ul.sc-ir-combobox{position:absolute;background:#ffffff;padding:0 0.75rem;margin:0;margin-top:2px;width:100%;max-height:80px;border-radius:0.21rem;border:1px solid #cacfe7}";
+const irComboboxCss = ".sc-ir-combobox-h{display:block;position:relative;padding:0;margin:0}ul.sc-ir-combobox{position:absolute;margin:0;margin-top:2px;width:100%;max-height:80px;border-radius:0.21rem;z-index:10000;padding:1px;background:white;box-shadow:0px 8px 16px 0px rgba(0, 0, 0, 0.2);padding:5px 0;max-height:250px;overflow-y:auto}.dropdown-item.sc-ir-combobox{cursor:pointer}ul.sc-ir-combobox li.sc-ir-combobox,span.sc-ir-combobox,loader-container.sc-ir-combobox{padding:0px 16px;margin:0px;margin-top:2px;width:100%;border-radius:2px}ul.sc-ir-combobox li.sc-ir-combobox{cursor:pointer}ul.sc-ir-combobox li.sc-ir-combobox:hover{background:#f4f5fa}ul.sc-ir-combobox li[data-selected].sc-ir-combobox,ul.sc-ir-combobox li[data-selected].sc-ir-combobox:hover{color:#fff;text-decoration:none;background-color:#666ee8}";
 
 const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTMLElement {
   constructor() {
     super();
     this.__registerHost();
-    this.comboboxValue = createEvent(this, "comboboxValue", 7);
+    this.comboboxValueChange = createEvent(this, "comboboxValueChange", 7);
     this.inputCleared = createEvent(this, "inputCleared", 7);
     this.toast = createEvent(this, "toast", 7);
     this.data = [];
     this.duration = 300;
+    this.placeholder = undefined;
+    this.value = undefined;
+    this.autoFocus = false;
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
     this.isLoading = true;
     this.isItemSelected = undefined;
     this.inputValue = '';
+    this.filteredData = [];
+  }
+  componentWillLoad() {
+    this.filteredData = this.data;
+  }
+  componentDidLoad() {
+    if (this.autoFocus) {
+      this.inputRef.focus();
+    }
   }
   handleKeyDown(event) {
     var _a;
@@ -69,9 +82,10 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     }
   }
   selectItem(index) {
-    if (this.data[index]) {
+    console.log('clicked');
+    if (this.filteredData[index]) {
       this.isItemSelected = true;
-      // this.comboboxValue.emit({ key: 'select', data: this.data[index] });
+      this.comboboxValueChange.emit({ key: 'select', data: this.filteredData[index].id });
       this.inputValue = '';
       this.resetCombobox();
     }
@@ -95,13 +109,13 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     if (withblur) {
       (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.blur();
     }
-    this.data = [];
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
   }
   async fetchData() {
     try {
       this.isLoading = true;
+      this.filteredData = this.data.filter(d => d.name.toLowerCase().startsWith(this.inputValue));
     }
     catch (error) {
       console.log('error', error);
@@ -116,8 +130,7 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
       this.debounceFetchData();
     }
     else {
-      clearTimeout(this.debounceTimer);
-      this.resetCombobox(false);
+      this.filteredData = this.data;
     }
   }
   handleDocumentClick(event) {
@@ -127,16 +140,15 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     }
   }
   handleBlur() {
-    setTimeout(() => {
+    this.blurTimout = setTimeout(() => {
       if (!this.isItemSelected) {
-        this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
         this.inputValue = '';
         this.resetCombobox();
       }
       else {
         this.isItemSelected = false;
       }
-    }, 200);
+    }, 300);
   }
   isDropdownItem(element) {
     return element && element.closest('.combobox');
@@ -144,6 +156,7 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
   disconnectedCallback() {
     var _a, _b, _c, _d;
     clearTimeout(this.debounceTimer);
+    clearTimeout(this.blurTimout);
     (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.removeEventListener('blur', this.handleBlur);
     (_b = this.inputRef) === null || _b === void 0 ? void 0 : _b.removeEventListener('click', this.selectItem);
     (_c = this.inputRef) === null || _c === void 0 ? void 0 : _c.removeEventListener('keydown', this.handleKeyDown);
@@ -164,19 +177,31 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
       return;
     }
   }
+  renderDropdown() {
+    var _a;
+    if (!this.isComboBoxVisible) {
+      return null;
+    }
+    return (h("ul", null, (_a = this.filteredData) === null || _a === void 0 ? void 0 :
+      _a.map((d, index) => (h("li", { role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, d.name))), this.filteredData.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, locales.entries.Lcz_NoResultsFound)));
+  }
   render() {
-    return (h("fieldset", { class: "m-0 p-0" }, h("input", { type: "text", class: "form-control" }), h("ul", { class: "" }, h("p", null, "Room 1"))));
+    return (h("fieldset", { class: "m-0 p-0" }, h("input", { autoFocus: this.autoFocus, ref: el => (this.inputRef = el), type: "text", value: this.value, placeholder: this.placeholder, class: "form-control", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this) }), this.renderDropdown()));
   }
   get el() { return this; }
   static get style() { return irComboboxCss; }
 }, [2, "ir-combobox", {
     "data": [1040],
     "duration": [2],
+    "placeholder": [1],
+    "value": [1],
+    "autoFocus": [4, "auto-focus"],
     "selectedIndex": [32],
     "isComboBoxVisible": [32],
     "isLoading": [32],
     "isItemSelected": [32],
-    "inputValue": [32]
+    "inputValue": [32],
+    "filteredData": [32]
   }, [[4, "click", "handleDocumentClick"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

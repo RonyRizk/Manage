@@ -2,9 +2,12 @@ import channels_data, { selectChannel } from "../../../../../src/stores/channel.
 import { Host, h } from "@stencil/core";
 export class IrChannelGeneral {
   render() {
-    return (h(Host, null, h("ir-select", { selectContainerStyle: "mb-1", onSelectChange: (e) => selectChannel(e.detail), class: 'm-0 mb-1', LabelAvailable: false, data: channels_data.channels.map(channel => ({
-        value: channel.id,
-        text: channel.name,
+    var _a;
+    return (h(Host, null, h("p", null, "Channel"), h("ir-combobox", { value: (_a = channels_data.selectedChannel) === null || _a === void 0 ? void 0 : _a.name, onComboboxValueChange: (e) => {
+        selectChannel(e.detail.data.toString());
+      }, placeholder: "Choose channel from list", data: channels_data.channels.map(channel => ({
+        id: channel.id,
+        name: channel.name,
       })) })));
   }
   static get is() { return "ir-channel-general"; }

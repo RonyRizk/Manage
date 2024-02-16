@@ -328,8 +328,11 @@ export namespace Components {
         "checkboxes": checkboxes[];
     }
     interface IrCombobox {
-        "data": { id: number; name: string }[];
+        "autoFocus": boolean;
+        "data": { id: string; name: string }[];
         "duration": number;
+        "placeholder": string;
+        "value": string;
     }
     interface IrCommon {
         "extraResources": string;
@@ -1563,11 +1566,14 @@ declare namespace LocalJSX {
         "onCheckboxesChange"?: (event: IrCheckboxesCustomEvent<checkboxes[]>) => void;
     }
     interface IrCombobox {
-        "data"?: { id: number; name: string }[];
+        "autoFocus"?: boolean;
+        "data"?: { id: string; name: string }[];
         "duration"?: number;
-        "onComboboxValue"?: (event: IrComboboxCustomEvent<{ key: string; data: unknown }>) => void;
+        "onComboboxValueChange"?: (event: IrComboboxCustomEvent<{ key: string; data: unknown }>) => void;
         "onInputCleared"?: (event: IrComboboxCustomEvent<null>) => void;
         "onToast"?: (event: IrComboboxCustomEvent<IToast>) => void;
+        "placeholder"?: string;
+        "value"?: string;
     }
     interface IrCommon {
         "extraResources"?: string;

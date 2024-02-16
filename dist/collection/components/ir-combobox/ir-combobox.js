@@ -1,13 +1,26 @@
+import locales from "../../../../src/stores/locales.store";
 import { h } from "@stencil/core";
 export class IrCombobox {
   constructor() {
     this.data = [];
     this.duration = 300;
+    this.placeholder = undefined;
+    this.value = undefined;
+    this.autoFocus = false;
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
     this.isLoading = true;
     this.isItemSelected = undefined;
     this.inputValue = '';
+    this.filteredData = [];
+  }
+  componentWillLoad() {
+    this.filteredData = this.data;
+  }
+  componentDidLoad() {
+    if (this.autoFocus) {
+      this.inputRef.focus();
+    }
   }
   handleKeyDown(event) {
     var _a;
@@ -61,9 +74,10 @@ export class IrCombobox {
     }
   }
   selectItem(index) {
-    if (this.data[index]) {
+    console.log('clicked');
+    if (this.filteredData[index]) {
       this.isItemSelected = true;
-      // this.comboboxValue.emit({ key: 'select', data: this.data[index] });
+      this.comboboxValueChange.emit({ key: 'select', data: this.filteredData[index].id });
       this.inputValue = '';
       this.resetCombobox();
     }
@@ -87,13 +101,13 @@ export class IrCombobox {
     if (withblur) {
       (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.blur();
     }
-    this.data = [];
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
   }
   async fetchData() {
     try {
       this.isLoading = true;
+      this.filteredData = this.data.filter(d => d.name.toLowerCase().startsWith(this.inputValue));
     }
     catch (error) {
       console.log('error', error);
@@ -108,8 +122,7 @@ export class IrCombobox {
       this.debounceFetchData();
     }
     else {
-      clearTimeout(this.debounceTimer);
-      this.resetCombobox(false);
+      this.filteredData = this.data;
     }
   }
   handleDocumentClick(event) {
@@ -119,16 +132,15 @@ export class IrCombobox {
     }
   }
   handleBlur() {
-    setTimeout(() => {
+    this.blurTimout = setTimeout(() => {
       if (!this.isItemSelected) {
-        this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
         this.inputValue = '';
         this.resetCombobox();
       }
       else {
         this.isItemSelected = false;
       }
-    }, 200);
+    }, 300);
   }
   isDropdownItem(element) {
     return element && element.closest('.combobox');
@@ -136,6 +148,7 @@ export class IrCombobox {
   disconnectedCallback() {
     var _a, _b, _c, _d;
     clearTimeout(this.debounceTimer);
+    clearTimeout(this.blurTimout);
     (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.removeEventListener('blur', this.handleBlur);
     (_b = this.inputRef) === null || _b === void 0 ? void 0 : _b.removeEventListener('click', this.selectItem);
     (_c = this.inputRef) === null || _c === void 0 ? void 0 : _c.removeEventListener('keydown', this.handleKeyDown);
@@ -156,8 +169,16 @@ export class IrCombobox {
       return;
     }
   }
+  renderDropdown() {
+    var _a;
+    if (!this.isComboBoxVisible) {
+      return null;
+    }
+    return (h("ul", null, (_a = this.filteredData) === null || _a === void 0 ? void 0 :
+      _a.map((d, index) => (h("li", { role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, d.name))), this.filteredData.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, locales.entries.Lcz_NoResultsFound)));
+  }
   render() {
-    return (h("fieldset", { class: "m-0 p-0" }, h("input", { type: "text", class: "form-control" }), h("ul", { class: "" }, h("p", null, "Room 1"))));
+    return (h("fieldset", { class: "m-0 p-0" }, h("input", { autoFocus: this.autoFocus, ref: el => (this.inputRef = el), type: "text", value: this.value, placeholder: this.placeholder, class: "form-control", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this) }), this.renderDropdown()));
   }
   static get is() { return "ir-combobox"; }
   static get encapsulation() { return "scoped"; }
@@ -177,8 +198,8 @@ export class IrCombobox {
         "type": "unknown",
         "mutable": true,
         "complexType": {
-          "original": "{ id: number; name: string }[]",
-          "resolved": "{ id: number; name: string; }[]",
+          "original": "{ id: string; name: string }[]",
+          "resolved": "{ id: string; name: string; }[]",
           "references": {}
         },
         "required": false,
@@ -206,6 +227,58 @@ export class IrCombobox {
         "attribute": "duration",
         "reflect": false,
         "defaultValue": "300"
+      },
+      "placeholder": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "placeholder",
+        "reflect": false
+      },
+      "value": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "value",
+        "reflect": false
+      },
+      "autoFocus": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "auto-focus",
+        "reflect": false,
+        "defaultValue": "false"
       }
     };
   }
@@ -215,13 +288,14 @@ export class IrCombobox {
       "isComboBoxVisible": {},
       "isLoading": {},
       "isItemSelected": {},
-      "inputValue": {}
+      "inputValue": {},
+      "filteredData": {}
     };
   }
   static get events() {
     return [{
-        "method": "comboboxValue",
-        "name": "comboboxValue",
+        "method": "comboboxValueChange",
+        "name": "comboboxValueChange",
         "bubbles": true,
         "cancelable": true,
         "composed": true,

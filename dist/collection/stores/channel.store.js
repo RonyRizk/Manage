@@ -16,5 +16,11 @@ export function selectChannel(channel_id) {
   channels_data.mappedChannel = selectedChannelMap.map;
   channels_data.selectedChannel = selectedChannel;
 }
+export function addMapping(ir_id, fr_id) {
+  channels_data.mappedChannel.push({
+    channel_id: fr_id,
+    ir_id,
+  });
+}
 export default channels_data;
 //# sourceMappingURL=channel.store.js.map

@@ -165,6 +165,7 @@ export interface RoomDetail {
   inventory: number;
   name: string;
   rate: number;
+  is_active: boolean;
   rateplans: RatePlanDetail[];
   physicalrooms: PhysicalRoomDetail[];
   exposed_inventory: null;

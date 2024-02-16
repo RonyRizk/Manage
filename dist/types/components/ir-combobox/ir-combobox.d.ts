@@ -2,17 +2,24 @@ import { IToast } from "../../components";
 import { EventEmitter } from '../../stencil-public-runtime';
 export declare class IrCombobox {
   data: {
-    id: number;
+    id: string;
     name: string;
   }[];
   duration: number;
+  placeholder: string;
+  value: string;
+  autoFocus: boolean;
   selectedIndex: number;
   isComboBoxVisible: boolean;
   isLoading: boolean;
   isItemSelected: boolean;
   inputValue: string;
+  filteredData: {
+    id: string;
+    name: string;
+  }[];
   el: HTMLElement;
-  comboboxValue: EventEmitter<{
+  comboboxValueChange: EventEmitter<{
     key: string;
     data: unknown;
   }>;
@@ -20,6 +27,9 @@ export declare class IrCombobox {
   toast: EventEmitter<IToast>;
   private inputRef;
   private debounceTimer;
+  private blurTimout;
+  componentWillLoad(): void;
+  componentDidLoad(): void;
   handleKeyDown(event: KeyboardEvent): void;
   getHeightOfPElement(): number;
   adjustScrollPosition(itemHeight: any, visibleHeight?: number): void;
@@ -35,5 +45,6 @@ export declare class IrCombobox {
   isDropdownItem(element: any): any;
   disconnectedCallback(): void;
   handleItemKeyDown(event: KeyboardEvent, index: number): void;
+  renderDropdown(): any;
   render(): any;
 }

@@ -19,6 +19,7 @@ const initialState = {
   pickup_service: undefined,
   max_nights: 0,
   is_frontdesk_enabled: false,
+  taxes: [],
 };
 export const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 export default calendar_data;

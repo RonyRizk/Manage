@@ -7,4 +7,5 @@ export interface IChannelStore {
 }
 export declare const channels_data: IChannelStore, onChannelChange: import("@stencil/store/dist/types").OnChangeHandler<IChannelStore>;
 export declare function selectChannel(channel_id: string): void;
+export declare function addMapping(ir_id: string, fr_id: string): void;
 export default channels_data;
