@@ -3294,7 +3294,7 @@ const IrRoom = class {
   //   return cat.CODE_VALUE_EN;
   // }
   /*
-  
+
   bookingEvent.defaultDateRange = {};
       bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
       bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
@@ -3414,7 +3414,7 @@ const IrRoom = class {
         }
         return (index.h("span", { class: `p-0 m-0` }, this.defaultTexts.entries.Lcz_Excluding, " ", tax.name, " (", tax.pct.toFixed(0), "%) ", _formatAmount(this.item.total * (tax.pct / 100), this.currency), ' ', index$1 < filtered_data.length - 1 ? ' - ' : ''));
       });
-    })()))) : (index.h(index.Fragment, null, (() => {
+    })()))) : (index.h(index.Fragment, null, index.h("div", { class: 'tax-width ' }, (() => {
       const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
       return filtered_data.map((tax, index$1) => {
         if (!tax.is_exlusive) {
@@ -3422,7 +3422,7 @@ const IrRoom = class {
         }
         return (index.h("span", { class: `p-0 m-0` }, this.defaultTexts.entries.Lcz_Excluding, " ", tax.name, " ", tax.currency.symbol + tax.amount, " ", index$1 < filtered_data.length - 1 ? ' - ' : ''));
       });
-    })())), index.h("p", { class: "p-0 m-0 ml-1 font-weight-bold" }, _formatAmount(this.item['gross_total'], this.currency))), index.h("div", { class: "d-flex align-items-center" }, index.h("span", { class: " mr-1" }, _formatDate(this.item.from_date), " - ", _formatDate(this.item.to_date)), calendarData.calendar_data.is_frontdesk_enabled && this.item.unit && index.h("span", { class: "light-blue-bg mr-2 " }, this.item.unit.name), this.hasCheckIn && index.h("ir-button", { id: "checkin", icon: "", class: "mr-1", btn_color: "info", size: "sm", text: "Check in" }), this.hasCheckOut && index.h("ir-button", { id: "checkout", icon: "", btn_color: "info", size: "sm", text: "Check out" })), index.h("div", null, index.h("span", { class: "mr-1" }, `${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`), this.item.rateplan.selected_variation.adult_nbr > 0 && index.h("span", null, " ", this.item.rateplan.selected_variation.adult_child_offering)), index.h("div", { class: "collapse", id: `roomCollapse-${this.item.identifier.split(' ').join('')}` }, index.h("div", { class: "d-flex" }, index.h("div", { class: " sm-padding-top" }, index.h("strong", { class: "sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Breakdown}:`)), index.h("div", { class: 'flex-fill' }, index.h("table", null, this.item.days.length > 0 &&
+    })()))), index.h("p", { class: "p-0 m-0 ml-1 font-weight-bold" }, _formatAmount(this.item['gross_total'], this.currency))), index.h("div", { class: "d-flex align-items-center" }, index.h("span", { class: " mr-1" }, _formatDate(this.item.from_date), " - ", _formatDate(this.item.to_date)), calendarData.calendar_data.is_frontdesk_enabled && this.item.unit && index.h("span", { class: "light-blue-bg mr-2 " }, this.item.unit.name), this.hasCheckIn && index.h("ir-button", { id: "checkin", icon: "", class: "mr-1", btn_color: "info", size: "sm", text: "Check in" }), this.hasCheckOut && index.h("ir-button", { id: "checkout", icon: "", btn_color: "info", size: "sm", text: "Check out" })), index.h("div", null, index.h("span", { class: "mr-1" }, `${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`), this.item.rateplan.selected_variation.adult_nbr > 0 && index.h("span", null, " ", this.item.rateplan.selected_variation.adult_child_offering)), index.h("div", { class: "collapse", id: `roomCollapse-${this.item.identifier.split(' ').join('')}` }, index.h("div", { class: "d-flex" }, index.h("div", { class: " sm-padding-top" }, index.h("strong", { class: "sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Breakdown}:`)), index.h("div", { class: 'flex-fill' }, index.h("table", null, this.item.days.length > 0 &&
       this.item.days.map(item => (index.h("tr", null, index.h("td", { class: 'pr-2' }, _getDay(item.date)), " ", index.h("td", null, _formatAmount(item.amount, this.currency)))))))), index.h("div", { innerHTML: this.item.rateplan.cancelation || '' }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_MealPlan}:`, value: this.mealCodeName }))), index.h("ir-modal", { onConfirmModal: this.deleteRoom.bind(this), iconAvailable: true, icon: "ft-alert-triangle danger h1", leftBtnText: this.defaultTexts.entries.Lcz_Cancel, rightBtnText: this.defaultTexts.entries.Lcz_Delete, leftBtnColor: "secondary", rightBtnColor: "danger", modalTitle: this.defaultTexts.entries.Lcz_Confirmation, modalBody: `${this.defaultTexts.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${this.item.unit && this.item.unit.name} ${this.defaultTexts.entries.Lcz_FromThisBooking}` })));
   }
   get element() { return index.getElement(this); }
