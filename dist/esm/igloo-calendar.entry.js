@@ -1,16 +1,14 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-795d2df3.js';
-import { R as RoomService } from './room.service-fec64b23.js';
-import { B as BookingService } from './booking.service-3f5bcfb7.js';
-import { j as formatLegendColors, h as hooks, d as dateToFormattedString, i as isBlockUnit, k as getNextDay, l as addTwoMonthToDate, m as convertDMYToISO, n as computeEndDate } from './utils-70966be2.js';
-import { a as axios } from './axios-3bd8531e.js';
-import { E as EventsService } from './events.service-544953b1.js';
-import { T as ToBeAssignedService } from './toBeAssigned.service-50db902b.js';
-import { t as transformNewBLockedRooms, a as transformNewBooking, b as bookingStatus, c as calculateDaysBetweenDates } from './booking-29d49af1.js';
-import { c as calendar_dates, a as addUnassingedDates, r as removeUnassignedDates } from './unassigned_dates.store-b22ec8f9.js';
-import { l as locales } from './locales.store-de01ea13.js';
-import { c as calendar_data } from './calendar-data-45884c68.js';
-import './channel.store-dae40e5c.js';
-import './index-2bd379e0.js';
+import { R as RoomService, c as calendar_dates, a as addUnassingedDates, r as removeUnassignedDates } from './unassigned_dates.store-03cf8a0c.js';
+import { B as BookingService } from './booking.service-f6c798c32.js';
+import { f as formatLegendColors, d as dateToFormattedString, i as isBlockUnit, g as getNextDay, e as addTwoMonthToDate, h as convertDMYToISO, j as computeEndDate } from './utils-fd7da1ce.js';
+import { a as axios, l as locales } from './axios-248c334f.js';
+import { E as EventsService } from './events.service-c79bcf72.js';
+import { h as hooks } from './moment-7d60e5ef.js';
+import { T as ToBeAssignedService } from './toBeAssigned.service-16e7aa8d.js';
+import { t as transformNewBLockedRooms, a as transformNewBooking, b as bookingStatus, c as calculateDaysBetweenDates } from './booking-9aaf08ea.js';
+import { c as calendar_data } from './calendar-data-31a23966.js';
+import './channel.store-c348aa20.js';
 
 const PACKET_TYPES = Object.create(null); // no Map = no polyfill
 PACKET_TYPES["open"] = "0";

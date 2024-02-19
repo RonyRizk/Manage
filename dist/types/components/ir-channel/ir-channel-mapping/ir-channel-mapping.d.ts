@@ -1,3 +1,4 @@
+import { RoomDetail, RatePlanDetail } from "../../../models/IBooking";
 export declare class IrChannelMapping {
   activeMapField: string;
   availableRooms: {
@@ -6,6 +7,12 @@ export declare class IrChannelMapping {
   }[];
   private mappingService;
   setActiveField(id: string, isRoomType: boolean, roomTypeId?: string): void;
-  renderMappingStatus(id: string, isRoomType: boolean, roomTypeId?: string): any;
+  renderMappingStatus(mappedField: {
+    hide: boolean;
+    result: RoomDetail;
+  } | {
+    hide: boolean;
+    result: RatePlanDetail;
+  }, id: string, isRoomType: boolean, roomTypeId?: string): any;
   render(): any;
 }

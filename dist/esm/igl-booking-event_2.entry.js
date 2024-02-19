@@ -1,12 +1,11 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-795d2df3.js';
-import { B as BookingService$1 } from './booking.service-3f5bcfb72.js';
-import { h as hooks, a as getReleaseHoursString, q as findCountry, f as formatDate, g as getCurrencySymbol } from './utils-70966be2.js';
-import { l as locales } from './locales.store-de01ea13.js';
-import { a as axios } from './axios-3bd8531e.js';
-import { B as BookingService } from './booking.service-3f5bcfb7.js';
-import { E as EventsService$1 } from './events.service-544953b1.js';
-import './booking-29d49af1.js';
-import './index-2bd379e0.js';
+import { B as BookingService$1 } from './booking.service-f6c798c3.js';
+import { h as hooks } from './moment-7d60e5ef.js';
+import { a as axios, l as locales } from './axios-248c334f.js';
+import { B as BookingService } from './booking.service-f6c798c32.js';
+import { k as getReleaseHoursString, p as findCountry, o as formatDate, m as getCurrencySymbol } from './utils-fd7da1ce.js';
+import { E as EventsService$1 } from './events.service-c79bcf72.js';
+import './booking-9aaf08ea.js';
 
 const bookingStatus = {
   '000': 'IN-HOUSE',

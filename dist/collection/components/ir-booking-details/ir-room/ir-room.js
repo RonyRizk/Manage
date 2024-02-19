@@ -153,7 +153,7 @@ export class IrRoom {
         return (h("tr", null, h("td", { class: "text-right pr-2" }, d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including, " ", d.name, " (", d.pct, "%)"), h("td", { class: "text-right" }, _formatAmount((this.item.total * d.pct) / 100, this.currency))));
       });
     })())) : (h(Fragment, null, (() => {
-      const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
+      const filtered_data = this.item.ota_taxes.filter(tx => tx.amount > 0);
       return filtered_data.map(d => {
         return (h("tr", null, h("td", { class: "text-right pr-2" }, d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including, " ", d.name), h("td", { class: "text-right" }, d.currency.symbol, d.amount)));
       });

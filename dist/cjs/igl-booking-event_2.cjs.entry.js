@@ -3,14 +3,13 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const booking_service$1 = require('./booking.service-bd209f012.js');
-const utils = require('./utils-cfac6d5b.js');
-const locales_store = require('./locales.store-e07a3298.js');
-const axios = require('./axios-5ba3068e.js');
-const booking_service = require('./booking.service-bd209f01.js');
-const events_service = require('./events.service-f34ca531.js');
-require('./booking-da250d92.js');
-require('./index-d93aa7bb.js');
+const booking_service$1 = require('./booking.service-2fe4746b.js');
+const moment = require('./moment-f96595e5.js');
+const axios = require('./axios-394374e5.js');
+const booking_service = require('./booking.service-2fe4746b2.js');
+const utils = require('./utils-bfd564ee.js');
+const events_service = require('./events.service-49da5532.js');
+require('./booking-1be13c43.js');
 
 const bookingStatus = {
   '000': 'IN-HOUSE',
@@ -30,9 +29,9 @@ function transformNewBooking(data) {
   let bookings = [];
   //console.log(data);
   const renderStatus = room => {
-    const now = utils.hooks();
-    const toDate = utils.hooks(room.to_date, 'YYYY-MM-DD');
-    const fromDate = utils.hooks(room.from_date, 'YYYY-MM-DD');
+    const now = moment.hooks();
+    const toDate = moment.hooks(room.to_date, 'YYYY-MM-DD');
+    const fromDate = moment.hooks(room.from_date, 'YYYY-MM-DD');
     if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
       return bookingStatus['000'];
     }
@@ -377,26 +376,26 @@ const IglBookingEvent = class {
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
-          description: `${locales_store.locales.entries.Lcz_YouWillLoseFutureUpdates}.`,
+          description: `${axios.locales.entries.Lcz_YouWillLoseFutureUpdates}.`,
           status: '200',
         };
       }
       else {
-        if (utils.hooks(from_date, 'YYYY-MM-DD').isSame(utils.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')) &&
-          utils.hooks(to_date, 'YYYY-MM-DD').isSame(utils.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))) {
+        if (moment.hooks(from_date, 'YYYY-MM-DD').isSame(moment.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')) &&
+          moment.hooks(to_date, 'YYYY-MM-DD').isSame(moment.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))) {
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
           if (initialRT === targetRT) {
-            return { description: `${locales_store.locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+            return { description: `${axios.locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           }
           else {
             return {
-              description: `${locales_store.locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${locales_store.locales.entries.Lcz_SameRatesWillBeKept}`,
+              description: `${axios.locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${axios.locales.entries.Lcz_SameRatesWillBeKept}`,
               status: '200',
             };
           }
         }
-        return { description: locales_store.locales.entries.Lcz_CannotChangeCHBookings, status: '400' };
+        return { description: axios.locales.entries.Lcz_CannotChangeCHBookings, status: '400' };
       }
     }
     else {
@@ -405,16 +404,16 @@ const IglBookingEvent = class {
         const targetRT = findRoomType(toRoomId);
         if (initialRT === targetRT) {
           console.log('same rt');
-          return { description: `${locales_store.locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+          return { description: `${axios.locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         }
         else {
           return {
-            description: locales_store.locales.entries.Lcz_SameRatesWillBeKept,
+            description: axios.locales.entries.Lcz_SameRatesWillBeKept,
             status: '200',
           };
         }
       }
-      return { description: locales_store.locales.entries.Lcz_BalanceWillBeCalculated, status: '200' };
+      return { description: axios.locales.entries.Lcz_BalanceWillBeCalculated, status: '200' };
     }
   }
   resetBookingToInitialPosition() {
@@ -436,14 +435,14 @@ const IglBookingEvent = class {
     }
   }
   checkIfSlotOccupied(toRoomId, from_date, to_date) {
-    const fromTime = utils.hooks(from_date, 'YYYY-MM-DD');
-    const toTime = utils.hooks(to_date, 'YYYY-MM-DD');
+    const fromTime = moment.hooks(from_date, 'YYYY-MM-DD');
+    const toTime = moment.hooks(to_date, 'YYYY-MM-DD');
     const isOccupied = this.allBookingEvents.some(event => {
       if (event.POOL === this.bookingEvent.POOL) {
         return false;
       }
-      const eventFromTime = utils.hooks(event.FROM_DATE, 'YYYY-MM-DD').add(1, 'days');
-      const eventToTime = utils.hooks(event.TO_DATE, 'YYYY-MM-DD');
+      const eventFromTime = moment.hooks(event.FROM_DATE, 'YYYY-MM-DD').add(1, 'days');
+      const eventToTime = moment.hooks(event.TO_DATE, 'YYYY-MM-DD');
       return event.PR_ID === +toRoomId && toTime.isSameOrAfter(eventFromTime) && fromTime.isBefore(eventToTime);
     });
     return isOccupied;
@@ -789,7 +788,7 @@ const IglBookingEventHover = class {
       console.log(selectedRt.physicalrooms.length === 1);
       this.shouldHideUnassignUnit = selectedRt.physicalrooms.length === 1;
     }
-    if (utils.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(utils.hooks())) {
+    if (moment.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(moment.hooks())) {
       this.hideButtons = true;
     }
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -920,7 +919,7 @@ const IglBookingEventHover = class {
   }
   handleEditBooking() {
     // console.log("Edit booking");
-    this.bookingEvent.TITLE = locales_store.locales.entries.Lcz_EditBookingFor;
+    this.bookingEvent.TITLE = axios.locales.entries.Lcz_EditBookingFor;
     this.handleBookingOption('EDIT_BOOKING');
   }
   getStringDateFormat(dt) {
@@ -1007,13 +1006,13 @@ const IglBookingEventHover = class {
   renderTitle(eventType, roomInfo) {
     switch (eventType) {
       case 'EDIT_BOOKING':
-        return `${locales_store.locales.entries.Lcz_EditBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+        return `${axios.locales.entries.Lcz_EditBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
       case 'ADD_ROOM':
-        return `${locales_store.locales.entries.Lcz_AddingUnitToBooking}# ${this.bookingEvent.BOOKING_NUMBER}`;
+        return `${axios.locales.entries.Lcz_AddingUnitToBooking}# ${this.bookingEvent.BOOKING_NUMBER}`;
       case 'SPLIT_BOOKING':
-        return locales_store.locales.entries.Lcz_Adding + ` ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+        return axios.locales.entries.Lcz_Adding + ` ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
       default:
-        return `${locales_store.locales.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+        return `${axios.locales.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
     }
   }
   handleBookingOption(eventType, roomData = null) {
@@ -1035,35 +1034,35 @@ const IglBookingEventHover = class {
   }
   getInfoElement() {
     var _a, _b;
-    return (index.h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("div", { class: "row p-0 m-0 pb-1" }, index.h("div", { class: "pl-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, index.h("img", { src: (_b = (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.origin) === null || _b === void 0 ? void 0 : _b.Icon, alt: "icon", class: 'icon-image' }), index.h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), index.h("div", { class: "pr-0 col-4 text-right" }, utils.getCurrencySymbol(this.currency.code), this.getTotalPrice())), index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_In, ": "), utils.formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD'), " - ", index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Out, ": "), utils.formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))), this.getArrivalTime() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_ArrivalTime, ": "), this.getArrivalTime()))), this.getTotalOccupants() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Occupancy, ": "), this.getTotalOccupants()))), this.getPhoneNumber() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12 text-wrap" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Phone, ": "), this.renderPhone()))), this.getRatePlan() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_RatePlan, ": "), this.getRatePlan()))), this.getGuestNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 pl-0 pr-0 text-wrap d-flex" }, index.h("sapn", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Note, ": "), this.getGuestNote()))) : null, this.getInternalNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 pl-0 pr-0 text-wrap" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_InternalRemark, ": "), this.getInternalNote()))) : null, index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group  btn-group-sm font-small-3", role: "group" }, index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${this.hideButtons ? 'mr-0' : 'mr-1'} ${this.shouldHideUnassignUnit ? 'w-50' : ''}`, onClick: _ => {
+    return (index.h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("div", { class: "row p-0 m-0 pb-1" }, index.h("div", { class: "pl-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, index.h("img", { src: (_b = (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.origin) === null || _b === void 0 ? void 0 : _b.Icon, alt: "icon", class: 'icon-image' }), index.h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), index.h("div", { class: "pr-0 col-4 text-right" }, utils.getCurrencySymbol(this.currency.code), this.getTotalPrice())), index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, axios.locales.entries.Lcz_In, ": "), utils.formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD'), " - ", index.h("span", { class: "font-weight-bold" }, axios.locales.entries.Lcz_Out, ": "), utils.formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))), this.getArrivalTime() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, axios.locales.entries.Lcz_ArrivalTime, ": "), this.getArrivalTime()))), this.getTotalOccupants() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, axios.locales.entries.Lcz_Occupancy, ": "), this.getTotalOccupants()))), this.getPhoneNumber() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12 text-wrap" }, index.h("span", { class: "font-weight-bold" }, axios.locales.entries.Lcz_Phone, ": "), this.renderPhone()))), this.getRatePlan() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "pl-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, axios.locales.entries.Lcz_RatePlan, ": "), this.getRatePlan()))), this.getGuestNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 pl-0 pr-0 text-wrap d-flex" }, index.h("sapn", { class: "font-weight-bold" }, axios.locales.entries.Lcz_Note, ": "), this.getGuestNote()))) : null, this.getInternalNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 pl-0 pr-0 text-wrap" }, index.h("span", { class: "font-weight-bold" }, axios.locales.entries.Lcz_InternalRemark, ": "), this.getInternalNote()))) : null, index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group  btn-group-sm font-small-3", role: "group" }, index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${this.hideButtons ? 'mr-0' : 'mr-1'} ${this.shouldHideUnassignUnit ? 'w-50' : ''}`, onClick: _ => {
         this.handleEditBooking();
-      }, disabled: !this.bookingEvent.IS_EDITABLE }, index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", stroke: "currentColor", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })), index.h("span", null, "\u00A0", locales_store.locales.entries.Lcz_Edit)), this.bookingEvent.IS_EDITABLE && !this.hideButtons && (index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${!this.shouldHideUnassignUnit ? 'mr-1' : 'w-50'}`, onClick: _ => {
+      }, disabled: !this.bookingEvent.IS_EDITABLE }, index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", stroke: "currentColor", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })), index.h("span", null, "\u00A0", axios.locales.entries.Lcz_Edit)), this.bookingEvent.IS_EDITABLE && !this.hideButtons && (index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${!this.shouldHideUnassignUnit ? 'mr-1' : 'w-50'}`, onClick: _ => {
         this.handleAddRoom();
-      } }, index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", "stroke-width": "2", stroke: "currentColor", height: 12, width: 12 }, index.h("path", { "stroke-linecap": "round", "stroke-linejoin": "round", d: "M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" })), index.h("span", null, "\u00A0", locales_store.locales.entries.Lcz_AddRoom))), this.hideButtons
+      } }, index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", "stroke-width": "2", stroke: "currentColor", height: 12, width: 12 }, index.h("path", { "stroke-linecap": "round", "stroke-linejoin": "round", d: "M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" })), index.h("span", null, "\u00A0", axios.locales.entries.Lcz_AddRoom))), this.hideButtons
       ? null
       : !this.shouldHideUnassignUnit && (index.h("button", { type: "button", class: "btn btn-primary p-0 d-flex align-items-center justify-content-center", onClick: _ => {
           this.handleDeleteEvent();
-        }, disabled: !this.bookingEvent.IS_EDITABLE || this.is_vacation_rental }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "12", width: "8.75", class: "p-0 m-0", viewBox: "0 0 384 512" }, index.h("path", { fill: "currentColor", d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" })), index.h("span", { class: "m-0 p-0" }, "\u00A0", locales_store.locales.entries.Lcz_Unassign)))))));
+        }, disabled: !this.bookingEvent.IS_EDITABLE || this.is_vacation_rental }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "12", width: "8.75", class: "p-0 m-0", viewBox: "0 0 384 512" }, index.h("path", { fill: "currentColor", d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" })), index.h("span", { class: "m-0 p-0" }, "\u00A0", axios.locales.entries.Lcz_Unassign)))))));
   }
   getNewBookingOptions() {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
     return (index.h("div", { class: `iglPopOver newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, shouldDisplayButtons ? (index.h(index.Fragment, null, index.h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square", onClick: _ => {
         this.handleBookingOption('BAR_BOOKING');
-      } }, locales_store.locales.entries.Lcz_CreateNewBooking), this.hasSplitBooking() ? (index.h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square", onClick: _ => {
+      } }, axios.locales.entries.Lcz_CreateNewBooking), this.hasSplitBooking() ? (index.h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square", onClick: _ => {
         this.handleBookingOption('SPLIT_BOOKING');
-      } }, locales_store.locales.entries.Lcz_AssignUnitToExistingBooking)) : null)) : (index.h("p", { class: 'text-danger' }, locales_store.locales.entries.Lcz_NoRatePlanDefined)), index.h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary font-small-3 square", onClick: _ => {
+      } }, axios.locales.entries.Lcz_AssignUnitToExistingBooking)) : null)) : (index.h("p", { class: 'text-danger' }, axios.locales.entries.Lcz_NoRatePlanDefined)), index.h("button", { type: "button", class: "d-block full-width btn btn-sm btn-primary font-small-3 square", onClick: _ => {
         this.handleBookingOption('BLOCK_DATES');
-      } }, locales_store.locales.entries.Lcz_Blockdates)));
+      } }, axios.locales.entries.Lcz_Blockdates)));
   }
   getBlockedView() {
     // let defaultData = {RELEASE_AFTER_HOURS: 0, OPTIONAL_REASON: "", OUT_OF_SERVICE: false};
-    return (index.h("div", { class: `iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("igl-block-dates-view", { isEventHover: true, entryHour: this.bookingEvent.ENTRY_HOUR, entryMinute: this.bookingEvent.ENTRY_MINUTE, defaultData: this.bookingEvent, fromDate: utils.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), toDate: utils.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), entryDate: this.getEntryDate(), onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group btn-group-sm font-small-3", role: "group" }, index.h("button", { disabled: this.isLoading === 'update', type: "button", class: "btn btn-primary mr-1 d-flex align-items-center justify-content-center", onClick: _ => {
+    return (index.h("div", { class: `iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("igl-block-dates-view", { isEventHover: true, entryHour: this.bookingEvent.ENTRY_HOUR, entryMinute: this.bookingEvent.ENTRY_MINUTE, defaultData: this.bookingEvent, fromDate: moment.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), toDate: moment.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), entryDate: this.getEntryDate(), onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group btn-group-sm font-small-3", role: "group" }, index.h("button", { disabled: this.isLoading === 'update', type: "button", class: "btn btn-primary mr-1 d-flex align-items-center justify-content-center", onClick: _ => {
         this.handleUpdateBlockedDates();
-      } }, this.isLoading === 'update' ? (index.h("i", { class: "la la-circle-o-notch spinner mx-1" })) : (index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", stroke: "currentColor", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" }))), index.h("span", null, "\u00A0", locales_store.locales.entries.Lcz_Update)), index.h("button", { type: "button", class: "btn btn-primary", onClick: _ => {
+      } }, this.isLoading === 'update' ? (index.h("i", { class: "la la-circle-o-notch spinner mx-1" })) : (index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", stroke: "currentColor", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" }))), index.h("span", null, "\u00A0", axios.locales.entries.Lcz_Update)), index.h("button", { type: "button", class: "btn btn-primary", onClick: _ => {
         this.handleConvertBlockedDateToBooking();
-      } }, locales_store.locales.entries.Lcz_ConvertToBooking), index.h("button", { type: "button", class: "btn btn-danger ml-1 d-flex align-items-center justify-content-center", onClick: _ => {
+      } }, axios.locales.entries.Lcz_ConvertToBooking), index.h("button", { type: "button", class: "btn btn-danger ml-1 d-flex align-items-center justify-content-center", onClick: _ => {
         this.handleDeleteEvent();
-      } }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "12", width: "10.5", viewBox: "0 0 448 512" }, index.h("path", { fill: "currentColor", d: "M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" })), index.h("span", null, "\u00A0", locales_store.locales.entries.Lcz_Delete))))));
+      } }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "12", width: "10.5", viewBox: "0 0 448 512" }, index.h("path", { fill: "currentColor", d: "M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" })), index.h("span", null, "\u00A0", axios.locales.entries.Lcz_Delete))))));
   }
   render() {
     return (index.h(index.Host, null, index.h("div", { class: `pointerContainer ${this.bubbleInfoTop ? 'pointerContainerTop' : ''}` }, index.h("div", { class: `bubblePointer ${this.bubbleInfoTop ? 'bubblePointTop' : 'bubblePointBottom'}` })), this.isBlockedDateEvent() ? this.getBlockedView() : null, this.isNewBooking() ? this.getNewBookingOptions() : null, !this.isBlockedDateEvent() && !this.isNewBooking() ? this.getInfoElement() : null));

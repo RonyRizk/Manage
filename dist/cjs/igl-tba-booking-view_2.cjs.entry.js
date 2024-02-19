@@ -3,12 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const toBeAssigned_service = require('./toBeAssigned.service-186e83cf.js');
-const locales_store = require('./locales.store-e07a3298.js');
+const toBeAssigned_service = require('./toBeAssigned.service-7dc3aaa9.js');
+const axios = require('./axios-394374e5.js');
 const v4 = require('./v4-d89fec7e.js');
-require('./axios-5ba3068e.js');
-require('./utils-cfac6d5b.js');
-require('./index-d93aa7bb.js');
+require('./utils-bfd564ee.js');
+require('./moment-f96595e5.js');
 
 const iglTbaBookingViewCss = ".sc-igl-tba-booking-view-h{display:block}.guestTitle.sc-igl-tba-booking-view{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px;margin-bottom:5px;margin-top:5px;padding-left:5px;padding-right:5px}.guestTitle.selectedOrder.sc-igl-tba-booking-view{background-color:#f9f9c9}.pointer.sc-igl-tba-booking-view{cursor:pointer}hr.sc-igl-tba-booking-view{margin-top:8px;margin-bottom:0px}.bookingContainer.sc-igl-tba-booking-view{background-color:#ececec}.actionsContainer.sc-igl-tba-booking-view{padding:5px !important;padding-right:0px !important}.selectContainer.sc-igl-tba-booking-view{width:195px;margin-right:8px}.buttonsContainer.sc-igl-tba-booking-view{width:100px}.btn-secondary.sc-igl-tba-booking-view{margin-right:8px !important}";
 
@@ -149,7 +148,7 @@ const IglTbaBookingView = class {
     // this.initializeToolTips();
   }
   render() {
-    return (index.h(index.Host, null, index.h("div", { class: "bookingContainer", onClick: () => this.handleHighlightAvailability() }, index.h("div", { class: `guestTitle ${this.highlightSection ? 'selectedOrder' : ''} pointer font-small-3`, "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Click to assign unit" }, `Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`), index.h("div", { class: "row m-0 p-0 actionsContainer" }, index.h("div", { class: "d-inline-block p-0 selectContainer" }, index.h("select", { class: "form-control input-sm", id: v4.v4(), onChange: evt => this.onSelectRoom(evt) }, index.h("option", { value: "", selected: this.selectedRoom == -1 }, locales_store.locales.entries.Lcz_AssignUnit), this.allRoomsList.map(room => (index.h("option", { value: room.id, selected: this.selectedRoom == room.id }, room.name))))), this.highlightSection ? (index.h("div", { class: "d-inline-block text-right buttonsContainer" }, index.h("button", { type: "button", class: "btn btn-secondary btn-sm", onClick: evt => this.handleCloseAssignment(evt) }, "X"), index.h("button", { type: "button", class: "btn btn-primary btn-sm", onClick: evt => this.handleAssignUnit(evt), disabled: this.selectedRoom === -1 }, locales_store.locales.entries.Lcz_Assign))) : null), index.h("hr", null))));
+    return (index.h(index.Host, null, index.h("div", { class: "bookingContainer", onClick: () => this.handleHighlightAvailability() }, index.h("div", { class: `guestTitle ${this.highlightSection ? 'selectedOrder' : ''} pointer font-small-3`, "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Click to assign unit" }, `Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`), index.h("div", { class: "row m-0 p-0 actionsContainer" }, index.h("div", { class: "d-inline-block p-0 selectContainer" }, index.h("select", { class: "form-control input-sm", id: v4.v4(), onChange: evt => this.onSelectRoom(evt) }, index.h("option", { value: "", selected: this.selectedRoom == -1 }, axios.locales.entries.Lcz_AssignUnit), this.allRoomsList.map(room => (index.h("option", { value: room.id, selected: this.selectedRoom == room.id }, room.name))))), this.highlightSection ? (index.h("div", { class: "d-inline-block text-right buttonsContainer" }, index.h("button", { type: "button", class: "btn btn-secondary btn-sm", onClick: evt => this.handleCloseAssignment(evt) }, "X"), index.h("button", { type: "button", class: "btn btn-primary btn-sm", onClick: evt => this.handleAssignUnit(evt), disabled: this.selectedRoom === -1 }, axios.locales.entries.Lcz_Assign))) : null), index.h("hr", null))));
   }
 };
 IglTbaBookingView.style = iglTbaBookingViewCss;

@@ -32,7 +32,8 @@ export interface IChannel {
 export interface IExposedChannel {
   id: number;
   name: string;
-  property: IChannelProperty;
+  properties: IChannelProperty[];
+  property?: IChannelProperty;
 }
 export interface IChannelProperty {
   id: string;
