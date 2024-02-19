@@ -5,5 +5,6 @@ export declare class RoomService {
     entries: any;
     direction: any;
   }>;
+  getExposedConnectedChannels(property_id: number): Promise<void>;
   private transformArrayToObject;
 }

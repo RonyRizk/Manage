@@ -10,9 +10,11 @@ export declare class IrChannelMapping {
   renderMappingStatus(mappedField: {
     hide: boolean;
     result: RoomDetail;
+    occupancy?: number;
   } | {
     hide: boolean;
     result: RatePlanDetail;
+    occupancy?: number;
   }, id: string, isRoomType: boolean, roomTypeId?: string): any;
   render(): any;
 }

@@ -8,6 +8,7 @@ export declare class IrCombobox {
   duration: number;
   placeholder: string;
   value: string;
+  disabled: boolean;
   autoFocus: boolean;
   selectedIndex: number;
   isComboBoxVisible: boolean;

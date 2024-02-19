@@ -6,6 +6,7 @@ export class IrCombobox {
     this.duration = 300;
     this.placeholder = undefined;
     this.value = undefined;
+    this.disabled = false;
     this.autoFocus = false;
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
@@ -192,7 +193,7 @@ export class IrCombobox {
       _a.map((d, index) => (h("li", { role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, d.name))), this.filteredData.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, locales.entries.Lcz_NoResultsFound)));
   }
   render() {
-    return (h("fieldset", { class: "m-0 p-0" }, h("input", { ref: el => (this.inputRef = el), type: "text", value: this.value, placeholder: this.placeholder, class: "form-control", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
+    return (h("fieldset", { class: "m-0 p-0" }, h("input", { ref: el => (this.inputRef = el), type: "text", disabled: this.disabled, value: this.value, placeholder: this.placeholder, class: "form-control bg-white", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
   }
   static get is() { return "ir-combobox"; }
   static get encapsulation() { return "scoped"; }
@@ -275,6 +276,24 @@ export class IrCombobox {
         },
         "attribute": "value",
         "reflect": false
+      },
+      "disabled": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "disabled",
+        "reflect": false,
+        "defaultValue": "false"
       },
       "autoFocus": {
         "type": "boolean",

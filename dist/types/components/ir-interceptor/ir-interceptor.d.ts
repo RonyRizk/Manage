@@ -17,8 +17,6 @@ export declare class IrInterceptor {
   handleRequest(config: any): any;
   handleResponse(response: any): any;
   handleError(error: any): Promise<never>;
-  showToast(): void;
-  hideToastAfterDelay(isSuccess: boolean): void;
   renderMessage(): string;
   render(): any;
 }

@@ -16,7 +16,6 @@ export declare function selectChannel(channel_id: string): void;
 export declare function updateChannelSettings(key: keyof IChannelSettings, value: string): void;
 export declare function setMappedChannel(): void;
 export declare function resetStore(): void;
-export declare function addMapping(ir_id: string, fr_id: string): void;
-export declare function removedMapping(ir_id: string): void;
+export declare function addMapping(ir_id: string, fr_id: string, isRoomType: boolean): void;
 export declare function testConnection(): void;
 export default channels_data;

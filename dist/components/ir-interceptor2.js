@@ -45,20 +45,18 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
       else {
         this.defaultMessage.loadingMessage = 'Fetching Data';
       }
-      this.showToast();
     }
     return config;
   }
   handleResponse(response) {
     var _a;
-    this.isLoading = false;
+    if (this.isHandledEndpoint(response.config.url)) {
+      this.isLoading = false;
+    }
     interceptor_requests.status = 'done';
     if ((_a = response.data.ExceptionMsg) === null || _a === void 0 ? void 0 : _a.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);
-    }
-    else {
-      this.hideToastAfterDelay(true);
     }
     return response;
   }
@@ -66,7 +64,6 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
     if (this.isUnassignedUnit) {
       this.isUnassignedUnit = false;
     }
-    this.hideToastAfterDelay(true);
     this.toast.emit({
       type: 'error',
       title: error,
@@ -75,26 +72,11 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
     });
     return Promise.reject(error);
   }
-  showToast() {
-    this.isShown = true;
-  }
-  hideToastAfterDelay(isSuccess) {
-    if (this.isUnassignedUnit) {
-      this.isShown = false;
-      this.isUnassignedUnit = false;
-    }
-    else {
-      const delay = isSuccess ? 0 : 5000;
-      setTimeout(() => {
-        this.isShown = false;
-      }, delay);
-    }
-  }
   renderMessage() {
     return this.defaultMessage.errorMessage;
   }
   render() {
-    return (h(Host, null, this.isLoading && this.isShown && (h("div", { class: "loadingScreenContainer" }, h("div", { class: "loadingContainer" }, h("ir-loading-screen", null))))));
+    return (h(Host, null, this.isLoading && (h("div", { class: "loadingScreenContainer" }, h("div", { class: "loadingContainer" }, h("ir-loading-screen", null))))));
   }
   static get style() { return irInterceptorCss; }
 }, [2, "ir-interceptor", {
