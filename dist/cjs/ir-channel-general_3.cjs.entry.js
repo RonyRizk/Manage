@@ -3,11 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const channel_store = require('./channel.store-4cb2919a.js');
+const channel_store = require('./channel.store-1ae952be.js');
 const calendarData = require('./calendar-data-a30446d5.js');
 require('./index-d93aa7bb.js');
 
-const irChannelGeneralCss = ".sc-ir-channel-general-h{display:block}";
+const irChannelGeneralCss = ".sc-ir-channel-general-h{display:block}.label-style.sc-ir-channel-general{width:100px}";
 
 const IrChannelGeneral = class {
   constructor(hostRef) {
@@ -15,12 +15,12 @@ const IrChannelGeneral = class {
   }
   render() {
     var _a;
-    return (index.h(index.Host, null, index.h("p", null, "Channel"), index.h("ir-combobox", { value: (_a = channel_store.channels_data.selectedChannel) === null || _a === void 0 ? void 0 : _a.name, onComboboxValueChange: (e) => {
+    return (index.h(index.Host, null, index.h("fieldset", { class: "d-flex align-items-center" }, index.h("label", { htmlFor: "", class: "m-0 p-0 label-style" }, "Channel:"), index.h("ir-combobox", { class: "flex-fill", value: (_a = channel_store.channels_data.selectedChannel) === null || _a === void 0 ? void 0 : _a.name, onComboboxValueChange: (e) => {
         channel_store.selectChannel(e.detail.data.toString());
       }, placeholder: "Choose channel from list", data: channel_store.channels_data.channels.map(channel => ({
         id: channel.id,
         name: channel.name,
-      })) })));
+      })) })), index.h("fieldset", { class: "d-flex align-items-center mt-1" }, index.h("label", { htmlFor: "", class: "m-0 p-0 label-style" }, "Title:"), index.h("div", { class: "flex-fill" }, index.h("input", { class: "form-control  flex-fill" })))));
   }
 };
 IrChannelGeneral.style = irChannelGeneralCss;
@@ -73,8 +73,28 @@ const IrChannelHeader = class {
 IrChannelHeader.style = irChannelHeaderCss;
 
 class IrMappingService {
-  checkMappingExists(id) {
-    return channel_store.channels_data.mappedChannel.find(m => m.channel_id === id);
+  checkMappingExists(id, isRoomType, roomTypeId) {
+    const mapped_id = channel_store.channels_data.mappedChannel.find(m => m.channel_id === id);
+    if (!mapped_id) {
+      return undefined;
+    }
+    if (!isRoomType) {
+      console.log('object');
+      return undefined;
+    }
+    if (isRoomType) {
+      return calendarData.calendar_data.roomsInfo.find(room => room.id.toString() === mapped_id.ir_id);
+    }
+    if (!roomTypeId) {
+      throw new Error('Missing room type id');
+    }
+    const room_type = calendarData.calendar_data.roomsInfo.find(room => room.id.toString() === roomTypeId);
+    console.log(room_type);
+    if (!room_type) {
+      throw new Error('Invalid Room type');
+    }
+    console.log(room_type);
+    return room_type.rateplans.find(r => r.id.toString() === mapped_id.ir_id);
   }
   getAppropriateRooms(isRoomType, roomTypeId) {
     if (isRoomType) {
@@ -84,7 +104,7 @@ class IrMappingService {
     if (!roomTypeId) {
       throw new Error('Missing roomType id');
     }
-    //find the selected roomType
+    console.log(roomTypeId);
     const selectedRoomType = calendarData.calendar_data.roomsInfo.filter(room => channel_store.channels_data.mappedChannel.find(m => m.channel_id.toString() === roomTypeId) && room.is_active);
     console.log(selectedRoomType);
     // console.log(filteredRoomTypes);
@@ -92,7 +112,7 @@ class IrMappingService {
   }
 }
 
-const irChannelMappingCss = ".sc-ir-channel-mapping-h{display:block;box-sizing:border-box}.map-row.sc-ir-channel-mapping{display:flex;align-items:center;justify-content:space-between}.map-row.sc-ir-channel-mapping span.sc-ir-channel-mapping{width:49%}.submap-text.sc-ir-channel-mapping{padding-left:10px}.text-blue.sc-ir-channel-mapping{color:var(--blue)}.text-red.sc-ir-channel-mapping{color:var(--red)}";
+const irChannelMappingCss = ".sc-ir-channel-mapping-h{display:block;box-sizing:border-box}.map-row.sc-ir-channel-mapping{display:flex;align-items:center;justify-content:space-between}.map-row.sc-ir-channel-mapping span.sc-ir-channel-mapping{width:49%}.submap-text.sc-ir-channel-mapping{padding-left:10px}.text-blue.sc-ir-channel-mapping{color:var(--blue)}.text-red.sc-ir-channel-mapping{color:var(--red)}.refresh-btn.sc-ir-channel-mapping{all:unset;color:var(--blue);cursor:pointer}";
 
 const IrChannelMapping = class {
   constructor(hostRef) {
@@ -109,17 +129,20 @@ const IrChannelMapping = class {
     this.activeMapField = id;
   }
   renderMappingStatus(id, isRoomType, roomTypeId) {
-    const mappedField = this.mappingService.checkMappingExists(id);
+    const mappedField = this.mappingService.checkMappingExists(id, isRoomType, roomTypeId);
     if (mappedField) {
-      return index.h("span", { class: "px-2" }, mappedField.ir_id);
+      return (index.h("span", { class: "px-2 text-blue d-flex align-items-center" }, index.h("span", { class: "m-0 p-0 flex-fill" }, mappedField.name), index.h("ir-icon", { class: "m-0 p-0", onIconClickHandler: () => channel_store.removedMapping(mappedField.id.toString()) }, index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" }, index.h("path", { fill: 'var(--blue)', d: "M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" })))));
     }
     return (index.h("span", { class: "px-2" }, this.activeMapField === id ? (index.h("ir-combobox", { autoFocus: true, placeholder: "Not mapped", data: this.availableRooms, onComboboxValueChange: e => {
+        console.log(e.detail.data);
         channel_store.addMapping(e.detail.data, this.activeMapField);
         this.activeMapField = '';
-      } })) : (index.h("span", { class: "cursor-pointer text-red", onClick: () => this.setActiveField(id, isRoomType, roomTypeId) }, "Not mapped"))));
+      } })) : (index.h("span", { class: "cursor-pointer text-danger", onClick: () => this.setActiveField(id, isRoomType, roomTypeId) }, "Not mapped"))));
   }
   render() {
-    return (index.h(index.Host, null, index.h("ul", { class: "m-0 p-0" }, index.h("li", { class: "map-row my-2" }, index.h("span", { class: "font-weight-bold" }, channel_store.channels_data.selectedChannel.name), index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" }, index.h("path", { d: "M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" })), index.h("span", { class: "font-weight-bold px-2" }, "Channel manager")), channel_store.channels_data.selectedChannel.property.room_types.map(room_type => (index.h("li", { key: room_type.id, class: "mb-1" }, index.h("div", { class: "map-row" }, index.h("span", null, room_type.name), index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" }, index.h("path", { d: "M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" })), this.renderMappingStatus(room_type.id, true)), index.h("ul", { class: "m-0 p-0" }, room_type.rate_plans.map(rate_plan => (index.h("li", { class: "map-row", key: rate_plan.id }, index.h("span", { class: "submap-text" }, rate_plan.name), index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" }, index.h("path", { fill: "currentColor", d: "M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" })), this.renderMappingStatus(rate_plan.id, false, room_type.id)))))))))));
+    return (index.h(index.Host, null, index.h("div", { class: "d-flex w-100 justify-content-end" }, index.h("button", { onClick: () => {
+        channel_store.setMappedChannel();
+      }, class: "btn refresh-btn" }, "Refresh")), index.h("ul", { class: "m-0 p-0" }, index.h("li", { class: "map-row my-1" }, index.h("span", { class: "font-weight-bold" }, channel_store.channels_data.selectedChannel.name), index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" }, index.h("path", { d: "M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" })), index.h("span", { class: "font-weight-bold px-2" }, "Igloorooms")), channel_store.channels_data.selectedChannel.property.room_types.map(room_type => (index.h("li", { key: room_type.id, class: "mb-1" }, index.h("div", { class: "map-row" }, index.h("span", null, room_type.name), index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" }, index.h("path", { d: "M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" })), this.renderMappingStatus(room_type.id, true)), index.h("ul", { class: "m-0 p-0" }, room_type.rate_plans.map(rate_plan => (index.h("li", { class: "map-row", key: rate_plan.id }, index.h("span", { class: "submap-text" }, rate_plan.name), index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" }, index.h("path", { fill: "currentColor", d: "M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" })), this.renderMappingStatus(rate_plan.id, false, room_type.id)))))))))));
   }
 };
 IrChannelMapping.style = irChannelMappingCss;

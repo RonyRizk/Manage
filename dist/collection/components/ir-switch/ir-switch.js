@@ -1,82 +1,52 @@
-import { h } from "@stencil/core";
-import { v4 as uuidv4 } from "uuid";
-import "jquery";
-import "bootstrap-switch";
-import "bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css";
-import $ from "jquery";
-import "./jquery-extensions";
-export class MyComponent {
+import { Host, h } from "@stencil/core";
+export class IrSwitch {
   constructor() {
-    this.componentId = uuidv4();
-    this.value = false;
-    this.labelOn = undefined;
-    this.labelOff = undefined;
-    this.size = undefined;
-    this.switch_animate = undefined;
-    this.disabled = undefined;
-    this.readonly = undefined;
-    this.indeterminate = undefined;
-    this.inverse = undefined;
-    this.radioAllOff = undefined;
-    this.colorOn = undefined;
-    this.offColor = undefined;
-    this.classOn = undefined;
-    this.offClass = undefined;
-    this.labelText = undefined;
-    this.handleWidth = undefined;
-    this.labelWidth = undefined;
-    this.baseClass = undefined;
-    this.wrapperClass = undefined;
+    this._id = '';
+    this.checked = false;
+    this.switchId = undefined;
+    this.disabled = false;
+  }
+  componentWillLoad() {
+    this._id = this.generateRandomId(10);
   }
   componentDidLoad() {
-    this.testElement = $(`#${this.componentId}`);
-    this.initializeSwitch();
-  }
-  initializeSwitch() {
-    if (this.testElement && this.testElement.length) {
-      // Unbind previous event listeners
-      this.testElement.off('switchChange.bootstrapSwitch');
-      // Initialize Bootstrap Switch with updated state and props
-      this.testElement.bootstrapSwitch({
-        state: this.value,
-        onText: this.labelOn,
-        offText: this.labelOff,
-        size: this.size,
-        animate: this.switch_animate,
-        disabled: this.disabled,
-        readonly: this.readonly,
-        indeterminate: this.indeterminate,
-        inverse: this.inverse,
-        radioAllOff: this.radioAllOff,
-        onColor: this.colorOn,
-        offColor: this.offColor,
-        onClass: this.classOn,
-        offClass: this.offClass,
-        labelText: this.labelText,
-        handleWidth: this.handleWidth,
-        labelWidth: this.labelWidth,
-        baseClass: this.baseClass,
-        wrapperClass: this.wrapperClass,
-      });
-      // Add event listener for switch change
-      this.testElement.on('switchChange.bootstrapSwitch', (event, state) => {
-        console.log('switchChange.bootstrapSwitch', event);
-        this.onSwitchChangeCallback(state);
-      });
+    if (!this.switchRoot) {
+      return;
     }
+    this.switchRoot.setAttribute('aria-checked', this.checked ? 'true' : 'false');
   }
-  onSwitchChangeCallback(state) {
-    this.value = state;
-    this.valueChange.emit(this.value);
+  generateRandomId(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+  handleCheckChange() {
+    this.checked = !this.checked;
+    this.switchRoot.setAttribute('aria-checked', this.checked ? 'true' : 'false');
+    this.checkChange.emit(this.checked);
   }
   render() {
-    //console.log('Props', this.value);
-    return h("input", { type: "checkbox", id: this.componentId });
+    return (h(Host, null, h("button", { disabled: this.disabled, ref: el => (this.switchRoot = el), type: "button", id: this.switchId || this._id, onClick: this.handleCheckChange.bind(this), role: "switch", "data-state": this.checked ? 'checked' : 'unchecked', value: 'on', class: "SwitchRoot" }, h("span", { class: "SwitchThumb", "data-state": this.checked ? 'checked' : 'unchecked' })), h("input", { type: "checkbox", checked: this.checked, "aria-hidden": "true", tabIndex: -1, value: 'on', class: "hidden-input" })));
   }
   static get is() { return "ir-switch"; }
+  static get encapsulation() { return "scoped"; }
+  static get originalStyleUrls() {
+    return {
+      "$": ["ir-switch.css"]
+    };
+  }
+  static get styleUrls() {
+    return {
+      "$": ["ir-switch.css"]
+    };
+  }
   static get properties() {
     return {
-      "value": {
+      "checked": {
         "type": "boolean",
         "mutable": true,
         "complexType": {
@@ -90,11 +60,11 @@ export class MyComponent {
           "tags": [],
           "text": ""
         },
-        "attribute": "value",
+        "attribute": "checked",
         "reflect": false,
         "defaultValue": "false"
       },
-      "labelOn": {
+      "switchId": {
         "type": "string",
         "mutable": false,
         "complexType": {
@@ -108,58 +78,7 @@ export class MyComponent {
           "tags": [],
           "text": ""
         },
-        "attribute": "label-on",
-        "reflect": false
-      },
-      "labelOff": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "label-off",
-        "reflect": false
-      },
-      "size": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string | 'mini' | 'small' | 'normal' | 'large'",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "size",
-        "reflect": false
-      },
-      "switch_animate": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "switch_animate",
+        "attribute": "switch-id",
         "reflect": false
       },
       "disabled": {
@@ -171,241 +90,21 @@ export class MyComponent {
           "references": {}
         },
         "required": false,
-        "optional": true,
+        "optional": false,
         "docs": {
           "tags": [],
           "text": ""
         },
         "attribute": "disabled",
-        "reflect": false
-      },
-      "readonly": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "readonly",
-        "reflect": false
-      },
-      "indeterminate": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "indeterminate",
-        "reflect": false
-      },
-      "inverse": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "inverse",
-        "reflect": false
-      },
-      "radioAllOff": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "radio-all-off",
-        "reflect": false
-      },
-      "colorOn": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "color-on",
-        "reflect": false
-      },
-      "offColor": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "off-color",
-        "reflect": false
-      },
-      "classOn": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "class-on",
-        "reflect": false
-      },
-      "offClass": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "off-class",
-        "reflect": false
-      },
-      "labelText": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "label-text",
-        "reflect": false
-      },
-      "handleWidth": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string | 'auto'",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "handle-width",
-        "reflect": false
-      },
-      "labelWidth": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string | 'auto'",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "label-width",
-        "reflect": false
-      },
-      "baseClass": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "base-class",
-        "reflect": false
-      },
-      "wrapperClass": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": ""
-        },
-        "attribute": "wrapper-class",
-        "reflect": false
+        "reflect": false,
+        "defaultValue": "false"
       }
     };
   }
   static get events() {
     return [{
-        "method": "valueChange",
-        "name": "valueChange",
+        "method": "checkChange",
+        "name": "checkChange",
         "bubbles": true,
         "cancelable": true,
         "composed": true,

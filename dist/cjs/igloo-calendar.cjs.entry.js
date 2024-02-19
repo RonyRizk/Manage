@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const room_service = require('./room.service-48409b7e.js');
+const room_service = require('./room.service-3ba5cbba.js');
 const booking_service = require('./booking.service-bd209f01.js');
 const utils = require('./utils-cfac6d5b.js');
 const axios = require('./axios-5ba3068e.js');
@@ -13,7 +13,7 @@ const booking = require('./booking-da250d92.js');
 const unassigned_dates_store = require('./unassigned_dates.store-f121b5c0.js');
 const locales_store = require('./locales.store-e07a3298.js');
 const calendarData = require('./calendar-data-a30446d5.js');
-require('./channel.store-4cb2919a.js');
+require('./channel.store-1ae952be.js');
 require('./index-d93aa7bb.js');
 
 const PACKET_TYPES = Object.create(null); // no Map = no polyfill

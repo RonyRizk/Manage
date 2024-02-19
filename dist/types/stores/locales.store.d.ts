@@ -150,6 +150,7 @@ export type LocalizationStrings = {
   Lcz_EnterAmount: string;
   Lcz_Excluding: string;
   Lcz_Including: string;
+  Lcz_SubTotal: string;
 };
 export declare const locales: ILocale, onCalendarDatesChange: import("@stencil/store/dist/types").OnChangeHandler<ILocale>;
 export default locales;

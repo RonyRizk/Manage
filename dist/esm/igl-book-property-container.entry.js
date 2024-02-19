@@ -1,13 +1,13 @@
 import { r as registerInstance, c as createEvent, h, H as Host } from './index-795d2df3.js';
 import { B as BookingService } from './booking.service-3f5bcfb72.js';
-import { R as RoomService } from './room.service-354f30b22.js';
+import { R as RoomService } from './room.service-fec64b232.js';
 import { l as locales } from './locales.store-de01ea13.js';
 import { a as axios } from './axios-3bd8531e.js';
 import './utils-70966be2.js';
 import './booking-29d49af1.js';
 import './calendar-data-45884c68.js';
 import './index-2bd379e0.js';
-import './channel.store-4949efb6.js';
+import './channel.store-dae40e5c.js';
 
 const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:block;margin:0;padding:0}.book-container.sc-igl-book-property-container{width:min-content;margin:0;padding:0}";
 

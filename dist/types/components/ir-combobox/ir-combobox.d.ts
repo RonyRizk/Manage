@@ -25,13 +25,16 @@ export declare class IrCombobox {
   }>;
   inputCleared: EventEmitter<null>;
   toast: EventEmitter<IToast>;
+  componentShouldAutoFocus: boolean;
   private inputRef;
   private debounceTimer;
   private blurTimout;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  watchHandler(newValue: boolean, oldValue: boolean): void;
   handleKeyDown(event: KeyboardEvent): void;
   getHeightOfPElement(): number;
+  focusInput(): void;
   adjustScrollPosition(itemHeight: any, visibleHeight?: number): void;
   selectItem(index: any): void;
   debounceFetchData(): void;

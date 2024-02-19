@@ -1,2 +1,0 @@
-import{c as n}from"./p-7cd9c724.js";const e={channels:[],selectedChannel:null,mappedChannel:[],connected_channels:[]};const{state:c,onChange:a}=n(e);function s(n){if(n===""){c.selectedChannel=null;return}const e=c.channels.find((e=>e.id.toString()===n));let a=c.connected_channels.find((n=>n.channel.id===e.id));c.mappedChannel=a.map;c.selectedChannel=e}function t(n,e){c.mappedChannel.push({channel_id:e,ir_id:n})}export{t as a,c,a as o,s};
-//# sourceMappingURL=p-2361995a.js.map

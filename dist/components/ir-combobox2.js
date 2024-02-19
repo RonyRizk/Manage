@@ -21,13 +21,19 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     this.isItemSelected = undefined;
     this.inputValue = '';
     this.filteredData = [];
+    this.componentShouldAutoFocus = false;
   }
   componentWillLoad() {
     this.filteredData = this.data;
   }
   componentDidLoad() {
     if (this.autoFocus) {
-      this.inputRef.focus();
+      this.focusInput();
+    }
+  }
+  watchHandler(newValue, oldValue) {
+    if (newValue !== oldValue && newValue === true) {
+      this.focusInput();
     }
   }
   handleKeyDown(event) {
@@ -67,6 +73,12 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     }
     return 0;
   }
+  focusInput() {
+    requestAnimationFrame(() => {
+      var _a;
+      (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.focus();
+    });
+  }
   adjustScrollPosition(itemHeight, visibleHeight = 250) {
     const combobox = this.el.querySelector('.combobox');
     if (combobox) {
@@ -82,12 +94,14 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     }
   }
   selectItem(index) {
-    console.log('clicked');
     if (this.filteredData[index]) {
       this.isItemSelected = true;
       this.comboboxValueChange.emit({ key: 'select', data: this.filteredData[index].id });
       this.inputValue = '';
       this.resetCombobox();
+      if (this.autoFocus) {
+        this.focusInput();
+      }
     }
   }
   debounceFetchData() {
@@ -186,9 +200,12 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
       _a.map((d, index) => (h("li", { role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, d.name))), this.filteredData.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, locales.entries.Lcz_NoResultsFound)));
   }
   render() {
-    return (h("fieldset", { class: "m-0 p-0" }, h("input", { autoFocus: this.autoFocus, ref: el => (this.inputRef = el), type: "text", value: this.value, placeholder: this.placeholder, class: "form-control", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this) }), this.renderDropdown()));
+    return (h("fieldset", { class: "m-0 p-0" }, h("input", { ref: el => (this.inputRef = el), type: "text", value: this.value, placeholder: this.placeholder, class: "form-control", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
   }
   get el() { return this; }
+  static get watchers() { return {
+    "isComboBoxVisible": ["watchHandler"]
+  }; }
   static get style() { return irComboboxCss; }
 }, [2, "ir-combobox", {
     "data": [1040],
@@ -201,7 +218,8 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     "isLoading": [32],
     "isItemSelected": [32],
     "inputValue": [32],
-    "filteredData": [32]
+    "filteredData": [32],
+    "componentShouldAutoFocus": [32]
   }, [[4, "click", "handleDocumentClick"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-795d2df3.js';
-import { R as RoomService } from './room.service-354f30b2.js';
+import { R as RoomService } from './room.service-fec64b23.js';
 import { B as BookingService } from './booking.service-3f5bcfb7.js';
 import { j as formatLegendColors, h as hooks, d as dateToFormattedString, i as isBlockUnit, k as getNextDay, l as addTwoMonthToDate, m as convertDMYToISO, n as computeEndDate } from './utils-70966be2.js';
 import { a as axios } from './axios-3bd8531e.js';
@@ -9,7 +9,7 @@ import { t as transformNewBLockedRooms, a as transformNewBooking, b as bookingSt
 import { c as calendar_dates, a as addUnassingedDates, r as removeUnassignedDates } from './unassigned_dates.store-b22ec8f9.js';
 import { l as locales } from './locales.store-de01ea13.js';
 import { c as calendar_data } from './calendar-data-45884c68.js';
-import './channel.store-4949efb6.js';
+import './channel.store-dae40e5c.js';
 import './index-2bd379e0.js';
 
 const PACKET_TYPES = Object.create(null); // no Map = no polyfill
