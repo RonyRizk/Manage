@@ -8,6 +8,7 @@ export class IrChannelMapping {
     this.availableRooms = [];
   }
   setActiveField(id, isRoomType, roomTypeId) {
+    console.log(isRoomType, roomTypeId);
     const availableRooms = this.mappingService.getAppropriateRooms(isRoomType, roomTypeId);
     if (availableRooms) {
       this.availableRooms = availableRooms;

@@ -78,22 +78,17 @@ class IrMappingService {
     if (!mapped_id) {
       return undefined;
     }
-    if (!isRoomType) {
-      console.log('object');
-      return undefined;
-    }
     if (isRoomType) {
       return calendarData.calendar_data.roomsInfo.find(room => room.id.toString() === mapped_id.ir_id);
     }
     if (!roomTypeId) {
       throw new Error('Missing room type id');
     }
-    const room_type = calendarData.calendar_data.roomsInfo.find(room => room.id.toString() === roomTypeId);
-    console.log(room_type);
+    const findRoomTypeId = channel_store.channels_data.mappedChannel.find(m => m.channel_id.toString() === roomTypeId);
+    const room_type = calendarData.calendar_data.roomsInfo.find(room => room.id.toString() === findRoomTypeId.ir_id);
     if (!room_type) {
       throw new Error('Invalid Room type');
     }
-    console.log(room_type);
     return room_type.rateplans.find(r => r.id.toString() === mapped_id.ir_id);
   }
   getAppropriateRooms(isRoomType, roomTypeId) {
@@ -104,11 +99,17 @@ class IrMappingService {
     if (!roomTypeId) {
       throw new Error('Missing roomType id');
     }
-    console.log(roomTypeId);
-    const selectedRoomType = calendarData.calendar_data.roomsInfo.filter(room => channel_store.channels_data.mappedChannel.find(m => m.channel_id.toString() === roomTypeId) && room.is_active);
-    console.log(selectedRoomType);
-    // console.log(filteredRoomTypes);
-    //filter all the room types that are taken
+    const findRoomTypeId = channel_store.channels_data.mappedChannel.find(m => m.channel_id.toString() === roomTypeId);
+    if (!findRoomTypeId) {
+      throw new Error('Invalid room type id');
+    }
+    const selectedRoomType = calendarData.calendar_data.roomsInfo.find(room => room.id.toString() === findRoomTypeId.ir_id);
+    return selectedRoomType.rateplans
+      .filter(rate_plan => channel_store.channels_data.mappedChannel.find(r => rate_plan.id.toString() === r.ir_id) === undefined)
+      .map(rate_plan => ({
+      id: rate_plan.id.toString(),
+      name: rate_plan.name,
+    }));
   }
 }
 
@@ -122,6 +123,7 @@ const IrChannelMapping = class {
     this.availableRooms = [];
   }
   setActiveField(id, isRoomType, roomTypeId) {
+    console.log(isRoomType, roomTypeId);
     const availableRooms = this.mappingService.getAppropriateRooms(isRoomType, roomTypeId);
     if (availableRooms) {
       this.availableRooms = availableRooms;
