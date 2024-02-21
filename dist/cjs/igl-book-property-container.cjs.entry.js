@@ -4,12 +4,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
 const booking_service = require('./booking.service-5bb83712.js');
-const room_service = require('./room.service-d9a54928.js');
+const room_service = require('./room.service-7d0ebf73.js');
 const locales_store = require('./locales.store-e07a3298.js');
 const axios = require('./axios-5ba3068e.js');
-require('./calendar-data-a30446d5.js');
+require('./channel.store-9456eab6.js');
 require('./index-d93aa7bb.js');
-require('./channel.store-eae2e2d2.js');
 
 const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:block;margin:0;padding:0}.book-container.sc-igl-book-property-container{width:min-content;margin:0;padding:0}";
 

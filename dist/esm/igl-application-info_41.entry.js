@@ -1,11 +1,10 @@
 import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-795d2df3.js';
 import { g as getCurrencySymbol, a as getMyBookings, c as convertDateToCustomFormat, b as convertDateToTime, d as dateToFormattedString, f as formatDate, e as getReleaseHoursString, t as transformNewBLockedRooms, h as hooks, B as BookingService$1, i as findCountry, j as dateDifference, k as formatLegendColors, l as transformNewBooking$1, m as bookingStatus$1, n as isBlockUnit$1, o as calculateDaysBetweenDates, p as getNextDay, q as addTwoMonthToDate, r as convertDMYToISO, s as computeEndDate, u as formatName$1, v as getDaysArray, w as convertDatePrice } from './booking.service-909c53f0.js';
 import { l as locales } from './locales.store-de01ea13.js';
-import { c as calendar_data } from './calendar-data-45884c68.js';
+import { c as calendar_data, a as channels_data } from './channel.store-12f73029.js';
 import { v as v4 } from './v4-87f26972.js';
 import { a as axios } from './axios-3bd8531e.js';
 import { c as createStore } from './index-2bd379e0.js';
-import { c as channels_data } from './channel.store-f0a30c09.js';
 
 const iglApplicationInfoCss = ".sc-igl-application-info-h{display:block}@media only screen and (min-width: 908px){.aplicationInfoContainer.sc-igl-application-info{max-width:80%}.guest-info-container.sc-igl-application-info{max-width:300px}.preference-select-container.sc-igl-application-info{max-width:250px}}";
 
@@ -4352,6 +4351,8 @@ class RoomService {
         calendar_data.max_nights = results.max_nights;
         calendar_data.roomsInfo = results.roomtypes;
         calendar_data.taxes = results.taxes;
+        calendar_data.id = results.id;
+        calendar_data.name = results.name;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
@@ -8752,14 +8753,15 @@ const IglooCalendar = class {
       calendar_dates.days = this.days;
       //calendar_dates.months = bookingResp.months;
       this.calendarData = Object.assign(Object.assign({}, this.calendarData), { days: this.days, monthsInfo: [...this.calendarData.monthsInfo, ...newMonths], bookingEvents: [...this.calendarData.bookingEvents, ...newBookings] });
+      const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
+      this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
+      this.unassignedDates = {
+        fromDate,
+        toDate,
+        data,
+      };
+      addUnassingedDates(data);
     }
-    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
-    this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
-    this.unassignedDates = {
-      fromDate,
-      toDate,
-      data,
-    };
   }
   async handleDateSearch(dates) {
     const startDate = hooks(dates.start).toDate();

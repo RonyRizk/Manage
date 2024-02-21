@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","sourceRoot":"","sources":["../../../src/components/ir-channel/types.ts"],"names":[],"mappings":"","sourcesContent":["export interface IModalCause {\r\n  cause: string;\r\n  action: () => Promise<any>;\r\n  title: string;\r\n  message: string;\r\n  main_color: 'primary' | 'danger';\r\n}\r\n"]}

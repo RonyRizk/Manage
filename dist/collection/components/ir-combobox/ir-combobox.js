@@ -8,6 +8,7 @@ export class IrCombobox {
     this.value = undefined;
     this.disabled = false;
     this.autoFocus = false;
+    this.input_id = '';
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
     this.isLoading = true;
@@ -45,12 +46,12 @@ export class IrCombobox {
           this.selectedIndex = (this.selectedIndex + 1) % dataSize;
           this.adjustScrollPosition(itemHeight);
           break;
-        case 'Enter':
-        case ' ':
-        case 'ArrowRight':
-          event.preventDefault();
-          this.selectItem(this.selectedIndex);
-          break;
+        // case 'Enter':
+        // case ' ':
+        // case 'ArrowRight':
+        //   event.preventDefault();
+        //   this.selectItem(this.selectedIndex);
+        //   break;
         case 'Escape':
           (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.blur();
           this.isComboBoxVisible = false;
@@ -180,9 +181,6 @@ export class IrCombobox {
       (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.blur();
       event.preventDefault();
     }
-    else {
-      return;
-    }
   }
   renderDropdown() {
     var _a;
@@ -192,8 +190,17 @@ export class IrCombobox {
     return (h("ul", null, (_a = this.filteredData) === null || _a === void 0 ? void 0 :
       _a.map((d, index) => (h("li", { role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, d.name))), this.filteredData.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, locales.entries.Lcz_NoResultsFound)));
   }
+  handleSubmit(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('object');
+    if (!this.filteredData.length) {
+      return;
+    }
+    this.selectItem(this.selectedIndex === -1 ? 0 : this.selectedIndex);
+  }
   render() {
-    return (h("fieldset", { class: "m-0 p-0" }, h("input", { ref: el => (this.inputRef = el), type: "text", disabled: this.disabled, value: this.value, placeholder: this.placeholder, class: "form-control bg-white", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
+    return (h("form", { onSubmit: this.handleSubmit.bind(this), class: "m-0 p-0" }, h("input", { id: this.input_id, ref: el => (this.inputRef = el), type: "text", disabled: this.disabled, value: this.value, placeholder: this.placeholder, class: "form-control bg-white", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
   }
   static get is() { return "ir-combobox"; }
   static get encapsulation() { return "scoped"; }
@@ -312,6 +319,24 @@ export class IrCombobox {
         "attribute": "auto-focus",
         "reflect": false,
         "defaultValue": "false"
+      },
+      "input_id": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "input_id",
+        "reflect": false,
+        "defaultValue": "''"
       }
     };
   }

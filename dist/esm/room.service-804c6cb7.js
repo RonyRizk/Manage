@@ -1,5 +1,4 @@
-import { c as calendar_data } from './calendar-data-45884c68.js';
-import { c as channels_data } from './channel.store-f0a30c09.js';
+import { c as calendar_data, a as channels_data } from './channel.store-12f73029.js';
 import { l as locales } from './locales.store-de01ea13.js';
 import { a as axios } from './axios-3bd8531e.js';
 
@@ -22,6 +21,8 @@ class RoomService {
         calendar_data.max_nights = results.max_nights;
         calendar_data.roomsInfo = results.roomtypes;
         calendar_data.taxes = results.taxes;
+        calendar_data.id = results.id;
+        calendar_data.name = results.name;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
@@ -95,4 +96,4 @@ class RoomService {
 
 export { RoomService as R };
 
-//# sourceMappingURL=room.service-15d7f45d.js.map
+//# sourceMappingURL=room.service-804c6cb7.js.map

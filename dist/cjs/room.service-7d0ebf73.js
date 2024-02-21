@@ -1,7 +1,6 @@
 'use strict';
 
-const calendarData = require('./calendar-data-a30446d5.js');
-const channel_store = require('./channel.store-eae2e2d2.js');
+const channel_store = require('./channel.store-9456eab6.js');
 const locales_store = require('./locales.store-e07a3298.js');
 const axios = require('./axios-5ba3068e.js');
 
@@ -15,16 +14,18 @@ class RoomService {
           throw new Error(data.ExceptionMsg);
         }
         const results = data.My_Result;
-        calendarData.calendar_data.adultChildConstraints = results.adult_child_constraints;
-        calendarData.calendar_data.allowedBookingSources = results.allowed_booking_sources;
-        calendarData.calendar_data.allowed_payment_methods = results.allowed_booking_methods;
-        calendarData.calendar_data.currency = results.currency;
-        calendarData.calendar_data.is_vacation_rental = results.is_vacation_rental;
-        calendarData.calendar_data.pickup_service = results.pickup_service;
-        calendarData.calendar_data.max_nights = results.max_nights;
-        calendarData.calendar_data.roomsInfo = results.roomtypes;
-        calendarData.calendar_data.taxes = results.taxes;
-        calendarData.calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
+        channel_store.calendar_data.adultChildConstraints = results.adult_child_constraints;
+        channel_store.calendar_data.allowedBookingSources = results.allowed_booking_sources;
+        channel_store.calendar_data.allowed_payment_methods = results.allowed_booking_methods;
+        channel_store.calendar_data.currency = results.currency;
+        channel_store.calendar_data.is_vacation_rental = results.is_vacation_rental;
+        channel_store.calendar_data.pickup_service = results.pickup_service;
+        channel_store.calendar_data.max_nights = results.max_nights;
+        channel_store.calendar_data.roomsInfo = results.roomtypes;
+        channel_store.calendar_data.taxes = results.taxes;
+        channel_store.calendar_data.id = results.id;
+        channel_store.calendar_data.name = results.name;
+        channel_store.calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
     }
@@ -97,4 +98,4 @@ class RoomService {
 
 exports.RoomService = RoomService;
 
-//# sourceMappingURL=room.service-d9a54928.js.map
+//# sourceMappingURL=room.service-7d0ebf73.js.map

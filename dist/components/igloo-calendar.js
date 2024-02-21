@@ -4378,14 +4378,15 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
       calendar_dates.days = this.days;
       //calendar_dates.months = bookingResp.months;
       this.calendarData = Object.assign(Object.assign({}, this.calendarData), { days: this.days, monthsInfo: [...this.calendarData.monthsInfo, ...newMonths], bookingEvents: [...this.calendarData.bookingEvents, ...newBookings] });
+      const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
+      this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
+      this.unassignedDates = {
+        fromDate,
+        toDate,
+        data,
+      };
+      addUnassingedDates(data);
     }
-    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
-    this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
-    this.unassignedDates = {
-      fromDate,
-      toDate,
-      data,
-    };
   }
   async handleDateSearch(dates) {
     const startDate = hooks(dates.start).toDate();

@@ -10,6 +10,7 @@ export interface IChannelStore {
   mappedChannels: IMap[];
   isConnectedToChannel: boolean;
   channel_settings: IChannelSettings | null;
+  property_id: number | null;
 }
 export declare const channels_data: IChannelStore, onChannelChange: import("@stencil/store/dist/types").OnChangeHandler<IChannelStore>, dispose: () => void;
 export declare function selectChannel(channel_id: string): void;
@@ -17,5 +18,6 @@ export declare function updateChannelSettings(key: keyof IChannelSettings, value
 export declare function setMappedChannel(): void;
 export declare function resetStore(): void;
 export declare function addMapping(ir_id: string, fr_id: string, isRoomType: boolean): void;
-export declare function testConnection(): void;
+export declare function testConnection(): boolean;
+export declare function saveChannel(): void;
 export default channels_data;

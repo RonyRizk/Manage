@@ -10,6 +10,7 @@ export declare class IrCombobox {
   value: string;
   disabled: boolean;
   autoFocus: boolean;
+  input_id: string;
   selectedIndex: number;
   isComboBoxVisible: boolean;
   isLoading: boolean;
@@ -50,5 +51,6 @@ export declare class IrCombobox {
   disconnectedCallback(): void;
   handleItemKeyDown(event: KeyboardEvent, index: number): void;
   renderDropdown(): any;
+  handleSubmit(e: Event): void;
   render(): any;
 }

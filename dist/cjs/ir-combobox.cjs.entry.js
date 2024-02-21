@@ -20,6 +20,7 @@ const IrCombobox = class {
     this.value = undefined;
     this.disabled = false;
     this.autoFocus = false;
+    this.input_id = '';
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
     this.isLoading = true;
@@ -57,12 +58,12 @@ const IrCombobox = class {
           this.selectedIndex = (this.selectedIndex + 1) % dataSize;
           this.adjustScrollPosition(itemHeight);
           break;
-        case 'Enter':
-        case ' ':
-        case 'ArrowRight':
-          event.preventDefault();
-          this.selectItem(this.selectedIndex);
-          break;
+        // case 'Enter':
+        // case ' ':
+        // case 'ArrowRight':
+        //   event.preventDefault();
+        //   this.selectItem(this.selectedIndex);
+        //   break;
         case 'Escape':
           (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.blur();
           this.isComboBoxVisible = false;
@@ -192,9 +193,6 @@ const IrCombobox = class {
       (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.blur();
       event.preventDefault();
     }
-    else {
-      return;
-    }
   }
   renderDropdown() {
     var _a;
@@ -204,8 +202,17 @@ const IrCombobox = class {
     return (index.h("ul", null, (_a = this.filteredData) === null || _a === void 0 ? void 0 :
       _a.map((d, index$1) => (index.h("li", { role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index$1), "data-selected": this.selectedIndex === index$1, tabIndex: 0, onClick: () => this.selectItem(index$1) }, d.name))), this.filteredData.length === 0 && !this.isLoading && index.h("span", { class: 'text-center' }, locales_store.locales.entries.Lcz_NoResultsFound)));
   }
+  handleSubmit(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('object');
+    if (!this.filteredData.length) {
+      return;
+    }
+    this.selectItem(this.selectedIndex === -1 ? 0 : this.selectedIndex);
+  }
   render() {
-    return (index.h("fieldset", { class: "m-0 p-0" }, index.h("input", { ref: el => (this.inputRef = el), type: "text", disabled: this.disabled, value: this.value, placeholder: this.placeholder, class: "form-control bg-white", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
+    return (index.h("form", { onSubmit: this.handleSubmit.bind(this), class: "m-0 p-0" }, index.h("input", { id: this.input_id, ref: el => (this.inputRef = el), type: "text", disabled: this.disabled, value: this.value, placeholder: this.placeholder, class: "form-control bg-white", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
   }
   get el() { return index.getElement(this); }
   static get watchers() { return {

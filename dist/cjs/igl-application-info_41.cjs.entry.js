@@ -5,11 +5,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const index = require('./index-4794c294.js');
 const booking_service = require('./booking.service-5bb83712.js');
 const locales_store = require('./locales.store-e07a3298.js');
-const calendarData = require('./calendar-data-a30446d5.js');
+const channel_store = require('./channel.store-9456eab6.js');
 const v4 = require('./v4-d89fec7e.js');
 const axios = require('./axios-5ba3068e.js');
 const index$1 = require('./index-d93aa7bb.js');
-const channel_store = require('./channel.store-eae2e2d2.js');
 
 const iglApplicationInfoCss = ".sc-igl-application-info-h{display:block}@media only screen and (min-width: 908px){.aplicationInfoContainer.sc-igl-application-info{max-width:80%}.guest-info-container.sc-igl-application-info{max-width:300px}.preference-select-container.sc-igl-application-info{max-width:250px}}";
 
@@ -91,7 +90,7 @@ const IglApplicationInfo = class {
   }
   render() {
     //console.log(this.guestInfo, this.roomsList);
-    return (index.h(index.Host, null, index.h("div", { class: "text-left mt-1 " }, index.h("div", { class: " mb-1 " }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (index.h("span", { class: "h5 mr-1" }, this.guestInfo.roomCategoryName)) : null, index.h("span", { class: " font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), index.h("ir-tooltip", { class: " mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), index.h("span", null, this.guestInfo.adult_child_offering)), index.h("div", { class: "d-flex flex-column flex-md-row m-0 p-0 align-items-md-center aplicationInfoContainer " }, index.h("div", { class: "mr-1 flex-fill guest-info-container" }, index.h("input", { id: v4.v4(), type: "email", class: `form-control ${this.isButtonPressed && this.guestData.guestName === '' && 'border-danger'}`, placeholder: locales_store.locales.entries.Lcz_GuestFirstnameAndLastname, name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), index.h("div", { class: 'mt-1 mt-md-0 d-flex align-items-center flex-fill' }, calendarData.calendar_data.is_frontdesk_enabled && (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') ? (index.h("div", { class: "mr-1 p-0 flex-fill  preference-select-container" }, index.h("select", { class: `form-control  input-sm pr-0`, id: v4.v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, index.h("option", { value: "", selected: this.guestData.roomId === '' }, locales_store.locales.entries.Lcz_Assignunits), this.filterdRoomList.map(room => (index.h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, index.h("div", { class: "mr-1 flex-fill" }, index.h("select", { class: `form-control input-sm ${this.isButtonPressed && (this.guestData.preference === '' || this.guestData.preference === 0) && 'border-danger'}`, id: v4.v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, index.h("option", { value: "", selected: this.guestData.preference === '' }, locales_store.locales.entries.Lcz_BedConfiguration), this.bedPreferenceType.map(data => (index.h("option", { value: +data.CODE_NAME, selected: this.guestData.preference === +data.CODE_NAME }, data.CODE_VALUE_EN))))), index.h("div", { class: "" }, booking_service.getCurrencySymbol(this.currency.code) + Number(this.userRate).toFixed(2), "/", locales_store.locales.entries.Lcz_Stay))))));
+    return (index.h(index.Host, null, index.h("div", { class: "text-left mt-1 " }, index.h("div", { class: " mb-1 " }, this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (index.h("span", { class: "h5 mr-1" }, this.guestInfo.roomCategoryName)) : null, index.h("span", { class: " font-weight-bold" }, this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', ''), index.h("ir-tooltip", { class: " mr-1", message: this.guestInfo.cancelation + this.guestInfo.guarantee })), index.h("span", null, this.guestInfo.adult_child_offering)), index.h("div", { class: "d-flex flex-column flex-md-row m-0 p-0 align-items-md-center aplicationInfoContainer " }, index.h("div", { class: "mr-1 flex-fill guest-info-container" }, index.h("input", { id: v4.v4(), type: "email", class: `form-control ${this.isButtonPressed && this.guestData.guestName === '' && 'border-danger'}`, placeholder: locales_store.locales.entries.Lcz_GuestFirstnameAndLastname, name: "guestName", onInput: event => this.handleGuestNameChange(event), required: true, value: this.guestData.guestName })), index.h("div", { class: 'mt-1 mt-md-0 d-flex align-items-center flex-fill' }, channel_store.calendar_data.is_frontdesk_enabled && (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') ? (index.h("div", { class: "mr-1 p-0 flex-fill  preference-select-container" }, index.h("select", { class: `form-control  input-sm pr-0`, id: v4.v4(), onChange: event => this.handleDataChange('roomId', event.target.value) }, index.h("option", { value: "", selected: this.guestData.roomId === '' }, locales_store.locales.entries.Lcz_Assignunits), this.filterdRoomList.map(room => (index.h("option", { value: room.id, selected: +this.guestData.roomId === room.id }, room.name)))))) : null, index.h("div", { class: "mr-1 flex-fill" }, index.h("select", { class: `form-control input-sm ${this.isButtonPressed && (this.guestData.preference === '' || this.guestData.preference === 0) && 'border-danger'}`, id: v4.v4(), onChange: event => this.handleDataChange('preference', event.target.value) }, index.h("option", { value: "", selected: this.guestData.preference === '' }, locales_store.locales.entries.Lcz_BedConfiguration), this.bedPreferenceType.map(data => (index.h("option", { value: +data.CODE_NAME, selected: this.guestData.preference === +data.CODE_NAME }, data.CODE_VALUE_EN))))), index.h("div", { class: "" }, booking_service.getCurrencySymbol(this.currency.code) + Number(this.userRate).toFixed(2), "/", locales_store.locales.entries.Lcz_Stay))))));
   }
   static get watchers() { return {
     "selectedUnits": ["handleSelctedUnits"]
@@ -2602,7 +2601,7 @@ const IglBookingRoomRatePlan = class {
       return false;
     }
     else {
-      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || (calendarData.calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0);
+      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || (channel_store.calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0);
     }
   }
   setAvailableRooms(data) {
@@ -4347,16 +4346,18 @@ class RoomService {
           throw new Error(data.ExceptionMsg);
         }
         const results = data.My_Result;
-        calendarData.calendar_data.adultChildConstraints = results.adult_child_constraints;
-        calendarData.calendar_data.allowedBookingSources = results.allowed_booking_sources;
-        calendarData.calendar_data.allowed_payment_methods = results.allowed_booking_methods;
-        calendarData.calendar_data.currency = results.currency;
-        calendarData.calendar_data.is_vacation_rental = results.is_vacation_rental;
-        calendarData.calendar_data.pickup_service = results.pickup_service;
-        calendarData.calendar_data.max_nights = results.max_nights;
-        calendarData.calendar_data.roomsInfo = results.roomtypes;
-        calendarData.calendar_data.taxes = results.taxes;
-        calendarData.calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
+        channel_store.calendar_data.adultChildConstraints = results.adult_child_constraints;
+        channel_store.calendar_data.allowedBookingSources = results.allowed_booking_sources;
+        channel_store.calendar_data.allowed_payment_methods = results.allowed_booking_methods;
+        channel_store.calendar_data.currency = results.currency;
+        channel_store.calendar_data.is_vacation_rental = results.is_vacation_rental;
+        channel_store.calendar_data.pickup_service = results.pickup_service;
+        channel_store.calendar_data.max_nights = results.max_nights;
+        channel_store.calendar_data.roomsInfo = results.roomtypes;
+        channel_store.calendar_data.taxes = results.taxes;
+        channel_store.calendar_data.id = results.id;
+        channel_store.calendar_data.name = results.name;
+        channel_store.calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
     }
@@ -8580,7 +8581,7 @@ const IglooCalendar = class {
         roomCategory.expanded = true;
       });
     }
-    calendarData.calendar_data.roomsInfo = roomsData;
+    channel_store.calendar_data.roomsInfo = roomsData;
     this.calendarData.roomsInfo = roomsData;
   }
   getLegendData(aData) {
@@ -8756,14 +8757,15 @@ const IglooCalendar = class {
       calendar_dates.days = this.days;
       //calendar_dates.months = bookingResp.months;
       this.calendarData = Object.assign(Object.assign({}, this.calendarData), { days: this.days, monthsInfo: [...this.calendarData.monthsInfo, ...newMonths], bookingEvents: [...this.calendarData.bookingEvents, ...newBookings] });
+      const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
+      this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
+      this.unassignedDates = {
+        fromDate,
+        toDate,
+        data,
+      };
+      addUnassingedDates(data);
     }
-    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
-    this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
-    this.unassignedDates = {
-      fromDate,
-      toDate,
-      data,
-    };
   }
   async handleDateSearch(dates) {
     const startDate = booking_service.hooks(dates.start).toDate();
@@ -9485,7 +9487,7 @@ const IrBookingDetails = class {
           // add separator if not last item with marginHorizontal and alignCenter
           index$1 !== this.bookingData.rooms.length - 1 && index.h("hr", { class: "mr-2 ml-2 my-0 p-0" }),
         ];
-      })), calendarData.calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && (index.h("div", { class: "mb-1" }, index.h("div", { class: 'd-flex w-100 mb-1 align-items-center justify-content-between' }, index.h("p", { class: 'font-size-large p-0 m-0 ' }, locales_store.locales.entries.Lcz_Pickup), index.h("ir-icon", { class: "pointer ", id: "pickup" }, index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "20", width: "20", viewBox: "0 0 512 512" }, index.h("path", { fill: "#6b6f82", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })))), this.bookingData.pickup_info && (index.h("div", { class: 'card' }, index.h("div", { class: 'p-1' }, index.h("div", { class: 'd-flex align-items-center py-0 my-0 pickup-margin' }, index.h("p", { class: 'font-weight-bold mr-1 py-0 my-0' }, locales_store.locales.entries.Lcz_Date, ": ", index.h("span", { class: 'font-weight-normal' }, booking_service.hooks(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MM YYYY'))), index.h("p", { class: 'font-weight-bold flex-fill py-0 my-0' }, locales_store.locales.entries.Lcz_Time, ":", index.h("span", { class: 'font-weight-normal' }, " ", `${this.bookingData.pickup_info.hour}:${this.bookingData.pickup_info.minute}`)), index.h("p", { class: 'font-weight-bold py-0 my-0' }, locales_store.locales.entries.Lcz_DueUponBooking, ":", ' ', index.h("span", { class: 'font-weight-normal' }, this.bookingData.pickup_info.currency.symbol, this.bookingData.pickup_info.total))), index.h("p", { class: 'font-weight-bold py-0 my-0' }, locales_store.locales.entries.Lcz_FlightDetails, ":", index.h("span", { class: 'font-weight-normal' }, " ", `${this.bookingData.pickup_info.details}`)), index.h("p", { class: 'py-0 my-0 pickup-margin' }, `${this.bookingData.pickup_info.selected_option.vehicle.description}`), index.h("p", { class: 'font-weight-bold py-0 my-0 pickup-margin' }, locales_store.locales.entries.Lcz_NbrOfVehicles, ":", index.h("span", { class: 'font-weight-normal' }, " ", `${this.bookingData.pickup_info.nbr_of_units}`)), index.h("p", { class: 'small py-0 my-0 pickup-margin' }, calendarData.calendar_data.pickup_service.pickup_instruction.description, calendarData.calendar_data.pickup_service.pickup_cancelation_prepayment.description))))))), index.h("div", { class: "col-12 p-0 m-0 pl-lg-1 col-lg-6" }, index.h("ir-payment-details", { defaultTexts: this.defaultTexts, bookingDetails: this.bookingData })))),
+      })), channel_store.calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && (index.h("div", { class: "mb-1" }, index.h("div", { class: 'd-flex w-100 mb-1 align-items-center justify-content-between' }, index.h("p", { class: 'font-size-large p-0 m-0 ' }, locales_store.locales.entries.Lcz_Pickup), index.h("ir-icon", { class: "pointer ", id: "pickup" }, index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "20", width: "20", viewBox: "0 0 512 512" }, index.h("path", { fill: "#6b6f82", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })))), this.bookingData.pickup_info && (index.h("div", { class: 'card' }, index.h("div", { class: 'p-1' }, index.h("div", { class: 'd-flex align-items-center py-0 my-0 pickup-margin' }, index.h("p", { class: 'font-weight-bold mr-1 py-0 my-0' }, locales_store.locales.entries.Lcz_Date, ": ", index.h("span", { class: 'font-weight-normal' }, booking_service.hooks(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MM YYYY'))), index.h("p", { class: 'font-weight-bold flex-fill py-0 my-0' }, locales_store.locales.entries.Lcz_Time, ":", index.h("span", { class: 'font-weight-normal' }, " ", `${this.bookingData.pickup_info.hour}:${this.bookingData.pickup_info.minute}`)), index.h("p", { class: 'font-weight-bold py-0 my-0' }, locales_store.locales.entries.Lcz_DueUponBooking, ":", ' ', index.h("span", { class: 'font-weight-normal' }, this.bookingData.pickup_info.currency.symbol, this.bookingData.pickup_info.total))), index.h("p", { class: 'font-weight-bold py-0 my-0' }, locales_store.locales.entries.Lcz_FlightDetails, ":", index.h("span", { class: 'font-weight-normal' }, " ", `${this.bookingData.pickup_info.details}`)), index.h("p", { class: 'py-0 my-0 pickup-margin' }, `${this.bookingData.pickup_info.selected_option.vehicle.description}`), index.h("p", { class: 'font-weight-bold py-0 my-0 pickup-margin' }, locales_store.locales.entries.Lcz_NbrOfVehicles, ":", index.h("span", { class: 'font-weight-normal' }, " ", `${this.bookingData.pickup_info.nbr_of_units}`)), index.h("p", { class: 'small py-0 my-0 pickup-margin' }, channel_store.calendar_data.pickup_service.pickup_instruction.description, channel_store.calendar_data.pickup_service.pickup_cancelation_prepayment.description))))))), index.h("div", { class: "col-12 p-0 m-0 pl-lg-1 col-lg-6" }, index.h("ir-payment-details", { defaultTexts: this.defaultTexts, bookingDetails: this.bookingData })))),
       index.h("ir-sidebar", { open: this.sidebarState !== null, side: 'right', id: "editGuestInfo", onIrSidebarToggle: e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
@@ -10267,7 +10269,7 @@ class PickupService {
   }
   getAvailableLocations(message) {
     let locations = [];
-    calendarData.calendar_data.pickup_service.allowed_options.forEach(option => {
+    channel_store.calendar_data.pickup_service.allowed_options.forEach(option => {
       if (locations.filter(location => location.value === option.location.id).length === 0) {
         locations.push({
           text: message + ' ' + option.location.description,
@@ -10311,7 +10313,7 @@ class PickupService {
     return Array.from({ length: total_number_of_vehicles + bonus_number }, (_, i) => startNumber + i);
   }
   getPickUpPersonStatus(code) {
-    const getCodeDescription = calendarData.calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
+    const getCodeDescription = channel_store.calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
     if (!getCodeDescription) {
       return null;
     }
@@ -10362,7 +10364,7 @@ const IrPickup = class {
     if (this.defaultPickupData) {
       const transformedData = this.pickupService.transformDefaultPickupData(this.defaultPickupData);
       this.vehicleCapacity = this.pickupService.getNumberOfVehicles(transformedData.selected_option.vehicle.capacity, this.numberOfPersons);
-      this.allowedOptionsByLocation = calendarData.calendar_data.pickup_service.allowed_options.filter(option => option.location.id === transformedData.location);
+      this.allowedOptionsByLocation = channel_store.calendar_data.pickup_service.allowed_options.filter(option => option.location.id === transformedData.location);
       this.pickupData = Object.assign({}, transformedData);
     }
   }
@@ -10374,7 +10376,7 @@ const IrPickup = class {
       this.updatePickupData('location', -1);
     }
     if (value !== '') {
-      this.allowedOptionsByLocation = calendarData.calendar_data.pickup_service.allowed_options.filter(option => option.location.id.toString() === value);
+      this.allowedOptionsByLocation = channel_store.calendar_data.pickup_service.allowed_options.filter(option => option.location.id.toString() === value);
       let locationChoice = this.allowedOptionsByLocation[0];
       if (!locationChoice) {
         return;
@@ -10450,7 +10452,7 @@ const IrPickup = class {
       this.pickupData = Object.assign(Object.assign({}, this.pickupData), { due_upon_booking: '', vehicle_type_code: '' });
       return;
     }
-    let locationChoice = calendarData.calendar_data.pickup_service.allowed_options.find(option => option.location.id === +this.pickupData.location && option.vehicle.code === e.detail);
+    let locationChoice = channel_store.calendar_data.pickup_service.allowed_options.find(option => option.location.id === +this.pickupData.location && option.vehicle.code === e.detail);
     if (!locationChoice) {
       return;
     }
@@ -10656,9 +10658,9 @@ const IrRoom = class {
   render() {
     return (index.h(index.Host, { class: "p-1 d-flex m-0" }, index.h("ir-icon", { id: "drawer-icon", "data-toggle": "collapse", "data-target": `#roomCollapse-${this.item.identifier.split(' ').join('')}`, "aria-expanded": "false", "aria-controls": "collapseExample", class: "pointer mr-1", onClick: () => {
         this.collapsed = !this.collapsed;
-      } }, !this.collapsed ? (index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "20", width: "22.5", viewBox: "0 0 576 512" }, index.h("path", { fill: "#104064", d: "M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" }))) : (index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "20", width: "25", viewBox: "0 0 640 512", slot: "icon" }, index.h("path", { fill: "#104064", d: "M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c8.4-19.3 10.6-41.4 4.8-63.3c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zM373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5L373 389.9z" })))), index.h("div", { class: "flex-fill m-0 " }, index.h("div", { class: "d-flex align-items-start justify-content-between sm-mb-1" }, index.h("p", { class: "m-0 p-0" }, index.h("strong", { class: "m-0 p-0" }, this.myRoomTypeFoodCat || '', " "), " ", this.mealCodeName, ' ', this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`, ' '), index.h("div", { class: "d-flex m-0 p-0 align-items-center" }, index.h("span", { class: "p-0 m-0 ml-1 font-weight-bold" }, _formatAmount(this.item['gross_total'], this.currency)), this.hasRoomEdit && (index.h("ir-icon", { id: `roomEdit-${this.item.identifier}`, class: "pointer mx-1", onClick: this.handleEditClick.bind(this) }, index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "16", width: "16", viewBox: "0 0 512 512" }, index.h("path", { fill: "#6b6f82", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })))), this.hasRoomDelete && (index.h("ir-icon", { onClick: this.handleDeleteClick.bind(this), id: `roomDelete-${this.item.identifier}`, class: "pointer" }, index.h("svg", { slot: "icon", fill: "#ff2441", xmlns: "http://www.w3.org/2000/svg", height: "16", width: "14.25", viewBox: "0 0 448 512" }, index.h("path", { d: "M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" })))))), index.h("div", { class: "d-flex align-items-center sm-mb-1" }, index.h("span", { class: " mr-1" }, _formatDate(this.item.from_date), " - ", _formatDate(this.item.to_date)), calendarData.calendar_data.is_frontdesk_enabled && this.item.unit && index.h("span", { class: "light-blue-bg mr-2 " }, this.item.unit.name), this.hasCheckIn && index.h("ir-button", { id: "checkin", icon: "", class: "mr-1", btn_color: "info", size: "sm", text: "Check in" }), this.hasCheckOut && index.h("ir-button", { id: "checkout", icon: "", btn_color: "info", size: "sm", text: "Check out" })), index.h("div", null, index.h("span", { class: "mr-1" }, `${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`), this.item.rateplan.selected_variation.adult_nbr > 0 && index.h("span", null, " ", this.item.rateplan.selected_variation.adult_child_offering)), index.h("div", { class: "collapse", id: `roomCollapse-${this.item.identifier.split(' ').join('')}` }, index.h("div", { class: "d-flex sm-mb-1 sm-mt-1" }, index.h("div", { class: " sm-padding-top" }, index.h("strong", { class: "sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Breakdown}:`)), index.h("div", { class: 'flex-fill' }, index.h("table", null, this.item.days.length > 0 &&
+      } }, !this.collapsed ? (index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "20", width: "22.5", viewBox: "0 0 576 512" }, index.h("path", { fill: "#104064", d: "M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" }))) : (index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "20", width: "25", viewBox: "0 0 640 512", slot: "icon" }, index.h("path", { fill: "#104064", d: "M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c8.4-19.3 10.6-41.4 4.8-63.3c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zM373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5L373 389.9z" })))), index.h("div", { class: "flex-fill m-0 " }, index.h("div", { class: "d-flex align-items-start justify-content-between sm-mb-1" }, index.h("p", { class: "m-0 p-0" }, index.h("strong", { class: "m-0 p-0" }, this.myRoomTypeFoodCat || '', " "), " ", this.mealCodeName, ' ', this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`, ' '), index.h("div", { class: "d-flex m-0 p-0 align-items-center" }, index.h("span", { class: "p-0 m-0 ml-1 font-weight-bold" }, _formatAmount(this.item['gross_total'], this.currency)), this.hasRoomEdit && (index.h("ir-icon", { id: `roomEdit-${this.item.identifier}`, class: "pointer mx-1", onClick: this.handleEditClick.bind(this) }, index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "16", width: "16", viewBox: "0 0 512 512" }, index.h("path", { fill: "#6b6f82", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })))), this.hasRoomDelete && (index.h("ir-icon", { onClick: this.handleDeleteClick.bind(this), id: `roomDelete-${this.item.identifier}`, class: "pointer" }, index.h("svg", { slot: "icon", fill: "#ff2441", xmlns: "http://www.w3.org/2000/svg", height: "16", width: "14.25", viewBox: "0 0 448 512" }, index.h("path", { d: "M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" })))))), index.h("div", { class: "d-flex align-items-center sm-mb-1" }, index.h("span", { class: " mr-1" }, _formatDate(this.item.from_date), " - ", _formatDate(this.item.to_date)), channel_store.calendar_data.is_frontdesk_enabled && this.item.unit && index.h("span", { class: "light-blue-bg mr-2 " }, this.item.unit.name), this.hasCheckIn && index.h("ir-button", { id: "checkin", icon: "", class: "mr-1", btn_color: "info", size: "sm", text: "Check in" }), this.hasCheckOut && index.h("ir-button", { id: "checkout", icon: "", btn_color: "info", size: "sm", text: "Check out" })), index.h("div", null, index.h("span", { class: "mr-1" }, `${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`), this.item.rateplan.selected_variation.adult_nbr > 0 && index.h("span", null, " ", this.item.rateplan.selected_variation.adult_child_offering)), index.h("div", { class: "collapse", id: `roomCollapse-${this.item.identifier.split(' ').join('')}` }, index.h("div", { class: "d-flex sm-mb-1 sm-mt-1" }, index.h("div", { class: " sm-padding-top" }, index.h("strong", { class: "sm-padding-right" }, `${this.defaultTexts.entries.Lcz_Breakdown}:`)), index.h("div", { class: 'flex-fill' }, index.h("table", null, this.item.days.length > 0 &&
       this.item.days.map(item => (index.h("tr", null, index.h("td", { class: 'pr-2 text-right' }, _getDay(item.date)), " ", index.h("td", { class: "text-right" }, _formatAmount(item.amount, this.currency))))), index.h("tr", null, index.h("th", { class: "text-right pr-2" }, this.defaultTexts.entries.Lcz_SubTotal), index.h("th", { class: "text-right" }, _formatAmount(this.item.total, this.currency))), this.bookingEvent.is_direct ? (index.h(index.Fragment, null, (() => {
-      const filtered_data = calendarData.calendar_data.taxes.filter(tx => tx.pct > 0);
+      const filtered_data = channel_store.calendar_data.taxes.filter(tx => tx.pct > 0);
       return filtered_data.map(d => {
         return (index.h("tr", null, index.h("td", { class: "text-right pr-2" }, d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including, " ", d.name, " (", d.pct, "%)"), index.h("td", { class: "text-right" }, _formatAmount((this.item.total * d.pct) / 100, this.currency))));
       });
