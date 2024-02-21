@@ -2,6 +2,7 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from 
 import { B as BookingService$1 } from './booking.service2.js';
 import { h as hooks } from './moment.js';
 import { l as locales } from './locales.store.js';
+import { i as isBlockUnit } from './utils2.js';
 import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
 import { e as getReleaseHoursString } from './utils.js';
@@ -94,10 +95,6 @@ function transformNewBooking(data) {
     });
   });
   return bookings;
-}
-
-function isBlockUnit(status_code) {
-  return ['003', '002', '004'].includes(status_code);
 }
 
 class EventsService {

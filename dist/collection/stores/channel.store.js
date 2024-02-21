@@ -7,8 +7,14 @@ const initialState = {
   isConnectedToChannel: false,
   channel_settings: null,
   property_id: null,
+  channel_id: -1,
+  is_active: false,
 };
 export const { state: channels_data, onChange: onChannelChange, dispose } = createStore(initialState);
+export function setChannelIdAndActiveState(id, is_active) {
+  channels_data.channel_id = id;
+  channels_data.is_active = is_active;
+}
 export function selectChannel(channel_id) {
   if (channel_id === '') {
     channels_data.selectedChannel = null;

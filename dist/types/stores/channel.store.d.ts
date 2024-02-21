@@ -11,8 +11,11 @@ export interface IChannelStore {
   isConnectedToChannel: boolean;
   channel_settings: IChannelSettings | null;
   property_id: number | null;
+  channel_id: number;
+  is_active: boolean;
 }
 export declare const channels_data: IChannelStore, onChannelChange: import("@stencil/store/dist/types").OnChangeHandler<IChannelStore>, dispose: () => void;
+export declare function setChannelIdAndActiveState(id: number, is_active: boolean): void;
 export declare function selectChannel(channel_id: string): void;
 export declare function updateChannelSettings(key: keyof IChannelSettings, value: string): void;
 export declare function setMappedChannel(): void;

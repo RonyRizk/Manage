@@ -1,5 +1,4 @@
 import { c as calendar_data } from './calendar-data.js';
-import { c as channels_data } from './channel.store.js';
 import { l as locales } from './locales.store.js';
 import { a as axios } from './axios.js';
 
@@ -33,29 +32,11 @@ class RoomService {
       throw new Error(error);
     }
   }
-  async getExposedChannels() {
+  async fetchLanguage(code, sections = ['_PMS_FRONT']) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${token}`, {});
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        const results = data.My_Result;
-        channels_data.channels = results;
-        return data;
-      }
-    }
-    catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
-  async fetchLanguage(code) {
-    try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code });
+        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code, sections });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -63,22 +44,6 @@ class RoomService {
         locales.entries = entries;
         locales.direction = data.My_Result.direction;
         return { entries, direction: data.My_Result.direction };
-      }
-    }
-    catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
-  async getExposedConnectedChannels(property_id) {
-    try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Connected_Channels?Ticket=${token}`, { property_id });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        channels_data.connected_channels = data.My_Result;
       }
     }
     catch (error) {

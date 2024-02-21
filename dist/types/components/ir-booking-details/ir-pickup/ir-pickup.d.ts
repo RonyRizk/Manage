@@ -19,6 +19,7 @@ export declare class IrPickup {
   handleLocationChange(event: CustomEvent): void;
   initializeInputMask(): void;
   handleVehicleQuantityChange(e: CustomEvent): void;
+  componentDidLoad(): void;
   handleVehicleTypeChange(e: CustomEvent): void;
   updatePickupData(key: keyof TPickupData, value: any): void;
   savePickup(): Promise<void>;

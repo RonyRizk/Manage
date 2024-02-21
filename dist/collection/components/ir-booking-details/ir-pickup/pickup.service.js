@@ -1,5 +1,6 @@
 import axios from "axios";
 import calendar_data from "../../../../../src/stores/calendar-data";
+import { renderTime } from "../../../../../src/utils/utils";
 export class PickupService {
   constructor() {
     this.token = JSON.parse(sessionStorage.getItem('token'));
@@ -25,9 +26,10 @@ export class PickupService {
     }
   }
   transformDefaultPickupData(data) {
+    const arrival_time = renderTime(data.hour) + ':' + renderTime(data.minute);
     return {
       arrival_date: data.date,
-      arrival_time: data.hour + ':' + data.minute,
+      arrival_time,
       currency: data.currency,
       due_upon_booking: data.total.toFixed(2),
       flight_details: data.details,

@@ -128,4 +128,7 @@ export function getDaysArray(date1, date2) {
   }
   return dates;
 }
+export function renderTime(time) {
+  return time < 10 ? time.toString().padStart(2, '0') : time.toString();
+}
 //# sourceMappingURL=utils.js.map

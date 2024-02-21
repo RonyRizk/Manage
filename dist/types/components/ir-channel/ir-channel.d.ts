@@ -9,6 +9,7 @@ export declare class IrChannel {
   modal_cause: IModalCause | null;
   private roomService;
   private irModalRef;
+  private channelService;
   componentWillLoad(): void;
   handleConfirmClicked(e: CustomEvent): Promise<void>;
   openModal(): void;
