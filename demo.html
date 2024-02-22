@@ -14,7 +14,7 @@
     <script src="dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
     <script src="dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
     <script src="dist/collection/assets/scripts/bootstrap.bundle.min.js"></script>
-    <script type="module" src="dist/ir-webcmp/ir-webcmp.esm.js"></script>
+    <script type="module" src="dist/ir-webcmp/ir-webcmp.esm.js?v=20240222"></script>
     <link rel="stylesheet" href="dist/collection/assets/scripts/daterangepicker/daterangepicker.css">
 </head>
 
@@ -23,9 +23,9 @@
     <igloo-calendar currency-name="USD" language="en" baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
     <link rel="stylesheet" href="dist/collection/assets/scripts/toastr/toastr.css" type="text/css">
 
-
+    
     <script>
-
+        console.log('XXXXXXXXXXXXXXXXXXXXXXXXX')
         var today = new Date();
         today.setDate(today.getDate() - 1);
         var _FROM_DATE = today.toISOString().substring(0, 10);
