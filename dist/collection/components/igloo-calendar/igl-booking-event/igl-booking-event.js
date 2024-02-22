@@ -17,6 +17,7 @@ import { isBlockUnit } from "../../../../../src/utils/utils";
 import moment from "moment";
 import { EventsService } from "../../../../../src/services/events.service";
 import locales from "../../../../../src/stores/locales.store";
+import calendar_data from "../../../../../src/stores/calendar-data";
 export class IglBookingEvent {
   constructor() {
     this.dayWidth = 0;
@@ -47,6 +48,8 @@ export class IglBookingEvent {
     this.isShrinking = null;
   }
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+    this.eventsService.setToken(calendar_data.token);
     window.addEventListener('click', this.handleClickOutsideBind);
   }
   async fetchAndAssignBookingData() {

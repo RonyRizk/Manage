@@ -14,6 +14,7 @@ export class IglCalBody {
     this.countryNodeList = undefined;
     this.dragOverElement = '';
     this.renderAgain = false;
+    this.toBeAssignedDate = undefined;
   }
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
@@ -367,6 +368,23 @@ export class IglCalBody {
           "text": ""
         },
         "attribute": "country-node-list",
+        "reflect": false
+      },
+      "toBeAssignedDate": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "to-be-assigned-date",
         "reflect": false
       }
     };

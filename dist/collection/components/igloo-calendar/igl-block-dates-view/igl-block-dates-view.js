@@ -2,6 +2,7 @@ import { Host, h } from "@stencil/core";
 import { BookingService } from "../../../services/booking.service";
 import { formatDate } from "../../../utils/utils";
 import locales from "../../../../../src/stores/locales.store";
+import calendar_data from "../../../../../src/stores/calendar-data";
 export class IglBlockDatesView {
   constructor() {
     this.blockDatesData = {
@@ -22,6 +23,7 @@ export class IglBlockDatesView {
   }
   async componentWillLoad() {
     try {
+      this.bookingService.setToken(calendar_data.token);
       this.releaseList = await this.bookingService.getBlockedInfo();
       if (this.defaultData) {
         this.blockDatesData = Object.assign({}, this.defaultData);

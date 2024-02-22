@@ -5,7 +5,9 @@ import { Host, h } from "@stencil/core";
 export class IrChannelEditor {
   constructor() {
     var _a, _b, _c;
+    this.channelService = new ChannelService();
     this.channel_status = null;
+    this.ticket = undefined;
     this.selectedTab = '';
     this.isLoading = false;
     this.headerTitles = [
@@ -20,6 +22,9 @@ export class IrChannelEditor {
     this.selectedRoomType = [];
   }
   componentWillLoad() {
+    if (this.ticket) {
+      this.channelService.setToken(this.ticket);
+    }
     if (this.channel_status === 'edit') {
       this.enableAllHeaders();
     }
@@ -56,7 +61,7 @@ export class IrChannelEditor {
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      await new ChannelService().saveConnectedChannel(false);
+      await this.channelService.saveConnectedChannel(false);
       this.saveChannelFinished.emit();
     }
     catch (error) {
@@ -103,6 +108,23 @@ export class IrChannelEditor {
         "attribute": "channel_status",
         "reflect": false,
         "defaultValue": "null"
+      },
+      "ticket": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "ticket",
+        "reflect": false
       }
     };
   }

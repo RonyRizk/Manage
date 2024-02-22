@@ -2,6 +2,7 @@ import { Host, h } from "@stencil/core";
 import { ToBeAssignedService } from "../../../../services/toBeAssigned.service";
 import { v4 } from "uuid";
 import locales from "../../../../../../src/stores/locales.store";
+import calendar_data from "../../../../../../src/stores/calendar-data";
 export class IglTbaBookingView {
   constructor() {
     this.highlightSection = false;
@@ -40,6 +41,7 @@ export class IglTbaBookingView {
     return true;
   }
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     if (this.categoryIndex === 0 && this.eventIndex === 0) {
       setTimeout(() => {
         this.handleHighlightAvailability();

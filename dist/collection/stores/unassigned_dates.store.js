@@ -1,11 +1,35 @@
 import { createStore } from "@stencil/store";
-const initialState = {};
-let { state: unassigned_dates } = createStore(initialState);
+const initialState = {
+  unassigned_dates: {},
+};
+export let { state: unassigned_dates, onChange: handleUnAssignedDatesChange } = createStore(initialState);
 export function addUnassingedDates(data) {
-  unassigned_dates = Object.assign(Object.assign({}, unassigned_dates), data);
+  unassigned_dates.unassigned_dates = Object.assign(Object.assign({}, unassigned_dates.unassigned_dates), data);
+  /*
+   try {
+      //console.log("called")
+      let categorisedRooms = {};
+      const result = await this.toBeAssignedService.getUnassignedRooms(
+        this.propertyid,
+        dateToFormattedString(new Date(+key)),
+        calendarData.roomsInfo,
+        calendarData.formattedLegendData,
+      );
+      result.forEach(room => {
+        if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
+          categorisedRooms[room.RT_ID] = [room];
+        } else {
+          categorisedRooms[room.RT_ID].push(room);
+        }
+      });
+      this.unassignedDates[key].categories = categorisedRooms;
+    } catch (error) {
+      //  toastr.error(error);
+    }
+  */
 }
 export function getUnassignedDates() {
-  return unassigned_dates;
+  return unassigned_dates.unassigned_dates;
 }
 export function removeUnassignedDates(from_date, to_date) {
   const fromTimestamp = convertToDateTimestamp(from_date);

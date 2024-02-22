@@ -1,4 +1,5 @@
 import { ChannelService } from "../../../../src/services/channel.service";
+import calendar_data from "../../../../src/stores/calendar-data";
 import { selectChannel, setChannelIdAndActiveState, testConnection, updateChannelSettings } from "../../../../src/stores/channel.store";
 import { h } from "@stencil/core";
 export const actions = (entries) => [
@@ -42,7 +43,7 @@ export const actions = (entries) => [
           alert('full sync');
         },
         title: '',
-        message: entries === null || entries === void 0 ? void 0 : entries.Lcz_FullSync,
+        message: entries === null || entries === void 0 ? void 0 : entries.Lcz_ScheduleFullSync,
         main_color: 'primary',
       };
     },
@@ -77,7 +78,9 @@ export const actions = (entries) => [
       return {
         cause: 'remove',
         action: async () => {
-          await new ChannelService().saveConnectedChannel(true);
+          const channel_service = new ChannelService();
+          channel_service.setToken(calendar_data.token);
+          await channel_service.saveConnectedChannel(true);
         },
         title: '',
         message: entries === null || entries === void 0 ? void 0 : entries.Lcz_ThisActionWillDelete,

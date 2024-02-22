@@ -1,13 +1,15 @@
 import axios from "axios";
 import { BookingService } from "./booking.service";
 import { getReleaseHoursString } from "../utils/utils";
-export class EventsService {
+import { Token } from "../../../src/models/Token";
+export class EventsService extends Token {
   constructor() {
+    super(...arguments);
     this.bookingService = new BookingService();
   }
   async reallocateEvent(pool, destination_pr_id, from_date, to_date) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         console.log(pool, destination_pr_id, from_date, to_date);
         const { data } = await axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date });
@@ -28,7 +30,7 @@ export class EventsService {
   }
   async deleteEvent(POOL) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/UnBlock_Exposed_Unit?Ticket=${token}`, {
           POOL,
@@ -49,7 +51,7 @@ export class EventsService {
   }
   async updateBlockedEvent(bookingEvent) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const releaseData = getReleaseHoursString(+bookingEvent.RELEASE_AFTER_HOURS);
         await this.deleteEvent(bookingEvent.POOL);

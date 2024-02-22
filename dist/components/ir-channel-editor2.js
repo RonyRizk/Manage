@@ -1,4 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { T as Token } from './Token.js';
 import { c as calendar_data } from './calendar-data.js';
 import { c as channels_data, o as onChannelChange } from './channel.store.js';
 import { a as axios } from './axios.js';
@@ -10,17 +11,17 @@ import { d as defineCustomElement$3 } from './ir-channel-mapping2.js';
 import { d as defineCustomElement$2 } from './ir-combobox2.js';
 import { d as defineCustomElement$1 } from './ir-icon2.js';
 
-class ChannelService {
+class ChannelService extends Token {
   async getExposedChannels() {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${token}`, {});
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         const results = data.My_Result;
-        channels_data.channels = results;
+        channels_data.channels = [...results];
         return data;
       }
     }
@@ -31,13 +32,13 @@ class ChannelService {
   }
   async getExposedConnectedChannels(property_id) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Connected_Channels?Ticket=${token}`, { property_id });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        channels_data.connected_channels = data.My_Result;
+        channels_data.connected_channels = [...data.My_Result];
       }
     }
     catch (error) {
@@ -56,7 +57,7 @@ class ChannelService {
         map: channels_data.mappedChannels,
         is_remove,
       };
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (!token) {
         throw new Error('Invalid Token');
       }
@@ -78,7 +79,9 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
     this.saveChannelFinished = createEvent(this, "saveChannelFinished", 7);
     this.closeSideBar = createEvent(this, "closeSideBar", 7);
     var _a, _b, _c;
+    this.channelService = new ChannelService();
     this.channel_status = null;
+    this.ticket = undefined;
     this.selectedTab = '';
     this.isLoading = false;
     this.headerTitles = [
@@ -93,6 +96,9 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
     this.selectedRoomType = [];
   }
   componentWillLoad() {
+    if (this.ticket) {
+      this.channelService.setToken(this.ticket);
+    }
     if (this.channel_status === 'edit') {
       this.enableAllHeaders();
     }
@@ -129,7 +135,7 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      await new ChannelService().saveConnectedChannel(false);
+      await this.channelService.saveConnectedChannel(false);
       this.saveChannelFinished.emit();
     }
     catch (error) {
@@ -148,6 +154,7 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
   static get style() { return irChannelEditorCss; }
 }, [2, "ir-channel-editor", {
     "channel_status": [1],
+    "ticket": [1],
     "selectedTab": [32],
     "isLoading": [32],
     "headerTitles": [32],

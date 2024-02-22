@@ -31,6 +31,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     this.countryNodeList = undefined;
     this.dragOverElement = '';
     this.renderAgain = false;
+    this.toBeAssignedDate = undefined;
   }
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
@@ -277,6 +278,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     "currency": [8],
     "language": [1],
     "countryNodeList": [8, "country-node-list"],
+    "toBeAssignedDate": [1, "to-be-assigned-date"],
     "dragOverElement": [32],
     "renderAgain": [32]
   }, [[8, "dragOverHighlightElement", "dragOverHighlightElementHandler"], [8, "gotoRoomEvent", "gotoRoom"], [8, "addToBeAssignedEvent", "addToBeAssignedEvents"], [8, "closeBookingWindow", "closeWindow"]]]);

@@ -1,11 +1,12 @@
+import { T as Token } from './Token.js';
 import { c as calendar_data } from './calendar-data.js';
 import { l as locales } from './locales.store.js';
 import { a as axios } from './axios.js';
 
-class RoomService {
+class RoomService extends Token {
   async fetchData(id, language) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${token}`, { id, language });
         if (data.ExceptionMsg !== '') {
@@ -34,7 +35,7 @@ class RoomService {
   }
   async fetchLanguage(code, sections = ['_PMS_FRONT']) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code, sections });
         if (data.ExceptionMsg !== '') {

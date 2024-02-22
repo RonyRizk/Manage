@@ -1,6 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
 import { B as BookingService } from './booking.service.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$1 } from './ir-autocomplete2.js';
 import { v as v4 } from './v4.js';
 
@@ -43,6 +44,7 @@ const IglPropertyBookedBy = /*@__PURE__*/ proxyCustomElement(class IglPropertyBo
     };
   }
   async componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
     this.assignCountryCode();
     this.initializeExpiryYears();
     this.initializeDateData();

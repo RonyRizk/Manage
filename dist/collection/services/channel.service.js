@@ -1,17 +1,18 @@
+import { Token } from "../../../src/models/Token";
 import calendar_data from "../../../src/stores/calendar-data";
 import channels_data from "../../../src/stores/channel.store";
 import axios from "axios";
-export class ChannelService {
+export class ChannelService extends Token {
   async getExposedChannels() {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${token}`, {});
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         const results = data.My_Result;
-        channels_data.channels = results;
+        channels_data.channels = [...results];
         return data;
       }
     }
@@ -22,13 +23,13 @@ export class ChannelService {
   }
   async getExposedConnectedChannels(property_id) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Connected_Channels?Ticket=${token}`, { property_id });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        channels_data.connected_channels = data.My_Result;
+        channels_data.connected_channels = [...data.My_Result];
       }
     }
     catch (error) {
@@ -47,7 +48,7 @@ export class ChannelService {
         map: channels_data.mappedChannels,
         is_remove,
       };
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (!token) {
         throw new Error('Invalid Token');
       }

@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
 import { B as BookingService } from './booking.service2.js';
+import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$4 } from './ir-button2.js';
 import { d as defineCustomElement$3 } from './ir-icon2.js';
 import { d as defineCustomElement$2 } from './ir-input-text2.js';
@@ -25,6 +26,7 @@ const GuestInfo = /*@__PURE__*/ proxyCustomElement(class GuestInfo extends HTMLE
     this.isLoading = false;
   }
   async componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
     await this.init();
   }
   async init() {

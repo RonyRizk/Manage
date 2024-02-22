@@ -4,6 +4,7 @@ import { dateToFormattedString } from "../../../utils/utils";
 import moment from "moment";
 import locales from "../../../../../src/stores/locales.store";
 import { getUnassignedDates } from "../../../../../src/stores/unassigned_dates.store";
+import calendar_data from "../../../../../src/stores/calendar-data";
 //import { updateCategories } from '../../../utils/events.utils';
 export class IglToBeAssigned {
   constructor() {
@@ -25,6 +26,7 @@ export class IglToBeAssigned {
     this.orderedDatesList = [];
   }
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     this.reArrangeData();
     this.loadingMessage = locales.entries.Lcz_FetchingUnAssignedUnits;
   }

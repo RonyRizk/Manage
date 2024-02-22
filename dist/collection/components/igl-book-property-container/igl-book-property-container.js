@@ -57,11 +57,14 @@ export class IglBookPropertyContainer {
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
+      this.bookingService.setToken(this.ticket);
+      this.roomService.setToken(this.ticket);
       this.initializeApp();
     }
   }
   async ticketChanged() {
-    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    this.bookingService.setToken(this.ticket);
+    this.roomService.setToken(this.ticket);
     this.initializeApp();
   }
   handleCloseBookingWindow() {

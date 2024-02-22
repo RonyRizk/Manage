@@ -11,13 +11,10 @@ import { d as defineCustomElement$2 } from './ir-input-text2.js';
 import { d as defineCustomElement$1 } from './ir-select2.js';
 
 class PickupService {
-  constructor() {
-    this.token = JSON.parse(sessionStorage.getItem('token'));
-  }
   async savePickup(params, booking_nbr, is_remove) {
     try {
       const splitTime = params.arrival_time.split(':');
-      await axios.post(`/Do_Pickup?Ticket=${this.token}`, {
+      await axios.post(`/Do_Pickup?Ticket=${calendar_data.token}`, {
         booking_nbr,
         is_remove,
         currency: params.currency,

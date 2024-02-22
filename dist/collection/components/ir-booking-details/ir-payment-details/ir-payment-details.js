@@ -3,6 +3,7 @@ import { _formatAmount, _formatDate } from "../functions";
 import { BookingService } from "../../../../../src/services/booking.service";
 import moment from "moment";
 import { PaymentService } from "../../../../../src/services/payment.service";
+import calendar_data from "../../../../../src/stores/calendar-data";
 export class IrPaymentDetails {
   constructor() {
     this.paymentService = new PaymentService();
@@ -19,6 +20,7 @@ export class IrPaymentDetails {
   }
   async componentWillLoad() {
     try {
+      this.paymentService.setToken(calendar_data.token);
       this.initializeItemToBeAdded();
     }
     catch (error) {

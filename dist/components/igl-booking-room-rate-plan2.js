@@ -28,6 +28,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
     this.isBookDisabled = false;
     this.defaultRoomId = undefined;
     this.selectedRoom = undefined;
+    this.is_bed_configuration_enabled = undefined;
     this.isInputFocused = false;
     this.selectedData = undefined;
     this.ratePlanChangedState = false;
@@ -80,6 +81,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
   updateSelectedRatePlan(data) {
     var _a;
     this.selectedData = {
+      is_bed_configuration_enabled: this.is_bed_configuration_enabled,
       ratePlanId: data.id,
       adult_child_offering: data.variations[data.variations.length - 1].adult_child_offering,
       rateType: 1,
@@ -225,6 +227,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
     "isBookDisabled": [4, "is-book-disabled"],
     "defaultRoomId": [8, "default-room-id"],
     "selectedRoom": [8, "selected-room"],
+    "is_bed_configuration_enabled": [4],
     "isInputFocused": [32],
     "selectedData": [32],
     "ratePlanChangedState": [32]

@@ -18,6 +18,7 @@ export declare class IglBookingRoomRatePlan {
   isBookDisabled: boolean;
   defaultRoomId: any;
   selectedRoom: any;
+  is_bed_configuration_enabled: boolean;
   isInputFocused: boolean;
   dataUpdateEvent: EventEmitter<{
     [key: string]: any;

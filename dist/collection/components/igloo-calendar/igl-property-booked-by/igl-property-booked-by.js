@@ -2,6 +2,7 @@ import { Host, h, Fragment } from "@stencil/core";
 import { BookingService } from "../../../services/booking.service";
 import { v4 } from "uuid";
 import locales from "../../../../../src/stores/locales.store";
+import calendar_data from "../../../../../src/stores/calendar-data";
 export class IglPropertyBookedBy {
   constructor() {
     this.bookingService = new BookingService();
@@ -36,6 +37,7 @@ export class IglPropertyBookedBy {
     };
   }
   async componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
     this.assignCountryCode();
     this.initializeExpiryYears();
     this.initializeDateData();

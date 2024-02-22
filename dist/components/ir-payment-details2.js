@@ -3,15 +3,17 @@ import { _ as _formatDate, b as _formatAmount } from './functions.js';
 import { B as BookingService } from './booking.service2.js';
 import { h as hooks } from './moment.js';
 import { a as axios } from './axios.js';
+import { T as Token } from './Token.js';
+import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$4 } from './ir-button2.js';
 import { d as defineCustomElement$3 } from './ir-date-picker2.js';
 import { d as defineCustomElement$2 } from './ir-icon2.js';
 import { d as defineCustomElement$1 } from './ir-modal2.js';
 
-class PaymentService {
+class PaymentService extends Token {
   async AddPayment(payment, book_nbr) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Do_Payment?Ticket=${token}`, { payment: Object.assign(Object.assign({}, payment), { book_nbr }) });
         if (data.ExceptionMsg !== '') {
@@ -27,7 +29,7 @@ class PaymentService {
   }
   async CancelPayment(id) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Cancel_Payment?Ticket=${token}`, { id });
         if (data.ExceptionMsg !== '') {
@@ -65,6 +67,7 @@ const IrPaymentDetails = /*@__PURE__*/ proxyCustomElement(class IrPaymentDetails
   }
   async componentWillLoad() {
     try {
+      this.paymentService.setToken(calendar_data.token);
       this.initializeItemToBeAdded();
     }
     catch (error) {

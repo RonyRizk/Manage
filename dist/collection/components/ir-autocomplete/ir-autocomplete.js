@@ -2,6 +2,7 @@ import { Host, h, Fragment } from "@stencil/core";
 import { v4 } from "uuid";
 import { BookingService } from "../../services/booking.service";
 import locales from "../../../../src/stores/locales.store";
+import calendar_data from "../../../../src/stores/calendar-data";
 export class IrAutocomplete {
   constructor() {
     this.bookingService = new BookingService();
@@ -27,6 +28,7 @@ export class IrAutocomplete {
     this.isItemSelected = undefined;
   }
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
     this.no_result_found = locales.entries.Lcz_NoResultsFound;
   }
   handleKeyDown(event) {

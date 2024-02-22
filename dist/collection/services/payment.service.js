@@ -1,8 +1,9 @@
 import axios from "axios";
-export class PaymentService {
+import { Token } from "../../../src/models/Token";
+export class PaymentService extends Token {
   async AddPayment(payment, book_nbr) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Do_Payment?Ticket=${token}`, { payment: Object.assign(Object.assign({}, payment), { book_nbr }) });
         if (data.ExceptionMsg !== '') {
@@ -18,7 +19,7 @@ export class PaymentService {
   }
   async CancelPayment(id) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Cancel_Payment?Ticket=${token}`, { id });
         if (data.ExceptionMsg !== '') {

@@ -1,5 +1,6 @@
 import { h } from "@stencil/core";
 import { BookingService } from "../../../../src/services/booking.service";
+import calendar_data from "../../../../src/stores/calendar-data";
 export class GuestInfo {
   constructor() {
     this.bookingService = new BookingService();
@@ -15,6 +16,7 @@ export class GuestInfo {
     this.isLoading = false;
   }
   async componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
     await this.init();
   }
   async init() {

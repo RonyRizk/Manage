@@ -3,6 +3,8 @@ import { T as ToBeAssignedService } from './toBeAssigned.service.js';
 import { d as dateToFormattedString } from './utils.js';
 import { h as hooks } from './moment.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
+import { h as handleUnAssignedDatesChange } from './unassigned_dates.store.js';
 import { d as defineCustomElement$1 } from './ir-date-picker2.js';
 
 const iglCalHeaderCss = ".sc-igl-cal-header-h{display:block;position:absolute;top:0;height:100%}.svg-icon.sc-igl-cal-header{height:20px;width:20px}.darkGrey.sc-igl-cal-header{background:#ececec}.btn.sc-igl-cal-header{pointer-events:auto}.stickyCell.sc-igl-cal-header{display:-ms-inline-grid;display:-moz-inline-grid;display:inline-grid;position:-webkit-sticky;position:sticky;top:0px;height:82px;display:inline-block;vertical-align:top;z-index:2}.headersContainer.sc-igl-cal-header{background-color:#ffffff}.headerCell.sc-igl-cal-header{display:inline-grid;width:70px;height:60px;vertical-align:top;background-color:#ffffff;border-bottom:1px solid #e0e0e0}.datePickerHidden.sc-igl-cal-header{position:absolute;top:0;left:0;width:100%;opacity:0}.monthsContainer.sc-igl-cal-header{height:20px;background-color:#ffffff;margin-bottom:0.2em}.monthCell.sc-igl-cal-header{display:inline-grid;height:20px;background-color:#ececec;border-right:1px solid #c7c7c7;vertical-align:top}.monthCell.sc-igl-cal-header:nth-child(odd){background-color:#dddddd}.monthTitle.sc-igl-cal-header{overflow:hidden;text-overflow:ellipsis;font-size:0.9em;text-transform:uppercase;font-weight:bold;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}.topLeftCell.sc-igl-cal-header{left:0px;z-index:3;width:170px;background-color:#ffffff;display:-ms-inline-grid;display:-moz-inline-grid;display:inline-grid}.caledarBtns.sc-igl-cal-header{position:relative;cursor:pointer;font-size:1.75em;line-height:1em;padding:0.4rem;display:flex;align-items:center;justify-content:center}.caledarBtns.sc-igl-cal-header .la.sc-igl-cal-header{font-size:1.1em}.caledarBtns.sc-igl-cal-header:hover{background-color:#f6f6f6}.dayTitle.sc-igl-cal-header{font-size:0.8em;font-weight:600;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}.currentDay.sc-igl-cal-header .dayTitle.sc-igl-cal-header{font-weight:bold}.currentDay.sc-igl-cal-header{background-color:#e3f3fa}.dayCapacityPercent.sc-igl-cal-header{font-size:0.75em;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}.badge-pill.sc-igl-cal-header{padding:3px 1em;font-size:0.8em;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}.pointer.sc-igl-cal-header{cursor:pointer}.searchContiner.sc-igl-cal-header{padding-left:10px;padding-right:10px}.searchListContainer.sc-igl-cal-header{background:#fff;border:1px solid #ccc;border-bottom:none}.searchListItem.sc-igl-cal-header{background:white;border-bottom:1px solid #ccc;padding-left:8px}.badge-light.sc-igl-cal-header{background-color:#999999;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}.min-width-full.sc-igl-cal-header{min-width:100%}";
@@ -27,10 +29,15 @@ const IglCalHeader = /*@__PURE__*/ proxyCustomElement(class IglCalHeader extends
     this.unassignedRoomsNumber = {};
   }
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     try {
       this.initializeRoomsList();
-      if (!this.calendarData.is_vacation_rental && Object.keys(this.unassignedDates).length > 0) {
-        this.fetchAndAssignUnassignedRooms();
+      if (!this.calendarData.is_vacation_rental) {
+        handleUnAssignedDatesChange('unassigned_dates', newValue => {
+          if (Object.keys(newValue).length > 0) {
+            this.fetchAndAssignUnassignedRooms();
+          }
+        });
       }
     }
     catch (error) {
@@ -57,14 +64,17 @@ const IglCalHeader = /*@__PURE__*/ proxyCustomElement(class IglCalHeader extends
       dt.setMinutes(0);
       dt.setSeconds(0);
       let endDate = dt.getTime();
+      console.log(data);
       while (endDate <= new Date(toDate).getTime()) {
+        console.log(endDate);
         const selectedDate = hooks(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
           this.unassignedRoomsNumber[selectedDate] = result.length;
         }
         else if (this.unassignedRoomsNumber[selectedDate]) {
-          this.unassignedRoomsNumber[selectedDate] = this.unassignedRoomsNumber[selectedDate] - 1;
+          const res = this.unassignedRoomsNumber[selectedDate] - 1;
+          this.unassignedRoomsNumber[selectedDate] = res < 0 ? 0 : res;
         }
         endDate = hooks(endDate).add(1, 'days').toDate().getTime();
         this.renderView();

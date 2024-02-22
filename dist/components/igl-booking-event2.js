@@ -2,10 +2,12 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from 
 import { B as BookingService$1 } from './booking.service2.js';
 import { h as hooks } from './moment.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
 import { i as isBlockUnit } from './utils2.js';
 import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
 import { e as getReleaseHoursString } from './utils.js';
+import { T as Token } from './Token.js';
 import { d as defineCustomElement$2 } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$1 } from './igl-booking-event-hover2.js';
 
@@ -97,13 +99,14 @@ function transformNewBooking(data) {
   return bookings;
 }
 
-class EventsService {
+class EventsService extends Token {
   constructor() {
+    super(...arguments);
     this.bookingService = new BookingService();
   }
   async reallocateEvent(pool, destination_pr_id, from_date, to_date) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         console.log(pool, destination_pr_id, from_date, to_date);
         const { data } = await axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date });
@@ -124,7 +127,7 @@ class EventsService {
   }
   async deleteEvent(POOL) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/UnBlock_Exposed_Unit?Ticket=${token}`, {
           POOL,
@@ -145,7 +148,7 @@ class EventsService {
   }
   async updateBlockedEvent(bookingEvent) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const releaseData = getReleaseHoursString(+bookingEvent.RELEASE_AFTER_HOURS);
         await this.deleteEvent(bookingEvent.POOL);
@@ -219,6 +222,8 @@ const IglBookingEvent = /*@__PURE__*/ proxyCustomElement(class IglBookingEvent e
     this.isShrinking = null;
   }
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+    this.eventsService.setToken(calendar_data.token);
     window.addEventListener('click', this.handleClickOutsideBind);
   }
   async fetchAndAssignBookingData() {

@@ -1,6 +1,7 @@
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries } from '../models/IBooking';
 import { Booking, Guest } from '../models/booking.dto';
-export declare class BookingService {
+import { Token } from "../models/Token";
+export declare class BookingService extends Token {
   getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{
     [key: string]: any;
   }>;

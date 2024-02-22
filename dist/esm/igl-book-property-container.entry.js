@@ -1,11 +1,9 @@
 import { r as registerInstance, c as createEvent, h, H as Host } from './index-795d2df3.js';
-import { B as BookingService } from './booking.service-f6c798c3.js';
-import { R as RoomService } from './room.service-773adfb0.js';
-import { l as locales, a as axios } from './axios-248c334f.js';
-import './utils-fd7da1ce.js';
-import './moment-7d60e5ef.js';
-import './booking-9aaf08ea.js';
-import './calendar-data-91df7993.js';
+import { B as BookingService } from './booking.service-c84d6d54.js';
+import { R as RoomService } from './room.service-f53b99f2.js';
+import { l as locales } from './locales.store-bd6e6ba2.js';
+import { a as axios } from './Token-2955ce2c.js';
+import './calendar-data-fd00da05.js';
 
 const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:block;margin:0;padding:0}.book-container.sc-igl-book-property-container{width:min-content;margin:0;padding:0}";
 
@@ -65,11 +63,14 @@ const IglBookPropertyContainer = class {
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
+      this.bookingService.setToken(this.ticket);
+      this.roomService.setToken(this.ticket);
       this.initializeApp();
     }
   }
   async ticketChanged() {
-    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    this.bookingService.setToken(this.ticket);
+    this.roomService.setToken(this.ticket);
     this.initializeApp();
   }
   handleCloseBookingWindow() {

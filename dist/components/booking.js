@@ -2,6 +2,7 @@ import { h as hooks } from './moment.js';
 import { i as isBlockUnit, b as dateDifference } from './utils.js';
 import { a as axios } from './axios.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
 
 async function getMyBookings(months) {
   const myBookings = [];
@@ -45,7 +46,7 @@ function formatName(firstName, lastName) {
 }
 async function getStayStatus() {
   try {
-    const token = JSON.parse(sessionStorage.getItem('token'));
+    const token = calendar_data.token;
     if (token) {
       const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi?Ticket=${token}`, {
         TBL_NAMES: ['_STAY_STATUS'],

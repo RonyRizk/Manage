@@ -4,11 +4,12 @@ import { B as BookingService } from './booking.service.js';
 import { o as getDaysArray, g as getCurrencySymbol, p as convertDatePrice, f as formatDate } from './utils.js';
 import { h as hooks } from './moment.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$2 } from './ir-button2.js';
 import { d as defineCustomElement$1 } from './ir-icon2.js';
 import { v as v4 } from './v4.js';
 
-const irRoomNightsCss = ".sc-ir-room-nights-h{display:block;box-sizing:border-box;margin:0}.close-icon.sc-ir-room-nights{position:absolute;top:18px;right:33px;outline:none}.close.sc-ir-room-nights{float:right;font-size:1.5rem;font-weight:700;line-height:1;color:#000;text-shadow:0 1px 0 #fff;opacity:0.5;padding:0;background-color:transparent;border:0;appearance:none}.card.sc-ir-room-nights{top:0;z-index:1000}.card-title.sc-ir-room-nights{border-bottom:1px solid #e4e5ec;width:100%}.irfontgreen.sc-ir-room-nights{color:#0e930e}.currency.sc-ir-room-nights{display:block;position:absolute;margin:0;padding:0;height:auto;left:10px}.rate-input.sc-ir-room-nights{font-size:14px;line-height:0;padding:0;height:0;border-left:0;border-radius:0.25rem !important}.rate-input-container.sc-ir-room-nights{display:flex;align-items:center;justify-content:flex-start;box-sizing:border-box;flex:1}.new-currency.sc-ir-room-nights{color:#3b4781;border:1px solid #cacfe7;font-size:0.975rem;height:2rem;background:white;border-right:0;border-top-right-radius:0;border-bottom-right-radius:0;transition:border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out}.input-group-prepend.sc-ir-room-nights span[data-state='focus'].sc-ir-room-nights{border-color:var(--blue)}.input-group-prepend.sc-ir-room-nights span[data-disabled].sc-ir-room-nights{background-color:#eceff1;border-color:rgba(118, 118, 118, 0.3)}";
+const irRoomNightsCss = ".sc-ir-room-nights-h{display:block;box-sizing:border-box;margin:0}.close-icon.sc-ir-room-nights{position:absolute;top:18px;right:33px;outline:none}.close.sc-ir-room-nights{float:right;font-size:1.5rem;font-weight:700;line-height:1;color:#000;text-shadow:0 1px 0 #fff;opacity:0.5;padding:0;background-color:transparent;border:0;appearance:none}.card.sc-ir-room-nights{top:0;z-index:1000}.card-title.sc-ir-room-nights{border-bottom:1px solid #e4e5ec;width:100%}.irfontgreen.sc-ir-room-nights{color:#0e930e}.currency.sc-ir-room-nights{display:block;position:absolute;margin:0;padding:0;height:auto;left:10px}.rate-input.sc-ir-room-nights{font-size:14px;line-height:0;padding:0;height:0;border-left:0;border-radius:0.25rem !important}.rate-input-container.sc-ir-room-nights{display:flex;align-items:center;justify-content:flex-start;box-sizing:border-box;flex:1}.new-currency.sc-ir-room-nights{color:#3b4781;border:1px solid #cacfe7;font-size:0.975rem;height:2rem;background:white;border-right:0;border-top-right-radius:0;border-bottom-right-radius:0;transition:border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out}.input-group-prepend.sc-ir-room-nights span[data-state='focus'].sc-ir-room-nights{border-color:var(--blue)}.input-group-prepend.sc-ir-room-nights span[data-disabled].sc-ir-room-nights{background-color:#eceff1;border-color:rgba(118, 118, 118, 0.3)}.rateInputBorder.sc-ir-room-nights{border-top-left-radius:0 !important;border-bottom-left-radius:0 !important}";
 
 const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends HTMLElement {
   constructor() {
@@ -36,6 +37,7 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
     this.isInputFocused = -1;
   }
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
     if (this.baseUrl) {
       axios.defaults.baseURL = this.baseUrl;
     }
@@ -128,7 +130,7 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
     }
   }
   renderInputField(index, currency_symbol, day) {
-    return (h("fieldset", { class: "col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container" }, h("div", { class: "input-group-prepend" }, h("span", { "data-disabled": this.inventory === 0 || this.inventory === null, "data-state": this.isInputFocused === index ? 'focus' : '', class: "input-group-text new-currency", id: "basic-addon1" }, currency_symbol)), h("input", { onFocus: () => (this.isInputFocused = index), onBlur: () => (this.isInputFocused = -1), disabled: this.inventory === 0 || this.inventory === null, type: "text", class: "form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder", id: v4(), value: day.amount > 0 ? day.amount : '', placeholder: locales.entries.Lcz_Rate || 'Rate', onInput: event => this.handleInput(event, index) })));
+    return (h("fieldset", { class: "col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container" }, h("div", { class: "input-group-prepend bg-white" }, h("span", { "data-disabled": this.inventory === 0 || this.inventory === null, "data-state": this.isInputFocused === index ? 'focus' : '', class: "input-group-text new-currency", id: "basic-addon1" }, currency_symbol)), h("input", { onFocus: () => (this.isInputFocused = index), onBlur: () => (this.isInputFocused = -1), disabled: this.inventory === 0 || this.inventory === null, type: "text", class: "form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder", id: v4(), value: day.amount > 0 ? day.amount : '', placeholder: locales.entries.Lcz_Rate || 'Rate', onInput: event => this.handleInput(event, index) })));
   }
   renderReadOnlyField(currency_symbol, day) {
     return h("p", { class: "col-9 ml-1 m-0 p-0" }, `${currency_symbol}${Number(day.amount).toFixed(2)}`);

@@ -4,6 +4,7 @@ import { d as dateToFormattedString, e as getReleaseHoursString } from './utils.
 import { t as transformNewBLockedRooms } from './booking.js';
 import { E as EventsService } from './events.service.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$f } from './igl-application-info2.js';
 import { d as defineCustomElement$e } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$d } from './igl-book-property-footer2.js';
@@ -282,6 +283,8 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     }
   }
   async componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+    this.eventsService.setToken(calendar_data.token);
     this.defaultDateRange = { from_date: this.bookingData.FROM_DATE, to_date: this.bookingData.TO_DATE };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     if (!this.bookingData.defaultDateRange) {
@@ -332,8 +335,9 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     if (this.guestData.length === 0) {
       return true;
     }
+    console.log(this.guestData);
     for (const data of this.guestData) {
-      if (data.guestName === '' || data.preference === '' || data.preference === 0) {
+      if (data.guestName === '' || ((data.preference === '' || data.preference === 0) && data.is_bed_configuration_enabled)) {
         return true;
       }
     }
@@ -389,7 +393,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
     }
   }
   setOtherProperties(res) {
-    this.ratePricingMode = res.ratePricingMode;
+    this.ratePricingMode = res === null || res === void 0 ? void 0 : res.ratePricingMode;
     this.bookedByInfoData.arrivalTime = res.arrivalTime;
     this.bedPreferenceType = res.bedPreferenceType;
   }

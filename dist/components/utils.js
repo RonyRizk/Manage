@@ -9,18 +9,9 @@ function convertDateToCustomFormat(dayWithWeekday, monthWithYear) {
   return date.format('D_M_YYYY');
 }
 function convertDateToTime(dayWithWeekday, monthWithYear) {
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-  const [_, day] = dayWithWeekday.split(' ');
-  const [month, year] = monthWithYear.split(' ');
-  const monthIndex = months.indexOf(month);
-  if (monthIndex !== -1) {
-    let date = new Date(`${year}-${monthIndex + 1}-${day}`);
-    date.setHours(0, 0, 0, 0);
-    return date.getTime();
-  }
-  else {
-    throw new Error('Invalid Month');
-  }
+  const date = hooks(dayWithWeekday + ' ' + monthWithYear, 'ddd DD MMM YYYY').toDate();
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
 }
 function dateDifference(FROM_DATE, TO_DATE) {
   const startDate = new Date(FROM_DATE);

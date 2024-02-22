@@ -44,11 +44,16 @@ export class IrBookingDetails {
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
+      calendar_data.token = this.ticket;
+      this.bookingService.setToken(this.ticket);
+      this.roomService.setToken(this.ticket);
       this.initializeApp();
     }
   }
   async ticketChanged() {
-    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    calendar_data.token = this.ticket;
+    this.bookingService.setToken(this.ticket);
+    this.roomService.setToken(this.ticket);
     this.initializeApp();
   }
   setRoomsData(roomServiceResp) {

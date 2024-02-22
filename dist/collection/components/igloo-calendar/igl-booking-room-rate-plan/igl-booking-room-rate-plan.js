@@ -20,6 +20,7 @@ export class IglBookingRoomRatePlan {
     this.isBookDisabled = false;
     this.defaultRoomId = undefined;
     this.selectedRoom = undefined;
+    this.is_bed_configuration_enabled = undefined;
     this.isInputFocused = false;
     this.selectedData = undefined;
     this.ratePlanChangedState = false;
@@ -72,6 +73,7 @@ export class IglBookingRoomRatePlan {
   updateSelectedRatePlan(data) {
     var _a;
     this.selectedData = {
+      is_bed_configuration_enabled: this.is_bed_configuration_enabled,
       ratePlanId: data.id,
       adult_child_offering: data.variations[data.variations.length - 1].adult_child_offering,
       rateType: 1,
@@ -445,6 +447,23 @@ export class IglBookingRoomRatePlan {
           "text": ""
         },
         "attribute": "selected-room",
+        "reflect": false
+      },
+      "is_bed_configuration_enabled": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "is_bed_configuration_enabled",
         "reflect": false
       }
     };

@@ -42,6 +42,7 @@ export declare class IglooCalendar {
     toDate: string;
   }>;
   revertBooking: EventEmitter;
+  toBeAssignedDate: string;
   private bookingService;
   private countryNodeList;
   private visibleCalendarCells;

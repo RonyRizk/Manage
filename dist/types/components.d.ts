@@ -135,6 +135,7 @@ export namespace Components {
         "fullyBlocked": boolean;
         "index": number;
         "isBookDisabled": boolean;
+        "is_bed_configuration_enabled": boolean;
         "physicalrooms": any;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
@@ -159,6 +160,7 @@ export namespace Components {
         "currency": any;
         "isScrollViewDragging": boolean;
         "language": string;
+        "toBeAssignedDate": string;
         "today": String;
     }
     interface IglCalFooter {
@@ -293,6 +295,7 @@ export namespace Components {
     }
     interface IrChannelEditor {
         "channel_status": 'create' | 'edit' | null;
+        "ticket": string;
     }
     interface IrChannelGeneral {
         "channel_status": 'create' | 'edit' | null;
@@ -1343,6 +1346,7 @@ declare namespace LocalJSX {
         "fullyBlocked"?: boolean;
         "index"?: number;
         "isBookDisabled"?: boolean;
+        "is_bed_configuration_enabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "onGotoSplitPageTwoEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "physicalrooms"?: any;
@@ -1373,6 +1377,7 @@ declare namespace LocalJSX {
         "onAddBookingDatasEvent"?: (event: IglCalBodyCustomEvent<any[]>) => void;
         "onScrollPageToRoom"?: (event: IglCalBodyCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglCalBodyCustomEvent<any>) => void;
+        "toBeAssignedDate"?: string;
         "today"?: String;
     }
     interface IglCalFooter {
@@ -1546,6 +1551,7 @@ declare namespace LocalJSX {
         "channel_status"?: 'create' | 'edit' | null;
         "onCloseSideBar"?: (event: IrChannelEditorCustomEvent<null>) => void;
         "onSaveChannelFinished"?: (event: IrChannelEditorCustomEvent<null>) => void;
+        "ticket"?: string;
     }
     interface IrChannelGeneral {
         "channel_status"?: 'create' | 'edit' | null;

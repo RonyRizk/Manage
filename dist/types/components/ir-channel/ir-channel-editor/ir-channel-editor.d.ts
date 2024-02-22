@@ -1,6 +1,7 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IrChannelEditor {
   channel_status: 'create' | 'edit' | null;
+  ticket: string;
   selectedTab: string;
   isLoading: boolean;
   headerTitles: {
@@ -11,6 +12,7 @@ export declare class IrChannelEditor {
   selectedRoomType: any[];
   saveChannelFinished: EventEmitter<null>;
   closeSideBar: EventEmitter<null>;
+  private channelService;
   componentWillLoad(): void;
   handleTabChange(e: CustomEvent): void;
   renderTabScreen(): any;

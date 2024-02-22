@@ -3,6 +3,8 @@ import { ToBeAssignedService } from "../../../services/toBeAssigned.service";
 import { dateToFormattedString } from "../../../utils/utils";
 import moment from "moment";
 import locales from "../../../../../src/stores/locales.store";
+import calendar_data from "../../../../../src/stores/calendar-data";
+import { handleUnAssignedDatesChange } from "../../../../../src/stores/unassigned_dates.store";
 export class IglCalHeader {
   constructor() {
     this.searchValue = '';
@@ -18,10 +20,15 @@ export class IglCalHeader {
     this.unassignedRoomsNumber = {};
   }
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     try {
       this.initializeRoomsList();
-      if (!this.calendarData.is_vacation_rental && Object.keys(this.unassignedDates).length > 0) {
-        this.fetchAndAssignUnassignedRooms();
+      if (!this.calendarData.is_vacation_rental) {
+        handleUnAssignedDatesChange('unassigned_dates', newValue => {
+          if (Object.keys(newValue).length > 0) {
+            this.fetchAndAssignUnassignedRooms();
+          }
+        });
       }
     }
     catch (error) {
@@ -48,14 +55,17 @@ export class IglCalHeader {
       dt.setMinutes(0);
       dt.setSeconds(0);
       let endDate = dt.getTime();
+      console.log(data);
       while (endDate <= new Date(toDate).getTime()) {
+        console.log(endDate);
         const selectedDate = moment(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
           this.unassignedRoomsNumber[selectedDate] = result.length;
         }
         else if (this.unassignedRoomsNumber[selectedDate]) {
-          this.unassignedRoomsNumber[selectedDate] = this.unassignedRoomsNumber[selectedDate] - 1;
+          const res = this.unassignedRoomsNumber[selectedDate] - 1;
+          this.unassignedRoomsNumber[selectedDate] = res < 0 ? 0 : res;
         }
         endDate = moment(endDate).add(1, 'days').toDate().getTime();
         this.renderView();

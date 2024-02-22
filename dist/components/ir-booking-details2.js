@@ -3,6 +3,7 @@ import { h as hooks } from './moment.js';
 import { _ as _formatDate, a as _formatTime } from './functions.js';
 import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
+import { T as Token } from './Token.js';
 import { c as calendar_data } from './calendar-data.js';
 import { l as locales } from './locales.store.js';
 import { r as renderTime } from './utils2.js';
@@ -35,10 +36,10 @@ import { d as defineCustomElement$3 } from './ir-sidebar2.js';
 import { d as defineCustomElement$2 } from './ir-toast2.js';
 import { d as defineCustomElement$1 } from './ir-tooltip2.js';
 
-class RoomService {
+class RoomService extends Token {
   async fetchData(id, language) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${token}`, { id, language });
         if (data.ExceptionMsg !== '') {
@@ -67,7 +68,7 @@ class RoomService {
   }
   async fetchLanguage(code, sections = ['_PMS_FRONT']) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code, sections });
         if (data.ExceptionMsg !== '') {
@@ -135,11 +136,16 @@ const IrBookingDetails = /*@__PURE__*/ proxyCustomElement(class IrBookingDetails
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
+      calendar_data.token = this.ticket;
+      this.bookingService.setToken(this.ticket);
+      this.roomService.setToken(this.ticket);
       this.initializeApp();
     }
   }
   async ticketChanged() {
-    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    calendar_data.token = this.ticket;
+    this.bookingService.setToken(this.ticket);
+    this.roomService.setToken(this.ticket);
     this.initializeApp();
   }
   setRoomsData(roomServiceResp) {

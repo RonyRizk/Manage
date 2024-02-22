@@ -1,11 +1,12 @@
 import { a as axios } from './axios.js';
 import { c as convertDateToCustomFormat, a as convertDateToTime, d as dateToFormattedString } from './utils.js';
 import { g as getMyBookings } from './booking.js';
+import { T as Token } from './Token.js';
 
-class BookingService {
+class BookingService extends Token {
   async getCalendarData(propertyid, from_date, to_date) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Calendar?Ticket=${token}`, {
           propertyid,
@@ -55,7 +56,7 @@ class BookingService {
   }
   async fetchGuest(email) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
         if (data.ExceptionMsg !== '') {
@@ -71,7 +72,7 @@ class BookingService {
   }
   async editExposedGuest(guest, book_nbr) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`, Object.assign(Object.assign({}, guest), { book_nbr }));
         if (data.ExceptionMsg !== '') {
@@ -87,7 +88,7 @@ class BookingService {
   }
   async getBookingAvailability(from_date, to_date, propertyid, adultChildCount, language, room_type_ids, currency) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
           propertyid,
@@ -115,7 +116,7 @@ class BookingService {
   }
   async getCountries(language) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Countries?Ticket=${token}`, {
           language,
@@ -133,7 +134,7 @@ class BookingService {
   }
   async fetchSetupEntries() {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, {
           TBL_NAMES: ['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
@@ -156,7 +157,7 @@ class BookingService {
   }
   async getBlockedInfo() {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
         if (data.ExceptionMsg !== '') {
@@ -172,7 +173,7 @@ class BookingService {
   }
   async getUserDefaultCountry() {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Country_By_IP?Ticket=${token}`, {
           IP: '',
@@ -190,7 +191,7 @@ class BookingService {
   }
   async blockUnit(params) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Block_Exposed_Unit?Ticket=${token}`, params);
         if (data.ExceptionMsg !== '') {
@@ -207,7 +208,7 @@ class BookingService {
   }
   async getUserInfo(email) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/GET_EXPOSED_GUEST?Ticket=${token}`, {
           email,
@@ -228,7 +229,7 @@ class BookingService {
   }
   async getExposedBooking(booking_nbr, language) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
           booking_nbr,
@@ -268,7 +269,7 @@ class BookingService {
   }
   async fetchExposedGuest(email, property_id) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Fetch_Exposed_Guests?Ticket=${token}`, {
           email,
@@ -290,7 +291,7 @@ class BookingService {
   }
   async fetchExposedBookings(booking_nbr, property_id, from_date, to_date) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Fetch_Exposed_Bookings?Ticket=${token}`, {
           booking_nbr,
@@ -314,7 +315,7 @@ class BookingService {
   }
   async getPCICardInfoURL(BOOK_NBR) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_PCI_Card_Info_URL?Ticket=${token}`, {
           BOOK_NBR,
@@ -336,7 +337,7 @@ class BookingService {
   async bookUser(bookedByInfoData, check_in, fromDate, toDate, guestData, totalNights, source, propertyid, rooms, currency, bookingNumber, defaultGuest, arrivalTime, pr_id, identifier) {
     console.log(arrivalTime);
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const fromDateStr = dateToFormattedString(fromDate);
         const toDateStr = dateToFormattedString(toDate);
