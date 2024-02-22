@@ -16,7 +16,7 @@ export declare class IglBookPropertyContainer {
   private roomService;
   setRoomsData(roomServiceResp: any): void;
   initializeApp(): Promise<void>;
-  componentDidLoad(): void;
+  componentWillLoad(): void;
   ticketChanged(): Promise<void>;
   handleCloseBookingWindow(): void;
   handleTriggerClicked(): void;
