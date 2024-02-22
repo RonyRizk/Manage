@@ -1,0 +1,35 @@
+:host {
+  display: flex;
+  text-align: left;
+  align-items: center;
+}
+
+.date-range-input {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex: 1;
+}
+.iglRangeNights {
+  margin: 0;
+  padding: 0;
+}
+.iglRangePicker[data-state='disabled'] {
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  width: 180px;
+  margin-right: 0;
+}
+.iglRangePicker {
+  margin: 0;
+  border: 1px solid #379ff2;
+  box-sizing: border-box;
+  width: 220px;
+  /* margin-right: 5px; */
+  display: flex;
+  align-items: center;
+}
+.calendarPickerContainer {
+  display: flex;
+}
