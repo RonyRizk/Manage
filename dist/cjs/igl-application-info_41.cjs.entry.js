@@ -3178,7 +3178,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " v1.01"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " (0.2)"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -3450,9 +3450,7 @@ const IglCalHeader = class {
       dt.setMinutes(0);
       dt.setSeconds(0);
       let endDate = dt.getTime();
-      console.log(data);
       while (endDate <= new Date(toDate).getTime()) {
-        console.log(endDate);
         const selectedDate = booking_service.hooks(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, booking_service.dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
@@ -8379,7 +8377,7 @@ const IglooCalendar = class {
       this.initializeApp();
     }
     handleUnAssignedDatesChange('unassigned_dates', newValue => {
-      console.log(newValue, Object.keys(newValue));
+      // console.log(newValue, Object.keys(newValue));
       if (Object.keys(newValue).length === 0 && this.toBeAssignedDate !== '') {
         this.toBeAssignedDate = '';
       }
@@ -8441,6 +8439,8 @@ const IglooCalendar = class {
         if (msgAsObject) {
           const { REASON, KEY, PAYLOAD } = msgAsObject;
           if (KEY.toString() === this.propertyid.toString()) {
+            console.log('default property_id', this.propertyid);
+            console.log('socket property id', KEY.toString());
             let result;
             if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
               result = PAYLOAD;
@@ -8547,9 +8547,11 @@ const IglooCalendar = class {
       //find the selected day
       const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
       if (index > 0) {
+        console.log('found the date');
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
         if (room_type_index > 0) {
+          console.log('found the room id');
           days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
         }
       }
