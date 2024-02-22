@@ -3174,7 +3174,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " (0.2)"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " (.03)"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -8542,11 +8542,12 @@ const IglooCalendar = class {
       selectedDate.setHours(0);
       //find the selected day
       const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
-      if (index > 0) {
+      if (index != -1) {
         console.log('found the date');
+        console.log(queue.room_type_id);
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
-        if (room_type_index > 0) {
+        if (room_type_index != -1) {
           console.log('found the room id');
           days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
         }

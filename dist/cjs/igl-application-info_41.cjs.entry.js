@@ -3178,7 +3178,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " (0.2)"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " (.03)"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -8546,11 +8546,12 @@ const IglooCalendar = class {
       selectedDate.setHours(0);
       //find the selected day
       const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
-      if (index > 0) {
+      if (index != -1) {
         console.log('found the date');
+        console.log(queue.room_type_id);
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
-        if (room_type_index > 0) {
+        if (room_type_index != -1) {
           console.log('found the room id');
           days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
         }
