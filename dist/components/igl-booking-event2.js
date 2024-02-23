@@ -20,7 +20,7 @@ const bookingStatus = {
 function formatName(firstName, lastName) {
   if (firstName === null && lastName === null)
     return '';
-  if (lastName !== null) {
+  if (lastName !== null && lastName !== '') {
     return `${firstName !== null && firstName !== void 0 ? firstName : ''} , ${lastName !== null && lastName !== void 0 ? lastName : ''}`;
   }
   return firstName;

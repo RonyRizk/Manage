@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-795d2df3.js';
-import { g as getCurrencySymbol, a as getMyBookings, c as convertDateToCustomFormat, b as convertDateToTime, d as dateToFormattedString, f as formatDate, e as getReleaseHoursString, t as transformNewBLockedRooms, h as hooks, B as BookingService$1, i as findCountry, j as dateDifference, k as formatLegendColors, l as transformNewBooking$1, m as bookingStatus$1, n as isBlockUnit$1, o as calculateDaysBetweenDates, p as getNextDay, q as addTwoMonthToDate, r as convertDMYToISO, s as computeEndDate, u as formatName$1, v as getDaysArray, w as convertDatePrice } from './booking.service-c84d6d54.js';
+import { g as getCurrencySymbol, a as getMyBookings, c as convertDateToCustomFormat, b as convertDateToTime, d as dateToFormattedString, f as formatDate, e as getReleaseHoursString, t as transformNewBLockedRooms, h as hooks, B as BookingService$1, i as findCountry, j as dateDifference, k as formatLegendColors, l as transformNewBooking$1, m as bookingStatus$1, n as isBlockUnit$1, o as calculateDaysBetweenDates, p as getNextDay, q as addTwoMonthToDate, r as convertDMYToISO, s as computeEndDate, u as formatName$1, v as getDaysArray, w as convertDatePrice } from './booking.service-6ae37f41.js';
 import { l as locales, c as createStore } from './locales.store-bd6e6ba2.js';
 import { c as calendar_data } from './calendar-data-fd00da05.js';
 import { v as v4 } from './v4-87f26972.js';
@@ -1467,7 +1467,7 @@ const bookingStatus = {
 function formatName(firstName, lastName) {
   if (firstName === null && lastName === null)
     return '';
-  if (lastName !== null) {
+  if (lastName !== null && lastName !== '') {
     return `${firstName !== null && firstName !== void 0 ? firstName : ''} , ${lastName !== null && lastName !== void 0 ? lastName : ''}`;
   }
   return firstName;
@@ -3174,7 +3174,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " (.04)"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v05"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
