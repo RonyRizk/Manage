@@ -54,6 +54,7 @@ const IrPaymentDetails = /*@__PURE__*/ proxyCustomElement(class IrPaymentDetails
     this.resetBookingData = createEvent(this, "resetBookingData", 7);
     this.toast = createEvent(this, "toast", 7);
     this.paymentService = new PaymentService();
+    this.bookingService = new BookingService();
     this.bookingDetails = undefined;
     this.defaultTexts = undefined;
     this.newTableRow = false;
@@ -68,6 +69,7 @@ const IrPaymentDetails = /*@__PURE__*/ proxyCustomElement(class IrPaymentDetails
   async componentWillLoad() {
     try {
       this.paymentService.setToken(calendar_data.token);
+      this.bookingService.setToken(calendar_data.token);
       this.initializeItemToBeAdded();
     }
     catch (error) {
@@ -178,7 +180,7 @@ const IrPaymentDetails = /*@__PURE__*/ proxyCustomElement(class IrPaymentDetails
     }
     return (h("div", null, h("div", { class: "d-flex align-items-center" }, h("strong", { class: "mr-1" }, this.defaultTexts.entries.Lcz_BookingGuarantee), h("ir-icon", { id: "drawer-icon", "data-toggle": "collapse", "data-target": `.guarrantee`, "aria-expanded": "false", "aria-controls": "myCollapse", class: "sm-padding-right pointer", onClick: async () => {
         if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
-          this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
+          this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
         }
         this.collapsedGuarantee = !this.collapsedGuarantee;
       } }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "20", width: "22.5", viewBox: "0 0 576 512" }, h("path", { fill: "#104064", d: "M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z" })))), h("div", { class: "collapse guarrantee " }, this.bookingDetails.is_direct ? ([

@@ -17,6 +17,7 @@ export declare class IrPaymentDetails {
   toast: EventEmitter<IToast>;
   private itemToBeAdded;
   private paymentService;
+  private bookingService;
   componentWillLoad(): Promise<void>;
   initializeItemToBeAdded(): void;
   _handleSave(): Promise<void>;
