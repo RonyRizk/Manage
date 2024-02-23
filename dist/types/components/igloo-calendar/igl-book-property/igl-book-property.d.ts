@@ -37,7 +37,6 @@ export declare class IglBookProperty {
   blockedCreated: EventEmitter<RoomBlockDetails>;
   resetBookingData: EventEmitter<null>;
   private initialRoomIds;
-  private message;
   private sourceOption;
   private page;
   private showSplitBookingOption;

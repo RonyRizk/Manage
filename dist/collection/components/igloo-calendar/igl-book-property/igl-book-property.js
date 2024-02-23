@@ -9,7 +9,6 @@ import calendar_data from "../../../../../src/stores/calendar-data";
 export class IglBookProperty {
   constructor() {
     this.initialRoomIds = null;
-    this.message = '';
     this.showSplitBookingOption = false;
     this.sourceOptions = [];
     this.guestData = [];
@@ -164,11 +163,11 @@ export class IglBookProperty {
       return property[key] === comparedBy || property[key] === undefined;
     };
     return (isValidProperty(this.guestData, 'guestName', '') ||
-      isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
-      isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
+      // isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
+      // isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
       isValidProperty(this.bookedByInfoData, 'firstName', '') ||
       isValidProperty(this.bookedByInfoData, 'lastName', '') ||
-      isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
+      // isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
       isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
       isValidProperty(this.bookedByInfoData, 'email', ''));
   }
@@ -205,8 +204,6 @@ export class IglBookProperty {
     try {
       const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
       const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
-      this.message = '';
-      this.message = data.tax_statement;
       if (!this.isEventType('EDIT_BOOKING')) {
         this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
         this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
@@ -242,7 +239,6 @@ export class IglBookProperty {
       this.dateRangeData = opt.data;
       if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
         this.defaultData.roomsInfo = [];
-        this.message = '';
       }
       else if (this.adultChildCount.adult !== 0) {
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
@@ -413,7 +409,7 @@ export class IglBookProperty {
     //console.log('render');
     return (h(Host, null, h("div", { class: "background-overlay", onClick: () => this.closeWindow() }), h("div", { class: 'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '') }, h("div", { class: "card position-sticky mb-0 shadow-none p-0 " }, h("div", { class: "d-flex mt-2 align-items-center justify-content-between  " }, h("h3", { class: "card-title text-left pb-1 font-medium-2 px-2 px-md-3" }, this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE), h("ir-icon", { class: "close close-icon", onIconClickHandler: () => {
         this.closeWindow();
-      } }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 384 512", height: 20, width: 20 }, h("path", { d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" }))))), h("div", { class: "px-2 px-md-3" }, this.getCurrentPage('page_one') && (h("igl-booking-overview-page", { initialRoomIds: this.initialRoomIds, defaultDaterange: this.defaultDateRange, class: 'p-0 mb-1', eventType: this.defaultData.event_type, selectedRooms: this.selectedUnits, currency: this.currency, message: this.message, showSplitBookingOption: this.showSplitBookingOption, ratePricingMode: this.ratePricingMode, dateRangeData: this.dateRangeData, bookingData: this.defaultData, adultChildCount: this.adultChildCount, bookedByInfoData: this.bookedByInfoData,
+      } }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 384 512", height: 20, width: 20 }, h("path", { d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" }))))), h("div", { class: "px-2 px-md-3" }, this.getCurrentPage('page_one') && (h("igl-booking-overview-page", { initialRoomIds: this.initialRoomIds, defaultDaterange: this.defaultDateRange, class: 'p-0 mb-1', eventType: this.defaultData.event_type, selectedRooms: this.selectedUnits, currency: this.currency, showSplitBookingOption: this.showSplitBookingOption, ratePricingMode: this.ratePricingMode, dateRangeData: this.dateRangeData, bookingData: this.defaultData, adultChildCount: this.adultChildCount, bookedByInfoData: this.bookedByInfoData,
       // bookingDataDefaultDateRange={this.dateRangeData}
       adultChildConstraints: this.adultChildConstraints, onRoomsDataUpdate: evt => {
         this.onRoomDataUpdate(evt);

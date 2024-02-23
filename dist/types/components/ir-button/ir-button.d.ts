@@ -11,8 +11,9 @@ export declare class IrButton {
   btn_type: string;
   isLoading: boolean;
   btn_styles: string;
-  connectedCallback(): void;
-  disconnectedCallback(): void;
+  btn_id: string;
   clickHanlder: EventEmitter<any>;
+  private buttonEl;
+  handleButtonAnimation(e: CustomEvent): void;
   render(): any;
 }

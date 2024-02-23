@@ -24,6 +24,7 @@ const initialState = {
   id: null,
   name: '',
   token: '',
+  tax_statement: '',
 };
 const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 

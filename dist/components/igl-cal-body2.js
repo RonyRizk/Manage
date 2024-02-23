@@ -1,9 +1,10 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { c as createStore } from './index2.js';
 import { l as locales } from './locales.store.js';
-import { d as defineCustomElement$3 } from './igl-block-dates-view2.js';
-import { d as defineCustomElement$2 } from './igl-booking-event2.js';
-import { d as defineCustomElement$1 } from './igl-booking-event-hover2.js';
+import { d as defineCustomElement$4 } from './igl-block-dates-view2.js';
+import { d as defineCustomElement$3 } from './igl-booking-event2.js';
+import { d as defineCustomElement$2 } from './igl-booking-event-hover2.js';
+import { d as defineCustomElement$1 } from './ir-popover2.js';
 
 const initialState = {
   days: [],
@@ -245,7 +246,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     if (this.getTotalPhysicalRooms(roomCategory) <= 1) {
       return null;
     }
-    return (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`, onClick: () => this.toggleCategory(roomCategory) }, h("div", { class: 'categoryName' }, this.getCategoryName(roomCategory)), roomCategory.expanded ? (h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 448 512", height: 14, width: 14 }, h("path", { fill: "#6b6f82", d: "M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" }))) : (h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 320 512", height: 14, width: 14 }, h("path", { fill: "#6b6f82", d: "M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" })))), this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)));
+    return (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`, onClick: () => this.toggleCategory(roomCategory) }, h("div", { class: 'categoryName' }, h("ir-popover", { popoverTitle: this.getCategoryName(roomCategory) })), roomCategory.expanded ? (h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 448 512", height: 14, width: 14 }, h("path", { fill: "#6b6f82", d: "M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" }))) : (h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 320 512", height: 14, width: 14 }, h("path", { fill: "#6b6f82", d: "M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" })))), this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)));
   }
   getRoomsByCategory(roomCategory) {
     var _a;
@@ -253,7 +254,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     if (!roomCategory.expanded) {
       return [];
     }
-    return (_a = this.getCategoryRooms(roomCategory)) === null || _a === void 0 ? void 0 : _a.map(room => (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`, "data-room": this.getRoomId(room) }, h("div", null, this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room))), this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory))));
+    return (_a = this.getCategoryRooms(roomCategory)) === null || _a === void 0 ? void 0 : _a.map(room => (h("div", { class: "roomRow" }, h("div", { class: `cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`, "data-room": this.getRoomId(room) }, h("ir-popover", { popoverTitle: this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room) })), this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory))));
   }
   getRoomRows() {
     return this.calendarData.roomsInfo.map((roomCategory, index) => {
@@ -286,7 +287,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["igl-cal-body", "igl-block-dates-view", "igl-booking-event", "igl-booking-event-hover"];
+  const components = ["igl-cal-body", "igl-block-dates-view", "igl-booking-event", "igl-booking-event-hover", "ir-popover"];
   components.forEach(tagName => { switch (tagName) {
     case "igl-cal-body":
       if (!customElements.get(tagName)) {
@@ -295,15 +296,20 @@ function defineCustomElement() {
       break;
     case "igl-block-dates-view":
       if (!customElements.get(tagName)) {
-        defineCustomElement$3();
+        defineCustomElement$4();
       }
       break;
     case "igl-booking-event":
       if (!customElements.get(tagName)) {
-        defineCustomElement$2();
+        defineCustomElement$3();
       }
       break;
     case "igl-booking-event-hover":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
+      }
+      break;
+    case "ir-popover":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

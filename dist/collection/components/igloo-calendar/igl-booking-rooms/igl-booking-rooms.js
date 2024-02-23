@@ -95,7 +95,7 @@ export class IglBookingRooms {
   }
   render() {
     const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
-    return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1 mb-1" }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
+    return (h(Host, null, isValidBookingType && h("div", { class: "font-weight-bold font-medium-1 margin-bottom-8 " }, this.roomTypeData.name), this.roomTypeData.rateplans.map((ratePlan, index) => {
       if (ratePlan.variations !== null) {
         let shouldBeDisabled = this.roomInfoId && this.roomInfoId === this.roomTypeData.id;
         let roomId = -1;

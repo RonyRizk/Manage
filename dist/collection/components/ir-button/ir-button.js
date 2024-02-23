@@ -1,4 +1,5 @@
 import { h } from "@stencil/core";
+import { v4 } from "uuid";
 export class IrButton {
   constructor() {
     this.name = undefined;
@@ -12,14 +13,24 @@ export class IrButton {
     this.btn_type = 'button';
     this.isLoading = false;
     this.btn_styles = undefined;
+    this.btn_id = v4();
   }
-  connectedCallback() { }
-  disconnectedCallback() { }
+  handleButtonAnimation(e) {
+    if (!this.buttonEl || e.detail !== this.btn_id) {
+      return;
+    }
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.buttonEl.classList.remove('bounce-3');
+    void this.buttonEl.offsetWidth;
+    this.buttonEl.classList.add('bounce-3');
+  }
   render() {
     let blockClass = this.btn_block ? 'btn-block' : '';
-    return (h("button", { onClick: () => this.clickHanlder.emit(), class: `btn btn-${this.btn_color} ${this.btn_styles} d-flex align-items-center btn-${this.size} text-${this.textSize} ${blockClass}`, type: this.btn_type, disabled: this.btn_disabled }, h("span", { class: "button-icon", "data-state": this.isLoading ? 'loading' : '' }, h("slot", { name: "icon" })), this.isLoading && h("span", { class: "loader m-0 p-0" }), this.text && h("span", { class: "button-text m-0" }, this.text)));
+    return (h("button", { id: this.btn_id, ref: el => (this.buttonEl = el), onClick: () => this.clickHanlder.emit(), class: `btn btn-${this.btn_color} ${this.btn_styles} d-flex align-items-center btn-${this.size} text-${this.textSize} ${blockClass}`, type: this.btn_type, disabled: this.btn_disabled }, h("span", { class: "button-icon", "data-state": this.isLoading ? 'loading' : '' }, h("slot", { name: "icon" })), this.isLoading && h("span", { class: "loader m-0 p-0" }), this.text && h("span", { class: "button-text m-0" }, this.text)));
   }
   static get is() { return "ir-button"; }
+  static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
       "$": ["ir-button.css"]
@@ -226,6 +237,24 @@ export class IrButton {
         },
         "attribute": "btn_styles",
         "reflect": false
+      },
+      "btn_id": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "btn_id",
+        "reflect": false,
+        "defaultValue": "v4()"
       }
     };
   }
@@ -245,6 +274,15 @@ export class IrButton {
           "resolved": "any",
           "references": {}
         }
+      }];
+  }
+  static get listeners() {
+    return [{
+        "name": "animateIrButton",
+        "method": "handleButtonAnimation",
+        "target": "body",
+        "capture": false,
+        "passive": false
       }];
   }
 }

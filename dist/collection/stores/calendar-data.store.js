@@ -23,6 +23,7 @@ const { state: calendarDataState } = createStore({
   id: 0,
   name: '',
   token: '',
+  tax_statement: '',
 });
 export default calendarDataState;
 //# sourceMappingURL=calendar-data.store.js.map

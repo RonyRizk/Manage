@@ -3,12 +3,12 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const room_service = require('./room.service-8405dd9f.js');
+const room_service = require('./room.service-619d898d.js');
 const channel_store = require('./channel.store-0818b630.js');
 const locales_store = require('./locales.store-1dd3e126.js');
 const Token = require('./Token-7fd57fe8.js');
-const channel_service = require('./channel.service-481a0566.js');
-const calendarData = require('./calendar-data-b7633d04.js');
+const channel_service = require('./channel.service-53e3bb3e.js');
+const calendarData = require('./calendar-data-2757e82e.js');
 
 const actions = (entries) => [
   {

@@ -36,6 +36,7 @@ export declare class IglBookPropertyHeader {
     key: string;
     data: unknown;
   }>;
+  animateIrButton: EventEmitter<string>;
   private sourceOption;
   getSplitBookingList(): any;
   getSourceNode(): any;
