@@ -577,7 +577,7 @@ export class IglBookingEvent {
     let legend = this.getEventLegend();
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
-    return (h(Host, { class: `bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `, style: this.getPosition(), id: 'event_' + this.getBookingId() }, h("div", { class: `bookingEventBase ${!this.bookingEvent.is_direct &&
+    return (h(Host, { class: `bookingEvent  ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `, style: this.getPosition(), id: 'event_' + this.getBookingId() }, h("div", { class: `bookingEventBase  ${!this.bookingEvent.is_direct &&
         !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
         this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
         this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&

@@ -3,6 +3,7 @@ import { h as findCountry, g as getCurrencySymbol, f as formatDate } from './uti
 import { E as EventsService } from './events.service.js';
 import { h as hooks } from './moment.js';
 import { l as locales } from './locales.store.js';
+import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$2 } from './igl-block-dates-view2.js';
 import { d as defineCustomElement$1 } from './ota-label2.js';
 
@@ -29,6 +30,7 @@ const IglBookingEventHover = /*@__PURE__*/ proxyCustomElement(class IglBookingEv
   }
   componentWillLoad() {
     console.log('this.bookingEvent', this.bookingEvent);
+    this.eventService.setToken(calendar_data.token);
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
     if (selectedRt) {
       console.log(selectedRt.physicalrooms.length === 1);

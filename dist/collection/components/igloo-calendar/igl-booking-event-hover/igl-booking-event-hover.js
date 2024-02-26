@@ -3,6 +3,7 @@ import { findCountry, formatDate, getCurrencySymbol } from "../../../utils/utils
 import { EventsService } from "../../../services/events.service";
 import moment from "moment";
 import locales from "../../../../../src/stores/locales.store";
+import calendar_data from "../../../../../src/stores/calendar-data";
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 export class IglBookingEventHover {
   constructor() {
@@ -19,6 +20,7 @@ export class IglBookingEventHover {
   }
   componentWillLoad() {
     console.log('this.bookingEvent', this.bookingEvent);
+    this.eventService.setToken(calendar_data.token);
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
     if (selectedRt) {
       console.log(selectedRt.physicalrooms.length === 1);
