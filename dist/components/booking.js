@@ -231,6 +231,7 @@ function transformNewBooking(data) {
       is_direct: data.is_direct,
       NOTES: data.remark,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
     });
   });
   return bookings;

@@ -25,7 +25,10 @@ export declare class IglApplicationInfo {
     [key: string]: any;
   };
   private userRate;
+  private timeout;
   componentWillLoad(): void;
+  componentDidLoad(): void;
+  disconnectedCallback(): void;
   handleSelctedUnits(): Promise<void>;
   updateRoomList(): void;
   updateData(): void;

@@ -33,7 +33,7 @@ const IrPopover = /*@__PURE__*/ proxyCustomElement(class IrPopover extends HTMLE
       const titleElement = this.el.querySelector('.popover-title');
       if (titleElement) {
         const width = titleElement.scrollWidth;
-        this.showPopover = width > 170; // Show popover if title width exceeds 170px
+        this.showPopover = width > 150; // Show popover if title width exceeds 170px
       }
     });
   }

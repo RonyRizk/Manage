@@ -6008,6 +6008,7 @@ function transformNewBooking(data) {
       is_direct: data.is_direct,
       NOTES: data.remark,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
     });
   });
   return bookings;
@@ -6517,4 +6518,4 @@ exports.isBlockUnit = isBlockUnit;
 exports.transformNewBLockedRooms = transformNewBLockedRooms;
 exports.transformNewBooking = transformNewBooking;
 
-//# sourceMappingURL=booking.service-cd7a29df.js.map
+//# sourceMappingURL=booking.service-a758c638.js.map

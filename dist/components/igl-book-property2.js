@@ -551,6 +551,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
   }
   async bookUser(check_in) {
     this.setLoadingState(check_in);
+    console.log('edit save clicked');
     if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
       if (this.isGuestDataIncomplete()) {
         this.isLoading = '';
@@ -564,6 +565,7 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
       }
     }
     try {
+      console.log('clicked');
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
       }

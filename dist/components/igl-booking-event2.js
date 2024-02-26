@@ -8,8 +8,9 @@ import { a as axios } from './axios.js';
 import { B as BookingService } from './booking.service.js';
 import { e as getReleaseHoursString } from './utils.js';
 import { T as Token } from './Token.js';
-import { d as defineCustomElement$2 } from './igl-block-dates-view2.js';
-import { d as defineCustomElement$1 } from './igl-booking-event-hover2.js';
+import { d as defineCustomElement$3 } from './igl-block-dates-view2.js';
+import { d as defineCustomElement$2 } from './igl-booking-event-hover2.js';
+import { d as defineCustomElement$1 } from './ota-label2.js';
 
 const bookingStatus = {
   '000': 'IN-HOUSE',
@@ -94,6 +95,7 @@ function transformNewBooking(data) {
       is_direct: data.is_direct,
       NOTES: data.remark,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
     });
   });
   return bookings;
@@ -774,7 +776,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["igl-booking-event", "igl-block-dates-view", "igl-booking-event-hover"];
+  const components = ["igl-booking-event", "igl-block-dates-view", "igl-booking-event-hover", "ota-label"];
   components.forEach(tagName => { switch (tagName) {
     case "igl-booking-event":
       if (!customElements.get(tagName)) {
@@ -783,10 +785,15 @@ function defineCustomElement() {
       break;
     case "igl-block-dates-view":
       if (!customElements.get(tagName)) {
-        defineCustomElement$2();
+        defineCustomElement$3();
       }
       break;
     case "igl-booking-event-hover":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
+      }
+      break;
+    case "ota-label":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

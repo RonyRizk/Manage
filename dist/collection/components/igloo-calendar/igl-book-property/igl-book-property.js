@@ -350,6 +350,7 @@ export class IglBookProperty {
   }
   async bookUser(check_in) {
     this.setLoadingState(check_in);
+    console.log('edit save clicked');
     if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
       if (this.isGuestDataIncomplete()) {
         this.isLoading = '';
@@ -363,6 +364,7 @@ export class IglBookProperty {
       }
     }
     try {
+      console.log('clicked');
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
       }

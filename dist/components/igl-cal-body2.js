@@ -1,10 +1,11 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { c as createStore } from './index2.js';
 import { l as locales } from './locales.store.js';
-import { d as defineCustomElement$4 } from './igl-block-dates-view2.js';
-import { d as defineCustomElement$3 } from './igl-booking-event2.js';
-import { d as defineCustomElement$2 } from './igl-booking-event-hover2.js';
-import { d as defineCustomElement$1 } from './ir-popover2.js';
+import { d as defineCustomElement$5 } from './igl-block-dates-view2.js';
+import { d as defineCustomElement$4 } from './igl-booking-event2.js';
+import { d as defineCustomElement$3 } from './igl-booking-event-hover2.js';
+import { d as defineCustomElement$2 } from './ir-popover2.js';
+import { d as defineCustomElement$1 } from './ota-label2.js';
 
 const initialState = {
   days: [],
@@ -287,7 +288,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["igl-cal-body", "igl-block-dates-view", "igl-booking-event", "igl-booking-event-hover", "ir-popover"];
+  const components = ["igl-cal-body", "igl-block-dates-view", "igl-booking-event", "igl-booking-event-hover", "ir-popover", "ota-label"];
   components.forEach(tagName => { switch (tagName) {
     case "igl-cal-body":
       if (!customElements.get(tagName)) {
@@ -296,20 +297,25 @@ function defineCustomElement() {
       break;
     case "igl-block-dates-view":
       if (!customElements.get(tagName)) {
-        defineCustomElement$4();
+        defineCustomElement$5();
       }
       break;
     case "igl-booking-event":
       if (!customElements.get(tagName)) {
-        defineCustomElement$3();
+        defineCustomElement$4();
       }
       break;
     case "igl-booking-event-hover":
       if (!customElements.get(tagName)) {
-        defineCustomElement$2();
+        defineCustomElement$3();
       }
       break;
     case "ir-popover":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
+      }
+      break;
+    case "ota-label":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const booking_service = require('./booking.service-cd7a29df.js');
+const booking_service = require('./booking.service-a758c638.js');
 const locales_store = require('./locales.store-1dd3e126.js');
 const calendarData = require('./calendar-data-2757e82e.js');
 const v4 = require('./v4-d89fec7e.js');
@@ -46,6 +46,14 @@ const IglApplicationInfo = class {
     }
     this.guestData.preference = +this.defaultGuestPreference || '';
     this.updateRoomList();
+  }
+  componentDidLoad() {
+    this.timeout = setTimeout(() => {
+      this.updateData();
+    }, 200);
+  }
+  disconnectedCallback() {
+    clearTimeout(this.timeout);
   }
   async handleSelctedUnits() {
     this.updateRoomList();
@@ -1229,6 +1237,7 @@ const IglBookProperty = class {
   }
   async bookUser(check_in) {
     this.setLoadingState(check_in);
+    console.log('edit save clicked');
     if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
       if (this.isGuestDataIncomplete()) {
         this.isLoading = '';
@@ -1242,6 +1251,7 @@ const IglBookProperty = class {
       }
     }
     try {
+      console.log('clicked');
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
       }
@@ -1545,6 +1555,7 @@ function transformNewBooking(data) {
       is_direct: data.is_direct,
       NOTES: data.remark,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
     });
   });
   return bookings;
@@ -2491,7 +2502,7 @@ const IglBookingEventHover = class {
   }
   getInfoElement() {
     var _a, _b;
-    return (index.h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("div", { class: "row p-0 m-0 pb-1" }, index.h("div", { class: "px-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, index.h("img", { src: (_b = (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.origin) === null || _b === void 0 ? void 0 : _b.Icon, alt: "icon", class: 'icon-image' }), index.h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), index.h("div", { class: "pr-0 col-4 text-right" }, booking_service.getCurrencySymbol(this.currency.code), this.getTotalPrice())), index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_In, ": "), booking_service.formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD'), " - ", index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Out, ": "), booking_service.formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))), this.getArrivalTime() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_ArrivalTime, ": "), this.getArrivalTime()))), this.getTotalOccupants() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Occupancy, ": "), this.getTotalOccupants()))), this.getPhoneNumber() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12 text-wrap" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Phone, ": "), this.renderPhone()))), this.getRatePlan() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_RatePlan, ": "), this.getRatePlan()))), this.getGuestNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap d-flex" }, index.h("sapn", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Note, ": "), this.getGuestNote()))) : null, this.getInternalNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_InternalRemark, ": "), this.getInternalNote()))) : null, index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group  btn-group-sm font-small-3", role: "group" }, index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${this.hideButtons ? 'mr-0' : 'mr-1'} ${this.shouldHideUnassignUnit ? 'w-50' : ''}`, onClick: _ => {
+    return (index.h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("div", { class: "row p-0 m-0 pb-1" }, index.h("div", { class: "px-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, index.h("img", { src: (_b = (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.origin) === null || _b === void 0 ? void 0 : _b.Icon, alt: "icon", class: 'icon-image' }), index.h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), index.h("div", { class: "pr-0 col-4 text-right" }, booking_service.getCurrencySymbol(this.currency.code), this.getTotalPrice())), index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 pr-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_In, ": "), booking_service.formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD'), " - ", index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Out, ": "), booking_service.formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))), this.getArrivalTime() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_ArrivalTime, ": "), this.getArrivalTime()))), this.getTotalOccupants() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Occupancy, ": "), this.getTotalOccupants()))), this.getPhoneNumber() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12 text-wrap" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Phone, ": "), this.renderPhone()))), this.getRatePlan() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_RatePlan, ": "), this.getRatePlan()))), this.getGuestNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap d-flex" }, this.bookingEvent.is_direct ? (index.h(index.Fragment, null, index.h("sapn", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Note, ": "), this.getGuestNote())) : (index.h("ota-label", { label: `${locales_store.locales.entries.Lcz_Note}:`, remarks: this.bookingEvent.ota_notes }))))) : null, this.getInternalNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap" }, this.bookingEvent.is_direct ? (index.h(index.Fragment, null, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_InternalRemark, ": "), this.getInternalNote())) : (index.h("ota-label", { label: `${locales_store.locales.entries.Lcz_InternalRemark}:`, remarks: this.bookingEvent.ota_notes }))))) : null, index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group  btn-group-sm font-small-3", role: "group" }, index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${this.hideButtons ? 'mr-0' : 'mr-1'} ${this.shouldHideUnassignUnit ? 'w-50' : ''}`, onClick: _ => {
         this.handleEditBooking();
       }, disabled: !this.bookingEvent.IS_EDITABLE }, index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", stroke: "currentColor", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })), index.h("span", null, "\u00A0", locales_store.locales.entries.Lcz_Edit)), this.bookingEvent.IS_EDITABLE && !this.hideButtons && (index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${!this.shouldHideUnassignUnit ? 'mr-1' : 'w-50'}`, onClick: _ => {
         this.handleAddRoom();
@@ -2666,11 +2677,7 @@ const IglBookingRoomRatePlan = class {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-      this.dataUpdateEvent.emit({
-        key: 'roomRatePlanUpdate',
-        changedKey: 'physicalRooms',
-        data: this.selectedData,
-      });
+      this.selectedData['rateType'] = 1;
     }
     if (this.defaultData && this.defaultData.isRateModified) {
       console.log('object');
@@ -2685,6 +2692,15 @@ const IglBookingRoomRatePlan = class {
     }
     else {
       this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    }
+  }
+  componentDidLoad() {
+    if (this.defaultData) {
+      this.dataUpdateEvent.emit({
+        key: 'roomRatePlanUpdate',
+        changedKey: 'physicalRooms',
+        data: this.selectedData,
+      });
     }
   }
   async ratePlanDataChanged(newData) {
@@ -3178,7 +3194,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v09"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v11"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -3381,10 +3397,10 @@ function getUnassignedDates() {
 function removeUnassignedDates(from_date, to_date) {
   const fromTimestamp = convertToDateTimestamp(from_date);
   const toTimestamp = convertToDateTimestamp(to_date);
-  Object.keys(unassigned_dates).forEach(key => {
+  Object.keys(unassigned_dates.unassigned_dates).forEach(key => {
     const keyTimestamp = parseInt(key);
     if (fromTimestamp <= keyTimestamp && keyTimestamp <= toTimestamp) {
-      delete unassigned_dates[key];
+      delete unassigned_dates.unassigned_dates[key];
     }
   });
 }
@@ -8313,19 +8329,20 @@ const IglooCalendar = class {
     this.reduceAvailableUnitEvent = index.createEvent(this, "reduceAvailableUnitEvent", 7);
     this.revertBooking = index.createEvent(this, "revertBooking", 7);
     this.bookingService = new BookingService();
-    this.countryNodeList = [];
-    this.visibleCalendarCells = { x: [], y: [] };
-    this.today = '';
     this.roomService = new RoomService();
     this.eventsService = new EventsService$1();
     this.toBeAssignedService = new ToBeAssignedService();
+    this.countryNodeList = [];
+    this.visibleCalendarCells = { x: [], y: [] };
+    this.today = '';
     this.reachedEndOfCalendar = false;
     this.scrollViewDragPos = { top: 0, left: 0, x: 0, y: 0 };
     this.onScrollContentMoveHandler = (event) => {
-      // How far the mouse has been moved
+      if (event.buttons !== 1) {
+        return;
+      }
       const dx = event.clientX - this.scrollViewDragPos.x;
       const dy = event.clientY - this.scrollViewDragPos.y;
-      // Scroll the element
       this.scrollContainer.scrollTop = this.scrollViewDragPos.top - dy;
       this.scrollContainer.scrollLeft = this.scrollViewDragPos.left - dx;
       if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
@@ -8451,7 +8468,7 @@ const IglooCalendar = class {
             else {
               result = JSON.parse(PAYLOAD);
             }
-            console.log(result, REASON);
+            // console.log(result, REASON);
             const resasons = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM_BLOCK'];
             if (resasons.includes(REASON)) {
               let transformedBooking;
@@ -8482,14 +8499,16 @@ const IglooCalendar = class {
                 new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate) {
                 const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, booking_service.dateToFormattedString(new Date(parsedResult.FROM_DATE)), booking_service.dateToFormattedString(new Date(parsedResult.TO_DATE)));
                 addUnassingedDates(data);
-                this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
+                // this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
                 this.unassignedDates = {
                   fromDate: booking_service.dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   toDate: booking_service.dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
+                console.log(data);
                 // console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
+                  console.log('clear data');
                   removeUnassignedDates(booking_service.dateToFormattedString(new Date(parsedResult.FROM_DATE)), booking_service.dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: booking_service.dateToFormattedString(new Date(parsedResult.FROM_DATE)),
@@ -8718,16 +8737,18 @@ const IglooCalendar = class {
         this.showToBeAssigned = false;
         break;
       case 'calendar':
+        let dt = new Date();
         if (opt.data.start !== undefined && opt.data.end !== undefined) {
+          dt = opt.data.start.toDate();
           this.handleDateSearch(opt.data);
         }
         else {
           //scroll to unassigned dates
-          let dt = new Date(opt.data);
-          dt.setDate(dt.getDate() + 1);
-          this.toBeAssignedDate = this.transformDateForScroll(dt);
           // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          dt = new Date(opt.data);
+          dt.setDate(dt.getDate() + 1);
         }
+        this.toBeAssignedDate = this.transformDateForScroll(dt);
         break;
       case 'search':
         break;
@@ -8835,12 +8856,10 @@ const IglooCalendar = class {
   dragScrollContent(event) {
     this.scrollViewDragging = false;
     let isPreventPageScroll = event && event.target ? this.hasAncestorWithClass(event.target, 'preventPageScroll') : false;
-    if (!isPreventPageScroll) {
+    if (!isPreventPageScroll && event.buttons === 1) {
       this.scrollViewDragPos = {
-        // The current scroll
         left: this.scrollContainer.scrollLeft,
         top: this.scrollContainer.scrollTop,
-        // Get the current mouse position
         x: event.clientX,
         y: event.clientY,
       };
@@ -9523,7 +9542,7 @@ const IrBookingDetails = class {
     return [
       index.h(index.Fragment, null, !this.is_from_front_desk && (index.h(index.Fragment, null, index.h("ir-toast", null), index.h("ir-interceptor", null)))),
       index.h("div", { class: "fluid-container p-1" }, index.h("div", { class: "d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1" }, index.h("div", { class: "m-0 p-0 mb-1 mb-lg-0 mt-md-0  d-flex justify-content-start align-items-center" }, index.h("p", { class: "font-size-large m-0 p-0" }, `${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`), index.h("p", { class: "m-0 p-0 ml-1" }, !this.bookingData.is_direct && (index.h("span", { class: "mr-1 m-0" }, this.bookingData.channel_booking_nbr, " ")), index.h("span", { class: "date-margin" }, _formatDate(this.bookingData.booked_on.date)), _formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString()))), index.h("div", { class: "d-flex justify-content-end align-items-center" }, index.h("span", { class: `confirmed btn-sm m-0 mr-2 ${confirmationBG}` }, this.bookingData.status.description), this.bookingData.allowed_actions.length > 0 && (index.h(index.Fragment, null, index.h("ir-select", { selectContainerStyle: "h-28", selectStyles: "d-flex align-items-center h-28", firstOption: locales_store.locales.entries.Lcz_Select, id: "update-status", size: "sm", "label-available": "false", data: this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code })), textSize: "sm", class: "sm-padding-right m-0" }), index.h("ir-button", { onClickHanlder: this.updateStatus.bind(this), btn_styles: "h-28", isLoading: this.isUpdateClicked, btn_disabled: this.isUpdateClicked, id: "update-status-btn", size: "sm", text: "Update" }))), this.hasReceipt && (index.h("ir-icon", { id: "receipt", class: "mx-1" }, index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", stroke: "#104064", height: "24", width: "19", viewBox: "0 0 384 512" }, index.h("path", { fill: "#104064", d: "M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM80 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm0 32v64H288V256H96zM240 416h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16s7.2-16 16-16z" })))), this.hasPrint && (index.h("ir-icon", { id: "print", icon: "ft-printer h1 color-ir-dark-blue-hover m-0 ml-1  pointer" }, index.h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "24", width: "24", viewBox: "0 0 512 512" }, index.h("path", { fill: "#104064", d: "M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zM432 248a24 24 0 1 1 0 48 24 24 0 1 1 0-48z" })))), this.hasDelete && index.h("ir-icon", { id: "book-delete", icon: "ft-trash-2 h1 danger m-0 ml-1 pointer" }), this.hasMenu && (index.h("ir-icon", { id: "menu", class: "m-0 ml-1 pointer" }, index.h("svg", { slot: "icon", height: 24, width: 24, xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512" }, index.h("path", { fill: "#104064", d: "M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z" }))))))),
-      index.h("div", { class: "fluid-container p-1 text-left mx-0" }, index.h("div", { class: "row m-0" }, index.h("div", { class: "col-12 p-0 mx-0 pr-lg-1 col-lg-6" }, index.h("div", { class: "card" }, index.h("div", { class: "p-1" }, this.bookingData.property.name || '', index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Source}:`, value: this.bookingData.origin.Label, imageSrc: this.bookingData.origin.Icon }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_BookedBy}:`, value: `${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`, iconShown: true }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Phone}:`, value: this.bookingData.guest.mobile }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Email}:`, value: this.bookingData.guest.email }), this.bookingData.guest.alternative_email && (index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_AlternativeEmail}:`, value: this.bookingData.guest.alternative_email })), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Address}:`, value: this.bookingData.guest.address }), this.bookingData.is_direct && index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_ArrivalTime}:`, value: this.bookingData.arrival.description }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Note}:`, value: this.bookingData.remark }))), index.h("p", { class: "font-size-large d-flex justify-content-between align-items-center mb-1" }, `${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date)} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
+      index.h("div", { class: "fluid-container p-1 text-left mx-0" }, index.h("div", { class: "row m-0" }, index.h("div", { class: "col-12 p-0 mx-0 pr-lg-1 col-lg-6" }, index.h("div", { class: "card" }, index.h("div", { class: "p-1" }, this.bookingData.property.name || '', index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Source}:`, value: this.bookingData.origin.Label, imageSrc: this.bookingData.origin.Icon }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_BookedBy}:`, value: `${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`, iconShown: true }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Phone}:`, value: this.bookingData.guest.mobile }), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Email}:`, value: this.bookingData.guest.email }), this.bookingData.guest.alternative_email && (index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_AlternativeEmail}:`, value: this.bookingData.guest.alternative_email })), index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Address}:`, value: this.bookingData.guest.address }), this.bookingData.is_direct && index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_ArrivalTime}:`, value: this.bookingData.arrival.description }), this.bookingData.is_direct ? (index.h("ir-label", { label: `${this.defaultTexts.entries.Lcz_Note}:`, value: this.bookingData.remark })) : (index.h("ota-label", { label: `${this.defaultTexts.entries.Lcz_Note}:`, remarks: this.bookingData.ota_notes })))), index.h("p", { class: "font-size-large d-flex justify-content-between align-items-center mb-1" }, `${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date)} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
         ? ` ${this.defaultTexts.entries.Lcz_Nights}`
         : ` ${this.defaultTexts.entries.Lcz_Night}`})`, this.hasRoomAdd && this.bookingData.is_direct && (index.h("ir-icon", { id: "room-add" }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "20", width: "17.5", viewBox: "0 0 448 512", slot: "icon" }, index.h("path", { fill: "#6b6f82", d: "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" }))))), index.h("div", { class: "card p-0 mx-0" }, this.bookingData.rooms.map((room, index$1) => {
         const mealCodeName = room.rateplan.name;
@@ -10587,7 +10606,7 @@ const IrPopover = class {
       const titleElement = this.el.querySelector('.popover-title');
       if (titleElement) {
         const width = titleElement.scrollWidth;
-        this.showPopover = width > 170; // Show popover if title width exceeds 170px
+        this.showPopover = width > 150; // Show popover if title width exceeds 170px
       }
     });
   }
@@ -10888,7 +10907,7 @@ const IrRoomNights = class {
     }
   }
   renderInputField(index$1, currency_symbol, day) {
-    return (index.h("fieldset", { class: "col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container" }, index.h("div", { class: "input-group-prepend bg-white" }, index.h("span", { "data-disabled": this.inventory === 0 || this.inventory === null, "data-state": this.isInputFocused === index$1 ? 'focus' : '', class: "input-group-text new-currency", id: "basic-addon1" }, currency_symbol)), index.h("input", { onFocus: () => (this.isInputFocused = index$1), onBlur: () => (this.isInputFocused = -1), disabled: this.inventory === 0 || this.inventory === null, type: "text", class: "form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder", id: v4.v4(), value: day.amount > 0 ? day.amount : '', placeholder: locales_store.locales.entries.Lcz_Rate || 'Rate', onInput: event => this.handleInput(event, index$1) })));
+    return (index.h("fieldset", { class: "col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container" }, index.h("div", { class: "input-group-prepend bg-white" }, index.h("span", { "data-disabled": this.inventory === 0 || this.inventory === null, "data-state": this.isInputFocused === index$1 ? 'focus' : '', class: "input-group-text new-currency bg-white", id: "basic-addon1" }, currency_symbol)), index.h("input", { onFocus: () => (this.isInputFocused = index$1), onBlur: () => (this.isInputFocused = -1), disabled: this.inventory === 0 || this.inventory === null, type: "text", class: "form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder", id: v4.v4(), value: day.amount > 0 ? day.amount : '', placeholder: locales_store.locales.entries.Lcz_Rate || 'Rate', onInput: event => this.handleInput(event, index$1) })));
   }
   renderReadOnlyField(currency_symbol, day) {
     return index.h("p", { class: "col-9 ml-1 m-0 p-0" }, `${currency_symbol}${Number(day.amount).toFixed(2)}`);
@@ -11170,6 +11189,24 @@ const IrTooltip = class {
 };
 IrTooltip.style = irTooltipCss;
 
+const otaLabelCss = "*.sc-ota-label{margin:0;padding:0}.sc-ota-label-h{display:flex;margin-bottom:5px;gap:5px}strong.sc-ota-label{margin:0;padding:0}ul.sc-ota-label{margin:0 3px;padding:0;flex:1}li.sc-ota-label{margin:0;padding:0}";
+
+const OtaLabel = class {
+  constructor(hostRef) {
+    index.registerInstance(this, hostRef);
+    this.label = undefined;
+    this.remarks = undefined;
+  }
+  render() {
+    var _a;
+    if (!this.remarks) {
+      return null;
+    }
+    return (index.h(index.Host, null, index.h("strong", null, this.label), index.h("ul", null, (_a = this.remarks) === null || _a === void 0 ? void 0 : _a.map(remark => (index.h("li", { key: v4.v4() }, "- ", remark.statement))))));
+  }
+};
+OtaLabel.style = otaLabelCss;
+
 exports.igl_application_info = IglApplicationInfo;
 exports.igl_block_dates_view = IglBlockDatesView;
 exports.igl_book_property = IglBookProperty;
@@ -11212,5 +11249,6 @@ exports.ir_select = IrSelect;
 exports.ir_sidebar = IrSidebar;
 exports.ir_toast = IrToast;
 exports.ir_tooltip = IrTooltip;
+exports.ota_label = OtaLabel;
 
-//# sourceMappingURL=igl-application-info_42.cjs.entry.js.map
+//# sourceMappingURL=igl-application-info_43.cjs.entry.js.map

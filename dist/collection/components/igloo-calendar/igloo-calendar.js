@@ -15,19 +15,20 @@ import { addUnassingedDates, handleUnAssignedDatesChange, removeUnassignedDates 
 export class IglooCalendar {
   constructor() {
     this.bookingService = new BookingService();
-    this.countryNodeList = [];
-    this.visibleCalendarCells = { x: [], y: [] };
-    this.today = '';
     this.roomService = new RoomService();
     this.eventsService = new EventsService();
     this.toBeAssignedService = new ToBeAssignedService();
+    this.countryNodeList = [];
+    this.visibleCalendarCells = { x: [], y: [] };
+    this.today = '';
     this.reachedEndOfCalendar = false;
     this.scrollViewDragPos = { top: 0, left: 0, x: 0, y: 0 };
     this.onScrollContentMoveHandler = (event) => {
-      // How far the mouse has been moved
+      if (event.buttons !== 1) {
+        return;
+      }
       const dx = event.clientX - this.scrollViewDragPos.x;
       const dy = event.clientY - this.scrollViewDragPos.y;
-      // Scroll the element
       this.scrollContainer.scrollTop = this.scrollViewDragPos.top - dy;
       this.scrollContainer.scrollLeft = this.scrollViewDragPos.left - dx;
       if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
@@ -153,7 +154,7 @@ export class IglooCalendar {
             else {
               result = JSON.parse(PAYLOAD);
             }
-            console.log(result, REASON);
+            // console.log(result, REASON);
             const resasons = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM_BLOCK'];
             if (resasons.includes(REASON)) {
               let transformedBooking;
@@ -184,14 +185,16 @@ export class IglooCalendar {
                 new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate) {
                 const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                 addUnassingedDates(data);
-                this.calendarData.unassignedDates = Object.assign(Object.assign({}, this.calendarData.unassignedDates), data);
+                // this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
                 this.unassignedDates = {
                   fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
+                console.log(data);
                 // console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
+                  console.log('clear data');
                   removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
@@ -420,16 +423,18 @@ export class IglooCalendar {
         this.showToBeAssigned = false;
         break;
       case 'calendar':
+        let dt = new Date();
         if (opt.data.start !== undefined && opt.data.end !== undefined) {
+          dt = opt.data.start.toDate();
           this.handleDateSearch(opt.data);
         }
         else {
           //scroll to unassigned dates
-          let dt = new Date(opt.data);
-          dt.setDate(dt.getDate() + 1);
-          this.toBeAssignedDate = this.transformDateForScroll(dt);
           // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          dt = new Date(opt.data);
+          dt.setDate(dt.getDate() + 1);
         }
+        this.toBeAssignedDate = this.transformDateForScroll(dt);
         break;
       case 'search':
         break;
@@ -537,12 +542,10 @@ export class IglooCalendar {
   dragScrollContent(event) {
     this.scrollViewDragging = false;
     let isPreventPageScroll = event && event.target ? this.hasAncestorWithClass(event.target, 'preventPageScroll') : false;
-    if (!isPreventPageScroll) {
+    if (!isPreventPageScroll && event.buttons === 1) {
       this.scrollViewDragPos = {
-        // The current scroll
         left: this.scrollContainer.scrollLeft,
         top: this.scrollContainer.scrollTop,
-        // Get the current mouse position
         x: event.clientX,
         y: event.clientY,
       };

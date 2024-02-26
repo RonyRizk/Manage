@@ -6006,6 +6006,7 @@ function transformNewBooking(data) {
       is_direct: data.is_direct,
       NOTES: data.remark,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
     });
   });
   return bookings;
@@ -6492,4 +6493,4 @@ class BookingService extends Token {
 
 export { BookingService as B, getMyBookings as a, convertDateToTime as b, convertDateToCustomFormat as c, dateToFormattedString as d, getReleaseHoursString as e, formatDate as f, getCurrencySymbol as g, hooks as h, findCountry as i, dateDifference as j, formatLegendColors as k, transformNewBooking as l, bookingStatus as m, isBlockUnit as n, calculateDaysBetweenDates as o, getNextDay as p, addTwoMonthToDate as q, convertDMYToISO as r, computeEndDate as s, transformNewBLockedRooms as t, formatName as u, getDaysArray as v, convertDatePrice as w };
 
-//# sourceMappingURL=booking.service-39637446.js.map
+//# sourceMappingURL=booking.service-2fe1dcfe.js.map

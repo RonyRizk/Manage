@@ -44,6 +44,14 @@ const IglApplicationInfo = /*@__PURE__*/ proxyCustomElement(class IglApplication
     this.guestData.preference = +this.defaultGuestPreference || '';
     this.updateRoomList();
   }
+  componentDidLoad() {
+    this.timeout = setTimeout(() => {
+      this.updateData();
+    }, 200);
+  }
+  disconnectedCallback() {
+    clearTimeout(this.timeout);
+  }
   async handleSelctedUnits() {
     this.updateRoomList();
   }

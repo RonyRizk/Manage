@@ -12,6 +12,7 @@ export interface Booking {
   origin: Origin;
   property: Property;
   remark: string;
+  ota_notes: IOtaNotes[];
   rooms: Room[];
   source: Source;
   status: Status;
@@ -23,6 +24,9 @@ export interface Booking {
   is_direct: boolean;
   financial: IFinancials;
   pickup_info: IBookingPickupInfo | null;
+}
+export interface IOtaNotes {
+  statement: string;
 }
 export interface IBookingPickupInfo {
   currency: IPickupCurrency;

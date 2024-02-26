@@ -37,6 +37,7 @@ export declare class IglBookingRoomRatePlan {
   setAvailableRooms(data: any): any[];
   getSelectedOffering(value: any): any;
   updateSelectedRatePlan(data: any): void;
+  componentDidLoad(): void;
   ratePlanDataChanged(newData: any): Promise<void>;
   handleRateDaysUpdate(): any;
   handleInput(event: InputEvent): void;

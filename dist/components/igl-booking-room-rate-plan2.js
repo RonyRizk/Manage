@@ -103,11 +103,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-      this.dataUpdateEvent.emit({
-        key: 'roomRatePlanUpdate',
-        changedKey: 'physicalRooms',
-        data: this.selectedData,
-      });
+      this.selectedData['rateType'] = 1;
     }
     if (this.defaultData && this.defaultData.isRateModified) {
       console.log('object');
@@ -122,6 +118,15 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
     }
     else {
       this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    }
+  }
+  componentDidLoad() {
+    if (this.defaultData) {
+      this.dataUpdateEvent.emit({
+        key: 'roomRatePlanUpdate',
+        changedKey: 'physicalRooms',
+        data: this.selectedData,
+      });
     }
   }
   async ratePlanDataChanged(newData) {

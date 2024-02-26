@@ -61,7 +61,8 @@
     "components/old-ir-channel/ir-general-settings/ir-general-settings.js",
     "components/old-ir-channel/ir-listItems/ir-listItem.js",
     "components/old-ir-channel/ir-mapping/ir-mapping.js",
-    "components/old-ir-channel/ir-topBar/ir-topbar.js"
+    "components/old-ir-channel/ir-topBar/ir-topbar.js",
+    "components/ota-label/ota-label.js"
   ],
   "compiler": {
     "name": "@stencil/core",
