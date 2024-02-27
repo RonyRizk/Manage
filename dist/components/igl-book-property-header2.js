@@ -3,10 +3,11 @@ import { h as hooks } from './moment.js';
 import { l as locales } from './locales.store.js';
 import { i as isRequestPending } from './ir-interceptor.store.js';
 import { c as calendar_data } from './calendar-data.js';
-import { d as defineCustomElement$4 } from './igl-date-range2.js';
-import { d as defineCustomElement$3 } from './ir-autocomplete2.js';
-import { d as defineCustomElement$2 } from './ir-button2.js';
-import { d as defineCustomElement$1 } from './ir-date-picker2.js';
+import { d as defineCustomElement$5 } from './igl-date-range2.js';
+import { d as defineCustomElement$4 } from './ir-autocomplete2.js';
+import { d as defineCustomElement$3 } from './ir-button2.js';
+import { d as defineCustomElement$2 } from './ir-date-picker2.js';
+import { d as defineCustomElement$1 } from './ir-date-view2.js';
 
 const iglBookPropertyHeaderCss = ".sc-igl-book-property-header-h{display:block}.row.sc-igl-book-property-header{padding:0 0 0 15px;margin:0}.sourceContainer.sc-igl-book-property-header{max-width:350px}.message-label.sc-igl-book-property-header{font-size:80%}";
 
@@ -151,7 +152,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["igl-book-property-header", "igl-date-range", "ir-autocomplete", "ir-button", "ir-date-picker"];
+  const components = ["igl-book-property-header", "igl-date-range", "ir-autocomplete", "ir-button", "ir-date-picker", "ir-date-view"];
   components.forEach(tagName => { switch (tagName) {
     case "igl-book-property-header":
       if (!customElements.get(tagName)) {
@@ -160,20 +161,25 @@ function defineCustomElement() {
       break;
     case "igl-date-range":
       if (!customElements.get(tagName)) {
-        defineCustomElement$4();
+        defineCustomElement$5();
       }
       break;
     case "ir-autocomplete":
       if (!customElements.get(tagName)) {
-        defineCustomElement$3();
+        defineCustomElement$4();
       }
       break;
     case "ir-button":
       if (!customElements.get(tagName)) {
-        defineCustomElement$2();
+        defineCustomElement$3();
       }
       break;
     case "ir-date-picker":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
+      }
+      break;
+    case "ir-date-view":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

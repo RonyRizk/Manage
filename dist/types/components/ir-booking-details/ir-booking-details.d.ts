@@ -43,7 +43,6 @@ export declare class IrBookingDetails {
   handleEditSidebar(): void;
   handleSelectChange(e: CustomEvent<any>): void;
   openEditSidebar(): void;
-  _calculateNights(fromDate: string, toDate: string): number;
   updateStatus(): Promise<void>;
   handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>): void;
   handleCloseBookingWindow(): void;

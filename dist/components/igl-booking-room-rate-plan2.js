@@ -43,7 +43,7 @@ const IglBookingRoomRatePlan = /*@__PURE__*/ proxyCustomElement(class IglBooking
     return result;
   }
   componentWillLoad() {
-    console.log('default data', this.defaultData);
+    // console.log('default data', this.defaultData);
     this.updateSelectedRatePlan(this.ratePlanData);
   }
   disableForm() {

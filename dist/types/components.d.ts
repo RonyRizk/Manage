@@ -175,7 +175,7 @@ export namespace Components {
         "unassignedDates": any;
     }
     interface IglDateRange {
-        "dateLabel": any;
+        "dateLabel": string;
         "defaultData": { [key: string]: any };
         "disabled": boolean;
         "maxDate": string;
@@ -366,6 +366,12 @@ export namespace Components {
         "toDate": Date;
         "toLabel": string;
         "weekLabel": string;
+    }
+    interface IrDateView {
+        "dateOption": string;
+        "from_date": string | Date | moment.Moment;
+        "showDateDifference": boolean;
+        "to_date": string | Date | moment.Moment;
     }
     interface IrDropdown {
         "data": {
@@ -1011,6 +1017,12 @@ declare global {
         prototype: HTMLIrDatePickerElement;
         new (): HTMLIrDatePickerElement;
     };
+    interface HTMLIrDateViewElement extends Components.IrDateView, HTMLStencilElement {
+    }
+    var HTMLIrDateViewElement: {
+        prototype: HTMLIrDateViewElement;
+        new (): HTMLIrDateViewElement;
+    };
     interface HTMLIrDropdownElement extends Components.IrDropdown, HTMLStencilElement {
     }
     var HTMLIrDropdownElement: {
@@ -1210,6 +1222,7 @@ declare global {
         "ir-combobox": HTMLIrComboboxElement;
         "ir-common": HTMLIrCommonElement;
         "ir-date-picker": HTMLIrDatePickerElement;
+        "ir-date-view": HTMLIrDateViewElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-general-settings": HTMLIrGeneralSettingsElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
@@ -1423,7 +1436,7 @@ declare namespace LocalJSX {
         "unassignedDates"?: any;
     }
     interface IglDateRange {
-        "dateLabel"?: any;
+        "dateLabel"?: string;
         "defaultData"?: { [key: string]: any };
         "disabled"?: boolean;
         "maxDate"?: string;
@@ -1658,6 +1671,12 @@ declare namespace LocalJSX {
         "toDate"?: Date;
         "toLabel"?: string;
         "weekLabel"?: string;
+    }
+    interface IrDateView {
+        "dateOption"?: string;
+        "from_date"?: string | Date | moment.Moment;
+        "showDateDifference"?: boolean;
+        "to_date"?: string | Date | moment.Moment;
     }
     interface IrDropdown {
         "data"?: {
@@ -1943,6 +1962,7 @@ declare namespace LocalJSX {
         "ir-combobox": IrCombobox;
         "ir-common": IrCommon;
         "ir-date-picker": IrDatePicker;
+        "ir-date-view": IrDateView;
         "ir-dropdown": IrDropdown;
         "ir-general-settings": IrGeneralSettings;
         "ir-guest-info": IrGuestInfo;
@@ -2012,6 +2032,7 @@ declare module "@stencil/core" {
             "ir-combobox": LocalJSX.IrCombobox & JSXBase.HTMLAttributes<HTMLIrComboboxElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
+            "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-general-settings": LocalJSX.IrGeneralSettings & JSXBase.HTMLAttributes<HTMLIrGeneralSettingsElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;

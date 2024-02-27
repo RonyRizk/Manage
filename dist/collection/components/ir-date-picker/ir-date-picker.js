@@ -1,4 +1,4 @@
-import { h } from "@stencil/core";
+import { h, Host } from "@stencil/core";
 import moment from "moment";
 export class IrDatePicker {
   constructor() {
@@ -54,7 +54,7 @@ export class IrDatePicker {
     });
   }
   render() {
-    return h("input", { class: "date-range-input", type: "text", disabled: this.disabled });
+    return (h(Host, null, h("input", { class: "date-range-input", type: "text", disabled: this.disabled })));
   }
   static get is() { return "ir-date-picker"; }
   static get encapsulation() { return "scoped"; }

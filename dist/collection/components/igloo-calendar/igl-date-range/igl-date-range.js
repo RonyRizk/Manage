@@ -1,5 +1,7 @@
 import { Host, h } from "@stencil/core";
 import locales from "../../../../../src/stores/locales.store";
+import { calculateDaysBetweenDates } from "../../../../../src/utils/booking";
+import moment from "moment";
 export class IglDateRange {
   constructor() {
     this.totalNights = 0;
@@ -43,7 +45,7 @@ export class IglDateRange {
     }
   }
   calculateTotalNights() {
-    this.totalNights = Math.floor((this.toDate.getTime() - this.fromDate.getTime()) / 86400000);
+    this.totalNights = calculateDaysBetweenDates(moment(this.fromDate).format('YYYY-MM-DD'), moment(this.toDate).format('YYYY-MM-DD'));
   }
   getFormattedDateString(dt) {
     return dt.getDate() + ' ' + dt.toLocaleString('default', { month: 'short' }).toLowerCase() + ' ' + dt.getFullYear();
@@ -66,9 +68,9 @@ export class IglDateRange {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (h(Host, null, h("div", { class: "calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center " }, h("span", { class: "mt-0 mb-1 mb-lg-0 mr-lg-1 text-left" }, this.dateLabel, ":"), h("div", { class: 'd-flex align-items-center mr-lg-1' }, h("div", { class: "iglRangePicker form-control input-sm ", "data-state": this.disabled ? 'disabled' : 'active' }, h("ir-date-picker", { maxDate: this.maxDate, class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
+    return (h(Host, null, h("div", { class: "calendarPickerContainer form-control input-sm", "data-state": this.disabled ? 'disabled' : 'active' }, h("ir-date-picker", { maxDate: this.maxDate, class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
         this.handleDateChange(evt);
-      } })), this.totalNights ? (h("span", { class: "iglRangeNights ml-1" }, "(", this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`), ")")) : ('')))));
+      } }), h("ir-date-view", { "data-state": this.disabled ? 'disabled' : 'active', showDateDifference: this.disabled, class: "date-view", from_date: this.fromDate, to_date: this.toDate })), h("span", null, this.totalNights && !this.disabled ? (h("span", { class: "iglRangeNights ml-1" }, this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`))) : (''))));
   }
   static get is() { return "igl-date-range"; }
   static get encapsulation() { return "scoped"; }
@@ -135,11 +137,11 @@ export class IglDateRange {
         "reflect": false
       },
       "dateLabel": {
-        "type": "any",
+        "type": "string",
         "mutable": false,
         "complexType": {
-          "original": "any",
-          "resolved": "any",
+          "original": "string",
+          "resolved": "string",
           "references": {}
         },
         "required": false,

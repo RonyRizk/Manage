@@ -6491,6 +6491,6 @@ class BookingService extends Token {
   }
 }
 
-export { BookingService as B, getMyBookings as a, convertDateToTime as b, convertDateToCustomFormat as c, dateToFormattedString as d, getReleaseHoursString as e, formatDate as f, getCurrencySymbol as g, hooks as h, findCountry as i, dateDifference as j, formatLegendColors as k, transformNewBooking as l, bookingStatus as m, isBlockUnit as n, calculateDaysBetweenDates as o, getNextDay as p, addTwoMonthToDate as q, convertDMYToISO as r, computeEndDate as s, transformNewBLockedRooms as t, formatName as u, getDaysArray as v, convertDatePrice as w };
+export { BookingService as B, getMyBookings as a, convertDateToTime as b, convertDateToCustomFormat as c, dateToFormattedString as d, getReleaseHoursString as e, findCountry as f, getCurrencySymbol as g, hooks as h, dateDifference as i, formatLegendColors as j, transformNewBooking as k, bookingStatus as l, isBlockUnit as m, calculateDaysBetweenDates as n, getNextDay as o, addTwoMonthToDate as p, convertDMYToISO as q, computeEndDate as r, formatName as s, transformNewBLockedRooms as t, getDaysArray as u, convertDatePrice as v, formatDate as w };
 
-//# sourceMappingURL=booking.service-2fe1dcfe.js.map
+//# sourceMappingURL=booking.service-f50acc1f.js.map

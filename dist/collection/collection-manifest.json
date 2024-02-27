@@ -39,6 +39,7 @@
     "components/ir-combobox/ir-combobox.js",
     "components/ir-common/ir-common.js",
     "components/ir-date-picker/ir-date-picker.js",
+    "components/ir-date-view/ir-date-view.js",
     "components/ir-dropdown/ir-dropdown.js",
     "components/ir-guest-info/ir-guest-info.js",
     "components/ir-icon/ir-icon.js",

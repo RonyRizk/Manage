@@ -1,7 +1,7 @@
-import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { h as hooks } from './moment.js';
 
-const irDatePickerCss = "input.sc-ir-date-picker{all:unset;box-sizing:border-box;padding:0;margin:0;width:100%;text-align:center}input.sc-ir-date-picker:disabled{text-align:start;font-size:14px}";
+const irDatePickerCss = "input.sc-ir-date-picker{all:unset;box-sizing:border-box !important;padding:0;margin:0;width:100%;text-align:center}input.sc-ir-date-picker:disabled{text-align:start;font-size:14px;width:100%}.sc-ir-date-picker-h{position:relative;box-sizing:border-box}.icon.sc-ir-date-picker{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%)}";
 
 const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends HTMLElement {
   constructor() {
@@ -60,7 +60,7 @@ const IrDatePicker = /*@__PURE__*/ proxyCustomElement(class IrDatePicker extends
     });
   }
   render() {
-    return h("input", { class: "date-range-input", type: "text", disabled: this.disabled });
+    return (h(Host, null, h("input", { class: "date-range-input", type: "text", disabled: this.disabled })));
   }
   get element() { return this; }
   static get style() { return irDatePickerCss; }
