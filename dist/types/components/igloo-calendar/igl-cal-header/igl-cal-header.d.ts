@@ -16,6 +16,7 @@ export declare class IglCalHeader {
   propertyid: number;
   unassignedDates: any;
   to_date: string;
+  highlightedDate: string;
   renderAgain: boolean;
   unassignedRoomsNumber: any;
   private searchValue;

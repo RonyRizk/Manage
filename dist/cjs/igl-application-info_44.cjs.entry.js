@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-4794c294.js');
-const booking_service = require('./booking.service-a758c638.js');
+const booking_service = require('./booking.service-2fb937cc.js');
 const locales_store = require('./locales.store-1dd3e126.js');
 const calendarData = require('./calendar-data-2757e82e.js');
 const v4 = require('./v4-d89fec7e.js');
@@ -901,6 +901,9 @@ const IglBookProperty = class {
     this.bookingCreated = index.createEvent(this, "bookingCreated", 7);
     this.blockedCreated = index.createEvent(this, "blockedCreated", 7);
     this.resetBookingData = index.createEvent(this, "resetBookingData", 7);
+    this.animateIrButton = index.createEvent(this, "animateIrButton", 7);
+    this.animateIrSelect = index.createEvent(this, "animateIrSelect", 7);
+    this.toast = index.createEvent(this, "toast", 7);
     this.initialRoomIds = null;
     this.showSplitBookingOption = false;
     this.sourceOptions = [];
@@ -1190,6 +1193,7 @@ const IglBookProperty = class {
     return (index.h(index.Fragment, null, index.h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), index.h("div", { class: "p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between" }, index.h("button", { class: "btn btn-secondary flex-fill", onClick: () => this.closeWindow() }, locales_store.locales.entries.Lcz_Cancel), index.h("button", { class: "btn btn-primary flex-fill", onClick: () => this.handleBlockDate() }, locales_store.locales.entries.Lcz_Blockdates))));
   }
   handleButtonClicked(event) {
+    var _a, _b;
     switch (event.detail.key) {
       case 'save':
         this.bookUser(false);
@@ -1215,9 +1219,29 @@ const IglBookProperty = class {
       case 'next':
         event.stopImmediatePropagation();
         event.stopPropagation();
-        this.gotoPage('page_two');
+        if (!((_a = this.adultChildCount) === null || _a === void 0 ? void 0 : _a.adult)) {
+          this.animateIrSelect.emit('adult_child_select');
+          break;
+        }
+        if (this.selectedUnits.size > 0) {
+          this.gotoPage('page_two');
+          break;
+        }
+        else {
+          if (((_b = this.defaultData) === null || _b === void 0 ? void 0 : _b.roomsInfo.length) === 0) {
+            this.animateIrButton.emit('check_availability');
+            break;
+          }
+        }
+        this.toast.emit({
+          type: 'error',
+          description: locales_store.locales.entries.Lcz_SelectRatePlan,
+          title: locales_store.locales.entries.Lcz_SelectRatePlan,
+        });
+        break;
       case 'check':
         this.initializeBookingAvailability(booking_service.dateToFormattedString(new Date(this.dateRangeData.fromDate)), booking_service.dateToFormattedString(new Date(this.dateRangeData.toDate)));
+        break;
     }
   }
   handlePageTwoDataUpdateEvent(event) {
@@ -1345,7 +1369,7 @@ const IglBookPropertyFooter = class {
     return this.isEventType('PLUS_BOOKING') || this.isEventType('ADD_ROOM') || this.isEventType('EDIT_BOOKING');
   }
   render() {
-    return (index.h(index.Host, null, index.h("div", { class: "d-flex justify-content-between gap-30 align-items-center" }, this.isEventType('EDIT_BOOKING') ? (index.h(index.Fragment, null, this.renderButton('cancel', locales_store.locales.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${locales_store.locales.entries.Lcz_Next} >>`, isRequestPending('/Get_Exposed_Booking_Availability')))) : (index.h(index.Fragment, null, this.renderButton('cancel', locales_store.locales.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${locales_store.locales.entries.Lcz_Next} >>`, this.disabled))))));
+    return (index.h(index.Host, null, index.h("div", { class: "d-flex justify-content-between gap-30 align-items-center" }, this.isEventType('EDIT_BOOKING') ? (index.h(index.Fragment, null, this.renderButton('cancel', locales_store.locales.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${locales_store.locales.entries.Lcz_Next} >>`, isRequestPending('/Get_Exposed_Booking_Availability')))) : (index.h(index.Fragment, null, this.renderButton('cancel', locales_store.locales.entries.Lcz_Cancel), this.shouldRenderTwoButtons() && this.renderButton('next', `${locales_store.locales.entries.Lcz_Next} >>`))))));
   }
 };
 IglBookPropertyFooter.style = iglBookPropertyFooterCss;
@@ -1363,6 +1387,7 @@ const IglBookPropertyHeader = class {
     this.toast = index.createEvent(this, "toast", 7);
     this.spiltBookingSelected = index.createEvent(this, "spiltBookingSelected", 7);
     this.animateIrButton = index.createEvent(this, "animateIrButton", 7);
+    this.animateIrSelect = index.createEvent(this, "animateIrSelect", 7);
     this.sourceOption = {
       code: '',
       description: '',
@@ -1397,8 +1422,8 @@ const IglBookPropertyHeader = class {
       return (index.h("option", { value: option.id, selected: this.sourceOption.code === option.id }, option.value));
     })))));
   }
-  handleAdultChildChange(key, event) {
-    const value = event.target.value;
+  handleAdultChildChange(key, value) {
+    //const value = (event.target as HTMLSelectElement).value;
     let obj = {};
     if (value === '') {
       obj = Object.assign(Object.assign({}, this.adultChildCount), { [key]: 0 });
@@ -1409,7 +1434,13 @@ const IglBookPropertyHeader = class {
     this.adultChild.emit(obj);
   }
   getAdultChildConstraints() {
-    return (index.h("div", { class: 'mt-1 mt-lg-0 d-flex flex-column text-left' }, index.h("label", { class: "mb-1 d-lg-none" }, locales_store.locales.entries.Lcz_NumberOfGuests, " "), index.h("div", { class: "form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start" }, index.h("fieldset", null, index.h("div", { class: "btn-group " }, index.h("select", { class: "form-control input-sm", id: "xAdultSmallSelect", onChange: evt => this.handleAdultChildChange('adult', evt) }, index.h("option", { value: "" }, locales_store.locales.entries.Lcz_AdultsCaption), Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (index.h("option", { value: option }, option)))))), this.adultChildConstraints.child_max_nbr > 0 && (index.h("fieldset", null, index.h("div", { class: "btn-group ml-1" }, index.h("select", { class: "form-control input-sm", id: "xChildrenSmallSelect", onChange: evt => this.handleAdultChildChange('child', evt) }, index.h("option", { value: '' }, this.renderChildCaption()), Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (index.h("option", { value: option }, option))))))), index.h("ir-button", { btn_id: "check_availability", isLoading: isRequestPending('/Get_Exposed_Booking_Availability'), icon: "", size: "sm", class: "ml-2", text: locales_store.locales.entries.Lcz_Check, onClickHanlder: () => this.handleButtonClicked() }))));
+    return (index.h("div", { class: 'mt-1 mt-lg-0 d-flex flex-column text-left' }, index.h("label", { class: "mb-1 d-lg-none" }, locales_store.locales.entries.Lcz_NumberOfGuests, " "), index.h("div", { class: "form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start" }, index.h("fieldset", null, index.h("div", { class: "btn-group " }, index.h("ir-select", { onSelectChange: e => this.handleAdultChildChange('adult', e.detail), select_id: "adult_child_select", firstOption: locales_store.locales.entries.Lcz_AdultsCaption, LabelAvailable: false, data: Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => ({
+        text: option.toString(),
+        value: option.toString(),
+      })) }))), this.adultChildConstraints.child_max_nbr > 0 && (index.h("fieldset", null, index.h("div", { class: "btn-group ml-1" }, index.h("ir-select", { onSelectChange: e => this.handleAdultChildChange('child', e.detail), select_id: "child_select", firstOption: this.renderChildCaption(), LabelAvailable: false, data: Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => ({
+        text: option.toString(),
+        value: option.toString(),
+      })) })))), index.h("ir-button", { btn_id: "check_availability", isLoading: isRequestPending('/Get_Exposed_Booking_Availability'), icon: "", size: "sm", class: "ml-2", text: locales_store.locales.entries.Lcz_Check, onClickHanlder: () => this.handleButtonClicked() }))));
   }
   renderChildCaption() {
     const maxAge = this.adultChildConstraints.child_max_age;
@@ -1444,6 +1475,7 @@ const IglBookPropertyHeader = class {
       }
       else if (this.adultChildCount.adult === 0) {
         this.toast.emit({ type: 'error', title: locales_store.locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
+        this.animateIrSelect.emit('adult_child_select');
       }
       else {
         this.buttonClicked.emit({ key: 'check' });
@@ -1458,6 +1490,7 @@ const IglBookPropertyHeader = class {
       });
     }
     else if (this.adultChildCount.adult === 0) {
+      this.animateIrSelect.emit('adult_child_select');
       this.toast.emit({ type: 'error', title: locales_store.locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
     }
     else {
@@ -1546,7 +1579,7 @@ function transformNewBooking(data) {
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
       guarantee: room.rateplan.guarantee,
-      TOTAL_PRICE: room.total,
+      TOTAL_PRICE: room.gross_total,
       COUNTRY: data.guest.country_id,
       FROM_DATE_STR: data.format.from_date,
       TO_DATE_STR: data.format.to_date,
@@ -1555,7 +1588,7 @@ function transformNewBooking(data) {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
-      NOTES: data.remark,
+      NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
       ota_notes: data.ota_notes,
     });
@@ -2510,9 +2543,21 @@ const IglBookingEventHover = class {
       currentInfoBubbleId: this.getBookingId(),
     });
   }
+  renderNote() {
+    const { is_direct, ota_notes } = this.bookingEvent;
+    const guestNote = this.getGuestNote();
+    const noteLabel = locales_store.locales.entries.Lcz_Note + ':';
+    if (!is_direct && ota_notes) {
+      return (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap d-flex" }, index.h("ota-label", { label: noteLabel, remarks: ota_notes }))));
+    }
+    else if (is_direct && guestNote) {
+      return (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap d-flex" }, index.h(index.Fragment, null, index.h("span", { class: "font-weight-bold" }, noteLabel, " "), guestNote))));
+    }
+    return null;
+  }
   getInfoElement() {
     var _a, _b;
-    return (index.h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("div", { class: "row p-0 m-0 pb-1" }, index.h("div", { class: "px-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, index.h("img", { src: (_b = (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.origin) === null || _b === void 0 ? void 0 : _b.Icon, alt: "icon", class: 'icon-image' }), index.h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), index.h("div", { class: "pr-0 col-4 text-right" }, booking_service.getCurrencySymbol(this.currency.code), this.getTotalPrice())), index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 pr-0 col-12" }, index.h("ir-date-view", { from_date: this.bookingEvent.FROM_DATE, to_date: this.bookingEvent.TO_DATE, showDateDifference: false }))), this.getArrivalTime() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_ArrivalTime, ": "), this.getArrivalTime()))), this.getTotalOccupants() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Occupancy, ": "), this.getTotalOccupants()))), this.getPhoneNumber() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12 text-wrap" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Phone, ": "), this.renderPhone()))), this.getRatePlan() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_RatePlan, ": "), this.getRatePlan()))), this.getGuestNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap d-flex" }, this.bookingEvent.is_direct ? (index.h(index.Fragment, null, index.h("sapn", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Note, ": "), this.getGuestNote())) : (index.h("ota-label", { label: `${locales_store.locales.entries.Lcz_Note}:`, remarks: this.bookingEvent.ota_notes }))))) : null, this.getInternalNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap" }, this.bookingEvent.is_direct ? (index.h(index.Fragment, null, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_InternalRemark, ": "), this.getInternalNote())) : (index.h("ota-label", { label: `${locales_store.locales.entries.Lcz_InternalRemark}:`, remarks: this.bookingEvent.ota_notes }))))) : null, index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group  btn-group-sm font-small-3", role: "group" }, index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${this.hideButtons ? 'mr-0' : 'mr-1'} ${this.shouldHideUnassignUnit ? 'w-50' : ''}`, onClick: _ => {
+    return (index.h("div", { class: `iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("div", { class: "row p-0 m-0 pb-1" }, index.h("div", { class: "px-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center" }, index.h("img", { src: (_b = (_a = this.bookingEvent) === null || _a === void 0 ? void 0 : _a.origin) === null || _b === void 0 ? void 0 : _b.Icon, alt: "icon", class: 'icon-image' }), index.h("p", { class: 'p-0 m-0' }, !this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER)), index.h("div", { class: "pr-0 col-4 text-right" }, booking_service.getCurrencySymbol(this.currency.code), this.getTotalPrice())), index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 pr-0 col-12" }, index.h("ir-date-view", { from_date: this.bookingEvent.FROM_DATE, to_date: this.bookingEvent.TO_DATE, showDateDifference: false }))), this.getArrivalTime() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0 col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_ArrivalTime, ": "), this.getArrivalTime()))), this.getTotalOccupants() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Occupancy, ": "), this.getTotalOccupants()))), this.getPhoneNumber() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12 text-wrap" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_Phone, ": "), this.renderPhone()))), this.getRatePlan() && (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "px-0  col-12" }, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_RatePlan, ": "), this.getRatePlan()))), this.renderNote(), this.getInternalNote() ? (index.h("div", { class: "row p-0 m-0" }, index.h("div", { class: "col-12 px-0 text-wrap" }, this.bookingEvent.is_direct ? (index.h(index.Fragment, null, index.h("span", { class: "font-weight-bold" }, locales_store.locales.entries.Lcz_InternalRemark, ": "), this.getInternalNote())) : (index.h("ota-label", { label: `${locales_store.locales.entries.Lcz_InternalRemark}:`, remarks: this.bookingEvent.ota_notes }))))) : null, index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group  btn-group-sm font-small-3", role: "group" }, index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${this.hideButtons ? 'mr-0' : 'mr-1'} ${this.shouldHideUnassignUnit ? 'w-50' : ''}`, onClick: _ => {
         this.handleEditBooking();
       }, disabled: !this.bookingEvent.IS_EDITABLE }, index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", stroke: "currentColor", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" })), index.h("span", null, "\u00A0", locales_store.locales.entries.Lcz_Edit)), this.bookingEvent.IS_EDITABLE && !this.hideButtons && (index.h("button", { type: "button", class: `btn btn-primary d-flex align-items-center justify-content-center ${!this.shouldHideUnassignUnit ? 'mr-1' : 'w-50'}`, onClick: _ => {
         this.handleAddRoom();
@@ -2948,7 +2993,7 @@ const IglCalBody = class {
     this.countryNodeList = undefined;
     this.dragOverElement = '';
     this.renderAgain = false;
-    this.toBeAssignedDate = undefined;
+    this.highlightedDate = undefined;
   }
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
@@ -3147,12 +3192,12 @@ const IglCalBody = class {
   }
   getGeneralCategoryDayColumns(addClass, isCategory = false, index$1) {
     return calendar_dates.days.map(dayInfo => {
-      return (index.h("div", { class: `cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (index.h("span", { class: 'categoryName' }, dayInfo.rate[index$1].exposed_inventory.rts)) : ('')));
+      return (index.h("div", { class: `cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''}` }, isCategory ? (index.h("span", { class: 'categoryName' }, dayInfo.rate[index$1].exposed_inventory.rts)) : ('')));
     });
   }
   getGeneralRoomDayColumns(roomId, roomCategory) {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
-    return this.calendarData.days.map(dayInfo => (index.h("div", { class: `cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''} ${this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''} ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`, onClick: () => this.clickCell(roomId, dayInfo, roomCategory) })));
+    return this.calendarData.days.map(dayInfo => (index.h("div", { class: `cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''} ${this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''} ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`, onClick: () => this.clickCell(roomId, dayInfo, roomCategory) })));
   }
   toggleCategory(roomCategory) {
     roomCategory.expanded = !roomCategory.expanded;
@@ -3198,13 +3243,14 @@ const IglCalFooter = class {
     this.optionEvent = index.createEvent(this, "optionEvent", 7);
     this.calendarData = undefined;
     this.today = undefined;
+    this.highlightedDate = undefined;
   }
   // private isOnline:boolean = false;
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v15"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v16"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -3437,6 +3483,7 @@ const IglCalHeader = class {
     this.propertyid = undefined;
     this.unassignedDates = undefined;
     this.to_date = undefined;
+    this.highlightedDate = undefined;
     this.renderAgain = false;
     this.unassignedRoomsNumber = {};
   }
@@ -3589,7 +3636,7 @@ const IglCalHeader = class {
     return (index.h(index.Host, null, index.h("div", { class: "stickyCell align-items-center topLeftCell preventPageScroll" }, index.h("div", { class: "row justify-content-around no-gutters" }, !this.calendarData.is_vacation_rental && (index.h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('showAssigned'), "data-toggle": "tooltip", "data-placement": "bottom", title: locales_store.locales.entries.Lcz_UnassignedUnitsTooltip }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512", class: "svg-icon" }, index.h("path", { fill: "#6b6f82", d: "M448 160H320V128H448v32zM48 64C21.5 64 0 85.5 0 112v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zM448 352v32H192V352H448zM48 288c-26.5 0-48 21.5-48 48v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V336c0-26.5-21.5-48-48-48H48z" })))), index.h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('calendar'), "data-toggle": "tooltip", "data-placement": "bottom", title: locales_store.locales.entries.Lcz_Navigate }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 448 512", class: 'svg-icon' }, index.h("path", { fill: "#6b6f82", d: "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z" })), index.h("ir-date-picker", { minDate: booking_service.hooks().add(-2, 'months').startOf('month').format('YYYY-MM-DD'), autoApply: true, singleDatePicker: true, onDateChanged: evt => {
         console.log('evt', evt);
         this.handleDateSelect(evt);
-      }, class: "datePickerHidden" })), index.h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('gotoToday'), "data-toggle": "tooltip", "data-placement": "bottom", title: locales_store.locales.entries.Lcz_Today }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512", class: "svg-icon" }, index.h("path", { fill: "#6b6f82", d: "M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z" }))), index.h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('add', this.getNewBookingModel()), "data-toggle": "tooltip", "data-placement": "bottom", title: locales_store.locales.entries.Lcz_CreateNewBooking }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 448 512", class: "svg-icon" }, index.h("path", { fill: "#6b6f82", d: "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" })))), index.h("div", { class: "row justify-content-around no-gutters searchContiner" }, index.h("fieldset", { class: `form-group position-relative ${this.searchValue != '' ? 'show' : ''}` }, index.h("input", { type: "text", class: "form-control form-control-sm input-sm", id: "iconLeft7", value: this.searchValue, placeholder: locales_store.locales.entries.Lcz_FindUnit, onInput: event => this.handleFilterRooms(event) }), this.searchValue !== '' ? (index.h("div", { class: "form-control-position pointer", onClick: () => this.handleClearSearch(), "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Clear Selection" }, index.h("i", { class: "la la-close font-small-4" }))) : null, this.searchList.length ? (index.h("div", { class: "position-absolute searchListContainer dropdown-menu dropdown-menu-left min-width-full" }, this.searchList.map(room => (index.h("div", { class: "searchListItem1 dropdown-item px-1 text-left pointer", onClick: () => this.handleScrollToRoom(room.id) }, room.name))))) : null))), index.h("div", { class: "stickyCell headersContainer" }, index.h("div", { class: "monthsContainer" }, this.calendarData.monthsInfo.map(monthInfo => (index.h("div", { class: "monthCell", style: { width: monthInfo.daysCount * 70 + 'px' } }, index.h("div", { class: "monthTitle" }, monthInfo.monthName))))), this.calendarData.days.map(dayInfo => (index.h("div", { class: `headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`, "data-day": dayInfo.day }, !this.calendarData.is_vacation_rental && (index.h("div", { class: "preventPageScroll" }, index.h("span", { class: `badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`, onClick: () => this.showToBeAssigned(dayInfo) }, this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr))), index.h("div", { class: "dayTitle" }, dayInfo.dayDisplayName), index.h("div", { class: "dayCapacityPercent" }, dayInfo.occupancy, "%")))))));
+      }, class: "datePickerHidden" })), index.h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('gotoToday'), "data-toggle": "tooltip", "data-placement": "bottom", title: locales_store.locales.entries.Lcz_Today }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512", class: "svg-icon" }, index.h("path", { fill: "#6b6f82", d: "M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z" }))), index.h("div", { class: "caledarBtns", onClick: () => this.handleOptionEvent('add', this.getNewBookingModel()), "data-toggle": "tooltip", "data-placement": "bottom", title: locales_store.locales.entries.Lcz_CreateNewBooking }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 448 512", class: "svg-icon" }, index.h("path", { fill: "#6b6f82", d: "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" })))), index.h("div", { class: "row justify-content-around no-gutters searchContiner" }, index.h("fieldset", { class: `form-group position-relative ${this.searchValue != '' ? 'show' : ''}` }, index.h("input", { type: "text", class: "form-control form-control-sm input-sm", id: "iconLeft7", value: this.searchValue, placeholder: locales_store.locales.entries.Lcz_FindUnit, onInput: event => this.handleFilterRooms(event) }), this.searchValue !== '' ? (index.h("div", { class: "form-control-position pointer", onClick: () => this.handleClearSearch(), "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Clear Selection" }, index.h("i", { class: "la la-close font-small-4" }))) : null, this.searchList.length ? (index.h("div", { class: "position-absolute searchListContainer dropdown-menu dropdown-menu-left min-width-full" }, this.searchList.map(room => (index.h("div", { class: "searchListItem1 dropdown-item px-1 text-left pointer", onClick: () => this.handleScrollToRoom(room.id) }, room.name))))) : null))), index.h("div", { class: "stickyCell headersContainer" }, index.h("div", { class: "monthsContainer" }, this.calendarData.monthsInfo.map(monthInfo => (index.h("div", { class: "monthCell", style: { width: monthInfo.daysCount * 70 + 'px' } }, index.h("div", { class: "monthTitle" }, monthInfo.monthName))))), this.calendarData.days.map(dayInfo => (index.h("div", { class: `headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''}`, "data-day": dayInfo.day }, !this.calendarData.is_vacation_rental && (index.h("div", { class: "preventPageScroll" }, index.h("span", { class: `badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`, onClick: () => this.showToBeAssigned(dayInfo) }, this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr))), index.h("div", { class: "dayTitle" }, dayInfo.dayDisplayName), index.h("div", { class: "dayCapacityPercent" }, dayInfo.occupancy, "%")))))));
   }
   static get watchers() { return {
     "unassignedDates": ["handleCalendarDataChanged"]
@@ -3597,7 +3644,7 @@ const IglCalHeader = class {
 };
 IglCalHeader.style = iglCalHeaderCss;
 
-const iglDateRangeCss = ".sc-igl-date-range-h{display:flex;align-items:center !important}.date-range-input.sc-igl-date-range{margin:0;padding:0;display:flex;flex:1;cursor:pointer;width:220px !important;opacity:0;user-select:none}.iglRangeNights.sc-igl-date-range{margin:0;padding:0}.date-view.sc-igl-date-range{position:absolute;background:white;pointer-events:none;cursor:pointer;display:block;margin-left:1rem;margin-right:1rem;font-size:0.975rem !important}.calendarPickerContainer.sc-igl-date-range{display:flex !important;position:relative !important;text-align:left;align-items:center !important;padding:0 !important;margin:0;border:1px solid #379ff2;width:220px}.calendarPickerContainer[data-state='disabled'].sc-igl-date-range{border:0px;width:280px}.date-view[data-state='disabled'].sc-igl-date-range{margin:0}";
+const iglDateRangeCss = ".sc-igl-date-range-h{display:flex;align-items:center !important}.date-range-input.sc-igl-date-range{margin:0;padding:0;display:flex;flex:1;cursor:pointer;width:220px !important;opacity:0;user-select:none}.iglRangeNights.sc-igl-date-range{margin:0;padding:0}.date-view.sc-igl-date-range{position:absolute;background:white;pointer-events:none;cursor:pointer;display:block;margin-left:1rem;margin-right:1rem;font-size:0.975rem !important;display:flex;align-items:center}.date-view.sc-igl-date-range svg.sc-igl-date-range{padding:0 !important;margin:0;margin-right:10px}.calendarPickerContainer.sc-igl-date-range{display:flex !important;position:relative !important;text-align:left;align-items:center !important;padding:0 !important;margin:0;border:1px solid #379ff2;width:240px}.calendarPickerContainer[data-state='disabled'].sc-igl-date-range{border:0px;width:280px}.date-view[data-state='disabled'].sc-igl-date-range,.date-range-input[data-state='disabled'].sc-igl-date-range{margin:0;cursor:default}";
 
 const IglDateRange = class {
   constructor(hostRef) {
@@ -3668,9 +3715,9 @@ const IglDateRange = class {
     this.renderAgain = !this.renderAgain;
   }
   render() {
-    return (index.h(index.Host, null, index.h("div", { class: "calendarPickerContainer form-control input-sm", "data-state": this.disabled ? 'disabled' : 'active' }, index.h("ir-date-picker", { maxDate: this.maxDate, class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, onDateChanged: evt => {
+    return (index.h(index.Host, null, index.h("div", { class: "calendarPickerContainer form-control input-sm", "data-state": this.disabled ? 'disabled' : 'active' }, index.h("ir-date-picker", { maxDate: this.maxDate, class: 'date-range-input', disabled: this.disabled, fromDate: this.fromDate, toDate: this.toDate, minDate: this.minDate, autoApply: true, "data-state": this.disabled ? 'disabled' : 'active', onDateChanged: evt => {
         this.handleDateChange(evt);
-      } }), index.h("ir-date-view", { "data-state": this.disabled ? 'disabled' : 'active', showDateDifference: this.disabled, class: "date-view", from_date: this.fromDate, to_date: this.toDate })), index.h("span", null, this.totalNights && !this.disabled ? (index.h("span", { class: "iglRangeNights ml-1" }, this.totalNights + (this.totalNights > 1 ? ` ${locales_store.locales.entries.Lcz_Nights}` : ` ${locales_store.locales.entries.Lcz_Night}`))) : (''))));
+      } }), index.h("div", { "data-state": this.disabled ? 'disabled' : 'active', class: "date-view" }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "12", width: "10.5", viewBox: "0 0 448 512" }, index.h("path", { fill: "currentColor", d: "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z" })), index.h("ir-date-view", { showDateDifference: this.disabled, from_date: this.fromDate, to_date: this.toDate }))), index.h("span", null, this.totalNights && !this.disabled ? (index.h("span", { class: "iglRangeNights mx-1" }, this.totalNights + (this.totalNights > 1 ? ` ${locales_store.locales.entries.Lcz_Nights}` : ` ${locales_store.locales.entries.Lcz_Night}`))) : (''))));
   }
 };
 IglDateRange.style = iglDateRangeCss;
@@ -3996,7 +4043,7 @@ const IglPropertyBookedBy = class {
     }
   }
   render() {
-    return (index.h(index.Host, null, index.h("div", { class: "text-left mt-3" }, index.h("div", { class: "form-group d-flex flex-column flex-md-row align-items-md-center text-left " }, index.h("label", { class: "p-0 m-0 label-control mr-1 font-weight-bold" }, locales_store.locales.entries.Lcz_BookedBy), index.h("div", { class: "bookedByEmailContainer mt-1 mt-md-0" }, index.h("ir-autocomplete", { danger_border: this.isButtonPressed && this.bookedByData.email === '', onComboboxValue: this.handleComboboxChange.bind(this), propertyId: this.propertyId, type: "email", value: this.bookedByData.email, required: true, placeholder: locales_store.locales.entries.Lcz_EmailAddress, onInputCleared: () => this.clearEvent() })))), index.h("div", { class: "bookedDetailsForm text-left mt-2 font-small-3 " }, index.h("div", { class: "d-flex flex-column flex-md-row  justify-content-md-between " }, index.h("div", { class: "p-0 flex-fill " }, index.h("div", { class: "form-group d-flex flex-column flex-md-row align-items-md-center p-0 flex-fill " }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_FirstName), index.h("div", { class: "p-0 m-0  controlContainer flex-fill  " }, index.h("input", { class: `form-control flex-fill ${this.isButtonPressed && this.bookedByData.firstName === '' && 'border-danger'}`, type: "text", placeholder: locales_store.locales.entries.Lcz_FirstName, id: v4.v4(), value: this.bookedByData.firstName, onInput: event => this.handleDataChange('firstName', event), required: true }))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_LastName), index.h("div", { class: "p-0 m-0  controlContainer flex-fill" }, index.h("input", { class: `form-control ${this.isButtonPressed && this.bookedByData.lastName === '' && 'border-danger'}`, type: "text", placeholder: locales_store.locales.entries.Lcz_LastName, id: v4.v4(), value: this.bookedByData.lastName, onInput: event => this.handleDataChange('lastName', event) }))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_Country), index.h("div", { class: "p-0 m-0  controlContainer flex-fill" }, index.h("select", { class: `form-control input-sm pr-0`, id: v4.v4(), onChange: event => this.handleDataChange('countryId', event) }, index.h("option", { value: "", selected: this.bookedByData.countryId === '' }, locales_store.locales.entries.Lcz_Select), this.countryNodeList.map(countryNode => (index.h("option", { value: countryNode.id, selected: this.bookedByData.countryId === countryNode.id }, countryNode.name)))))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_MobilePhone), index.h("div", { class: "p-0 m-0  d-flex  controlContainer flex-fill" }, index.h("div", { class: " p-0 m-0" }, index.h("select", { class: `form-control input-sm pr-0`, id: v4.v4(), onChange: event => this.handleDataChange('isdCode', event) }, index.h("option", { value: "", selected: this.bookedByData.isdCode === '' }, locales_store.locales.entries.Lcz_Isd), this.countryNodeList.map(country => (index.h("option", { value: country.id, selected: this.bookedByData.isdCode === country.id.toString() }, country.phone_prefix))))), index.h("div", { class: "flex-fill p-0 m-0" }, index.h("input", { class: `form-control
+    return (index.h(index.Host, null, index.h("div", { class: "text-left mt-3" }, index.h("div", { class: "form-group d-flex flex-column flex-md-row align-items-md-center text-left " }, index.h("label", { class: "p-0 m-0 label-control mr-1 font-weight-bold" }, locales_store.locales.entries.Lcz_BookedBy), index.h("div", { class: "bookedByEmailContainer mt-1 mt-md-0" }, index.h("ir-autocomplete", { danger_border: this.isButtonPressed && this.bookedByData.email === '', onComboboxValue: this.handleComboboxChange.bind(this), propertyId: this.propertyId, type: "email", value: this.bookedByData.email, required: true, placeholder: locales_store.locales.entries.Lcz_FindEmailAddress, onInputCleared: () => this.clearEvent() })))), index.h("div", { class: "bookedDetailsForm text-left mt-2 font-small-3 " }, index.h("div", { class: "d-flex flex-column flex-md-row  justify-content-md-between " }, index.h("div", { class: "p-0 flex-fill " }, index.h("div", { class: "form-group d-flex flex-column flex-md-row align-items-md-center p-0 flex-fill " }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_FirstName), index.h("div", { class: "p-0 m-0  controlContainer flex-fill  " }, index.h("input", { class: `form-control flex-fill ${this.isButtonPressed && this.bookedByData.firstName === '' && 'border-danger'}`, type: "text", placeholder: locales_store.locales.entries.Lcz_FirstName, id: v4.v4(), value: this.bookedByData.firstName, onInput: event => this.handleDataChange('firstName', event), required: true }))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_LastName), index.h("div", { class: "p-0 m-0  controlContainer flex-fill" }, index.h("input", { class: `form-control ${this.isButtonPressed && this.bookedByData.lastName === '' && 'border-danger'}`, type: "text", placeholder: locales_store.locales.entries.Lcz_LastName, id: v4.v4(), value: this.bookedByData.lastName, onInput: event => this.handleDataChange('lastName', event) }))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_Country), index.h("div", { class: "p-0 m-0  controlContainer flex-fill" }, index.h("select", { class: `form-control input-sm pr-0`, id: v4.v4(), onChange: event => this.handleDataChange('countryId', event) }, index.h("option", { value: "", selected: this.bookedByData.countryId === '' }, locales_store.locales.entries.Lcz_Select), this.countryNodeList.map(countryNode => (index.h("option", { value: countryNode.id, selected: this.bookedByData.countryId === countryNode.id }, countryNode.name)))))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_MobilePhone), index.h("div", { class: "p-0 m-0  d-flex  controlContainer flex-fill" }, index.h("div", { class: " p-0 m-0" }, index.h("select", { class: `form-control input-sm pr-0`, id: v4.v4(), onChange: event => this.handleDataChange('isdCode', event) }, index.h("option", { value: "", selected: this.bookedByData.isdCode === '' }, locales_store.locales.entries.Lcz_Isd), this.countryNodeList.map(country => (index.h("option", { value: country.id, selected: this.bookedByData.isdCode === country.id.toString() }, country.phone_prefix))))), index.h("div", { class: "flex-fill p-0 m-0" }, index.h("input", { class: `form-control
                      
                       `, type: "tel", placeholder: locales_store.locales.entries.Lcz_ContactNumber, id: v4.v4(), value: this.bookedByData.contactNumber, onInput: event => this.handleNumberInput('contactNumber', event) })))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_YourArrivalTime), index.h("div", { class: "p-0 m-0  controlContainer flex-fill" }, index.h("select", { class: `form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.selectedArrivalTime.code === '' && 'border-danger'}`, id: v4.v4(), onChange: event => this.handleDataChange('selectedArrivalTime', event) }, this.arrivalTimeList.map(time => (index.h("option", { value: time.CODE_NAME, selected: this.bookedByData.selectedArrivalTime.code === time.CODE_NAME }, time.CODE_VALUE_EN))))))), index.h("div", { class: "p-0 flex-fill  ml-md-3" }, index.h("div", { class: "  p-0 d-flex flex-column flex-md-row align-items-md-center " }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_AnyMessageForUs), index.h("div", { class: "p-0 m-0  controlContainer flex-fill " }, index.h("textarea", { id: v4.v4(), rows: 4, class: "form-control ", name: "message", value: this.bookedByData.message, onInput: event => this.handleDataChange('message', event) }))), this.showPaymentDetails && (index.h(index.Fragment, null, index.h("div", { class: "form-group mt-md-1  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_CardNumber), index.h("div", { class: "p-0 m-0  controlContainer flex-fill" }, index.h("input", { class: "form-control", type: "text", placeholder: "", pattern: "0-9 ", id: v4.v4(), value: this.bookedByData.cardNumber, onInput: event => this.handleNumberInput('cardNumber', event) }))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_CardHolderName), index.h("div", { class: "p-0 m-0  controlContainer flex-fill" }, index.h("input", { class: "form-control", type: "text", placeholder: "", pattern: "0-9 ", id: v4.v4(), value: this.bookedByData.cardHolderName, onInput: event => this.handleDataChange('cardHolderName', event) }))), index.h("div", { class: "form-group  p-0 d-flex flex-column flex-md-row align-items-md-center" }, index.h("label", { class: "p-0 m-0 margin3" }, locales_store.locales.entries.Lcz_ExpiryDate), index.h("div", { class: "p-0 m-0 row  controlContainer flex-fill" }, index.h("div", { class: "p-0 m-0" }, index.h("select", { class: "form-control input-sm pr-0", id: v4.v4(), onChange: event => this.handleDataChange('expiryMonth', event) }, this.expiryMonths.map(month => (index.h("option", { value: month, selected: month === this.bookedByData.expiryMonth }, month))))), index.h("div", { class: "p-0 m-0 ml-1" }, index.h("select", { class: "form-control input-sm pr-0", id: v4.v4(), onChange: event => this.handleDataChange('expiryYear', event) }, this.expiryYears.map((year, index$1) => (index.h("option", { value: year, selected: index$1 === this.bookedByData.expiryYear }, year))))))))), index.h("div", { class: "form-group mt-1 p-0 d-flex flex-row align-items-center" }, index.h("label", { class: "p-0 m-0", htmlFor: 'emailTheGuestId' }, locales_store.locales.entries.Lcz_EmailTheGuest), index.h("div", { class: "p-0 m-0  controlContainer flex-fill checkBoxContainer" }, index.h("input", { class: "form-control", type: "checkbox", checked: this.bookedByData.emailGuest, id: 'emailTheGuestId', onChange: event => this.handleDataChange('emailGuest', event) }))))))));
   }
@@ -8385,7 +8432,7 @@ const IglooCalendar = class {
     this.renderAgain = false;
     this.showBookProperty = false;
     this.totalAvailabilityQueue = [];
-    this.toBeAssignedDate = undefined;
+    this.highlightedDate = undefined;
   }
   ticketChanged() {
     calendarData.calendar_data.token = this.ticket;
@@ -8410,8 +8457,8 @@ const IglooCalendar = class {
     }
     handleUnAssignedDatesChange('unassigned_dates', newValue => {
       // console.log(newValue, Object.keys(newValue));
-      if (Object.keys(newValue).length === 0 && this.toBeAssignedDate !== '') {
-        this.toBeAssignedDate = '';
+      if (Object.keys(newValue).length === 0 && this.highlightedDate !== '') {
+        this.highlightedDate = '';
       }
     });
   }
@@ -8758,7 +8805,7 @@ const IglooCalendar = class {
           dt = new Date(opt.data);
           dt.setDate(dt.getDate() + 1);
         }
-        this.toBeAssignedDate = this.transformDateForScroll(dt);
+        this.highlightedDate = this.transformDateForScroll(dt);
         break;
       case 'search':
         break;
@@ -8776,7 +8823,7 @@ const IglooCalendar = class {
         break;
       case 'closeSideMenu':
         this.closeSideMenu();
-        this.toBeAssignedDate = '';
+        this.highlightedDate = '';
         this.showBookProperty = false;
         break;
     }
@@ -8879,6 +8926,16 @@ const IglooCalendar = class {
   }
   calendarScrolling() {
     if (this.scrollContainer) {
+      if (this.highlightedDate) {
+        const highlightedElement = document.querySelector(`.day-${this.highlightedDate}`);
+        if (highlightedElement) {
+          const { left, right } = highlightedElement.getBoundingClientRect();
+          const isVisible = left >= 0 && right <= window.innerWidth;
+          if (!isVisible) {
+            this.highlightedDate = '';
+          }
+        }
+      }
       const containerRect = this.scrollContainer.getBoundingClientRect();
       let leftSideMenuSize = 170;
       let maxWidth = containerRect.width - leftSideMenuSize;
@@ -9048,7 +9105,7 @@ const IglooCalendar = class {
     return (index.h(index.Host, null, index.h("ir-toast", null), index.h("ir-interceptor", null), index.h("div", { id: "iglooCalendar", class: "igl-calendar" }, this.shouldRenderCalendarView() ? ([
       this.showToBeAssigned ? (index.h("igl-to-be-assigned", { unassignedDatesProp: this.unassignedDates, to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       this.showLegend ? (index.h("igl-legends", { class: "legendContainer", legendData: this.calendarData.legendData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
-      index.h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, index.h("div", { id: "calendarContainer" }, index.h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }), index.h("igl-cal-body", { language: this.language, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, toBeAssignedDate: this.toBeAssignedDate, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), index.h("igl-cal-footer", { today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
+      index.h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, index.h("div", { id: "calendarContainer" }, index.h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, highlightedDate: this.highlightedDate, onOptionEvent: evt => this.onOptionSelect(evt) }), index.h("igl-cal-body", { language: this.language, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, highlightedDate: this.highlightedDate, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), index.h("igl-cal-footer", { highlightedDate: this.highlightedDate, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
     ]) : (index.h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (index.h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, adultChildConstraints: this.calendarData.adultChildConstraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() })), index.h("ir-sidebar", { onIrSidebarToggle: this.handleSideBarToggle.bind(this), open: this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING'), showCloseButton: this.editBookingItem !== null, sidebarStyles: { width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: this.roomNightsData ? 'white' : '#F2F3F8' } }, this.roomNightsData && (index.h("ir-room-nights", { pool: this.roomNightsData.pool, onCloseRoomNightsDialog: this.handleRoomNightsDialogClose.bind(this), language: this.language, bookingNumber: this.roomNightsData.bookingNumber, identifier: this.roomNightsData.identifier, toDate: this.roomNightsData.to_date, fromDate: this.roomNightsData.from_date, ticket: this.ticket, propertyId: this.propertyid })), this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (index.h("ir-booking-details", { hasPrint: true, hasReceipt: true, is_from_front_desk: true, propertyid: this.propertyid, hasRoomEdit: true, hasRoomDelete: true, bookingNumber: this.editBookingItem.BOOKING_NUMBER, ticket: this.ticket, baseurl: this.baseurl, language: this.language, hasRoomAdd: true }))), index.h("ir-modal", { modalTitle: '', rightBtnActive: this.dialogData ? !this.dialogData.hideConfirmButton : true, leftBtnText: (_a = locales_store.locales === null || locales_store.locales === void 0 ? void 0 : locales_store.locales.entries) === null || _a === void 0 ? void 0 : _a.Lcz_Cancel, rightBtnText: (_b = locales_store.locales === null || locales_store.locales === void 0 ? void 0 : locales_store.locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_Confirm, modalBody: this.dialogData ? this.dialogData.description : '', onConfirmModal: this.handleModalConfirm.bind(this), onCancelModal: this.handleModalCancel.bind(this) })));
   }
   get element() { return index.getElement(this); }
@@ -9058,7 +9115,7 @@ const IglooCalendar = class {
 };
 IglooCalendar.style = iglooCalendarCss;
 
-const irAutocompleteCss = ".sc-ir-autocomplete-h{display:block;position:relative}.selected.sc-ir-autocomplete{color:#fff;text-decoration:none;background-color:#666ee8}input.sc-ir-autocomplete{width:100%;position:relative}.combobox.sc-ir-autocomplete{margin:0;top:30px;min-width:100%;width:max-content;display:block;z-index:10000;padding:1px;background:white;box-shadow:0px 8px 16px 0px rgba(0, 0, 0, 0.2);padding:5px 0;max-height:250px;overflow-y:auto}.dropdown-item.sc-ir-autocomplete{cursor:pointer}button.sc-ir-autocomplete{all:unset;right:4px}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete,span.sc-ir-autocomplete,loader-container.sc-ir-autocomplete{padding:5px 16px;margin:0px;margin-top:2px;width:100%}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete{cursor:pointer}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete:hover{background:#f4f5fa}.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete,.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete:hover{color:#fff;text-decoration:none;background-color:#666ee8}.loader.sc-ir-autocomplete{width:14px;height:14px;border:2px solid #0f0f0f;border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}";
+const irAutocompleteCss = ".sc-ir-autocomplete-h{display:block;position:relative}.selected.sc-ir-autocomplete{color:#fff;text-decoration:none;background-color:#666ee8}input.sc-ir-autocomplete{width:100%;position:relative;border-top-left-radius:0px !important;border-left:0 !important;border-bottom-left-radius:0px !important}label.sc-ir-autocomplete{margin:0;border-top-right-radius:0px !important;border-right:0 !important;border-bottom-right-radius:0px !important;width:fit-content;display:flex;align-items:center;padding-right:3px !important;justify-content:center;transition:border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out}label[data-state='focused'].sc-ir-autocomplete{border-color:var(--blue)}.combobox.sc-ir-autocomplete{margin:0;top:30px;min-width:100%;width:max-content;display:block;z-index:10000;padding:1px;background:white;box-shadow:0px 8px 16px 0px rgba(0, 0, 0, 0.2);padding:5px 0;max-height:250px;overflow-y:auto}.dropdown-item.sc-ir-autocomplete{cursor:pointer}button.sc-ir-autocomplete{all:unset;right:4px}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete,span.sc-ir-autocomplete,loader-container.sc-ir-autocomplete{padding:5px 16px;margin:0px;margin-top:2px;width:100%}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete{cursor:pointer}.combobox.sc-ir-autocomplete p.sc-ir-autocomplete:hover{background:#f4f5fa}.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete,.combobox.sc-ir-autocomplete p[data-selected].sc-ir-autocomplete:hover{color:#fff;text-decoration:none;background-color:#666ee8}.loader.sc-ir-autocomplete{width:14px;height:14px;border:2px solid #0f0f0f;border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}";
 
 const IrAutocomplete = class {
   constructor(hostRef) {
@@ -9087,6 +9144,7 @@ const IrAutocomplete = class {
     this.isComboBoxVisible = false;
     this.isLoading = true;
     this.isItemSelected = undefined;
+    this.inputFocused = false;
   }
   componentWillLoad() {
     this.bookingService.setToken(calendarData.calendar_data.token);
@@ -9198,6 +9256,7 @@ const IrAutocomplete = class {
     }
   }
   handleBlur() {
+    this.inputFocused = false;
     setTimeout(() => {
       if (this.isDropdownItem(document.activeElement)) {
         return;
@@ -9272,6 +9331,7 @@ const IrAutocomplete = class {
   }
   handleFocus() {
     this.isComboBoxVisible = true;
+    this.inputFocused = true;
   }
   clearInput() {
     this.inputValue = '';
@@ -9288,7 +9348,7 @@ const IrAutocomplete = class {
     this.isComboBoxVisible = false;
   }
   render() {
-    return (index.h(index.Host, null, index.h("div", { class: 'd-flex align-items-center ' }, index.h("input", { required: this.required, disabled: this.disabled, id: this.inputId, onKeyDown: this.handleKeyDown.bind(this), class: `form-control input-sm flex-full ${this.danger_border && 'border-danger'}`, type: this.type, name: this.name, value: this.value || this.inputValue, placeholder: this.placeholder, onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), ref: el => (this.inputRef = el) }), this.inputValue && (index.h("button", { type: "button", class: 'position-absolute d-flex align-items-center justify-content-center ', onClick: this.clearInput.bind(this) }, index.h("p", { class: 'sr-only' }, "clear input"), index.h("svg", { width: "15", height: "15", viewBox: "0 0 15 15", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, index.h("path", { d: "M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z", fill: "currentColor", "fill-rule": "evenodd", "clip-rule": "evenodd" }))))), this.isComboBoxVisible && this.renderDropdown()));
+    return (index.h(index.Host, null, index.h("div", { class: 'd-flex align-items-center ' }, index.h("label", { "data-state": this.inputFocused ? 'focused' : 'blured', htmlFor: this.inputId, class: `form-control input-sm ${this.danger_border && 'border-danger'}` }, index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" }))), index.h("input", { required: this.required, disabled: this.disabled, id: this.inputId, onKeyDown: this.handleKeyDown.bind(this), class: `form-control input-sm flex-full ${this.danger_border && 'border-danger'}`, type: this.type, name: this.name, value: this.value || this.inputValue, placeholder: this.placeholder, onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), ref: el => (this.inputRef = el) }), this.inputValue && (index.h("button", { type: "button", class: 'position-absolute d-flex align-items-center justify-content-center ', onClick: this.clearInput.bind(this) }, index.h("p", { class: 'sr-only' }, "clear input"), index.h("svg", { width: "15", height: "15", viewBox: "0 0 15 15", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, index.h("path", { d: "M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z", fill: "currentColor", "fill-rule": "evenodd", "clip-rule": "evenodd" }))))), this.isComboBoxVisible && this.renderDropdown()));
   }
   get el() { return index.getElement(this); }
 };
@@ -11052,7 +11112,7 @@ const IrRoomNights = class {
 };
 IrRoomNights.style = irRoomNightsCss;
 
-const irSelectCss = ".border-theme.sc-ir-select{border:1px solid #cacfe7}";
+const irSelectCss = ".border-theme.sc-ir-select{border:1px solid #cacfe7}@keyframes bounce{0%,100%{transform:scale(1);animation-timing-function:cubic-bezier(0.8, 0, 1, 1)}50%{transform:scale(1.2);animation-timing-function:cubic-bezier(0, 0, 0.2, 1)}}.bounce-3.sc-ir-select{animation:bounce 1s 1}";
 
 const IrSelect = class {
   constructor(hostRef) {
@@ -11077,6 +11137,7 @@ const IrSelect = class {
     this.labelColor = 'dark';
     this.labelBorder = 'theme';
     this.labelWidth = 3;
+    this.select_id = v4.v4();
     this.initial = true;
     this.valid = false;
   }
@@ -11090,9 +11151,20 @@ const IrSelect = class {
       this.initial = false;
     }
   }
+  handleButtonAnimation(e) {
+    console.log(e.detail, this.select_id, e.detail === this.select_id);
+    if (!this.selectEl || e.detail !== this.select_id) {
+      return;
+    }
+    console.log('first1');
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.selectEl.classList.add('border-danger');
+  }
   componentwillload() { }
   disconnectedCallback() { }
   handleSelectChange(event) {
+    this.selectEl.classList.remove('border-danger');
     if (this.required) {
       this.initial = false;
       this.valid = event.target.checkValidity();
@@ -11106,7 +11178,7 @@ const IrSelect = class {
   }
   render() {
     let className = 'form-control';
-    let label = (index.h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}` }, index.h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${this.labelBackground ? 'bg-' + this.labelBackground : ''} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
+    let label = (index.h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}` }, index.h("label", { htmlFor: this.select_id, class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${this.labelBackground ? 'bg-' + this.labelBackground : ''} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
     if (this.selectStyle === false) {
       className = '';
     }
@@ -11116,7 +11188,7 @@ const IrSelect = class {
     if (!this.LabelAvailable) {
       label = '';
     }
-    return (index.h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, index.h("div", { class: "input-group row m-0" }, label, index.h("select", { class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, index.h("option", { value: '' }, this.firstOption), this.data.map(item => {
+    return (index.h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, index.h("div", { class: "input-group row m-0" }, label, index.h("select", { ref: el => (this.selectEl = el), id: this.select_id, class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, index.h("option", { value: '' }, this.firstOption), this.data.map(item => {
       if (this.selectedValue === item.value) {
         return (index.h("option", { selected: true, value: item.value }, item.text));
       }

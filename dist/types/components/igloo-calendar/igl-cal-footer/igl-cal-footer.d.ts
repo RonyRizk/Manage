@@ -7,6 +7,7 @@ export declare class IglCalFooter {
     [key: string]: any;
   };
   today: String;
+  highlightedDate: string;
   handleOptionEvent(key: any, data?: string): void;
   render(): any;
 }

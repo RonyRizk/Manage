@@ -61,7 +61,7 @@ export class IglooCalendar {
     this.renderAgain = false;
     this.showBookProperty = false;
     this.totalAvailabilityQueue = [];
-    this.toBeAssignedDate = undefined;
+    this.highlightedDate = undefined;
   }
   ticketChanged() {
     calendar_data.token = this.ticket;
@@ -86,8 +86,8 @@ export class IglooCalendar {
     }
     handleUnAssignedDatesChange('unassigned_dates', newValue => {
       // console.log(newValue, Object.keys(newValue));
-      if (Object.keys(newValue).length === 0 && this.toBeAssignedDate !== '') {
-        this.toBeAssignedDate = '';
+      if (Object.keys(newValue).length === 0 && this.highlightedDate !== '') {
+        this.highlightedDate = '';
       }
     });
   }
@@ -434,7 +434,7 @@ export class IglooCalendar {
           dt = new Date(opt.data);
           dt.setDate(dt.getDate() + 1);
         }
-        this.toBeAssignedDate = this.transformDateForScroll(dt);
+        this.highlightedDate = this.transformDateForScroll(dt);
         break;
       case 'search':
         break;
@@ -452,7 +452,7 @@ export class IglooCalendar {
         break;
       case 'closeSideMenu':
         this.closeSideMenu();
-        this.toBeAssignedDate = '';
+        this.highlightedDate = '';
         this.showBookProperty = false;
         break;
     }
@@ -555,6 +555,16 @@ export class IglooCalendar {
   }
   calendarScrolling() {
     if (this.scrollContainer) {
+      if (this.highlightedDate) {
+        const highlightedElement = document.querySelector(`.day-${this.highlightedDate}`);
+        if (highlightedElement) {
+          const { left, right } = highlightedElement.getBoundingClientRect();
+          const isVisible = left >= 0 && right <= window.innerWidth;
+          if (!isVisible) {
+            this.highlightedDate = '';
+          }
+        }
+      }
       const containerRect = this.scrollContainer.getBoundingClientRect();
       let leftSideMenuSize = 170;
       let maxWidth = containerRect.width - leftSideMenuSize;
@@ -728,7 +738,7 @@ export class IglooCalendar {
     return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { id: "iglooCalendar", class: "igl-calendar" }, this.shouldRenderCalendarView() ? ([
       this.showToBeAssigned ? (h("igl-to-be-assigned", { unassignedDatesProp: this.unassignedDates, to_date: this.to_date, from_date: this.from_date, propertyid: this.propertyid, class: "tobeAssignedContainer", calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
       this.showLegend ? (h("igl-legends", { class: "legendContainer", legendData: this.calendarData.legendData, onOptionEvent: evt => this.onOptionSelect(evt) })) : null,
-      h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, h("div", { id: "calendarContainer" }, h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }), h("igl-cal-body", { language: this.language, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, toBeAssignedDate: this.toBeAssignedDate, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), h("igl-cal-footer", { today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
+      h("div", { class: "calendarScrollContainer", onMouseDown: event => this.dragScrollContent(event), onScroll: () => this.calendarScrolling() }, h("div", { id: "calendarContainer" }, h("igl-cal-header", { unassignedDates: this.unassignedDates, to_date: this.to_date, propertyid: this.propertyid, today: this.today, calendarData: this.calendarData, highlightedDate: this.highlightedDate, onOptionEvent: evt => this.onOptionSelect(evt) }), h("igl-cal-body", { language: this.language, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, today: this.today, highlightedDate: this.highlightedDate, isScrollViewDragging: this.scrollViewDragging, calendarData: this.calendarData }), h("igl-cal-footer", { highlightedDate: this.highlightedDate, today: this.today, calendarData: this.calendarData, onOptionEvent: evt => this.onOptionSelect(evt) }))),
     ]) : (h("ir-loading-screen", { message: "Preparing Calendar Data" }))), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowedBookingSources, adultChildConstraints: this.calendarData.adultChildConstraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onCloseBookingWindow: () => this.handleCloseBookingWindow() })), h("ir-sidebar", { onIrSidebarToggle: this.handleSideBarToggle.bind(this), open: this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING'), showCloseButton: this.editBookingItem !== null, sidebarStyles: { width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: this.roomNightsData ? 'white' : '#F2F3F8' } }, this.roomNightsData && (h("ir-room-nights", { pool: this.roomNightsData.pool, onCloseRoomNightsDialog: this.handleRoomNightsDialogClose.bind(this), language: this.language, bookingNumber: this.roomNightsData.bookingNumber, identifier: this.roomNightsData.identifier, toDate: this.roomNightsData.to_date, fromDate: this.roomNightsData.from_date, ticket: this.ticket, propertyId: this.propertyid })), this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (h("ir-booking-details", { hasPrint: true, hasReceipt: true, is_from_front_desk: true, propertyid: this.propertyid, hasRoomEdit: true, hasRoomDelete: true, bookingNumber: this.editBookingItem.BOOKING_NUMBER, ticket: this.ticket, baseurl: this.baseurl, language: this.language, hasRoomAdd: true }))), h("ir-modal", { modalTitle: '', rightBtnActive: this.dialogData ? !this.dialogData.hideConfirmButton : true, leftBtnText: (_a = locales === null || locales === void 0 ? void 0 : locales.entries) === null || _a === void 0 ? void 0 : _a.Lcz_Cancel, rightBtnText: (_b = locales === null || locales === void 0 ? void 0 : locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_Confirm, modalBody: this.dialogData ? this.dialogData.description : '', onConfirmModal: this.handleModalConfirm.bind(this), onCancelModal: this.handleModalCancel.bind(this) })));
   }
   static get is() { return "igloo-calendar"; }
@@ -900,7 +910,7 @@ export class IglooCalendar {
       "renderAgain": {},
       "showBookProperty": {},
       "totalAvailabilityQueue": {},
-      "toBeAssignedDate": {}
+      "highlightedDate": {}
     };
   }
   static get events() {

@@ -1,4 +1,5 @@
 import { h } from "@stencil/core";
+import { v4 } from "uuid";
 export class IrSelect {
   constructor() {
     this.count = 0;
@@ -20,6 +21,7 @@ export class IrSelect {
     this.labelColor = 'dark';
     this.labelBorder = 'theme';
     this.labelWidth = 3;
+    this.select_id = v4();
     this.initial = true;
     this.valid = false;
   }
@@ -33,9 +35,20 @@ export class IrSelect {
       this.initial = false;
     }
   }
+  handleButtonAnimation(e) {
+    console.log(e.detail, this.select_id, e.detail === this.select_id);
+    if (!this.selectEl || e.detail !== this.select_id) {
+      return;
+    }
+    console.log('first1');
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.selectEl.classList.add('border-danger');
+  }
   componentwillload() { }
   disconnectedCallback() { }
   handleSelectChange(event) {
+    this.selectEl.classList.remove('border-danger');
     if (this.required) {
       this.initial = false;
       this.valid = event.target.checkValidity();
@@ -49,7 +62,7 @@ export class IrSelect {
   }
   render() {
     let className = 'form-control';
-    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}` }, h("label", { class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${this.labelBackground ? 'bg-' + this.labelBackground : ''} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
+    let label = (h("div", { class: `input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}` }, h("label", { htmlFor: this.select_id, class: `input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${this.labelBackground ? 'bg-' + this.labelBackground : ''} flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} ` }, this.label, this.required ? '*' : '')));
     if (this.selectStyle === false) {
       className = '';
     }
@@ -59,7 +72,7 @@ export class IrSelect {
     if (!this.LabelAvailable) {
       label = '';
     }
-    return (h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, h("div", { class: "input-group row m-0" }, label, h("select", { class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, h("option", { value: '' }, this.firstOption), this.data.map(item => {
+    return (h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, h("div", { class: "input-group row m-0" }, label, h("select", { ref: el => (this.selectEl = el), id: this.select_id, class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, h("option", { value: '' }, this.firstOption), this.data.map(item => {
       if (this.selectedValue === item.value) {
         return (h("option", { selected: true, value: item.value }, item.text));
       }
@@ -404,6 +417,24 @@ export class IrSelect {
         "attribute": "label-width",
         "reflect": false,
         "defaultValue": "3"
+      },
+      "select_id": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "select_id",
+        "reflect": false,
+        "defaultValue": "v4()"
       }
     };
   }
@@ -438,6 +469,15 @@ export class IrSelect {
       }, {
         "propName": "submited",
         "methodName": "watchHandler2"
+      }];
+  }
+  static get listeners() {
+    return [{
+        "name": "animateIrSelect",
+        "method": "handleButtonAnimation",
+        "target": "body",
+        "capture": false,
+        "passive": false
       }];
   }
 }

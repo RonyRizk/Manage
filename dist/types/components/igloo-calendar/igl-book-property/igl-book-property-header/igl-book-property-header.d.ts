@@ -37,10 +37,11 @@ export declare class IglBookPropertyHeader {
     data: unknown;
   }>;
   animateIrButton: EventEmitter<string>;
+  animateIrSelect: EventEmitter<string>;
   private sourceOption;
   getSplitBookingList(): any;
   getSourceNode(): any;
-  handleAdultChildChange(key: string, event: Event): void;
+  handleAdultChildChange(key: string, value: string): void;
   getAdultChildConstraints(): any;
   renderChildCaption(): string;
   handleButtonClicked(): void;

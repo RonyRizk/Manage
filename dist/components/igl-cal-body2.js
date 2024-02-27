@@ -34,7 +34,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     this.countryNodeList = undefined;
     this.dragOverElement = '';
     this.renderAgain = false;
-    this.toBeAssignedDate = undefined;
+    this.highlightedDate = undefined;
   }
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
@@ -233,12 +233,12 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
   }
   getGeneralCategoryDayColumns(addClass, isCategory = false, index) {
     return calendar_dates.days.map(dayInfo => {
-      return (h("div", { class: `cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}` }, isCategory ? (h("span", { class: 'categoryName' }, dayInfo.rate[index].exposed_inventory.rts)) : ('')));
+      return (h("div", { class: `cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''}` }, isCategory ? (h("span", { class: 'categoryName' }, dayInfo.rate[index].exposed_inventory.rts)) : ('')));
     });
   }
   getGeneralRoomDayColumns(roomId, roomCategory) {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
-    return this.calendarData.days.map(dayInfo => (h("div", { class: `cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''} ${this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''} ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`, onClick: () => this.clickCell(roomId, dayInfo, roomCategory) })));
+    return this.calendarData.days.map(dayInfo => (h("div", { class: `cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''} ${this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''} ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`, onClick: () => this.clickCell(roomId, dayInfo, roomCategory) })));
   }
   toggleCategory(roomCategory) {
     roomCategory.expanded = !roomCategory.expanded;
@@ -281,7 +281,7 @@ const IglCalBody = /*@__PURE__*/ proxyCustomElement(class IglCalBody extends HTM
     "currency": [8],
     "language": [1],
     "countryNodeList": [8, "country-node-list"],
-    "toBeAssignedDate": [1, "to-be-assigned-date"],
+    "highlightedDate": [1, "highlighted-date"],
     "dragOverElement": [32],
     "renderAgain": [32]
   }, [[8, "dragOverHighlightElement", "dragOverHighlightElementHandler"], [8, "gotoRoomEvent", "gotoRoom"], [8, "addToBeAssignedEvent", "addToBeAssignedEvents"], [8, "closeBookingWindow", "closeWindow"]]]);

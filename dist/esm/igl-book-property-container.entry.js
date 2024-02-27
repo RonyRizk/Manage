@@ -1,11 +1,11 @@
 import { r as registerInstance, c as createEvent, h, H as Host } from './index-795d2df3.js';
-import { B as BookingService } from './booking.service-f50acc1f.js';
+import { B as BookingService } from './booking.service-9fa3200d.js';
 import { R as RoomService } from './room.service-155ea63e.js';
 import { c as calendar_data } from './calendar-data-b063a88d.js';
 import { l as locales } from './locales.store-bd6e6ba2.js';
 import { a as axios } from './Token-2955ce2c.js';
 
-const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:block;margin:0;padding:0}.book-container.sc-igl-book-property-container{width:min-content;margin:0;padding:0}";
+const iglBookPropertyContainerCss = ".sc-igl-book-property-container-h{display:block;margin:0;padding:0;letter-spacing:0px !important;font-family:'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;font-size:1rem !important;font-weight:400 !important;line-height:1.45 !important;color:#6b6f82 !important;text-align:left !important}.book-container.sc-igl-book-property-container{width:min-content;margin:0;padding:0}h3.sc-igl-book-property-container{font-size:1rem}";
 
 const IglBookPropertyContainer = class {
   constructor(hostRef) {

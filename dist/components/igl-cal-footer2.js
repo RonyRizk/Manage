@@ -10,18 +10,20 @@ const IglCalFooter = /*@__PURE__*/ proxyCustomElement(class IglCalFooter extends
     this.optionEvent = createEvent(this, "optionEvent", 7);
     this.calendarData = undefined;
     this.today = undefined;
+    this.highlightedDate = undefined;
   }
   // private isOnline:boolean = false;
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v15"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v16"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
   static get style() { return iglCalFooterCss; }
 }, [2, "igl-cal-footer", {
     "calendarData": [16],
-    "today": [16]
+    "today": [16],
+    "highlightedDate": [1, "highlighted-date"]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

@@ -66,6 +66,7 @@ export declare class IglBookingEventHover {
   getRoomInfo(): any;
   renderTitle(eventType: any, roomInfo: any): string;
   handleBookingOption(eventType: any, roomData?: any): void;
+  renderNote(): any;
   getInfoElement(): any;
   getNewBookingOptions(): any;
   getBlockedView(): any;

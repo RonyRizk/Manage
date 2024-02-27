@@ -20,6 +20,7 @@ export declare class IrAutocomplete {
   isComboBoxVisible: boolean;
   isLoading: boolean;
   isItemSelected: boolean;
+  inputFocused: boolean;
   comboboxValue: EventEmitter<{
     key: string;
     data: unknown;

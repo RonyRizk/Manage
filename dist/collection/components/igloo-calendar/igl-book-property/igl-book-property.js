@@ -298,6 +298,7 @@ export class IglBookProperty {
     return (h(Fragment, null, h("igl-block-dates-view", { fromDate: this.dateRangeData.fromDateStr, toDate: this.dateRangeData.toDateStr, entryDate: this.defaultData.ENTRY_DATE, onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), h("div", { class: "p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between" }, h("button", { class: "btn btn-secondary flex-fill", onClick: () => this.closeWindow() }, locales.entries.Lcz_Cancel), h("button", { class: "btn btn-primary flex-fill", onClick: () => this.handleBlockDate() }, locales.entries.Lcz_Blockdates))));
   }
   handleButtonClicked(event) {
+    var _a, _b;
     switch (event.detail.key) {
       case 'save':
         this.bookUser(false);
@@ -324,9 +325,29 @@ export class IglBookProperty {
       case 'next':
         event.stopImmediatePropagation();
         event.stopPropagation();
-        this.gotoPage('page_two');
+        if (!((_a = this.adultChildCount) === null || _a === void 0 ? void 0 : _a.adult)) {
+          this.animateIrSelect.emit('adult_child_select');
+          break;
+        }
+        if (this.selectedUnits.size > 0) {
+          this.gotoPage('page_two');
+          break;
+        }
+        else {
+          if (((_b = this.defaultData) === null || _b === void 0 ? void 0 : _b.roomsInfo.length) === 0) {
+            this.animateIrButton.emit('check_availability');
+            break;
+          }
+        }
+        this.toast.emit({
+          type: 'error',
+          description: locales.entries.Lcz_SelectRatePlan,
+          title: locales.entries.Lcz_SelectRatePlan,
+        });
+        break;
       case 'check':
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
+        break;
       default:
         break;
     }
@@ -652,6 +673,57 @@ export class IglBookProperty {
           "original": "null",
           "resolved": "null",
           "references": {}
+        }
+      }, {
+        "method": "animateIrButton",
+        "name": "animateIrButton",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        }
+      }, {
+        "method": "animateIrSelect",
+        "name": "animateIrSelect",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        }
+      }, {
+        "method": "toast",
+        "name": "toast",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "IToast",
+          "resolved": "ICustomToast & Partial<IToastWithButton> | IDefaultToast & Partial<IToastWithButton>",
+          "references": {
+            "IToast": {
+              "location": "import",
+              "path": "@/components/ir-toast/toast",
+              "id": "src/components/ir-toast/toast.ts::IToast"
+            }
+          }
         }
       }];
   }

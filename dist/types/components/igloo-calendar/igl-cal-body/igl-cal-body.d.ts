@@ -12,7 +12,7 @@ export declare class IglCalBody {
   countryNodeList: any;
   dragOverElement: string;
   renderAgain: boolean;
-  toBeAssignedDate: string;
+  highlightedDate: string;
   addBookingDatasEvent: EventEmitter<any[]>;
   private selectedRooms;
   private fromRoomId;

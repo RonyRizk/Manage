@@ -1,8 +1,6 @@
-'use strict';
-
-const Token = require('./Token-7fd57fe8.js');
-const locales_store = require('./locales.store-1dd3e126.js');
-const calendarData = require('./calendar-data-2757e82e.js');
+import { a as axios, T as Token } from './Token-2955ce2c.js';
+import { l as locales$1 } from './locales.store-bd6e6ba2.js';
+import { c as calendar_data } from './calendar-data-b063a88d.js';
 
 //! moment.js
 //! version : 2.29.4
@@ -5823,9 +5821,9 @@ function formatName(firstName, lastName) {
 }
 async function getStayStatus() {
   try {
-    const token = calendarData.calendar_data.token;
+    const token = calendar_data.token;
     if (token) {
-      const { data } = await Token.axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi?Ticket=${token}`, {
+      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi?Ticket=${token}`, {
         TBL_NAMES: ['_STAY_STATUS'],
       });
       return data.My_Result.map(d => ({
@@ -5845,7 +5843,7 @@ function renderBlock003Date(date, hour, minute) {
   const dt = new Date(date);
   dt.setHours(hour);
   dt.setMinutes(minute);
-  return `${locales_store.locales.entries.Lcz_BlockedTill} ${hooks(dt).format('MMM DD, HH:mm')}`;
+  return `${locales$1.entries.Lcz_BlockedTill} ${hooks(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell, stayStatus) {
   var _a, _b;
@@ -5888,7 +5886,7 @@ function getDefaultData(cell, stayStatus) {
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
-    NOTES: cell.booking.remark,
+    NOTES: cell.booking.is_direct ? cell.booking.remark : null,
     is_direct: cell.booking.is_direct,
     BALANCE: (_b = cell.booking.financial) === null || _b === void 0 ? void 0 : _b.due_amount,
     channel_booking_nbr: cell.booking.channel_booking_nbr,
@@ -5997,7 +5995,7 @@ function transformNewBooking(data) {
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
       guarantee: room.rateplan.guarantee,
-      TOTAL_PRICE: room.total,
+      TOTAL_PRICE: room.gross_total,
       COUNTRY: data.guest.country_id,
       FROM_DATE_STR: data.format.from_date,
       TO_DATE_STR: data.format.to_date,
@@ -6006,7 +6004,7 @@ function transformNewBooking(data) {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
-      NOTES: data.remark,
+      NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
       ota_notes: data.ota_notes,
     });
@@ -6048,12 +6046,12 @@ function calculateDaysBetweenDates(from_date, to_date) {
   return daysDiff;
 }
 
-class BookingService extends Token.Token {
+class BookingService extends Token {
   async getCalendarData(propertyid, from_date, to_date) {
     try {
       const token = this.getToken();
       if (token !== null) {
-        const { data } = await Token.axios.post(`/Get_Exposed_Calendar?Ticket=${token}`, {
+        const { data } = await axios.post(`/Get_Exposed_Calendar?Ticket=${token}`, {
           propertyid,
           from_date,
           to_date,
@@ -6103,7 +6101,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token !== null) {
-        const { data } = await Token.axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
+        const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -6119,7 +6117,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token !== null) {
-        const { data } = await Token.axios.post(`/Edit_Exposed_Guest?Ticket=${token}`, Object.assign(Object.assign({}, guest), { book_nbr }));
+        const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`, Object.assign(Object.assign({}, guest), { book_nbr }));
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -6135,7 +6133,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
+        const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
           propertyid,
           from_date,
           to_date,
@@ -6163,7 +6161,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Get_Exposed_Countries?Ticket=${token}`, {
+        const { data } = await axios.post(`/Get_Exposed_Countries?Ticket=${token}`, {
           language,
         });
         if (data.ExceptionMsg !== '') {
@@ -6181,7 +6179,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, {
+        const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, {
           TBL_NAMES: ['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
         });
         if (data.ExceptionMsg !== '') {
@@ -6204,7 +6202,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
+        const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -6220,7 +6218,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Get_Country_By_IP?Ticket=${token}`, {
+        const { data } = await axios.post(`/Get_Country_By_IP?Ticket=${token}`, {
           IP: '',
         });
         if (data.ExceptionMsg !== '') {
@@ -6238,7 +6236,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Block_Exposed_Unit?Ticket=${token}`, params);
+        const { data } = await axios.post(`/Block_Exposed_Unit?Ticket=${token}`, params);
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -6255,7 +6253,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/GET_EXPOSED_GUEST?Ticket=${token}`, {
+        const { data } = await axios.post(`/GET_EXPOSED_GUEST?Ticket=${token}`, {
           email,
         });
         if (data.ExceptionMsg !== '') {
@@ -6276,7 +6274,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
+        const { data } = await axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
           booking_nbr,
           language,
         });
@@ -6316,7 +6314,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Fetch_Exposed_Guests?Ticket=${token}`, {
+        const { data } = await axios.post(`/Fetch_Exposed_Guests?Ticket=${token}`, {
           email,
           property_id,
         });
@@ -6338,7 +6336,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Fetch_Exposed_Bookings?Ticket=${token}`, {
+        const { data } = await axios.post(`/Fetch_Exposed_Bookings?Ticket=${token}`, {
           booking_nbr,
           property_id,
           from_date,
@@ -6362,7 +6360,7 @@ class BookingService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/Get_PCI_Card_Info_URL?Ticket=${token}`, {
+        const { data } = await axios.post(`/Get_PCI_Card_Info_URL?Ticket=${token}`, {
           BOOK_NBR,
         });
         if (data.ExceptionMsg !== '') {
@@ -6475,7 +6473,7 @@ class BookingService extends Token.Token {
           },
         };
         console.log('book user payload', body);
-        const { data } = await Token.axios.post(`/DoReservation?Ticket=${token}`, body);
+        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -6493,29 +6491,6 @@ class BookingService extends Token.Token {
   }
 }
 
-exports.BookingService = BookingService;
-exports.addTwoMonthToDate = addTwoMonthToDate;
-exports.bookingStatus = bookingStatus;
-exports.calculateDaysBetweenDates = calculateDaysBetweenDates;
-exports.computeEndDate = computeEndDate;
-exports.convertDMYToISO = convertDMYToISO;
-exports.convertDatePrice = convertDatePrice;
-exports.convertDateToCustomFormat = convertDateToCustomFormat;
-exports.convertDateToTime = convertDateToTime;
-exports.dateDifference = dateDifference;
-exports.dateToFormattedString = dateToFormattedString;
-exports.findCountry = findCountry;
-exports.formatDate = formatDate;
-exports.formatLegendColors = formatLegendColors;
-exports.formatName = formatName;
-exports.getCurrencySymbol = getCurrencySymbol;
-exports.getDaysArray = getDaysArray;
-exports.getMyBookings = getMyBookings;
-exports.getNextDay = getNextDay;
-exports.getReleaseHoursString = getReleaseHoursString;
-exports.hooks = hooks;
-exports.isBlockUnit = isBlockUnit;
-exports.transformNewBLockedRooms = transformNewBLockedRooms;
-exports.transformNewBooking = transformNewBooking;
+export { BookingService as B, getMyBookings as a, convertDateToTime as b, convertDateToCustomFormat as c, dateToFormattedString as d, getReleaseHoursString as e, findCountry as f, getCurrencySymbol as g, hooks as h, dateDifference as i, formatLegendColors as j, transformNewBooking as k, bookingStatus as l, isBlockUnit as m, calculateDaysBetweenDates as n, getNextDay as o, addTwoMonthToDate as p, convertDMYToISO as q, computeEndDate as r, formatName as s, transformNewBLockedRooms as t, getDaysArray as u, convertDatePrice as v, formatDate as w };
 
-//# sourceMappingURL=booking.service-a758c638.js.map
+//# sourceMappingURL=booking.service-9fa3200d.js.map

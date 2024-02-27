@@ -75,7 +75,7 @@ function transformNewBooking(data) {
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
       guarantee: room.rateplan.guarantee,
-      TOTAL_PRICE: room.total,
+      TOTAL_PRICE: room.gross_total,
       COUNTRY: data.guest.country_id,
       FROM_DATE_STR: data.format.from_date,
       TO_DATE_STR: data.format.to_date,
@@ -84,7 +84,7 @@ function transformNewBooking(data) {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
-      NOTES: data.remark,
+      NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
       ota_notes: data.ota_notes,
     });

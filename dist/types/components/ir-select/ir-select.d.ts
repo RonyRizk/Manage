@@ -19,11 +19,14 @@ export declare class IrSelect {
   labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
   labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
   labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  select_id: string;
   initial: boolean;
   valid: boolean;
   selectChange: EventEmitter;
+  private selectEl;
   watchHandler(newValue: string): void;
   watchHandler2(newValue: boolean): void;
+  handleButtonAnimation(e: CustomEvent): void;
   componentwillload(): void;
   disconnectedCallback(): void;
   handleSelectChange(event: any): void;

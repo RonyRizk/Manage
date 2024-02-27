@@ -2,6 +2,7 @@ import { EventEmitter } from '../../../stencil-public-runtime';
 import { RoomBlockDetails, RoomBookingDetails } from '../../../models/IBooking';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { TAdultChildConstraints, TPropertyButtonsTypes } from '../../../models/igl-book-property';
+import { IToast } from "../../ir-toast/toast";
 export declare class IglBookProperty {
   propertyid: number;
   allowedBookingSources: any;
@@ -36,6 +37,9 @@ export declare class IglBookProperty {
   }>;
   blockedCreated: EventEmitter<RoomBlockDetails>;
   resetBookingData: EventEmitter<null>;
+  animateIrButton: EventEmitter<string>;
+  animateIrSelect: EventEmitter<string>;
+  toast: EventEmitter<IToast>;
   private initialRoomIds;
   private sourceOption;
   private page;
