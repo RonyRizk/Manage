@@ -37,6 +37,7 @@ export class GuestInfo {
       this.isLoading = true;
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr);
       this.closeSideBar.emit(null);
+      this.resetBookingData.emit(null);
     }
     catch (error) {
       console.log(error);
@@ -209,6 +210,21 @@ export class GuestInfo {
     return [{
         "method": "closeSideBar",
         "name": "closeSideBar",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "null",
+          "resolved": "null",
+          "references": {}
+        }
+      }, {
+        "method": "resetBookingData",
+        "name": "resetBookingData",
         "bubbles": true,
         "cancelable": true,
         "composed": true,

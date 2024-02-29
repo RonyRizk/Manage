@@ -43,7 +43,7 @@ class RoomService extends Token {
           throw new Error(data.ExceptionMsg);
         }
         let entries = this.transformArrayToObject(data.My_Result.entries);
-        locales.entries = entries;
+        locales.entries = Object.assign(Object.assign({}, locales.entries), entries);
         locales.direction = data.My_Result.direction;
         return { entries, direction: data.My_Result.direction };
       }

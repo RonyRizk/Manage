@@ -13,6 +13,7 @@ const GuestInfo = /*@__PURE__*/ proxyCustomElement(class GuestInfo extends HTMLE
     super();
     this.__registerHost();
     this.closeSideBar = createEvent(this, "closeSideBar", 7);
+    this.resetBookingData = createEvent(this, "resetBookingData", 7);
     this.bookingService = new BookingService();
     this.setupDataCountries = null;
     this.setupDataCountriesCode = null;
@@ -47,6 +48,7 @@ const GuestInfo = /*@__PURE__*/ proxyCustomElement(class GuestInfo extends HTMLE
       this.isLoading = true;
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr);
       this.closeSideBar.emit(null);
+      this.resetBookingData.emit(null);
     }
     catch (error) {
       console.log(error);

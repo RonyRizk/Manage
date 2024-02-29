@@ -1,0 +1,1 @@
+{"version":3,"file":"common.js","sourceRoot":"","sources":["../../src/models/common.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,UAAU;CAGtB","sourcesContent":["export class Identifier {\r\n  code: string;\r\n  name: string;\r\n}\r\n"]}

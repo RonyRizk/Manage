@@ -13,7 +13,7 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
     this.isShown = false;
     this.isLoading = false;
     this.isUnassignedUnit = false;
-    this.handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment'];
+    this.handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   }
   componentWillLoad() {
     this.setupAxiosInterceptors();

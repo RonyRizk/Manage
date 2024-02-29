@@ -11,6 +11,7 @@ export declare class IrSelect {
   LabelAvailable: boolean;
   firstOption: string;
   selectStyle: boolean;
+  showFirstOption: boolean;
   submited: boolean;
   size: 'sm' | 'md' | 'lg';
   textSize: 'sm' | 'md' | 'lg';

@@ -15,6 +15,7 @@ export declare class GuestInfo {
   guest: Guest | null;
   isLoading: boolean;
   closeSideBar: EventEmitter<null>;
+  resetBookingData: EventEmitter<null>;
   private bookingService;
   componentWillLoad(): Promise<void>;
   init(): Promise<void>;

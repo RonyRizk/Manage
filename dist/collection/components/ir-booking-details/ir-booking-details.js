@@ -75,19 +75,15 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
-      console.log(languageTexts);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
       }
       this.defaultTexts = languageTexts;
-      console.log(this.defaultTexts);
       this.countryNodeList = countriesList;
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
-      console.log(this.calendarData);
       this.setRoomsData(roomResponse);
-      // console.log(this.calendarData);
       const paymentCodesToShow = ['001', '004'];
       this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
       this.guestData = bookingDetails.guest;

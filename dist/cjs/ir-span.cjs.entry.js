@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-4794c294.js');
+const index = require('./index-94e5c77d.js');
 
 const IrSpan = class {
   constructor(hostRef) {

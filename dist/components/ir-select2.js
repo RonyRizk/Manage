@@ -19,6 +19,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     this.LabelAvailable = true;
     this.firstOption = 'Select';
     this.selectStyle = true;
+    this.showFirstOption = true;
     this.submited = false;
     this.size = 'md';
     this.textSize = 'md';
@@ -78,7 +79,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     if (!this.LabelAvailable) {
       label = '';
     }
-    return (h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, h("div", { class: "input-group row m-0" }, label, h("select", { ref: el => (this.selectEl = el), id: this.select_id, class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, h("option", { value: '' }, this.firstOption), this.data.map(item => {
+    return (h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, h("div", { class: "input-group row m-0" }, label, h("select", { ref: el => (this.selectEl = el), id: this.select_id, class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, this.showFirstOption && h("option", { value: '' }, this.firstOption), this.data.map(item => {
       if (this.selectedValue === item.value) {
         return (h("option", { selected: true, value: item.value }, item.text));
       }
@@ -103,6 +104,7 @@ const IrSelect = /*@__PURE__*/ proxyCustomElement(class IrSelect extends HTMLEle
     "LabelAvailable": [4, "label-available"],
     "firstOption": [1, "first-option"],
     "selectStyle": [4, "select-style"],
+    "showFirstOption": [4, "show-first-option"],
     "submited": [4],
     "size": [1],
     "textSize": [1, "text-size"],

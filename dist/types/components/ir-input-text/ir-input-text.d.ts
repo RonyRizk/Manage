@@ -18,8 +18,12 @@ export declare class IrInputText {
   labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
   labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
   labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  variant: 'default' | 'icon';
+  disabled: boolean;
+  error: boolean;
   valid: boolean;
   initial: boolean;
+  inputFocused: boolean;
   textChange: EventEmitter<any>;
   connectedCallback(): void;
   disconnectedCallback(): void;

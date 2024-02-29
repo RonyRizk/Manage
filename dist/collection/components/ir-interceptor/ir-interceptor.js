@@ -6,7 +6,7 @@ export class IrInterceptor {
     this.isShown = false;
     this.isLoading = false;
     this.isUnassignedUnit = false;
-    this.handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment'];
+    this.handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   }
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -82,7 +82,7 @@ export class IrInterceptor {
           "tags": [],
           "text": ""
         },
-        "defaultValue": "['/ReAllocate_Exposed_Room', '/Do_Payment']"
+        "defaultValue": "['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings']"
       }
     };
   }

@@ -13,6 +13,7 @@ export class IrSelect {
     this.LabelAvailable = true;
     this.firstOption = 'Select';
     this.selectStyle = true;
+    this.showFirstOption = true;
     this.submited = false;
     this.size = 'md';
     this.textSize = 'md';
@@ -72,7 +73,7 @@ export class IrSelect {
     if (!this.LabelAvailable) {
       label = '';
     }
-    return (h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, h("div", { class: "input-group row m-0" }, label, h("select", { ref: el => (this.selectEl = el), id: this.select_id, class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, h("option", { value: '' }, this.firstOption), this.data.map(item => {
+    return (h("div", { class: `form-group m-0 ${this.selectContainerStyle}` }, h("div", { class: "input-group row m-0" }, label, h("select", { ref: el => (this.selectEl = el), id: this.select_id, class: `${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`, onInput: this.handleSelectChange.bind(this), required: this.required }, this.showFirstOption && h("option", { value: '' }, this.firstOption), this.data.map(item => {
       if (this.selectedValue === item.value) {
         return (h("option", { selected: true, value: item.value }, item.text));
       }
@@ -271,6 +272,24 @@ export class IrSelect {
           "text": ""
         },
         "attribute": "select-style",
+        "reflect": false,
+        "defaultValue": "true"
+      },
+      "showFirstOption": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "show-first-option",
         "reflect": false,
         "defaultValue": "true"
       },

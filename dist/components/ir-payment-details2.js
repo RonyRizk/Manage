@@ -2,48 +2,12 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Fragment } from '@sten
 import { _ as _formatDate, b as _formatAmount } from './functions.js';
 import { B as BookingService } from './booking.service2.js';
 import { h as hooks } from './moment.js';
-import { a as axios } from './axios.js';
-import { T as Token } from './Token.js';
+import { P as PaymentService } from './payment.service.js';
 import { c as calendar_data } from './calendar-data.js';
 import { d as defineCustomElement$4 } from './ir-button2.js';
 import { d as defineCustomElement$3 } from './ir-date-picker2.js';
 import { d as defineCustomElement$2 } from './ir-icon2.js';
 import { d as defineCustomElement$1 } from './ir-modal2.js';
-
-class PaymentService extends Token {
-  async AddPayment(payment, book_nbr) {
-    try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Do_Payment?Ticket=${token}`, { payment: Object.assign(Object.assign({}, payment), { book_nbr }) });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
-      }
-    }
-    catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
-  async CancelPayment(id) {
-    try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Cancel_Payment?Ticket=${token}`, { id });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
-      }
-    }
-    catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
-}
 
 const irPaymentDetailsCss = ".sm-margin-right.sc-ir-payment-details{margin-right:5px !important;background:#000}.action_icons.sc-ir-payment-details{width:60px}.w-60.sc-ir-payment-details{width:100px;padding:0 5px}.payments-height.sc-ir-payment-details{height:30px}.payment_date.sc-ir-payment-details{width:100px}.iframeHeight.sc-ir-payment-details{height:max-content;height:22.5rem}.designation.sc-ir-payment-details{width:120px}";
 
