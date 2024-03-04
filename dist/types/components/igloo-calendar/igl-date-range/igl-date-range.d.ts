@@ -21,7 +21,9 @@ export declare class IglDateRange {
   private toDateStr;
   dateRangeInput: HTMLElement;
   getStringDateFormat(dt: Date): string;
+  initializeDates(): void;
   componentWillLoad(): void;
+  handleDataChange(newValue: any, oldValue: any): void;
   calculateTotalNights(): void;
   getFormattedDateString(dt: any): string;
   handleDateSelectEvent(key: any, data?: any): void;

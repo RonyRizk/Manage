@@ -22,6 +22,7 @@ const IrListingModal = /*@__PURE__*/ proxyCustomElement(class IrListingModal ext
     this.isOpen = false;
     this.deletionStage = 1;
     this.selectedDesignation = undefined;
+    this.loadingBtn = null;
   }
   componentWillLoad() {
     this.bookingListingsService.setToken(booking_listing.token);
@@ -37,6 +38,9 @@ const IrListingModal = /*@__PURE__*/ proxyCustomElement(class IrListingModal ext
   async openModal() {
     this.isOpen = true;
   }
+  filterBookings() {
+    booking_listing.bookings = booking_listing.bookings.filter(booking => booking.booking_nbr !== this.editBooking.booking.booking_nbr);
+  }
   async btnClickHandler(event) {
     let target = event.target;
     let name = target.name;
@@ -51,24 +55,39 @@ const IrListingModal = /*@__PURE__*/ proxyCustomElement(class IrListingModal ext
             id: -1,
             reference: '',
           }, this.editBooking.booking.booking_nbr);
-          this.resetData.emit(null);
+          this.resetData.emit(this.editBooking.booking.booking_nbr);
           this.closeModal();
         }
         else {
+          if (this.deletionStage === 2) {
+            this.loadingBtn = 'recover_and_delete';
+            await this.bookingListingsService.removeExposedBooking(this.editBooking.booking.booking_nbr, true);
+            this.filterBookings();
+          }
           if (this.deletionStage === 1) {
             this.deletionStage = 2;
           }
+        }
+      }
+      if (name === 'cancel') {
+        if (this.deletionStage === 2) {
+          this.loadingBtn = 'just_delete';
+          await this.bookingListingsService.removeExposedBooking(this.editBooking.booking.booking_nbr, false);
+          this.filterBookings();
+        }
+        else {
+          this.closeModal();
         }
       }
     }
     catch (error) {
       console.error(error);
     }
-    if (name === 'cancel') {
-      if (this.deletionStage === 2) {
-        return;
+    finally {
+      if (this.loadingBtn) {
+        this.loadingBtn = null;
+        this.closeModal();
       }
-      this.closeModal();
     }
   }
   renderTitle() {
@@ -84,15 +103,10 @@ const IrListingModal = /*@__PURE__*/ proxyCustomElement(class IrListingModal ext
     }
   }
   renderConfirmationTitle() {
-    if (this.editBooking.cause === 'payment') {
-      return locales.entries.Lcz_Confirm;
-    }
-    else {
-      if (this.deletionStage === 1) {
-        return locales.entries.Lcz_OK;
-      }
+    if (this.deletionStage === 2) {
       return locales.entries.Lcz_RecoverAndDelete;
     }
+    return locales.entries.Lcz_Confirm;
   }
   renderCancelationTitle() {
     if (this.deletionStage === 2) {
@@ -111,12 +125,12 @@ const IrListingModal = /*@__PURE__*/ proxyCustomElement(class IrListingModal ext
           }
           this.closeModal();
         } }),
-      h("div", { "data-state": this.isOpen ? 'opened' : 'closed', class: `ir-modal`, tabindex: "-1" }, h("div", { class: `ir-alert-content p-2` }, h("div", { class: `ir-alert-header align-items-center border-0 py-0 m-0 ` }, h("p", { class: "font-weight-bold p-0 my-0 mb-1" }, this.renderTitle()), h("ir-icon", { class: "exit-icon", style: { cursor: 'pointer' }, onClick: () => {
+      h("div", { "data-state": this.isOpen ? 'opened' : 'closed', class: `ir-modal`, tabindex: "-1" }, this.isOpen && (h("div", { class: `ir-alert-content p-2` }, h("div", { class: `ir-alert-header align-items-center border-0 py-0 m-0 ` }, h("p", { class: "font-weight-bold p-0 my-0 mb-1" }, this.renderTitle()), h("ir-icon", { class: "exit-icon", style: { cursor: 'pointer' }, onClick: () => {
           this.closeModal();
         } }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "14", width: "10.5", viewBox: "0 0 384 512" }, h("path", { fill: "currentColor", d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" })))), h("div", { class: "modal-body text-left p-0 mb-2" }, this.editBooking.cause === 'payment' ? (h("ir-select", { selectedValue: this.selectedDesignation, onSelectChange: e => (this.selectedDesignation = e.detail), showFirstOption: false, LabelAvailable: false, data: booking_listing.settlement_methods.map(m => ({
           value: m.name,
           text: m.name,
-        })) })) : null), h("div", { class: `ir-alert-footer border-0 d-flex justify-content-end` }, h("ir-button", { icon: '', btn_color: 'secondary', btn_block: true, text: this.renderCancelationTitle(), name: 'cancel' }), h("ir-button", { icon: '', btn_color: 'primary', btn_block: true, text: this.renderConfirmationTitle(), name: 'confirm' })))),
+        })) })) : null), h("div", { class: `ir-alert-footer border-0 d-flex justify-content-end` }, h("ir-button", { isLoading: this.loadingBtn === 'just_delete', icon: '', btn_color: 'secondary', btn_block: true, text: this.renderCancelationTitle(), name: 'cancel' }), h("ir-button", { isLoading: this.loadingBtn === 'recover_and_delete', icon: '', btn_color: 'primary', btn_block: true, text: this.renderConfirmationTitle(), name: 'confirm' }))))),
     ];
   }
   static get style() { return irListingModalCss; }
@@ -126,6 +140,7 @@ const IrListingModal = /*@__PURE__*/ proxyCustomElement(class IrListingModal ext
     "isOpen": [32],
     "deletionStage": [32],
     "selectedDesignation": [32],
+    "loadingBtn": [32],
     "closeModal": [64],
     "openModal": [64]
   }, [[0, "clickHanlder", "btnClickHandler"]]]);

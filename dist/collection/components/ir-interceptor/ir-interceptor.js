@@ -52,7 +52,7 @@ export class IrInterceptor {
     return Promise.reject(error);
   }
   render() {
-    return (h(Host, null, this.isLoading && (h("div", { class: "loadingScreenContainer" }, h("div", { class: "loadingContainer" }, h("ir-loading-screen", null))))));
+    return (h(Host, null, this.isLoading && (h("div", { class: "loadingScreenContainer" }, h("div", { class: "loaderContainer" }, h("span", { class: "loader" }))))));
   }
   static get is() { return "ir-interceptor"; }
   static get encapsulation() { return "scoped"; }

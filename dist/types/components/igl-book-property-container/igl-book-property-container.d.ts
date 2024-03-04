@@ -7,6 +7,7 @@ export declare class IglBookPropertyContainer {
   propertyid: number;
   from_date: string;
   to_date: string;
+  withIrToastAndInterceptor: boolean;
   bookingItem: IglBookPropertyPayloadPlusBooking | null;
   showPaymentDetails: any;
   countryNodeList: any;

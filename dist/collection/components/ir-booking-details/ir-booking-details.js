@@ -201,6 +201,7 @@ export class IrBookingDetails {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.bookingData = Object.assign({}, booking);
+      this.bookingChanged.emit(this.bookingData);
     }
     catch (error) {
       console.log(error);
@@ -571,6 +572,27 @@ export class IrBookingDetails {
               "location": "import",
               "path": "../ir-toast/toast",
               "id": "src/components/ir-toast/toast.ts::IToast"
+            }
+          }
+        }
+      }, {
+        "method": "bookingChanged",
+        "name": "bookingChanged",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "Booking",
+          "resolved": "Booking",
+          "references": {
+            "Booking": {
+              "location": "import",
+              "path": "../../models/booking.dto",
+              "id": "src/models/booking.dto.ts::Booking"
             }
           }
         }

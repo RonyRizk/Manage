@@ -26,7 +26,7 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
   getStringDateFormat(dt) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
-  componentWillLoad() {
+  initializeDates() {
     let dt = new Date();
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() + 1);
@@ -51,6 +51,14 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
         toDateStr: this.toDateStr,
         dateDifference: this.totalNights,
       });
+    }
+  }
+  componentWillLoad() {
+    this.initializeDates();
+  }
+  handleDataChange(newValue, oldValue) {
+    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+      this.initializeDates();
     }
   }
   calculateTotalNights() {
@@ -81,6 +89,9 @@ const IglDateRange = /*@__PURE__*/ proxyCustomElement(class IglDateRange extends
         this.handleDateChange(evt);
       } }), h("div", { "data-state": this.disabled ? 'disabled' : 'active', class: "date-view" }, h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "12", width: "10.5", viewBox: "0 0 448 512" }, h("path", { fill: "currentColor", d: "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z" })), h("ir-date-view", { showDateDifference: this.disabled, from_date: this.fromDate, to_date: this.toDate }))), this.withDateDifference && (h("span", null, this.totalNights && !this.disabled ? (h("span", { class: "iglRangeNights mx-1" }, this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`))) : ('')))));
   }
+  static get watchers() { return {
+    "defaultData": ["handleDataChange"]
+  }; }
   static get style() { return iglDateRangeCss; }
 }, [2, "igl-date-range", {
     "defaultData": [16],

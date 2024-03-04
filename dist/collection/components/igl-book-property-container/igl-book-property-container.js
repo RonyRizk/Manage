@@ -2,7 +2,7 @@ import { BookingService } from "../../../../src/services/booking.service";
 import { RoomService } from "../../../../src/services/room.service";
 import calendar_data from "../../../../src/stores/calendar-data";
 import locales from "../../../../src/stores/locales.store";
-import { Host, h } from "@stencil/core";
+import { Host, h, Fragment } from "@stencil/core";
 import axios from "axios";
 export class IglBookPropertyContainer {
   constructor() {
@@ -14,6 +14,7 @@ export class IglBookPropertyContainer {
     this.propertyid = undefined;
     this.from_date = undefined;
     this.to_date = undefined;
+    this.withIrToastAndInterceptor = true;
     this.bookingItem = undefined;
     this.showPaymentDetails = undefined;
     this.countryNodeList = undefined;
@@ -37,7 +38,6 @@ export class IglBookPropertyContainer {
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
       ]);
-      console.log(languageTexts);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -97,7 +97,7 @@ export class IglBookPropertyContainer {
     };
   }
   render() {
-    return (h(Host, null, h("ir-toast", null), h("ir-interceptor", null), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onResetBookingData: (e) => {
+    return (h(Host, null, this.withIrToastAndInterceptor && (h(Fragment, null, h("ir-toast", null), h("ir-interceptor", null))), h("div", { class: "book-container", onClick: this.handleTriggerClicked.bind(this) }, h("slot", { name: "trigger" })), this.bookingItem && (h("igl-book-property", { allowedBookingSources: this.calendarData.allowed_booking_sources, adultChildConstraints: this.calendarData.adult_child_constraints, showPaymentDetails: this.showPaymentDetails, countryNodeList: this.countryNodeList, currency: this.calendarData.currency, language: this.language, propertyid: this.propertyid, bookingData: this.bookingItem, onResetBookingData: (e) => {
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.resetBookingData.emit(null);
@@ -221,6 +221,24 @@ export class IglBookPropertyContainer {
         },
         "attribute": "to_date",
         "reflect": false
+      },
+      "withIrToastAndInterceptor": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "with-ir-toast-and-interceptor",
+        "reflect": false,
+        "defaultValue": "true"
       }
     };
   }

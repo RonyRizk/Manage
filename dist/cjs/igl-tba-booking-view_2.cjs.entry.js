@@ -3,13 +3,12 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
-const toBeAssigned_service = require('./toBeAssigned.service-553da14e.js');
+const toBeAssigned_service = require('./toBeAssigned.service-8117e266.js');
 const locales_store = require('./locales.store-0567c122.js');
 const calendarData = require('./calendar-data-d3bf3294.js');
 const v4 = require('./v4-d89fec7e.js');
 require('./Token-7fd57fe8.js');
-require('./utils-6a5b3cb5.js');
-require('./moment-f96595e5.js');
+require('./utils-3a7c81a3.js');
 
 const iglTbaBookingViewCss = ".sc-igl-tba-booking-view-h{display:block}.guestTitle.sc-igl-tba-booking-view{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px;margin-bottom:5px;margin-top:5px;padding-left:5px;padding-right:5px}.guestTitle.selectedOrder.sc-igl-tba-booking-view{background-color:#f9f9c9}.pointer.sc-igl-tba-booking-view{cursor:pointer}hr.sc-igl-tba-booking-view{margin-top:8px;margin-bottom:0px}.bookingContainer.sc-igl-tba-booking-view{background-color:#ececec}.actionsContainer.sc-igl-tba-booking-view{padding:5px !important;padding-right:0px !important}.selectContainer.sc-igl-tba-booking-view{width:195px;margin-right:8px}.buttonsContainer.sc-igl-tba-booking-view{width:100px}.btn-secondary.sc-igl-tba-booking-view{margin-right:8px !important}";
 

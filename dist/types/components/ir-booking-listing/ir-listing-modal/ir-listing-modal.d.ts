@@ -9,13 +9,15 @@ export declare class IrListingModal {
   isOpen: boolean;
   deletionStage: number;
   selectedDesignation: string;
+  loadingBtn: 'confirm' | 'just_delete' | 'recover_and_delete' | null;
   private bookingListingsService;
   private paymentService;
   componentWillLoad(): void;
   modalClosed: EventEmitter<null>;
-  resetData: EventEmitter<null>;
+  resetData: EventEmitter<string>;
   closeModal(): Promise<void>;
   openModal(): Promise<void>;
+  filterBookings(): void;
   btnClickHandler(event: CustomEvent): Promise<void>;
   renderTitle(): string;
   renderConfirmationTitle(): string;

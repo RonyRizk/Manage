@@ -13,7 +13,7 @@ const initialState = {
   userSelection: {
     from: hooks().add(-7, 'days').format('YYYY-MM-DD'),
     to: hooks().format('YYYY-MM-DD'),
-    channel: undefined,
+    channel: '',
     property_id: null,
     start_row: 0,
     end_row: 20,
@@ -29,11 +29,12 @@ const initialState = {
     is_combined_view: false,
     is_to_export: false,
   },
+  download_url: null,
 };
 const { state: booking_listing, onChange: onBookingListingChange } = createStore(initialState);
 function initializeUserSelection() {
   //booking_listing.channels[0].name
-  booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { channel: '', booking_status: booking_listing.statuses[0].code, filter_type: booking_listing.types[0].id, book_nbr: '', name: '', total_count: 0 });
+  booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { channel: '', booking_status: booking_listing.statuses[0].code, filter_type: booking_listing.types[0].id, book_nbr: '', name: '', from: hooks().add(-7, 'days').format('YYYY-MM-DD'), to: hooks().format('YYYY-MM-DD'), start_row: 0, end_row: 20 });
 }
 function updateUserSelection(key, value) {
   booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { [key]: value });
@@ -62,10 +63,21 @@ class BookingListingService extends Token {
     const result = data.My_Result;
     const header = data.My_Params_Get_Exposed_Bookings;
     booking_listing.bookings = [...result];
-    booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { book_nbr: '', name: '', total_count: header.total_count });
+    booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { total_count: header.total_count });
+    booking_listing.download_url = header.exported_data_url;
+  }
+  async removeExposedBooking(booking_nbr, is_to_revover) {
+    const token = this.getToken();
+    if (!token) {
+      throw new Error('Invalid token');
+    }
+    await axios.post(`/Remove_Exposed_Booking?Ticket=${token}`, {
+      booking_nbr,
+      is_to_revover,
+    });
   }
 }
 
-export { BookingListingService as B, booking_listing as b, onBookingListingChange as o, updateUserSelection as u };
+export { BookingListingService as B, booking_listing as b, initializeUserSelection as i, onBookingListingChange as o, updateUserSelection as u };
 
 //# sourceMappingURL=booking_listing.service.js.map

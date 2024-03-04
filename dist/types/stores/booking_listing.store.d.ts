@@ -4,6 +4,7 @@ export interface IBookingListingStore extends IExposedBookingsCriteria {
   token: string;
   userSelection: IUserListingSelection;
   bookings: Booking[];
+  download_url: string | null;
 }
 export interface IUserListingSelection {
   channel: string;

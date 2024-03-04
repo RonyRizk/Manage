@@ -18,7 +18,7 @@ export class IglDateRange {
   getStringDateFormat(dt) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
-  componentWillLoad() {
+  initializeDates() {
     let dt = new Date();
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() + 1);
@@ -43,6 +43,14 @@ export class IglDateRange {
         toDateStr: this.toDateStr,
         dateDifference: this.totalNights,
       });
+    }
+  }
+  componentWillLoad() {
+    this.initializeDates();
+  }
+  handleDataChange(newValue, oldValue) {
+    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+      this.initializeDates();
     }
   }
   calculateTotalNights() {
@@ -233,6 +241,12 @@ export class IglDateRange {
             }
           }
         }
+      }];
+  }
+  static get watchers() {
+    return [{
+        "propName": "defaultData",
+        "methodName": "handleDataChange"
       }];
   }
 }

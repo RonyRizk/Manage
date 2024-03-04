@@ -33,6 +33,7 @@ export declare class IrBookingDetails {
   sidebarState: 'guest' | 'pickup' | null;
   isUpdateClicked: boolean;
   toast: EventEmitter<IToast>;
+  bookingChanged: EventEmitter<Booking>;
   private bookingService;
   private roomService;
   componentDidLoad(): void;
