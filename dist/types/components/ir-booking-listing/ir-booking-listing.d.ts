@@ -5,6 +5,7 @@ export declare class IrBookingListing {
   ticket: string;
   baseurl: string;
   propertyid: number;
+  rowCount: number;
   isLoading: boolean;
   currentPage: number;
   totalPages: number;
@@ -16,7 +17,6 @@ export declare class IrBookingListing {
   private bookingListingService;
   private roomService;
   private listingModal;
-  private itemsPerPage;
   private listingModalTimeout;
   private statusColors;
   componentWillLoad(): void;

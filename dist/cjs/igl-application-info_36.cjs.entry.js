@@ -2399,6 +2399,7 @@ const initialState = {
   statuses: [],
   types: [],
   token: '',
+  rowCount: 10,
   bookings: [],
   userSelection: {
     from: utils.hooks().add(-7, 'days').format('YYYY-MM-DD'),
@@ -2424,7 +2425,7 @@ const initialState = {
 const { state: booking_listing, onChange: onBookingListingChange } = locales_store.createStore(initialState);
 function initializeUserSelection() {
   //booking_listing.channels[0].name
-  booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { channel: '', booking_status: booking_listing.statuses[0].code, filter_type: booking_listing.types[0].id, book_nbr: '', name: '', from: utils.hooks().add(-7, 'days').format('YYYY-MM-DD'), to: utils.hooks().format('YYYY-MM-DD'), start_row: 0, end_row: 20 });
+  booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { channel: '', booking_status: booking_listing.statuses[0].code, filter_type: booking_listing.types[0].id, book_nbr: '', name: '', from: utils.hooks().add(-7, 'days').format('YYYY-MM-DD'), to: utils.hooks().format('YYYY-MM-DD'), start_row: 0, end_row: booking_listing.rowCount });
 }
 function updateUserSelection(key, value) {
   booking_listing.userSelection = Object.assign(Object.assign({}, booking_listing.userSelection), { [key]: value });
@@ -2475,7 +2476,6 @@ const IrBookingListing = class {
     index.registerInstance(this, hostRef);
     this.bookingListingService = new BookingListingService();
     this.roomService = new room_service.RoomService();
-    this.itemsPerPage = 20;
     this.statusColors = {
       '001': 'badge-warning',
       '002': 'badge-success',
@@ -2486,6 +2486,7 @@ const IrBookingListing = class {
     this.ticket = '';
     this.baseurl = '';
     this.propertyid = undefined;
+    this.rowCount = 10;
     this.isLoading = false;
     this.currentPage = 1;
     this.totalPages = 1;
@@ -2493,6 +2494,8 @@ const IrBookingListing = class {
     this.editBookingItem = null;
   }
   componentWillLoad() {
+    updateUserSelection('end_row', this.rowCount);
+    booking_listing.rowCount = this.rowCount;
     if (this.baseurl) {
       Token.axios.defaults.baseURL = this.baseurl;
     }
@@ -2505,7 +2508,7 @@ const IrBookingListing = class {
     onBookingListingChange('userSelection', async (newValue) => {
       const newTotal = newValue.total_count;
       if (newTotal && this.totalPages !== newTotal) {
-        this.totalPages = Math.round(newTotal / this.itemsPerPage);
+        this.totalPages = Math.round(newTotal / this.rowCount);
       }
     });
   }
@@ -2538,8 +2541,8 @@ const IrBookingListing = class {
   }
   getPaginationBounds() {
     const totalCount = booking_listing.userSelection.total_count;
-    const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
-    let endItem = this.currentPage * this.itemsPerPage;
+    const startItem = (this.currentPage - 1) * this.rowCount;
+    let endItem = this.currentPage * this.rowCount;
     endItem = endItem > totalCount ? totalCount : endItem;
     return { startItem, endItem, totalCount };
   }

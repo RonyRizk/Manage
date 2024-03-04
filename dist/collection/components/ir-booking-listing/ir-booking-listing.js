@@ -10,7 +10,6 @@ export class IrBookingListing {
   constructor() {
     this.bookingListingService = new BookingListingService();
     this.roomService = new RoomService();
-    this.itemsPerPage = 20;
     this.statusColors = {
       '001': 'badge-warning',
       '002': 'badge-success',
@@ -21,6 +20,7 @@ export class IrBookingListing {
     this.ticket = '';
     this.baseurl = '';
     this.propertyid = undefined;
+    this.rowCount = 10;
     this.isLoading = false;
     this.currentPage = 1;
     this.totalPages = 1;
@@ -28,6 +28,8 @@ export class IrBookingListing {
     this.editBookingItem = null;
   }
   componentWillLoad() {
+    updateUserSelection('end_row', this.rowCount);
+    booking_listing.rowCount = this.rowCount;
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -40,7 +42,7 @@ export class IrBookingListing {
     onBookingListingChange('userSelection', async (newValue) => {
       const newTotal = newValue.total_count;
       if (newTotal && this.totalPages !== newTotal) {
-        this.totalPages = Math.round(newTotal / this.itemsPerPage);
+        this.totalPages = Math.round(newTotal / this.rowCount);
       }
     });
   }
@@ -73,8 +75,8 @@ export class IrBookingListing {
   }
   getPaginationBounds() {
     const totalCount = booking_listing.userSelection.total_count;
-    const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
-    let endItem = this.currentPage * this.itemsPerPage;
+    const startItem = (this.currentPage - 1) * this.rowCount;
+    let endItem = this.currentPage * this.rowCount;
     endItem = endItem > totalCount ? totalCount : endItem;
     return { startItem, endItem, totalCount };
   }
@@ -241,6 +243,24 @@ export class IrBookingListing {
         },
         "attribute": "propertyid",
         "reflect": false
+      },
+      "rowCount": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "row-count",
+        "reflect": false,
+        "defaultValue": "10"
       }
     };
   }

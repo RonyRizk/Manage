@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
-import { B as BookingListingService, b as booking_listing, o as onBookingListingChange, u as updateUserSelection } from './booking_listing.service.js';
+import { B as BookingListingService, u as updateUserSelection, b as booking_listing, o as onBookingListingChange } from './booking_listing.service.js';
 import { R as RoomService } from './room.service.js';
 import { l as locales } from './locales.store.js';
 import { f as formatAmount } from './utils2.js';
@@ -48,7 +48,6 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     this.__registerHost();
     this.bookingListingService = new BookingListingService();
     this.roomService = new RoomService();
-    this.itemsPerPage = 20;
     this.statusColors = {
       '001': 'badge-warning',
       '002': 'badge-success',
@@ -59,6 +58,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     this.ticket = '';
     this.baseurl = '';
     this.propertyid = undefined;
+    this.rowCount = 10;
     this.isLoading = false;
     this.currentPage = 1;
     this.totalPages = 1;
@@ -66,6 +66,8 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     this.editBookingItem = null;
   }
   componentWillLoad() {
+    updateUserSelection('end_row', this.rowCount);
+    booking_listing.rowCount = this.rowCount;
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -78,7 +80,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     onBookingListingChange('userSelection', async (newValue) => {
       const newTotal = newValue.total_count;
       if (newTotal && this.totalPages !== newTotal) {
-        this.totalPages = Math.round(newTotal / this.itemsPerPage);
+        this.totalPages = Math.round(newTotal / this.rowCount);
       }
     });
   }
@@ -111,8 +113,8 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
   }
   getPaginationBounds() {
     const totalCount = booking_listing.userSelection.total_count;
-    const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
-    let endItem = this.currentPage * this.itemsPerPage;
+    const startItem = (this.currentPage - 1) * this.rowCount;
+    let endItem = this.currentPage * this.rowCount;
     endItem = endItem > totalCount ? totalCount : endItem;
     return { startItem, endItem, totalCount };
   }
@@ -205,6 +207,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     "ticket": [1],
     "baseurl": [1],
     "propertyid": [2],
+    "rowCount": [2, "row-count"],
     "isLoading": [32],
     "currentPage": [32],
     "totalPages": [32],

@@ -5,6 +5,7 @@ export interface IBookingListingStore extends IExposedBookingsCriteria {
   userSelection: IUserListingSelection;
   bookings: Booking[];
   download_url: string | null;
+  rowCount: number;
 }
 export interface IUserListingSelection {
   channel: string;
