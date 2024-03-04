@@ -2,12 +2,14 @@ import { Token } from "../../../src/models/Token";
 import booking_listing, { initializeUserSelection } from "../../../src/stores/booking_listing.store";
 import axios from "axios";
 export class BookingListingService extends Token {
-  async getExposedBookingsCriteria() {
+  async getExposedBookingsCriteria(property_id) {
     const token = this.getToken();
     if (!token) {
       throw new Error('Invalid token');
     }
-    const { data } = await axios.post(`/Get_Exposed_Bookings_Criteria?Ticket=${token}`);
+    const { data } = await axios.post(`/Get_Exposed_Bookings_Criteria?Ticket=${token}`, {
+      property_id,
+    });
     const result = data.My_Result;
     booking_listing.channels = result.channels;
     booking_listing.settlement_methods = result.settlement_methods;

@@ -40,7 +40,7 @@ import { d as defineCustomElement$4 } from './ir-toast2.js';
 import { d as defineCustomElement$3 } from './ir-tooltip2.js';
 import { d as defineCustomElement$2 } from './ota-label2.js';
 
-const irBookingListingCss = ".sc-ir-booking-listing-h{display:block;height:100%}.card.sc-ir-booking-listing{overflow-x:auto}.secondary-p.sc-ir-booking-listing{font-size:12px !important}.h-screen.sc-ir-booking-listing{height:100%}.main-container.sc-ir-booking-listing{height:100%;overflow-y:auto}.bg-ir-red.sc-ir-booking-listing{background:#ff4961;height:28px;padding-top:0 !important;padding-bottom:0 !important}.due-btn.sc-ir-booking-listing{border:1px solid #ff4961;color:#ff4961;cursor:pointer;padding:1px 0.25rem !important;font-size:12px !important}.due-btn.sc-ir-booking-listing:hover{background:#ff4961;color:white}.booking_number.sc-ir-booking-listing{all:unset;cursor:pointer}.booking_number.sc-ir-booking-listing:hover{color:#1e9ff2}.in-out.sc-ir-booking-listing{width:150px !important}.buttons-container.sc-ir-booking-listing{gap:10px}td.sc-ir-booking-listing ul.sc-ir-booking-listing{width:max-content !important}td.sc-ir-booking-listing{width:max-content !important}.date-p.sc-ir-booking-listing{width:max-content !important;min-width:100%;text-align:center !important}";
+const irBookingListingCss = ".sc-ir-booking-listing-h{display:block;height:100%}.card.sc-ir-booking-listing{overflow-x:auto}.secondary-p.sc-ir-booking-listing{font-size:12px !important}.h-screen.sc-ir-booking-listing{height:100%}.price-span.sc-ir-booking-listing{margin:0;margin-right:5px}.main-container.sc-ir-booking-listing{height:100%;overflow-y:auto}.bg-ir-red.sc-ir-booking-listing{background:#ff4961;height:28px;padding-top:0 !important;padding-bottom:0 !important}.due-btn.sc-ir-booking-listing{border:1px solid #ff4961;color:#ff4961;cursor:pointer;padding:1px 0.25rem !important}.due-btn.sc-ir-booking-listing:hover{background:#ff4961;color:white}.booking_number.sc-ir-booking-listing{all:unset;cursor:pointer}.booking_number.sc-ir-booking-listing:hover{color:#1e9ff2}.in-out.sc-ir-booking-listing{width:150px !important}.buttons-container.sc-ir-booking-listing{gap:10px}td.sc-ir-booking-listing ul.sc-ir-booking-listing{width:max-content !important}td.sc-ir-booking-listing{width:max-content !important}.date-p.sc-ir-booking-listing{width:max-content !important;min-width:100%;text-align:center !important}";
 
 const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListing extends HTMLElement {
   constructor() {
@@ -79,9 +79,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     }
     onBookingListingChange('userSelection', async (newValue) => {
       const newTotal = newValue.total_count;
-      if (newTotal && this.totalPages !== newTotal) {
-        this.totalPages = Math.round(newTotal / this.rowCount);
-      }
+      this.totalPages = Math.round(newTotal / this.rowCount);
     });
   }
   async ticketChanged(newValue, oldValue) {
@@ -96,7 +94,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     try {
       this.isLoading = true;
       updateUserSelection('property_id', this.propertyid);
-      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
+      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(this.propertyid), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
       await this.bookingListingService.getExposedBookings(Object.assign(Object.assign({}, booking_listing.userSelection), { is_to_export: false }));
     }
     catch (error) {
@@ -164,7 +162,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
       return h("ir-loading-screen", null);
     }
     return (h(Host, null, h("ir-interceptor", null), h("ir-toast", null), h("div", { class: "p-1 main-container" }, h("ir-listing-header", { propertyId: this.propertyid, language: this.language, baseurl: this.baseurl }), h("section", null, h("div", { class: "card p-1 flex-fill m-0 mt-2" }, h("table", { class: "table table-striped table-bordered no-footer dataTable" }, h("thead", null, h("tr", null, h("th", { scope: "col", class: "text-left" }, (_a = locales.entries) === null || _a === void 0 ? void 0 :
-      _a.Lcz_Bookings, "#"), h("th", { scope: "col" }, (_b = locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_BookedOn), h("th", { scope: "col" }, (_c = locales.entries) === null || _c === void 0 ? void 0 : _c.Lcz_GuestSource), h("th", { scope: "col" }, h("p", { class: 'm-0' }, (_d = locales.entries) === null || _d === void 0 ? void 0 : _d.Lcz_Price), h("ir-tooltip", { customSlot: true, message: `<span style="width:100%;display:block;">${(_e = locales.entries) === null || _e === void 0 ? void 0 : _e.Lcz_BookingBalance}</span><span>${(_f = locales.entries) === null || _f === void 0 ? void 0 : _f.Lcz_ClickToSettle}</span>` }, h("p", { slot: "tooltip-trigger", class: 'm-0 btn due-btn' }, (_g = locales.entries) === null || _g === void 0 ? void 0 : _g.Lcz_Balance))), h("th", { scope: "col", class: "text-left services-cell" }, (_h = locales.entries) === null || _h === void 0 ? void 0 : _h.Lcz_Services), h("th", { scope: "col", class: "in-out" }, (_j = locales.entries) === null || _j === void 0 ? void 0 : _j.Lcz_InOut), h("th", { scope: "col" }, (_k = locales.entries) === null || _k === void 0 ? void 0 : _k.Lcz_Status), h("th", { scope: "col" }, h("p", { class: "sr-only" }, "actions")))), h("tbody", { class: "" }, booking_listing.bookings.length === 0 && (h("tr", null, h("td", { colSpan: 8 }, (_l = locales.entries) === null || _l === void 0 ? void 0 : _l.Lcz_NoDataAvailable))), (_m = booking_listing.bookings) === null || _m === void 0 ? void 0 :
+      _a.Lcz_Bookings, "#"), h("th", { scope: "col" }, (_b = locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_BookedOn), h("th", { scope: "col" }, (_c = locales.entries) === null || _c === void 0 ? void 0 : _c.Lcz_GuestSource), h("th", { scope: "col" }, h("span", { class: "price-span" }, (_d = locales.entries) === null || _d === void 0 ? void 0 : _d.Lcz_Price), h("ir-tooltip", { customSlot: true, message: `<span style="width:100%;display:block;">${(_e = locales.entries) === null || _e === void 0 ? void 0 : _e.Lcz_BookingBalance}</span><span>${(_f = locales.entries) === null || _f === void 0 ? void 0 : _f.Lcz_ClickToSettle}</span>` }, h("span", { slot: "tooltip-trigger", class: 'm-0 btn due-btn' }, (_g = locales.entries) === null || _g === void 0 ? void 0 : _g.Lcz_Balance))), h("th", { scope: "col", class: "text-left services-cell" }, (_h = locales.entries) === null || _h === void 0 ? void 0 : _h.Lcz_Services), h("th", { scope: "col", class: "in-out" }, (_j = locales.entries) === null || _j === void 0 ? void 0 : _j.Lcz_InOut), h("th", { scope: "col" }, (_k = locales.entries) === null || _k === void 0 ? void 0 : _k.Lcz_Status), h("th", { scope: "col" }, h("p", { class: "sr-only" }, "actions")))), h("tbody", { class: "" }, booking_listing.bookings.length === 0 && (h("tr", null, h("td", { colSpan: 8 }, (_l = locales.entries) === null || _l === void 0 ? void 0 : _l.Lcz_NoDataAvailable))), (_m = booking_listing.bookings) === null || _m === void 0 ? void 0 :
       _m.map(booking => {
         var _a, _b, _c;
         let confirmationBG = this.statusColors[booking.status.code];
