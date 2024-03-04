@@ -15,6 +15,7 @@ const _getDay = (date) => {
 const _formatTime = (hour, minute) => {
   // format them as AM/PM using moment.js
   return hooks(`${hour}:${minute}`, 'HH:mm').format('hh:mm A');
+  // return moment(`${hour}:${minute}`, 'HH:mm').format('HH:mm');
 };
 
 export { _formatDate as _, _formatTime as a, _formatAmount as b, _getDay as c };

@@ -14,5 +14,6 @@ export const _getDay = (date) => {
 export const _formatTime = (hour, minute) => {
   // format them as AM/PM using moment.js
   return moment(`${hour}:${minute}`, 'HH:mm').format('hh:mm A');
+  // return moment(`${hour}:${minute}`, 'HH:mm').format('HH:mm');
 };
 //# sourceMappingURL=functions.js.map
