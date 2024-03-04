@@ -17,6 +17,7 @@ export declare class IrBookingListing {
   private roomService;
   private listingModal;
   private itemsPerPage;
+  private listingModalTimeout;
   private statusColors;
   componentWillLoad(): void;
   ticketChanged(newValue: string, oldValue: string): Promise<void>;
@@ -28,6 +29,7 @@ export declare class IrBookingListing {
     totalCount: number;
   };
   openModal(): void;
+  disconnectedCallback(): void;
   handleResetData(e: CustomEvent): Promise<void>;
   handleResetStoreData(e: CustomEvent): Promise<void>;
   handleBookingChanged(e: CustomEvent<Booking>): void;
