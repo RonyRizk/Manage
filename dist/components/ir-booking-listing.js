@@ -80,7 +80,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
     }
     onBookingListingChange('userSelection', async (newValue) => {
       const newTotal = newValue.total_count;
-      this.totalPages = Math.round(newTotal / this.rowCount);
+      this.totalPages = Math.ceil(newTotal / this.rowCount);
     });
   }
   async ticketChanged(newValue, oldValue) {
@@ -151,7 +151,7 @@ const IrBookingListing$1 = /*@__PURE__*/ proxyCustomElement(class IrBookingListi
   }
   renderItemRange() {
     const { endItem, startItem, totalCount } = this.getPaginationBounds();
-    return `${locales.entries.Lcz_View} ${startItem} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
+    return `${locales.entries.Lcz_View} ${startItem + 1} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
   }
   async updateData() {
     const { endItem, startItem } = this.getPaginationBounds();

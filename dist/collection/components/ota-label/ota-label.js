@@ -1,16 +1,22 @@
 import { Host, h } from "@stencil/core";
 import { v4 } from "uuid";
+import locales from "../../../../src/stores/locales.store";
 export class OtaLabel {
   constructor() {
+    this.toggleShowAll = () => {
+      this.showAll = !this.showAll;
+    };
     this.label = undefined;
     this.remarks = undefined;
+    this.maxVisibleItems = 3;
+    this.showAll = false;
   }
   render() {
-    var _a;
     if (!this.remarks) {
       return null;
     }
-    return (h(Host, null, h("strong", null, this.label), h("ul", null, (_a = this.remarks) === null || _a === void 0 ? void 0 : _a.map(remark => (h("li", { key: v4() }, "- ", remark.statement))))));
+    const displayedRemarks = this.showAll ? this.remarks : this.remarks.slice(0, this.maxVisibleItems);
+    return (h(Host, null, h("strong", null, this.label), h("ul", null, displayedRemarks.map((remark, index) => (h("li", { key: v4() }, "- ", remark.statement, ' ', this.remarks.length > this.maxVisibleItems && index === displayedRemarks.length - 1 && (h("button", { onClick: this.toggleShowAll }, this.showAll ? locales.entries.Lcz_ShowLess : locales.entries.Lcz_ShowMore))))))));
   }
   static get is() { return "ota-label"; }
   static get encapsulation() { return "scoped"; }
@@ -63,7 +69,30 @@ export class OtaLabel {
           "tags": [],
           "text": ""
         }
+      },
+      "maxVisibleItems": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "max-visible-items",
+        "reflect": false,
+        "defaultValue": "3"
       }
+    };
+  }
+  static get states() {
+    return {
+      "showAll": {}
     };
   }
 }

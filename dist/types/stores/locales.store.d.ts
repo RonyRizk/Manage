@@ -154,6 +154,8 @@ export type LocalizationStrings = {
   Lcz_Excluding: string;
   Lcz_Including: string;
   Lcz_SubTotal: string;
+  Lcz_ShowLess: string;
+  Lcz_ShowMore: string;
 };
 export type BookingListingCodes = {
   Lcz_BookedOn: string;
