@@ -98,7 +98,7 @@ function calculateDaysBetweenDates(from_date, to_date) {
   return daysDiff;
 }
 
-const irDateViewCss = ".sc-ir-date-view-h{display:block}.mx-01.sc-ir-date-view{--m:5px;margin-right:var(--m) !important;margin-left:var(--m) !important}";
+const irDateViewCss = ".sc-ir-date-view-h{display:block;font-size:13.65px !important}.mx-01.sc-ir-date-view{--m:5px;margin-right:var(--m) !important;margin-left:var(--m) !important}";
 
 const IrDateView = /*@__PURE__*/ proxyCustomElement(class IrDateView extends HTMLElement {
   constructor() {

@@ -95,6 +95,7 @@ const IglPropertyBookedBy = /*@__PURE__*/ proxyCustomElement(class IglPropertyBo
     if (key === 'countryId') {
       this.bookedByData = Object.assign(Object.assign({}, this.bookedByData), { isdCode: event.target.value });
     }
+    console.log(this.bookedByData);
   }
   handleNumberInput(key, event) {
     const inputElement = event.target;

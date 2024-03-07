@@ -48,13 +48,13 @@ const IrListingHeader = /*@__PURE__*/ proxyCustomElement(class IrListingHeader e
   async handleSearchClicked(is_to_export) {
     if (this.inputValue !== '') {
       if (/^-?\d+$/.test(this.inputValue)) {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       }
       else if (this.inputValue[3] === '-') {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       }
       else {
-        updateUserSelection('name', this.inputValue);
+        updateUserSelection('name', this.inputValue.trim());
       }
     }
     if (this.inputValue === '' && (booking_listing.userSelection.book_nbr !== '' || booking_listing.userSelection.name !== '')) {
@@ -82,13 +82,10 @@ const IrListingHeader = /*@__PURE__*/ proxyCustomElement(class IrListingHeader e
         e.preventDefault();
         console.log(this.inputValue);
         this.handleSearchClicked(false);
-      }, class: "booking-search-field width-fill" }, h("ir-input-text", { class: 'flex-fill', value: this.inputValue, onTextChange: e => (this.inputValue = e.detail), variant: "icon", placeholder: (_c = locales.entries) === null || _c === void 0 ? void 0 : _c.Lcz_FindBookNbrorName }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "14", width: "14", viewBox: "0 0 512 512" }, h("path", { fill: "currentColor", d: "M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" }))), h("h5", { class: "m-0 font-weight-bold d-none d-sm-block" }, (_d = locales.entries) === null || _d === void 0 ? void 0 : _d.Lcz_Or))), h("div", { class: "d-none d-md-block" }, booking_listing.token && (h("igl-book-property-container", { withIrToastAndInterceptor: false, propertyid: this.propertyId, language: this.language, title: locales.entries.Lcz_CreateNewBooking, baseurl: this.baseurl, ticket: booking_listing.token }, h("button", { slot: "trigger", class: 'new-booking-btn' }, h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "20", width: "17.5", viewBox: "0 0 448 512" }, h("path", { fill: "currentColor", d: "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" }))))))), h("section", { class: "d-flex align-items-center justify-evenly seperator-container d-sm-none" }, h("span", null), h("h5", { class: "m-0 font-weight-bold" }, (_e = locales.entries) === null || _e === void 0 ? void 0 : _e.Lcz_Or), h("span", null)), h("section", { class: "d-flex flex-column align-items-sm-center flex-sm-row flex-sm-wrap filters-container justify-content-lg-start mt-1" }, h("ir-select", { onSelectChange: e => updateUserSelection('filter_type', e.detail), showFirstOption: false, data: booking_listing === null || booking_listing === void 0 ? void 0 : booking_listing.types.map(t => {
-        var _a;
-        return ({
-          value: t.id.toString(),
-          text: ((_a = locales.entries) === null || _a === void 0 ? void 0 : _a.Lcz_DateOf) + ' ' + t.name,
-        });
-      }), class: "flex-sm-wrap", selectedValue: booking_listing.userSelection.filter_type, select_id: "dateTo", LabelAvailable: false }), h("igl-date-range", { class: "flex-sm-wrap", minDate: "2000-01-01", withDateDifference: false, defaultData: {
+      }, class: "booking-search-field width-fill" }, h("ir-input-text", { class: 'flex-fill', value: this.inputValue, onTextChange: e => (this.inputValue = e.detail), variant: "icon", placeholder: (_c = locales.entries) === null || _c === void 0 ? void 0 : _c.Lcz_FindBookNbrorName }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", height: "14", width: "14", viewBox: "0 0 512 512" }, h("path", { fill: "currentColor", d: "M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" }))), h("h5", { class: "m-0 font-weight-bold d-none d-sm-block" }, (_d = locales.entries) === null || _d === void 0 ? void 0 : _d.Lcz_Or))), h("div", { class: "d-none d-md-block" }, booking_listing.token && (h("igl-book-property-container", { withIrToastAndInterceptor: false, propertyid: this.propertyId, language: this.language, title: locales.entries.Lcz_CreateNewBooking, baseurl: this.baseurl, ticket: booking_listing.token }, h("button", { slot: "trigger", class: 'new-booking-btn' }, h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "20", width: "17.5", viewBox: "0 0 448 512" }, h("path", { fill: "currentColor", d: "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" }))))))), h("section", { class: "d-flex align-items-center justify-evenly seperator-container d-sm-none" }, h("span", null), h("h5", { class: "m-0 font-weight-bold" }, (_e = locales.entries) === null || _e === void 0 ? void 0 : _e.Lcz_Or), h("span", null)), h("section", { class: "d-flex flex-column align-items-sm-center flex-sm-row flex-sm-wrap filters-container justify-content-lg-start mt-1" }, h("ir-select", { onSelectChange: e => updateUserSelection('filter_type', e.detail), showFirstOption: false, data: booking_listing === null || booking_listing === void 0 ? void 0 : booking_listing.types.map(t => ({
+        value: t.id.toString(),
+        text: t.name,
+      })), class: "flex-sm-wrap", selectedValue: booking_listing.userSelection.filter_type, select_id: "dateTo", LabelAvailable: false }), h("igl-date-range", { class: "flex-sm-wrap", minDate: "2000-01-01", withDateDifference: false, defaultData: {
         fromDate: booking_listing.userSelection.from,
         toDate: booking_listing.userSelection.to,
       } }), h("ir-select", { class: "flex-sm-wrap", selectedValue: booking_listing.userSelection.booking_status, onSelectChange: e => updateUserSelection('booking_status', e.detail), showFirstOption: false, data: booking_listing === null || booking_listing === void 0 ? void 0 : booking_listing.statuses.map(status => ({
