@@ -24,10 +24,7 @@ export class IglPropertyBookedBy {
       countryId: '',
       isdCode: '',
       contactNumber: '',
-      selectedArrivalTime: {
-        code: '',
-        description: '',
-      },
+      selectedArrivalTime: '',
       emailGuest: true,
       message: '',
       cardNumber: '',
@@ -62,25 +59,17 @@ export class IglPropertyBookedBy {
     var _a;
     this.bookedByData = this.defaultData ? Object.assign(Object.assign({}, this.bookedByData), this.defaultData) : {};
     this.arrivalTimeList = ((_a = this.defaultData) === null || _a === void 0 ? void 0 : _a.arrivalTime) || [];
-    this.bookedByData = Object.assign(Object.assign({}, this.bookedByData), { selectedArrivalTime: { code: this.arrivalTimeList[0].CODE_NAME, description: this.arrivalTimeList[0].CODE_VALUE_EN } });
+    this.bookedByData = Object.assign(Object.assign({}, this.bookedByData), { selectedArrivalTime: this.arrivalTimeList[0].CODE_NAME });
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
     }
     if (!this.bookedByData.expiryYear) {
       this.bookedByData.expiryYear = new Date().getFullYear();
     }
+    console.log('initial bookedby data', this.bookedByData);
   }
   handleDataChange(key, event) {
-    const foundTime = this.arrivalTimeList.find(time => time.CODE_NAME === event.target.value);
-    this.bookedByData[key] =
-      key === 'emailGuest'
-        ? event.target.checked
-        : key === 'arrivalTime'
-          ? {
-            code: event.target.value,
-            description: (foundTime && foundTime.CODE_VALUE_EN) || '',
-          }
-          : event.target.value;
+    this.bookedByData[key] = key === 'emailGuest' ? event.target.checked : event.target.value;
     this.dataUpdateEvent.emit({
       key: 'bookedByInfoUpdated',
       data: Object.assign({}, this.bookedByData),
