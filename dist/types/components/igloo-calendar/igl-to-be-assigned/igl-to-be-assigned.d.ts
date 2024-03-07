@@ -4,10 +4,14 @@ export declare class IglToBeAssigned {
   propertyid: number;
   from_date: string;
   to_date: string;
-  loadingMessage: string;
   calendarData: {
     [key: string]: any;
   };
+  loadingMessage: string;
+  showDatesList: boolean;
+  renderAgain: boolean;
+  orderedDatesList: any[];
+  noScroll: boolean;
   optionEvent: EventEmitter<{
     [key: string]: any;
   }>;
@@ -17,9 +21,6 @@ export declare class IglToBeAssigned {
   showBookingPopup: EventEmitter;
   addToBeAssignedEvent: EventEmitter;
   highlightToBeAssignedBookingEvent: EventEmitter;
-  showDatesList: boolean;
-  renderAgain: boolean;
-  orderedDatesList: any[];
   private isGotoToBeAssignedDate;
   private isLoading;
   private selectedDate;
@@ -37,6 +38,7 @@ export declare class IglToBeAssigned {
   reArrangeData(): Promise<void>;
   componentDidLoad(): Promise<void>;
   gotoDate(event: CustomEvent): Promise<void>;
+  handleToBeAssignedDate(e: CustomEvent): void;
   showForDate(dateStamp: any, withLoading?: boolean): Promise<void>;
   getDay(dt: any): string;
   getLocalizedDayOfWeek(date: any, locale: any): any;

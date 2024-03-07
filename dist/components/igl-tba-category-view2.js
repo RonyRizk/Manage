@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { d as defineCustomElement$1 } from './igl-tba-booking-view2.js';
+import { d as defineCustomElement$2 } from './igl-tba-booking-view2.js';
+import { d as defineCustomElement$1 } from './ir-button2.js';
 
 const iglTbaCategoryViewCss = ".sc-igl-tba-category-view-h{display:block}";
 
@@ -62,7 +63,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["igl-tba-category-view", "igl-tba-booking-view"];
+  const components = ["igl-tba-category-view", "igl-tba-booking-view", "ir-button"];
   components.forEach(tagName => { switch (tagName) {
     case "igl-tba-category-view":
       if (!customElements.get(tagName)) {
@@ -70,6 +71,11 @@ function defineCustomElement() {
       }
       break;
     case "igl-tba-booking-view":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
+      }
+      break;
+    case "ir-button":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

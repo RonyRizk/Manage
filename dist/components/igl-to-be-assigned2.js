@@ -5,8 +5,9 @@ import { h as hooks } from './moment.js';
 import { l as locales } from './locales.store.js';
 import { g as getUnassignedDates } from './unassigned_dates.store.js';
 import { c as calendar_data } from './calendar-data.js';
-import { d as defineCustomElement$3 } from './igl-tba-booking-view2.js';
-import { d as defineCustomElement$2 } from './igl-tba-category-view2.js';
+import { d as defineCustomElement$4 } from './igl-tba-booking-view2.js';
+import { d as defineCustomElement$3 } from './igl-tba-category-view2.js';
+import { d as defineCustomElement$2 } from './ir-button2.js';
 import { d as defineCustomElement$1 } from './ir-icon2.js';
 
 const iglToBeAssignedCss = ".sc-igl-to-be-assigned-h{display:block}.custom-dropdown.sc-igl-to-be-assigned{cursor:pointer;padding:5px 10px;width:min-content;margin-left:auto;margin-right:auto}.dropdown-toggle.sc-igl-to-be-assigned{all:unset;display:flex;width:max-content;align-items:center;gap:10px}.dropdown-menu.sc-igl-to-be-assigned{max-height:250px;overflow-y:auto}.tobeAssignedHeader.sc-igl-to-be-assigned{font-weight:500;letter-spacing:0.05rem;font-size:1.12rem;padding-top:5px;margin-bottom:1rem}.closeBtn.sc-igl-to-be-assigned{position:absolute;top:0;right:0;cursor:pointer;line-height:1em;padding:0.4rem}.closeBtn.sc-igl-to-be-assigned:hover{background-color:#f6f6f6}.dropdown-toggle.sc-igl-to-be-assigned::after{content:none;display:none}.dropdown-toggle.sc-igl-to-be-assigned .caret-icon.sc-igl-to-be-assigned{transition:transform 0.2s ease}.show.sc-igl-to-be-assigned .caret-icon.sc-igl-to-be-assigned{transform:rotate(-180deg)}.stickyHeader.sc-igl-to-be-assigned{position:-webkit-sticky;position:sticky;top:0;background-color:#ffffff;z-index:1}.pointer.sc-igl-to-be-assigned{cursor:pointer}.dots.sc-igl-to-be-assigned{display:flex;align-items:center;justify-content:center;margin:0 3px;padding:0}.dot.sc-igl-to-be-assigned{width:5px;height:5px;margin:5px 4px 0;background-color:#6b6f82;border-radius:50%;animation:dotFlashing 1s infinite linear alternate}.dot.sc-igl-to-be-assigned:nth-child(2){animation-delay:0.2s}.dot.sc-igl-to-be-assigned:nth-child(3){animation-delay:0.4s}@keyframes dotFlashing{0%{opacity:0}50%,100%{opacity:1}}";
@@ -31,11 +32,12 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     this.propertyid = undefined;
     this.from_date = undefined;
     this.to_date = undefined;
-    this.loadingMessage = undefined;
     this.calendarData = undefined;
+    this.loadingMessage = undefined;
     this.showDatesList = false;
     this.renderAgain = false;
     this.orderedDatesList = [];
+    this.noScroll = false;
   }
   componentWillLoad() {
     this.toBeAssignedService.setToken(calendar_data.token);
@@ -79,6 +81,7 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     if (opt.key === 'assignUnit') {
       if (Object.keys(this.data[data.selectedDate].categories).length === 1) {
         this.isLoading = true;
+        this.noScroll = true;
       }
       this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
       this.calendarData = data.calendarData;
@@ -156,6 +159,13 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     this.showDatesList = false;
     this.renderView();
   }
+  handleToBeAssignedDate(e) {
+    this.showBookingPopup.emit({
+      key: 'calendar',
+      data: new Date(e.detail.data.fromDate).getTime() - 86400000,
+      noScroll: false,
+    });
+  }
   async showForDate(dateStamp, withLoading = true) {
     try {
       if (withLoading) {
@@ -169,6 +179,7 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
       this.showBookingPopup.emit({
         key: 'calendar',
         data: parseInt(dateStamp) - 86400000,
+        noScroll: this.noScroll,
       });
       if (this.isGotoToBeAssignedDate) {
         this.isGotoToBeAssignedDate = false;
@@ -234,13 +245,14 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     "loadingMessage": [32],
     "showDatesList": [32],
     "renderAgain": [32],
-    "orderedDatesList": [32]
-  }, [[8, "gotoToBeAssignedDate", "gotoDate"]]]);
+    "orderedDatesList": [32],
+    "noScroll": [32]
+  }, [[8, "gotoToBeAssignedDate", "gotoDate"], [0, "highlightToBeAssignedBookingEvent", "handleToBeAssignedDate"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["igl-to-be-assigned", "igl-tba-booking-view", "igl-tba-category-view", "ir-icon"];
+  const components = ["igl-to-be-assigned", "igl-tba-booking-view", "igl-tba-category-view", "ir-button", "ir-icon"];
   components.forEach(tagName => { switch (tagName) {
     case "igl-to-be-assigned":
       if (!customElements.get(tagName)) {
@@ -249,10 +261,15 @@ function defineCustomElement() {
       break;
     case "igl-tba-booking-view":
       if (!customElements.get(tagName)) {
-        defineCustomElement$3();
+        defineCustomElement$4();
       }
       break;
     case "igl-tba-category-view":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$3();
+      }
+      break;
+    case "ir-button":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

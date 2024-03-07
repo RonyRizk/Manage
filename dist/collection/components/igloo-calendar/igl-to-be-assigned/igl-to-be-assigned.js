@@ -19,11 +19,12 @@ export class IglToBeAssigned {
     this.propertyid = undefined;
     this.from_date = undefined;
     this.to_date = undefined;
-    this.loadingMessage = undefined;
     this.calendarData = undefined;
+    this.loadingMessage = undefined;
     this.showDatesList = false;
     this.renderAgain = false;
     this.orderedDatesList = [];
+    this.noScroll = false;
   }
   componentWillLoad() {
     this.toBeAssignedService.setToken(calendar_data.token);
@@ -67,6 +68,7 @@ export class IglToBeAssigned {
     if (opt.key === 'assignUnit') {
       if (Object.keys(this.data[data.selectedDate].categories).length === 1) {
         this.isLoading = true;
+        this.noScroll = true;
       }
       this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
       this.calendarData = data.calendarData;
@@ -144,6 +146,13 @@ export class IglToBeAssigned {
     this.showDatesList = false;
     this.renderView();
   }
+  handleToBeAssignedDate(e) {
+    this.showBookingPopup.emit({
+      key: 'calendar',
+      data: new Date(e.detail.data.fromDate).getTime() - 86400000,
+      noScroll: false,
+    });
+  }
   async showForDate(dateStamp, withLoading = true) {
     try {
       if (withLoading) {
@@ -157,6 +166,7 @@ export class IglToBeAssigned {
       this.showBookingPopup.emit({
         key: 'calendar',
         data: parseInt(dateStamp) - 86400000,
+        noScroll: this.noScroll,
       });
       if (this.isGotoToBeAssignedDate) {
         this.isGotoToBeAssignedDate = false;
@@ -313,7 +323,8 @@ export class IglToBeAssigned {
       "loadingMessage": {},
       "showDatesList": {},
       "renderAgain": {},
-      "orderedDatesList": {}
+      "orderedDatesList": {},
+      "noScroll": {}
     };
   }
   static get events() {
@@ -405,6 +416,12 @@ export class IglToBeAssigned {
         "name": "gotoToBeAssignedDate",
         "method": "gotoDate",
         "target": "window",
+        "capture": false,
+        "passive": false
+      }, {
+        "name": "highlightToBeAssignedBookingEvent",
+        "method": "handleToBeAssignedDate",
+        "target": undefined,
         "capture": false,
         "passive": false
       }];

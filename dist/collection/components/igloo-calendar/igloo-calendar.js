@@ -430,9 +430,11 @@ export class IglooCalendar {
         }
         else {
           //scroll to unassigned dates
-          // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
           dt = new Date(opt.data);
           dt.setDate(dt.getDate() + 1);
+          if (!(opt === null || opt === void 0 ? void 0 : opt.noScroll)) {
+            this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          }
         }
         this.highlightedDate = this.transformDateForScroll(dt);
         break;

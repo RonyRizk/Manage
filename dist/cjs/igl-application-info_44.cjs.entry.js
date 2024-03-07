@@ -3307,7 +3307,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v30"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v32"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -4109,7 +4109,7 @@ const IglPropertyBookedBy = class {
 };
 IglPropertyBookedBy.style = iglPropertyBookedByCss;
 
-const iglTbaBookingViewCss = ".sc-igl-tba-booking-view-h{display:block}.guestTitle.sc-igl-tba-booking-view{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px;margin-bottom:5px;margin-top:5px;padding-left:5px;padding-right:5px}.guestTitle.selectedOrder.sc-igl-tba-booking-view{background-color:#f9f9c9}.pointer.sc-igl-tba-booking-view{cursor:pointer}hr.sc-igl-tba-booking-view{margin-top:8px;margin-bottom:0px}.bookingContainer.sc-igl-tba-booking-view{background-color:#ececec}.actionsContainer.sc-igl-tba-booking-view{padding:5px !important;padding-right:0px !important}.selectContainer.sc-igl-tba-booking-view{width:195px;margin-right:8px}.buttonsContainer.sc-igl-tba-booking-view{width:100px}.btn-secondary.sc-igl-tba-booking-view{margin-right:8px !important}";
+const iglTbaBookingViewCss = ".sc-igl-tba-booking-view-h{display:block}.guestTitle.sc-igl-tba-booking-view{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px;margin-bottom:5px;margin-top:5px;padding-left:5px;padding-right:5px}.guestTitle.selectedOrder.sc-igl-tba-booking-view{background-color:#f9f9c9}.pointer.sc-igl-tba-booking-view{cursor:pointer}hr.sc-igl-tba-booking-view{margin-top:8px;margin-bottom:0px}.bookingContainer.sc-igl-tba-booking-view{background-color:#ececec}.actionsContainer.sc-igl-tba-booking-view{display:flex;align-items:center;padding:5px !important;width:100%;gap:16px}.room-select.sc-igl-tba-booking-view{flex:1}.selectContainer.sc-igl-tba-booking-view{width:195px;margin-right:8px}.buttonsContainer.sc-igl-tba-booking-view{box-sizing:border-box}.btn-secondary.sc-igl-tba-booking-view{margin-right:8px !important}";
 
 const IglTbaBookingView = class {
   constructor(hostRef) {
@@ -4191,7 +4191,7 @@ const IglTbaBookingView = class {
   handleHighlightAvailability() {
     this.highlightToBeAssignedBookingEvent.emit({
       key: 'highlightBookingId',
-      data: { bookingId: this.eventData.ID },
+      data: { bookingId: this.eventData.ID, fromDate: this.eventData.FROM_DATE },
     });
     if (!this.selectedDate) {
       return;
@@ -4229,6 +4229,7 @@ const IglTbaBookingView = class {
       data: { bookingId: '----' },
     });
     this.onSelectRoom({ target: { value: '' } });
+    this.selectedRoom = -1;
     this.addToBeAssignedEvent.emit({ key: 'tobeAssignedEvents', data: [] });
     this.renderView();
   }
@@ -4249,7 +4250,7 @@ const IglTbaBookingView = class {
     // this.initializeToolTips();
   }
   render() {
-    return (index.h(index.Host, null, index.h("div", { class: "bookingContainer", onClick: () => this.handleHighlightAvailability() }, index.h("div", { class: `guestTitle ${this.highlightSection ? 'selectedOrder' : ''} pointer font-small-3`, "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Click to assign unit" }, `Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`), index.h("div", { class: "row m-0 p-0 actionsContainer" }, index.h("div", { class: "d-inline-block p-0 selectContainer" }, index.h("select", { class: "form-control input-sm", id: v4(), onChange: evt => this.onSelectRoom(evt) }, index.h("option", { value: "", selected: this.selectedRoom == -1 }, locales_store.locales.entries.Lcz_AssignUnit), this.allRoomsList.map(room => (index.h("option", { value: room.id, selected: this.selectedRoom == room.id }, room.name))))), this.highlightSection ? (index.h("div", { class: "d-inline-block text-right buttonsContainer" }, index.h("button", { type: "button", class: "btn btn-secondary btn-sm", onClick: evt => this.handleCloseAssignment(evt) }, "X"), index.h("button", { type: "button", class: "btn btn-primary btn-sm", onClick: evt => this.handleAssignUnit(evt), disabled: this.selectedRoom === -1 }, locales_store.locales.entries.Lcz_Assign))) : null), index.h("hr", null))));
+    return (index.h(index.Host, null, index.h("div", { class: "bookingContainer", onClick: () => this.handleHighlightAvailability() }, index.h("div", { class: `guestTitle ${this.highlightSection ? 'selectedOrder' : ''} pointer font-small-3`, "data-toggle": "tooltip", "data-placement": "top", "data-original-title": "Click to assign unit" }, `Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`), index.h("div", { class: "row m-0 p-0 actionsContainer" }, index.h("select", { class: "form-control input-sm room-select", id: v4(), onChange: evt => this.onSelectRoom(evt) }, index.h("option", { value: "", selected: this.selectedRoom == -1 }, locales_store.locales.entries.Lcz_AssignUnit), this.allRoomsList.map(room => (index.h("option", { value: room.id, selected: this.selectedRoom == room.id }, room.name)))), this.highlightSection ? (index.h("div", { class: "d-flex buttonsContainer" }, index.h("button", { type: "button", class: "btn btn-secondary btn-sm", onClick: evt => this.handleCloseAssignment(evt) }, index.h("svg", { class: "m-0 p-0", xmlns: "http://www.w3.org/2000/svg", height: "12", width: "9", viewBox: "0 0 384 512" }, index.h("path", { fill: "currentColor", d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" }))), index.h("ir-button", { isLoading: isRequestPending('/Assign_Exposed_Room'), size: "sm", text: locales_store.locales.entries.Lcz_Assign, onClickHanlder: evt => this.handleAssignUnit(evt), btn_disabled: this.selectedRoom === -1 }))) : null), index.h("hr", null))));
   }
 };
 IglTbaBookingView.style = iglTbaBookingViewCss;
@@ -4324,11 +4325,12 @@ const IglToBeAssigned = class {
     this.propertyid = undefined;
     this.from_date = undefined;
     this.to_date = undefined;
-    this.loadingMessage = undefined;
     this.calendarData = undefined;
+    this.loadingMessage = undefined;
     this.showDatesList = false;
     this.renderAgain = false;
     this.orderedDatesList = [];
+    this.noScroll = false;
   }
   componentWillLoad() {
     this.toBeAssignedService.setToken(calendarData.calendar_data.token);
@@ -4372,6 +4374,7 @@ const IglToBeAssigned = class {
     if (opt.key === 'assignUnit') {
       if (Object.keys(this.data[data.selectedDate].categories).length === 1) {
         this.isLoading = true;
+        this.noScroll = true;
       }
       this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
       this.calendarData = data.calendarData;
@@ -4449,6 +4452,13 @@ const IglToBeAssigned = class {
     this.showDatesList = false;
     this.renderView();
   }
+  handleToBeAssignedDate(e) {
+    this.showBookingPopup.emit({
+      key: 'calendar',
+      data: new Date(e.detail.data.fromDate).getTime() - 86400000,
+      noScroll: false,
+    });
+  }
   async showForDate(dateStamp, withLoading = true) {
     try {
       if (withLoading) {
@@ -4462,6 +4472,7 @@ const IglToBeAssigned = class {
       this.showBookingPopup.emit({
         key: 'calendar',
         data: parseInt(dateStamp) - 86400000,
+        noScroll: this.noScroll,
       });
       if (this.isGotoToBeAssignedDate) {
         this.isGotoToBeAssignedDate = false;
@@ -8860,9 +8871,11 @@ const IglooCalendar = class {
         }
         else {
           //scroll to unassigned dates
-          // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
           dt = new Date(opt.data);
           dt.setDate(dt.getDate() + 1);
+          if (!(opt === null || opt === void 0 ? void 0 : opt.noScroll)) {
+            this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          }
         }
         this.highlightedDate = this.transformDateForScroll(dt);
         break;
