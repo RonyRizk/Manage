@@ -47,7 +47,7 @@ const IrListingHeader = /*@__PURE__*/ proxyCustomElement(class IrListingHeader e
   }
   async handleSearchClicked(is_to_export) {
     if (this.inputValue !== '') {
-      if (/^-?\d+$/.test(this.inputValue)) {
+      if (/^-?\d+$/.test(this.inputValue.trim())) {
         updateUserSelection('book_nbr', this.inputValue.trim());
       }
       else if (this.inputValue[3] === '-') {
