@@ -4,11 +4,12 @@ import { l as locales } from './locales.store.js';
 import { h as hooks } from './moment.js';
 import { a as axios } from './axios.js';
 import { r as renderTime } from './utils2.js';
-import { d as defineCustomElement$5 } from './ir-button2.js';
-import { d as defineCustomElement$4 } from './ir-date-picker2.js';
-import { d as defineCustomElement$3 } from './ir-icon2.js';
-import { d as defineCustomElement$2 } from './ir-input-text2.js';
-import { d as defineCustomElement$1 } from './ir-select2.js';
+import { d as defineCustomElement$6 } from './ir-button2.js';
+import { d as defineCustomElement$5 } from './ir-date-picker2.js';
+import { d as defineCustomElement$4 } from './ir-icon2.js';
+import { d as defineCustomElement$3 } from './ir-input-text2.js';
+import { d as defineCustomElement$2 } from './ir-select2.js';
+import { d as defineCustomElement$1 } from './ir-title2.js';
 
 class PickupService {
   async savePickup(params, booking_nbr, is_remove) {
@@ -287,9 +288,7 @@ const IrPickup = /*@__PURE__*/ proxyCustomElement(class IrPickup extends HTMLEle
     }
   }
   render() {
-    return (h(Host, { class: 'p-0' }, h("div", { class: "position-sticky mb-0 shadow-none p-0" }, h("div", { class: "mt-2 custom-card-container pb-1 mb-3 px-1" }, h("h3", { class: "card-title p-0  m-0 text-left font-medium-2" }, locales.entries.Lcz_Pickup), h("div", null, h("ir-icon", { class: 'close m-0 p-0 ', onIconClickHandler: () => {
-        this.closeModal.emit(null);
-      } }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", class: "m-0 p-0", viewBox: "0 0 384 512", height: 20, width: 20 }, h("path", { d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" })))))), h("section", { class: 'px-1' }, h("ir-select", { selectedValue: this.pickupData.location, selectContainerStyle: "mb-1", onSelectChange: this.handleLocationChange.bind(this), firstOption: locales.entries.Lcz_Pickup_NoThankYou, class: 'm-0 mb-1', LabelAvailable: false, data: this.pickupService.getAvailableLocations(locales.entries.Lcz_Pickup_YesFrom) }), this.pickupData.location > 0 && (h(Fragment, null, h("div", { class: 'd-flex' }, h("div", { class: "form-group  mr-1" }, h("div", { class: "input-group row m-0" }, h("div", { class: `input-group-prepend col-5 p-0 text-dark border-0` }, h("label", { class: `input-group-text  flex-grow-1 text-dark border-theme ` }, locales.entries.Lcz_ArrivalDate)), h("div", { class: "form-control form-control-md col-7 d-flex align-items-center pl-0" }, h("ir-date-picker", { minDate: hooks().format('YYYY-MM-DD'), autoApply: true,
+    return (h(Host, { class: 'p-0' }, h("ir-title", { class: "px-1", onCloseSideBar: () => this.closeModal.emit(null), label: locales.entries.Lcz_Pickup, displayContext: "sidebar" }), h("section", { class: 'px-1' }, h("ir-select", { selectedValue: this.pickupData.location, selectContainerStyle: "mb-1", onSelectChange: this.handleLocationChange.bind(this), firstOption: locales.entries.Lcz_Pickup_NoThankYou, class: 'm-0 mb-1', LabelAvailable: false, data: this.pickupService.getAvailableLocations(locales.entries.Lcz_Pickup_YesFrom) }), this.pickupData.location > 0 && (h(Fragment, null, h("div", { class: 'd-flex' }, h("div", { class: "form-group  mr-1" }, h("div", { class: "input-group row m-0" }, h("div", { class: `input-group-prepend col-5 p-0 text-dark border-0` }, h("label", { class: `input-group-text  flex-grow-1 text-dark border-theme ` }, locales.entries.Lcz_ArrivalDate)), h("div", { class: "form-control form-control-md col-7 d-flex align-items-center pl-0" }, h("ir-date-picker", { minDate: hooks().format('YYYY-MM-DD'), autoApply: true,
       // format="ddd, DD M YYYY"
       singleDatePicker: true, onDateChanged: evt => {
         this.updatePickupData('arrival_date', evt.detail.start.format('YYYY-MM-DD'));
@@ -317,7 +316,7 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-pickup", "ir-button", "ir-date-picker", "ir-icon", "ir-input-text", "ir-select"];
+  const components = ["ir-pickup", "ir-button", "ir-date-picker", "ir-icon", "ir-input-text", "ir-select", "ir-title"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-pickup":
       if (!customElements.get(tagName)) {
@@ -326,25 +325,30 @@ function defineCustomElement() {
       break;
     case "ir-button":
       if (!customElements.get(tagName)) {
-        defineCustomElement$5();
+        defineCustomElement$6();
       }
       break;
     case "ir-date-picker":
       if (!customElements.get(tagName)) {
-        defineCustomElement$4();
+        defineCustomElement$5();
       }
       break;
     case "ir-icon":
       if (!customElements.get(tagName)) {
-        defineCustomElement$3();
+        defineCustomElement$4();
       }
       break;
     case "ir-input-text":
       if (!customElements.get(tagName)) {
-        defineCustomElement$2();
+        defineCustomElement$3();
       }
       break;
     case "ir-select":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
+      }
+      break;
+    case "ir-title":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

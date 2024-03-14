@@ -25,6 +25,7 @@ export declare class IrInputText {
   initial: boolean;
   inputFocused: boolean;
   textChange: EventEmitter<any>;
+  inputBlur: EventEmitter<FocusEvent>;
   connectedCallback(): void;
   disconnectedCallback(): void;
   watchHandler(newValue: string): void;

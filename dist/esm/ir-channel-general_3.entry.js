@@ -1,7 +1,8 @@
 import { r as registerInstance, h, H as Host, c as createEvent, g as getElement, F as Fragment } from './index-2fc15efd.js';
-import { c as channels_data, t as testConnection, u as updateChannelSettings, a as selectChannel, b as addMapping, d as setMappedChannel } from './channel.store-9910375b.js';
-import { l as locales } from './locales.store-15011fa2.js';
-import { c as calendar_data } from './calendar-data-7d89fa9d.js';
+import { c as channels_data, t as testConnection, u as updateChannelSettings, a as selectChannel, b as addMapping, d as setMappedChannel } from './channel.store-fcec6283.js';
+import { l as locales } from './locales.store-103cb063.js';
+import { c as calendar_data } from './calendar-data-353b2869.js';
+import './index-12cef0ac.js';
 
 const irChannelGeneralCss = ".sc-ir-channel-general-h{display:block}.label-style.sc-ir-channel-general{width:100px;text-align:end;padding-right:10px !important}.connection-testing-container.sc-ir-channel-general{display:flex;align-items:center;justify-content:space-between;margin-top:10px !important}.connection-title.sc-ir-channel-general{border-bottom:1px solid #e4e5ec}.ml-18.sc-ir-channel-general{margin-left:18% !important}svg.sc-ir-channel-general{margin-right:5px}";
 

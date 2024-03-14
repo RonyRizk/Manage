@@ -33,6 +33,7 @@ export interface ICountry {
   id: number;
   name: string;
   phone_prefix: string;
+  flag: string;
 }
 export interface IEntries {
   CODE_NAME: string;

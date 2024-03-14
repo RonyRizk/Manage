@@ -3,13 +3,17 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
-const utils$1 = require('./utils-3f536a57.js');
-const utils = require('./utils-3a7c81a3.js');
+const booking_service$1 = require('./booking.service-851b0e7d2.js');
+const utils$1 = require('./utils-5155ae8c.js');
+const moment = require('./moment-f96595e5.js');
 const Token = require('./Token-7fd57fe8.js');
-const booking_service = require('./booking.service-b613fae9.js');
-const locales_store = require('./locales.store-0567c122.js');
-const calendarData = require('./calendar-data-d3bf3294.js');
-const events_service = require('./events.service-1e478cb3.js');
+const booking_service = require('./booking.service-851b0e7d.js');
+const utils = require('./utils-6a5b3cb5.js');
+const locales_store = require('./locales.store-8fed15eb.js');
+const calendarData = require('./calendar-data-96bc0c2a.js');
+const events_service = require('./events.service-b8517756.js');
+require('./booking-ad67fbae.js');
+require('./index-797ee4c0.js');
 
 class EventsService extends Token.Token {
   constructor() {
@@ -115,7 +119,7 @@ const IglBookingEvent = class {
     this.isStreatch = false;
     /*Services */
     this.eventsService = new EventsService();
-    this.bookingService = new utils$1.BookingService();
+    this.bookingService = new booking_service$1.BookingService();
     /* Resize props */
     this.resizeSide = '';
     this.isDragging = false;
@@ -222,6 +226,7 @@ const IglBookingEvent = class {
           this.animationFrameId = requestAnimationFrame(() => {
             this.resetBookingToInitialPosition();
           });
+          return;
         }
       }
       else {
@@ -235,6 +240,12 @@ const IglBookingEvent = class {
         }
         else {
           const { pool, to_date, from_date, toRoomId } = event.detail;
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+            this.animationFrameId = requestAnimationFrame(() => {
+              this.resetBookingToInitialPosition();
+            });
+            throw new Error('Overlapping Dates');
+          }
           if (pool) {
             if (utils$1.isBlockUnit(this.bookingEvent.STATUS_CODE)) {
               await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
@@ -243,6 +254,17 @@ const IglBookingEvent = class {
             }
             else {
               if (this.isShrinking || !this.isStreatch) {
+                console.log(this.bookingEvent.PR_ID.toString() === toRoomId.toString(), this.bookingEvent.PR_ID.toString(), toRoomId.toString());
+                try {
+                  if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
+                    await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+                    return;
+                  }
+                }
+                catch (error) {
+                  this.resetBookingToInitialPosition();
+                  return;
+                }
                 const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
@@ -251,15 +273,14 @@ const IglBookingEvent = class {
                 this.showDialog.emit(Object.assign(Object.assign({}, event.detail), { description, title: '', hideConfirmButton }));
               }
               else {
-                if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-                  this.animationFrameId = requestAnimationFrame(() => {
-                    this.resetBookingToInitialPosition();
-                  });
-                  throw new Error('Overlapping Dates');
-                }
-                else {
-                  this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
-                }
+                // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+                //   this.animationFrameId = requestAnimationFrame(() => {
+                //     this.resetBookingToInitialPosition();
+                //   });
+                //   throw new Error('Overlapping Dates');
+                // } else {
+                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
+                // }
               }
             }
             this.isShrinking = null;
@@ -293,8 +314,8 @@ const IglBookingEvent = class {
         };
       }
       else {
-        if (utils.hooks(from_date, 'YYYY-MM-DD').isSame(utils.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')) &&
-          utils.hooks(to_date, 'YYYY-MM-DD').isSame(utils.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))) {
+        if (moment.hooks(from_date, 'YYYY-MM-DD').isSame(moment.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')) &&
+          moment.hooks(to_date, 'YYYY-MM-DD').isSame(moment.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))) {
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
           if (initialRT === targetRT) {
@@ -347,14 +368,14 @@ const IglBookingEvent = class {
     }
   }
   checkIfSlotOccupied(toRoomId, from_date, to_date) {
-    const fromTime = utils.hooks(from_date, 'YYYY-MM-DD');
-    const toTime = utils.hooks(to_date, 'YYYY-MM-DD');
+    const fromTime = moment.hooks(from_date, 'YYYY-MM-DD');
+    const toTime = moment.hooks(to_date, 'YYYY-MM-DD');
     const isOccupied = this.allBookingEvents.some(event => {
       if (event.POOL === this.bookingEvent.POOL) {
         return false;
       }
-      const eventFromTime = utils.hooks(event.FROM_DATE, 'YYYY-MM-DD').add(1, 'days');
-      const eventToTime = utils.hooks(event.TO_DATE, 'YYYY-MM-DD');
+      const eventFromTime = moment.hooks(event.FROM_DATE, 'YYYY-MM-DD').add(1, 'days');
+      const eventToTime = moment.hooks(event.TO_DATE, 'YYYY-MM-DD');
       return event.PR_ID === +toRoomId && toTime.isSameOrAfter(eventFromTime) && fromTime.isBefore(eventToTime);
     });
     return isOccupied;
@@ -701,7 +722,7 @@ const IglBookingEventHover = class {
       console.log(selectedRt.physicalrooms.length === 1);
       this.shouldHideUnassignUnit = selectedRt.physicalrooms.length === 1;
     }
-    if (utils.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(utils.hooks())) {
+    if (moment.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(moment.hooks())) {
       this.hideButtons = true;
     }
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -981,7 +1002,7 @@ const IglBookingEventHover = class {
   }
   getBlockedView() {
     // let defaultData = {RELEASE_AFTER_HOURS: 0, OPTIONAL_REASON: "", OUT_OF_SERVICE: false};
-    return (index.h("div", { class: `iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("igl-block-dates-view", { isEventHover: true, entryHour: this.bookingEvent.ENTRY_HOUR, entryMinute: this.bookingEvent.ENTRY_MINUTE, defaultData: this.bookingEvent, fromDate: utils.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), toDate: utils.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), entryDate: this.getEntryDate(), onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group btn-group-sm font-small-3", role: "group" }, index.h("button", { disabled: this.isLoading === 'update', type: "button", class: "btn btn-primary mr-1 d-flex align-items-center justify-content-center", onClick: _ => {
+    return (index.h("div", { class: `iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left` }, index.h("igl-block-dates-view", { isEventHover: true, entryHour: this.bookingEvent.ENTRY_HOUR, entryMinute: this.bookingEvent.ENTRY_MINUTE, defaultData: this.bookingEvent, fromDate: moment.hooks(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), toDate: moment.hooks(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').format('DD MM YYYY'), entryDate: this.getEntryDate(), onDataUpdateEvent: event => this.handleBlockDateUpdate(event) }), index.h("div", { class: "row p-0 m-0 mt-2" }, index.h("div", { class: "full-width btn-group btn-group-sm font-small-3", role: "group" }, index.h("button", { disabled: this.isLoading === 'update', type: "button", class: "btn btn-primary mr-1 d-flex align-items-center justify-content-center", onClick: _ => {
         this.handleUpdateBlockedDates();
       } }, this.isLoading === 'update' ? (index.h("i", { class: "la la-circle-o-notch spinner mx-1" })) : (index.h("svg", { class: "p-0 m-0", xmlns: "http://www.w3.org/2000/svg", fill: "none", stroke: "currentColor", height: "12", width: "12", viewBox: "0 0 512 512" }, index.h("path", { fill: "currentColor", d: "M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" }))), index.h("span", null, "\u00A0", locales_store.locales.entries.Lcz_Update)), index.h("button", { type: "button", class: "btn btn-primary", onClick: _ => {
         this.handleConvertBlockedDateToBooking();

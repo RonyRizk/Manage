@@ -103,6 +103,9 @@ function getDefaultData(cell, stayStatus) {
   // if (!cell.booking.is_direct) {
   //   console.log(formatName(cell.room.guest.first_name, cell.room.guest.last_name), cell.booking.channel_booking_nbr);
   // }
+  if (cell.booking.booking_nbr === '88237899') {
+    console.log(cell);
+  }
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,

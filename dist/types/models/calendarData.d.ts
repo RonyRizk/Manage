@@ -1,4 +1,4 @@
-import { RoomDetail, STATUS } from './IBooking';
+import { ICountry, RoomDetail, STATUS } from './IBooking';
 import { TAdultChildConstraints } from './igl-book-property';
 export interface CalendarDataDetails {
   adultChildConstraints: TAdultChildConstraints;
@@ -21,6 +21,7 @@ export interface CalendarDataDetails {
   name: string;
   token: string;
   tax_statement: string;
+  country: ICountry;
 }
 export interface ITaxes {
   is_exlusive: boolean;

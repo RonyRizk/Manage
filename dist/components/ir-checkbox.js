@@ -1,6 +1,6 @@
-import { I as IrCheckBox, d as defineCustomElement$1 } from './ir-checlbox.js';
+import { I as IrCheckbox$1, d as defineCustomElement$1 } from './ir-checkbox2.js';
 
-const IrCheckbox = IrCheckBox;
+const IrCheckbox = IrCheckbox$1;
 const defineCustomElement = defineCustomElement$1;
 
 export { IrCheckbox, defineCustomElement };

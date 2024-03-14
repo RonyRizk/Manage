@@ -136,6 +136,7 @@ export class IglBookingEvent {
           this.animationFrameId = requestAnimationFrame(() => {
             this.resetBookingToInitialPosition();
           });
+          return;
         }
       }
       else {
@@ -149,6 +150,12 @@ export class IglBookingEvent {
         }
         else {
           const { pool, to_date, from_date, toRoomId } = event.detail;
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+            this.animationFrameId = requestAnimationFrame(() => {
+              this.resetBookingToInitialPosition();
+            });
+            throw new Error('Overlapping Dates');
+          }
           if (pool) {
             if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
               await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
@@ -157,6 +164,17 @@ export class IglBookingEvent {
             }
             else {
               if (this.isShrinking || !this.isStreatch) {
+                console.log(this.bookingEvent.PR_ID.toString() === toRoomId.toString(), this.bookingEvent.PR_ID.toString(), toRoomId.toString());
+                try {
+                  if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
+                    await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+                    return;
+                  }
+                }
+                catch (error) {
+                  this.resetBookingToInitialPosition();
+                  return;
+                }
                 const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
@@ -165,15 +183,14 @@ export class IglBookingEvent {
                 this.showDialog.emit(Object.assign(Object.assign({}, event.detail), { description, title: '', hideConfirmButton }));
               }
               else {
-                if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-                  this.animationFrameId = requestAnimationFrame(() => {
-                    this.resetBookingToInitialPosition();
-                  });
-                  throw new Error('Overlapping Dates');
-                }
-                else {
-                  this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
-                }
+                // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+                //   this.animationFrameId = requestAnimationFrame(() => {
+                //     this.resetBookingToInitialPosition();
+                //   });
+                //   throw new Error('Overlapping Dates');
+                // } else {
+                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
+                // }
               }
             }
             this.isShrinking = null;

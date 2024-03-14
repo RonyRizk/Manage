@@ -4,6 +4,7 @@ export declare class IrCombobox {
   data: {
     id: string;
     name: string;
+    image?: string;
   }[];
   duration: number;
   placeholder: string;
@@ -12,6 +13,7 @@ export declare class IrCombobox {
   autoFocus: boolean;
   input_id: string;
   selectedIndex: number;
+  actualIndex: number;
   isComboBoxVisible: boolean;
   isLoading: boolean;
   isItemSelected: boolean;
@@ -35,9 +37,8 @@ export declare class IrCombobox {
   componentDidLoad(): void;
   watchHandler(newValue: boolean, oldValue: boolean): void;
   handleKeyDown(event: KeyboardEvent): void;
-  getHeightOfPElement(): number;
   focusInput(): void;
-  adjustScrollPosition(itemHeight: any, visibleHeight?: number): void;
+  adjustScrollPosition(): void;
   selectItem(index: any): void;
   debounceFetchData(): void;
   handleFocus(): void;

@@ -1,43 +1,26 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
-import { T as Token } from './Token.js';
-import { a as axios } from './axios.js';
+import { H as HouseKeepingService, u as updateHKStore } from './housekeeping.service.js';
 import { R as RoomService } from './room.service.js';
-import { c as createStore } from './index2.js';
-import { d as defineCustomElement$5 } from './ir-interceptor2.js';
-import { d as defineCustomElement$4 } from './ir-loading-screen2.js';
-import { d as defineCustomElement$3 } from './ir-select2.js';
-import { d as defineCustomElement$2 } from './ir-toast2.js';
+import { a as axios } from './axios.js';
+import { d as defineCustomElement$i } from './ir-button2.js';
+import { d as defineCustomElement$h } from './ir-combobox2.js';
+import { d as defineCustomElement$g } from './ir-delete-modal2.js';
+import { d as defineCustomElement$f } from './ir-hk-team2.js';
+import { d as defineCustomElement$e } from './ir-hk-unassigned-units2.js';
+import { d as defineCustomElement$d } from './ir-hk-user2.js';
+import { d as defineCustomElement$c } from './ir-icon2.js';
+import { d as defineCustomElement$b } from './ir-input-text2.js';
+import { d as defineCustomElement$a } from './ir-interceptor2.js';
+import { d as defineCustomElement$9 } from './ir-loading-screen2.js';
+import { d as defineCustomElement$8 } from './ir-phone-input2.js';
+import { d as defineCustomElement$7 } from './ir-select2.js';
+import { d as defineCustomElement$6 } from './ir-sidebar2.js';
+import { d as defineCustomElement$5 } from './ir-switch2.js';
+import { d as defineCustomElement$4 } from './ir-title2.js';
+import { d as defineCustomElement$3 } from './ir-toast2.js';
+import { d as defineCustomElement$2 } from './ir-unit-status2.js';
 
-class HouseKeepingService extends Token {
-  async getExposedHKSetup(property_id) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Missing token');
-    }
-    const { data } = await axios.post(`/Get_Exposed_HK_Setup?Ticket=${token}`, {
-      property_id,
-    });
-    return data['My_Result'];
-  }
-  async setExposedInspectionMode(property_id, mode) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Missing token');
-    }
-    const { data } = await axios.post(`/Set_Exposed_Inspection_Mode?Ticket=${token}`, {
-      property_id,
-      mode,
-    });
-    return data['My_Result'];
-  }
-}
-
-const initialValue = {
-  token: '',
-};
-const { state: housekeeping_store } = createStore(initialValue);
-
-const irHousekeepingCss = ".sc-ir-housekeeping-h{display:block}.circle.sc-ir-housekeeping{display:inline-flex;border-radius:50%}.green.sc-ir-housekeeping{background:#629a4c}.red.sc-ir-housekeeping{background:#ff4961}.orange.sc-ir-housekeeping{background:#ff9149}.black.sc-ir-housekeeping{background:#000}.smallcircle.sc-ir-housekeeping{height:7px;width:7px}.bigcircle.sc-ir-housekeeping{height:7px;width:7px}.status-container.sc-ir-housekeeping,.action-container.sc-ir-housekeeping{display:flex;align-items:center;gap:8px}.status-container.sc-ir-housekeeping p.sc-ir-housekeeping{margin:0}";
+const irHousekeepingCss = ".sc-ir-housekeeping-h{display:block}";
 
 const IrHousekeeping$1 = /*@__PURE__*/ proxyCustomElement(class IrHousekeeping extends HTMLElement {
   constructor() {
@@ -50,7 +33,6 @@ const IrHousekeeping$1 = /*@__PURE__*/ proxyCustomElement(class IrHousekeeping e
     this.baseurl = '';
     this.propertyid = undefined;
     this.isLoading = false;
-    this.exposedHouseKeepingStatuses = undefined;
   }
   componentWillLoad() {
     if (this.baseurl) {
@@ -59,23 +41,31 @@ const IrHousekeeping$1 = /*@__PURE__*/ proxyCustomElement(class IrHousekeeping e
     if (this.ticket !== '') {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      housekeeping_store.token = this.ticket;
+      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
+  }
+  async handleResetData(e) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.houseKeepingService.getExposedHKSetup(this.propertyid);
   }
   async ticketChanged(newValue, oldValue) {
     if (newValue !== oldValue) {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      housekeeping_store.token = this.ticket;
+      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
   async initializeApp() {
     try {
       this.isLoading = true;
-      const [housekeeping] = await Promise.all([this.houseKeepingService.getExposedHKSetup(this.propertyid)]);
-      this.exposedHouseKeepingStatuses = housekeeping.statuses;
+      await Promise.all([
+        this.houseKeepingService.getExposedHKSetup(this.propertyid),
+        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.fetchLanguage(this.language, ['_HK_FRONT']),
+      ]);
     }
     catch (error) {
       console.error(error);
@@ -85,20 +75,10 @@ const IrHousekeeping$1 = /*@__PURE__*/ proxyCustomElement(class IrHousekeeping e
     }
   }
   render() {
-    var _a;
     if (this.isLoading) {
       return h("ir-loading-screen", null);
     }
-    return (h(Host, null, h("ir-interceptor", null), h("ir-toast", null), h("section", { class: "p-1" }, h("div", { class: "card p-1" }, h("h4", null, "Room or Unit Status"), h("table", null, h("thead", null, h("tr", null, h("th", null, "Status"), h("th", null, "Code"), h("th", null, "Action"))), h("tbody", null, (_a = this.exposedHouseKeepingStatuses) === null || _a === void 0 ? void 0 : _a.map(status => {
-      var _a;
-      return (h("tr", { key: status.code }, h("td", null, h("div", { class: "status-container" }, h("span", { class: `circle ${status.style.shape} ${status.style.color}` }), h("p", null, status.description))), h("td", null, status.code), h("td", null, h("div", { class: "action-container" }, h("p", { class: 'm-0' }, status.action), ((_a = status.inspection_mode) === null || _a === void 0 ? void 0 : _a.is_active) && (h("div", null, h("ir-select", { LabelAvailable: false, firstOption: "No", data: Array.from(Array(status.inspection_mode.window + 1), (_, i) => i).map(i => {
-          const text = i === 0 ? 'Yes on the same day.' : i.toString() + ' day prior.';
-          return {
-            text,
-            value: i.toString(),
-          };
-        }) })))))));
-    })))))));
+    return (h(Host, null, h("ir-interceptor", null), h("ir-toast", null), h("section", { class: "p-1" }, h("ir-unit-status", { class: "mb-1" }), h("ir-hk-team", { class: "mb-1" }))));
   }
   static get watchers() { return {
     "ticket": ["ticketChanged"]
@@ -109,36 +89,100 @@ const IrHousekeeping$1 = /*@__PURE__*/ proxyCustomElement(class IrHousekeeping e
     "ticket": [1],
     "baseurl": [1],
     "propertyid": [2],
-    "isLoading": [32],
-    "exposedHouseKeepingStatuses": [32]
-  }]);
+    "isLoading": [32]
+  }, [[0, "resetData", "handleResetData"]]]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-housekeeping", "ir-interceptor", "ir-loading-screen", "ir-select", "ir-toast"];
+  const components = ["ir-housekeeping", "ir-button", "ir-combobox", "ir-delete-modal", "ir-hk-team", "ir-hk-unassigned-units", "ir-hk-user", "ir-icon", "ir-input-text", "ir-interceptor", "ir-loading-screen", "ir-phone-input", "ir-select", "ir-sidebar", "ir-switch", "ir-title", "ir-toast", "ir-unit-status"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-housekeeping":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, IrHousekeeping$1);
       }
       break;
+    case "ir-button":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$i();
+      }
+      break;
+    case "ir-combobox":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$h();
+      }
+      break;
+    case "ir-delete-modal":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$g();
+      }
+      break;
+    case "ir-hk-team":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$f();
+      }
+      break;
+    case "ir-hk-unassigned-units":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$e();
+      }
+      break;
+    case "ir-hk-user":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$d();
+      }
+      break;
+    case "ir-icon":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$c();
+      }
+      break;
+    case "ir-input-text":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$b();
+      }
+      break;
     case "ir-interceptor":
       if (!customElements.get(tagName)) {
-        defineCustomElement$5();
+        defineCustomElement$a();
       }
       break;
     case "ir-loading-screen":
       if (!customElements.get(tagName)) {
-        defineCustomElement$4();
+        defineCustomElement$9();
+      }
+      break;
+    case "ir-phone-input":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$8();
       }
       break;
     case "ir-select":
       if (!customElements.get(tagName)) {
-        defineCustomElement$3();
+        defineCustomElement$7();
+      }
+      break;
+    case "ir-sidebar":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$6();
+      }
+      break;
+    case "ir-switch":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$5();
+      }
+      break;
+    case "ir-title":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$4();
       }
       break;
     case "ir-toast":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$3();
+      }
+      break;
+    case "ir-unit-status":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

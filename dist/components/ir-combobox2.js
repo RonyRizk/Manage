@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
 import { l as locales } from './locales.store.js';
+import { v as v4 } from './v4.js';
 
 const irComboboxCss = ".sc-ir-combobox-h{display:block;position:relative;padding:0;margin:0}ul.sc-ir-combobox{position:absolute;margin:0;margin-top:2px;width:100%;max-height:80px;border-radius:0.21rem;z-index:10000;padding:1px;background:white;box-shadow:0px 8px 16px 0px rgba(0, 0, 0, 0.2);padding:5px 0;max-height:250px;overflow-y:auto}.dropdown-item.sc-ir-combobox{cursor:pointer}ul.sc-ir-combobox li.sc-ir-combobox,span.sc-ir-combobox,loader-container.sc-ir-combobox{padding:0px 16px;margin:0px;margin-top:2px;width:100%;border-radius:2px}ul.sc-ir-combobox li.sc-ir-combobox{cursor:pointer}ul.sc-ir-combobox li.sc-ir-combobox:hover{background:#f4f5fa}ul.sc-ir-combobox li[data-selected].sc-ir-combobox,ul.sc-ir-combobox li[data-selected].sc-ir-combobox:hover{color:#fff;text-decoration:none;background-color:#666ee8}";
 
@@ -16,8 +17,9 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     this.value = undefined;
     this.disabled = false;
     this.autoFocus = false;
-    this.input_id = '';
+    this.input_id = v4();
     this.selectedIndex = -1;
+    this.actualIndex = -1;
     this.isComboBoxVisible = false;
     this.isLoading = true;
     this.isItemSelected = undefined;
@@ -40,19 +42,18 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
   }
   handleKeyDown(event) {
     var _a;
-    const dataSize = this.data.length;
-    const itemHeight = this.getHeightOfPElement();
+    const dataSize = this.filteredData.length;
     if (dataSize > 0) {
       switch (event.key) {
         case 'ArrowUp':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex - 1 + dataSize) % dataSize;
-          this.adjustScrollPosition(itemHeight);
+          this.adjustScrollPosition();
           break;
         case 'ArrowDown':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex + 1) % dataSize;
-          this.adjustScrollPosition(itemHeight);
+          this.adjustScrollPosition();
           break;
         // case 'Enter':
         // case ' ':
@@ -67,33 +68,20 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
       }
     }
   }
-  getHeightOfPElement() {
-    const combobox = this.el.querySelector('.combobox');
-    if (combobox) {
-      const pItem = combobox.querySelector('p');
-      return pItem ? pItem.offsetHeight : 0;
-    }
-    return 0;
-  }
   focusInput() {
     requestAnimationFrame(() => {
       var _a;
       (_a = this.inputRef) === null || _a === void 0 ? void 0 : _a.focus();
     });
   }
-  adjustScrollPosition(itemHeight, visibleHeight = 250) {
-    const combobox = this.el.querySelector('.combobox');
-    if (combobox) {
-      const margin = 2;
-      const itemTotalHeight = itemHeight + margin;
-      const selectedPosition = itemTotalHeight * this.selectedIndex;
-      let newScrollTop = selectedPosition - visibleHeight / 2 + itemHeight / 2;
-      newScrollTop = Math.max(0, Math.min(newScrollTop, combobox.scrollHeight - visibleHeight));
-      combobox.scrollTo({
-        top: newScrollTop,
-        behavior: 'auto',
-      });
-    }
+  adjustScrollPosition() {
+    var _a;
+    const selectedItem = (_a = this.el) === null || _a === void 0 ? void 0 : _a.querySelector(`[data-selected]`);
+    if (!selectedItem)
+      return;
+    selectedItem.scrollIntoView({
+      block: 'center',
+    });
   }
   selectItem(index) {
     if (this.filteredData[index]) {
@@ -132,6 +120,7 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     try {
       this.isLoading = true;
       this.filteredData = this.data.filter(d => d.name.toLowerCase().startsWith(this.inputValue));
+      this.selectedIndex = -1;
     }
     catch (error) {
       console.log('error', error);
@@ -196,7 +185,7 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
       return null;
     }
     return (h("ul", null, (_a = this.filteredData) === null || _a === void 0 ? void 0 :
-      _a.map((d, index) => (h("li", { role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, d.name))), this.filteredData.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, locales.entries.Lcz_NoResultsFound)));
+      _a.map((d, index) => (h("li", { onMouseEnter: () => (this.selectedIndex = index), role: "button", key: d.id, onKeyDown: e => this.handleItemKeyDown(e, index), "data-selected": this.selectedIndex === index, tabIndex: 0, onClick: () => this.selectItem(index) }, d.name))), this.filteredData.length === 0 && !this.isLoading && h("span", { class: 'text-center' }, locales.entries.Lcz_NoResultsFound)));
   }
   handleSubmit(e) {
     e.preventDefault();
@@ -208,7 +197,7 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     this.selectItem(this.selectedIndex === -1 ? 0 : this.selectedIndex);
   }
   render() {
-    return (h("form", { onSubmit: this.handleSubmit.bind(this), class: "m-0 p-0" }, h("input", { id: this.input_id, ref: el => (this.inputRef = el), type: "text", disabled: this.disabled, value: this.value, placeholder: this.placeholder, class: "form-control bg-white", onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
+    return (h("form", { onSubmit: this.handleSubmit.bind(this), class: "m-0 p-0" }, h("input", { type: "text", class: "form-control bg-white", id: this.input_id, ref: el => (this.inputRef = el), disabled: this.disabled, value: this.value, placeholder: this.placeholder, onKeyDown: this.handleKeyDown.bind(this), onBlur: this.handleBlur.bind(this), onInput: this.handleInputChange.bind(this), onFocus: this.handleFocus.bind(this), autoFocus: this.autoFocus }), this.renderDropdown()));
   }
   get el() { return this; }
   static get watchers() { return {
@@ -224,6 +213,7 @@ const IrCombobox = /*@__PURE__*/ proxyCustomElement(class IrCombobox extends HTM
     "autoFocus": [4, "auto-focus"],
     "input_id": [1],
     "selectedIndex": [32],
+    "actualIndex": [32],
     "isComboBoxVisible": [32],
     "isLoading": [32],
     "isItemSelected": [32],

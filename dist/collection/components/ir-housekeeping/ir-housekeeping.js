@@ -1,6 +1,6 @@
 import { HouseKeepingService } from "../../../../src/services/housekeeping.service";
 import { RoomService } from "../../../../src/services/room.service";
-import housekeeping_store from "../../../../src/stores/housekeeping.store";
+import { updateHKStore } from "../../../../src/stores/housekeeping.store";
 import { Host, h } from "@stencil/core";
 import axios from "axios";
 export class IrHousekeeping {
@@ -12,7 +12,6 @@ export class IrHousekeeping {
     this.baseurl = '';
     this.propertyid = undefined;
     this.isLoading = false;
-    this.exposedHouseKeepingStatuses = undefined;
   }
   componentWillLoad() {
     if (this.baseurl) {
@@ -21,23 +20,31 @@ export class IrHousekeeping {
     if (this.ticket !== '') {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      housekeeping_store.token = this.ticket;
+      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
+  }
+  async handleResetData(e) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.houseKeepingService.getExposedHKSetup(this.propertyid);
   }
   async ticketChanged(newValue, oldValue) {
     if (newValue !== oldValue) {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      housekeeping_store.token = this.ticket;
+      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
   async initializeApp() {
     try {
       this.isLoading = true;
-      const [housekeeping] = await Promise.all([this.houseKeepingService.getExposedHKSetup(this.propertyid)]);
-      this.exposedHouseKeepingStatuses = housekeeping.statuses;
+      await Promise.all([
+        this.houseKeepingService.getExposedHKSetup(this.propertyid),
+        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.fetchLanguage(this.language, ['_HK_FRONT']),
+      ]);
     }
     catch (error) {
       console.error(error);
@@ -47,20 +54,10 @@ export class IrHousekeeping {
     }
   }
   render() {
-    var _a;
     if (this.isLoading) {
       return h("ir-loading-screen", null);
     }
-    return (h(Host, null, h("ir-interceptor", null), h("ir-toast", null), h("section", { class: "p-1" }, h("div", { class: "card p-1" }, h("h4", null, "Room or Unit Status"), h("table", null, h("thead", null, h("tr", null, h("th", null, "Status"), h("th", null, "Code"), h("th", null, "Action"))), h("tbody", null, (_a = this.exposedHouseKeepingStatuses) === null || _a === void 0 ? void 0 : _a.map(status => {
-      var _a;
-      return (h("tr", { key: status.code }, h("td", null, h("div", { class: "status-container" }, h("span", { class: `circle ${status.style.shape} ${status.style.color}` }), h("p", null, status.description))), h("td", null, status.code), h("td", null, h("div", { class: "action-container" }, h("p", { class: 'm-0' }, status.action), ((_a = status.inspection_mode) === null || _a === void 0 ? void 0 : _a.is_active) && (h("div", null, h("ir-select", { LabelAvailable: false, firstOption: "No", data: Array.from(Array(status.inspection_mode.window + 1), (_, i) => i).map(i => {
-          const text = i === 0 ? 'Yes on the same day.' : i.toString() + ' day prior.';
-          return {
-            text,
-            value: i.toString(),
-          };
-        }) })))))));
-    })))))));
+    return (h(Host, null, h("ir-interceptor", null), h("ir-toast", null), h("section", { class: "p-1" }, h("ir-unit-status", { class: "mb-1" }), h("ir-hk-team", { class: "mb-1" }))));
   }
   static get is() { return "ir-housekeeping"; }
   static get encapsulation() { return "scoped"; }
@@ -151,14 +148,22 @@ export class IrHousekeeping {
   }
   static get states() {
     return {
-      "isLoading": {},
-      "exposedHouseKeepingStatuses": {}
+      "isLoading": {}
     };
   }
   static get watchers() {
     return [{
         "propName": "ticket",
         "methodName": "ticketChanged"
+      }];
+  }
+  static get listeners() {
+    return [{
+        "name": "resetData",
+        "method": "handleResetData",
+        "target": undefined,
+        "capture": false,
+        "passive": false
       }];
   }
 }

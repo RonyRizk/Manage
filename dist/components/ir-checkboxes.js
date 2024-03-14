@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
-import { d as defineCustomElement$2 } from './ir-checlbox.js';
+import { d as defineCustomElement$2 } from './ir-checkbox2.js';
 
 const IrCheckBoxes = /*@__PURE__*/ proxyCustomElement(class IrCheckBoxes extends HTMLElement {
   constructor() {
@@ -25,7 +25,7 @@ const IrCheckBoxes = /*@__PURE__*/ proxyCustomElement(class IrCheckBoxes extends
     }
   }
   render() {
-    return (h("div", null, this.checkboxes.map((checkbox, index) => (h("ir-checkbox", { name: index.toString(), label: checkbox.text, value: checkbox.value, checked: checkbox.checked || false })))));
+    return (h("div", null, this.checkboxes.map((checkbox, index) => (h("ir-checkbox", { name: index.toString(), label: checkbox.text, checked: checkbox.checked || false })))));
   }
 }, [0, "ir-checkboxes", {
     "checkboxes": [16]

@@ -14,6 +14,7 @@ import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking } from "./models/booking.dto";
 import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
+import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -27,6 +28,7 @@ export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking } from "./models/booking.dto";
 export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
+export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -264,6 +266,7 @@ export namespace Components {
         "bookingNumber": string;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
+        "hasCloseButton": boolean;
         "hasDelete": boolean;
         "hasMenu": boolean;
         "hasPrint": boolean;
@@ -316,19 +319,18 @@ export namespace Components {
     interface IrChannelMapping {
     }
     interface IrCheckbox {
+        "checkboxId": string;
         "checked": boolean;
         "disabled": boolean;
         "label": string;
-        "labelPosition": 'before' | 'after';
         "name": string;
-        "value": string;
     }
     interface IrCheckboxes {
         "checkboxes": checkboxes[];
     }
     interface IrCombobox {
         "autoFocus": boolean;
-        "data": { id: string; name: string }[];
+        "data": { id: string; name: string; image?: string }[];
         "disabled": boolean;
         "duration": number;
         "input_id": string;
@@ -366,6 +368,11 @@ export namespace Components {
         "showDateDifference": boolean;
         "to_date": string | Date | moment.Moment;
     }
+    interface IrDeleteModal {
+        "closeModal": () => Promise<void>;
+        "openModal": () => Promise<void>;
+        "user": IHouseKeepers;
+    }
     interface IrDropdown {
         "data": {
     name: string;
@@ -384,6 +391,23 @@ export namespace Components {
         "language": string;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
+    }
+    interface IrHkArchive {
+    }
+    interface IrHkTasks {
+        "baseurl": string;
+        "language": string;
+        "propertyid": number;
+        "ticket": string;
+    }
+    interface IrHkTeam {
+    }
+    interface IrHkUnassignedUnits {
+        "user": IHouseKeepers | null;
+    }
+    interface IrHkUser {
+        "isEdit": boolean;
+        "user": THKUser | null;
     }
     interface IrHousekeeping {
         "baseurl": string;
@@ -459,6 +483,17 @@ export namespace Components {
     interface IrPaymentDetails {
         "bookingDetails": Booking;
         "defaultTexts": ILocale;
+    }
+    interface IrPhoneInput {
+        "default_country": number;
+        "disabled": boolean;
+        "error": boolean;
+        "label": string;
+        "language": string;
+        "phone_prefix": string | null;
+        "placeholder": string;
+        "token": string;
+        "value": string;
     }
     interface IrPickup {
         "bookingNumber": string;
@@ -541,6 +576,24 @@ export namespace Components {
         "rows": number;
         "text": string;
     }
+    interface IrTitle {
+        "displayContext": 'default' | 'sidebar';
+        "justifyContent": | 'center'
+    | 'start'
+    | 'end'
+    | 'flex-start'
+    | 'flex-end'
+    | 'left'
+    | 'right'
+    | 'normal'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | 'stretch'
+    | 'safe center'
+    | 'unsafe center';
+        "label": string;
+    }
     interface IrToast {
         "position": TPositions;
     }
@@ -548,6 +601,8 @@ export namespace Components {
         "customSlot": boolean;
         "message": string;
         "withHtml": boolean;
+    }
+    interface IrUnitStatus {
     }
     interface OtaLabel {
         "label": string;
@@ -679,6 +734,10 @@ export interface IrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDatePickerElement;
 }
+export interface IrDeleteModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDeleteModalElement;
+}
 export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDropdownElement;
@@ -686,6 +745,14 @@ export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
 export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGuestInfoElement;
+}
+export interface IrHkUnassignedUnitsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrHkUnassignedUnitsElement;
+}
+export interface IrHkUserCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrHkUserElement;
 }
 export interface IrIconCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -715,6 +782,10 @@ export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentDetailsElement;
 }
+export interface IrPhoneInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPhoneInputElement;
+}
 export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPickupElement;
@@ -738,6 +809,14 @@ export interface IrSidebarCustomEvent<T> extends CustomEvent<T> {
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
+}
+export interface IrTitleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTitleElement;
+}
+export interface IrUnitStatusCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrUnitStatusElement;
 }
 declare global {
     interface HTMLIglApplicationInfoElement extends Components.IglApplicationInfo, HTMLStencilElement {
@@ -962,6 +1041,12 @@ declare global {
         prototype: HTMLIrDateViewElement;
         new (): HTMLIrDateViewElement;
     };
+    interface HTMLIrDeleteModalElement extends Components.IrDeleteModal, HTMLStencilElement {
+    }
+    var HTMLIrDeleteModalElement: {
+        prototype: HTMLIrDeleteModalElement;
+        new (): HTMLIrDeleteModalElement;
+    };
     interface HTMLIrDropdownElement extends Components.IrDropdown, HTMLStencilElement {
     }
     var HTMLIrDropdownElement: {
@@ -973,6 +1058,36 @@ declare global {
     var HTMLIrGuestInfoElement: {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
+    };
+    interface HTMLIrHkArchiveElement extends Components.IrHkArchive, HTMLStencilElement {
+    }
+    var HTMLIrHkArchiveElement: {
+        prototype: HTMLIrHkArchiveElement;
+        new (): HTMLIrHkArchiveElement;
+    };
+    interface HTMLIrHkTasksElement extends Components.IrHkTasks, HTMLStencilElement {
+    }
+    var HTMLIrHkTasksElement: {
+        prototype: HTMLIrHkTasksElement;
+        new (): HTMLIrHkTasksElement;
+    };
+    interface HTMLIrHkTeamElement extends Components.IrHkTeam, HTMLStencilElement {
+    }
+    var HTMLIrHkTeamElement: {
+        prototype: HTMLIrHkTeamElement;
+        new (): HTMLIrHkTeamElement;
+    };
+    interface HTMLIrHkUnassignedUnitsElement extends Components.IrHkUnassignedUnits, HTMLStencilElement {
+    }
+    var HTMLIrHkUnassignedUnitsElement: {
+        prototype: HTMLIrHkUnassignedUnitsElement;
+        new (): HTMLIrHkUnassignedUnitsElement;
+    };
+    interface HTMLIrHkUserElement extends Components.IrHkUser, HTMLStencilElement {
+    }
+    var HTMLIrHkUserElement: {
+        prototype: HTMLIrHkUserElement;
+        new (): HTMLIrHkUserElement;
     };
     interface HTMLIrHousekeepingElement extends Components.IrHousekeeping, HTMLStencilElement {
     }
@@ -1034,6 +1149,12 @@ declare global {
         prototype: HTMLIrPaymentDetailsElement;
         new (): HTMLIrPaymentDetailsElement;
     };
+    interface HTMLIrPhoneInputElement extends Components.IrPhoneInput, HTMLStencilElement {
+    }
+    var HTMLIrPhoneInputElement: {
+        prototype: HTMLIrPhoneInputElement;
+        new (): HTMLIrPhoneInputElement;
+    };
     interface HTMLIrPickupElement extends Components.IrPickup, HTMLStencilElement {
     }
     var HTMLIrPickupElement: {
@@ -1088,6 +1209,12 @@ declare global {
         prototype: HTMLIrTextareaElement;
         new (): HTMLIrTextareaElement;
     };
+    interface HTMLIrTitleElement extends Components.IrTitle, HTMLStencilElement {
+    }
+    var HTMLIrTitleElement: {
+        prototype: HTMLIrTitleElement;
+        new (): HTMLIrTitleElement;
+    };
     interface HTMLIrToastElement extends Components.IrToast, HTMLStencilElement {
     }
     var HTMLIrToastElement: {
@@ -1099,6 +1226,12 @@ declare global {
     var HTMLIrTooltipElement: {
         prototype: HTMLIrTooltipElement;
         new (): HTMLIrTooltipElement;
+    };
+    interface HTMLIrUnitStatusElement extends Components.IrUnitStatus, HTMLStencilElement {
+    }
+    var HTMLIrUnitStatusElement: {
+        prototype: HTMLIrUnitStatusElement;
+        new (): HTMLIrUnitStatusElement;
     };
     interface HTMLOtaLabelElement extends Components.OtaLabel, HTMLStencilElement {
     }
@@ -1144,8 +1277,14 @@ declare global {
         "ir-common": HTMLIrCommonElement;
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-date-view": HTMLIrDateViewElement;
+        "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-hk-archive": HTMLIrHkArchiveElement;
+        "ir-hk-tasks": HTMLIrHkTasksElement;
+        "ir-hk-team": HTMLIrHkTeamElement;
+        "ir-hk-unassigned-units": HTMLIrHkUnassignedUnitsElement;
+        "ir-hk-user": HTMLIrHkUserElement;
         "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
         "ir-input-text": HTMLIrInputTextElement;
@@ -1156,6 +1295,7 @@ declare global {
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
+        "ir-phone-input": HTMLIrPhoneInputElement;
         "ir-pickup": HTMLIrPickupElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-room": HTMLIrRoomElement;
@@ -1165,8 +1305,10 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-textarea": HTMLIrTextareaElement;
+        "ir-title": HTMLIrTitleElement;
         "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
+        "ir-unit-status": HTMLIrUnitStatusElement;
         "ota-label": HTMLOtaLabelElement;
     }
 }
@@ -1476,6 +1618,7 @@ declare namespace LocalJSX {
         "bookingNumber"?: string;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
+        "hasCloseButton"?: boolean;
         "hasDelete"?: boolean;
         "hasMenu"?: boolean;
         "hasPrint"?: boolean;
@@ -1486,6 +1629,7 @@ declare namespace LocalJSX {
         "is_from_front_desk"?: boolean;
         "language"?: string;
         "onBookingChanged"?: (event: IrBookingDetailsCustomEvent<Booking>) => void;
+        "onCloseSidebar"?: (event: IrBookingDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast1>) => void;
         "propertyid"?: number;
         "ticket"?: string;
@@ -1534,13 +1678,12 @@ declare namespace LocalJSX {
     interface IrChannelMapping {
     }
     interface IrCheckbox {
+        "checkboxId"?: string;
         "checked"?: boolean;
         "disabled"?: boolean;
         "label"?: string;
-        "labelPosition"?: 'before' | 'after';
         "name"?: string;
-        "onCheckboxChange"?: (event: IrCheckboxCustomEvent<{ name: string; value: string; checked: boolean }>) => void;
-        "value"?: string;
+        "onCheckChange"?: (event: IrCheckboxCustomEvent<boolean>) => void;
     }
     interface IrCheckboxes {
         "checkboxes"?: checkboxes[];
@@ -1548,7 +1691,7 @@ declare namespace LocalJSX {
     }
     interface IrCombobox {
         "autoFocus"?: boolean;
-        "data"?: { id: string; name: string }[];
+        "data"?: { id: string; name: string; image?: string }[];
         "disabled"?: boolean;
         "duration"?: number;
         "input_id"?: string;
@@ -1593,6 +1736,11 @@ declare namespace LocalJSX {
         "showDateDifference"?: boolean;
         "to_date"?: string | Date | moment.Moment;
     }
+    interface IrDeleteModal {
+        "onModalClosed"?: (event: IrDeleteModalCustomEvent<null>) => void;
+        "onResetData"?: (event: IrDeleteModalCustomEvent<string>) => void;
+        "user"?: IHouseKeepers;
+    }
     interface IrDropdown {
         "data"?: {
     name: string;
@@ -1614,6 +1762,27 @@ declare namespace LocalJSX {
         "onResetBookingData"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
+    }
+    interface IrHkArchive {
+    }
+    interface IrHkTasks {
+        "baseurl"?: string;
+        "language"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrHkTeam {
+    }
+    interface IrHkUnassignedUnits {
+        "onCloseSideBar"?: (event: IrHkUnassignedUnitsCustomEvent<null>) => void;
+        "onResetData"?: (event: IrHkUnassignedUnitsCustomEvent<null>) => void;
+        "user"?: IHouseKeepers | null;
+    }
+    interface IrHkUser {
+        "isEdit"?: boolean;
+        "onCloseSideBar"?: (event: IrHkUserCustomEvent<null>) => void;
+        "onResetData"?: (event: IrHkUserCustomEvent<null>) => void;
+        "user"?: THKUser | null;
     }
     interface IrHousekeeping {
         "baseurl"?: string;
@@ -1638,6 +1807,7 @@ declare namespace LocalJSX {
         "labelPosition"?: 'left' | 'right' | 'center';
         "labelWidth"?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
         "name"?: string;
+        "onInputBlur"?: (event: IrInputTextCustomEvent<FocusEvent>) => void;
         "onTextChange"?: (event: IrInputTextCustomEvent<any>) => void;
         "placeholder"?: string;
         "readonly"?: boolean;
@@ -1695,6 +1865,18 @@ declare namespace LocalJSX {
         "defaultTexts"?: ILocale;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
+    }
+    interface IrPhoneInput {
+        "default_country"?: number;
+        "disabled"?: boolean;
+        "error"?: boolean;
+        "label"?: string;
+        "language"?: string;
+        "onTextChange"?: (event: IrPhoneInputCustomEvent<{ phone_prefix: string; mobile: string }>) => void;
+        "phone_prefix"?: string | null;
+        "placeholder"?: string;
+        "token"?: string;
+        "value"?: string;
     }
     interface IrPickup {
         "bookingNumber"?: string;
@@ -1786,6 +1968,25 @@ declare namespace LocalJSX {
         "rows"?: number;
         "text"?: string;
     }
+    interface IrTitle {
+        "displayContext"?: 'default' | 'sidebar';
+        "justifyContent"?: | 'center'
+    | 'start'
+    | 'end'
+    | 'flex-start'
+    | 'flex-end'
+    | 'left'
+    | 'right'
+    | 'normal'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | 'stretch'
+    | 'safe center'
+    | 'unsafe center';
+        "label"?: string;
+        "onCloseSideBar"?: (event: IrTitleCustomEvent<null>) => void;
+    }
     interface IrToast {
         "position"?: TPositions;
     }
@@ -1793,6 +1994,9 @@ declare namespace LocalJSX {
         "customSlot"?: boolean;
         "message"?: string;
         "withHtml"?: boolean;
+    }
+    interface IrUnitStatus {
+        "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
     }
     interface OtaLabel {
         "label"?: string;
@@ -1837,8 +2041,14 @@ declare namespace LocalJSX {
         "ir-common": IrCommon;
         "ir-date-picker": IrDatePicker;
         "ir-date-view": IrDateView;
+        "ir-delete-modal": IrDeleteModal;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
+        "ir-hk-archive": IrHkArchive;
+        "ir-hk-tasks": IrHkTasks;
+        "ir-hk-team": IrHkTeam;
+        "ir-hk-unassigned-units": IrHkUnassignedUnits;
+        "ir-hk-user": IrHkUser;
         "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
         "ir-input-text": IrInputText;
@@ -1849,6 +2059,7 @@ declare namespace LocalJSX {
         "ir-loading-screen": IrLoadingScreen;
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
+        "ir-phone-input": IrPhoneInput;
         "ir-pickup": IrPickup;
         "ir-popover": IrPopover;
         "ir-room": IrRoom;
@@ -1858,8 +2069,10 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-switch": IrSwitch;
         "ir-textarea": IrTextarea;
+        "ir-title": IrTitle;
         "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
+        "ir-unit-status": IrUnitStatus;
         "ota-label": OtaLabel;
     }
 }
@@ -1904,8 +2117,14 @@ declare module "@stencil/core" {
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
+            "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
+            "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
+            "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
+            "ir-hk-unassigned-units": LocalJSX.IrHkUnassignedUnits & JSXBase.HTMLAttributes<HTMLIrHkUnassignedUnitsElement>;
+            "ir-hk-user": LocalJSX.IrHkUser & JSXBase.HTMLAttributes<HTMLIrHkUserElement>;
             "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
@@ -1916,6 +2135,7 @@ declare module "@stencil/core" {
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
+            "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
@@ -1925,8 +2145,10 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
+            "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
+            "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
         }
     }

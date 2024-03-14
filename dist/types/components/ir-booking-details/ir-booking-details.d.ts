@@ -20,6 +20,7 @@ export declare class IrBookingDetails {
   hasRoomAdd: boolean;
   hasCheckIn: boolean;
   hasCheckOut: boolean;
+  hasCloseButton: boolean;
   bookingItem: TIglBookPropertyPayload | null;
   statusData: any[];
   tempStatus: string;
@@ -34,6 +35,7 @@ export declare class IrBookingDetails {
   isUpdateClicked: boolean;
   toast: EventEmitter<IToast>;
   bookingChanged: EventEmitter<Booking>;
+  closeSidebar: EventEmitter<null>;
   private bookingService;
   private roomService;
   componentDidLoad(): void;
