@@ -3,6 +3,7 @@ import { Booking, Guest } from '../../models/booking.dto';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { ILocale } from "../../stores/locales.store";
 import { IToast } from '../ir-toast/toast';
+import { ICountry } from "../../models/IBooking";
 export declare class IrBookingDetails {
   element: HTMLElement;
   language: string;
@@ -26,7 +27,7 @@ export declare class IrBookingDetails {
   tempStatus: string;
   showPaymentDetails: any;
   bookingData: Booking;
-  countryNodeList: any;
+  countryNodeList: ICountry[];
   calendarData: any;
   guestData: Guest;
   defaultTexts: ILocale;
@@ -52,5 +53,6 @@ export declare class IrBookingDetails {
   handleDeleteFinish(e: CustomEvent): void;
   resetBookingData(): Promise<void>;
   handleResetBookingData(e: CustomEvent): Promise<void>;
+  renderPhoneNumber(): string;
   render(): any[];
 }
