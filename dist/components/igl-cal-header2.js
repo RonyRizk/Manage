@@ -61,13 +61,9 @@ const IglCalHeader = /*@__PURE__*/ proxyCustomElement(class IglCalHeader extends
     try {
       const { fromDate, toDate, data } = this.unassignedDates;
       let dt = new Date(fromDate);
-      dt.setHours(0);
-      dt.setMinutes(0);
-      dt.setSeconds(0);
+      dt.setHours(0, 0, 0, 0);
       let endDate = dt.getTime();
-      //console.log('unassigned Dates', this.unassignedDates);
       while (endDate <= new Date(toDate).getTime()) {
-        //console.log('end date:', endDate);
         const selectedDate = hooks(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
@@ -77,7 +73,9 @@ const IglCalHeader = /*@__PURE__*/ proxyCustomElement(class IglCalHeader extends
           const res = this.unassignedRoomsNumber[selectedDate] - 1;
           this.unassignedRoomsNumber[selectedDate] = res < 0 ? 0 : res;
         }
-        endDate = hooks(endDate).add(1, 'days').toDate().getTime();
+        const newEndDate = hooks(endDate).add(1, 'days').toDate();
+        newEndDate.setHours(0, 0, 0, 0);
+        endDate = newEndDate.getTime();
         this.renderView();
       }
     }

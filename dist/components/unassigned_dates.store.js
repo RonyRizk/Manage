@@ -28,6 +28,7 @@ function addUnassingedDates(data) {
       //  toastr.error(error);
     }
   */
+  console.log(unassigned_dates.unassigned_dates);
 }
 function getUnassignedDates() {
   return unassigned_dates.unassigned_dates;

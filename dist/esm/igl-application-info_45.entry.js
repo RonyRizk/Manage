@@ -3252,7 +3252,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v35"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v36"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -3448,6 +3448,7 @@ function addUnassingedDates(data) {
       //  toastr.error(error);
     }
   */
+  console.log(unassigned_dates.unassigned_dates);
 }
 function getUnassignedDates() {
   return unassigned_dates.unassigned_dates;
@@ -3521,13 +3522,9 @@ const IglCalHeader = class {
     try {
       const { fromDate, toDate, data } = this.unassignedDates;
       let dt = new Date(fromDate);
-      dt.setHours(0);
-      dt.setMinutes(0);
-      dt.setSeconds(0);
+      dt.setHours(0, 0, 0, 0);
       let endDate = dt.getTime();
-      //console.log('unassigned Dates', this.unassignedDates);
       while (endDate <= new Date(toDate).getTime()) {
-        //console.log('end date:', endDate);
         const selectedDate = hooks(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
@@ -3537,7 +3534,9 @@ const IglCalHeader = class {
           const res = this.unassignedRoomsNumber[selectedDate] - 1;
           this.unassignedRoomsNumber[selectedDate] = res < 0 ? 0 : res;
         }
-        endDate = hooks(endDate).add(1, 'days').toDate().getTime();
+        const newEndDate = hooks(endDate).add(1, 'days').toDate();
+        newEndDate.setHours(0, 0, 0, 0);
+        endDate = newEndDate.getTime();
         this.renderView();
       }
     }
@@ -11364,7 +11363,7 @@ const IrTooltip = class {
 };
 IrTooltip.style = irTooltipCss;
 
-const otaLabelCss = "*.sc-ota-label{margin:0;padding:0}.sc-ota-label-h{display:flex;margin-bottom:5px;gap:5px}strong.sc-ota-label{margin:0;padding:0}ul.sc-ota-label{margin:0 3px;padding:0;flex:1;list-style:none}li.sc-ota-label{line-height:1.5;margin:0;padding:0}button.sc-ota-label{background:white;color:var(--blue);padding:0;margin:0;margin-left:3px;font-size:12px;border:0}button.sc-ota-label:hover{color:#355270}";
+const otaLabelCss = "*.sc-ota-label{margin:0;padding:0}.sc-ota-label-h{display:flex;margin-bottom:5px;gap:5px;width:100%}strong.sc-ota-label{margin:0;padding:0}ul.sc-ota-label{margin:0 3px;padding:0;list-style:none;overflow:hidden;width:100%;word-wrap:break-word !important;overflow-wrap:break-word !important}li.sc-ota-label{width:100%;line-height:1.5;margin:0;padding:0;word-wrap:break-word !important;overflow-wrap:break-word !important}button.sc-ota-label{background:white;color:var(--blue);padding:0;margin:0;margin-left:3px;font-size:12px;border:0}button.sc-ota-label:hover{color:#355270}";
 
 const OtaLabel = class {
   constructor(hostRef) {
