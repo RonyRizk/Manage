@@ -25,5 +25,6 @@ export declare class IglBookingOverviewPage {
   roomsDataUpdate: EventEmitter;
   getSplitBookings(): any;
   isEventType(event: string): boolean;
+  setMinDate(): string;
   render(): any;
 }

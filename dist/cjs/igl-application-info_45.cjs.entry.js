@@ -2628,10 +2628,21 @@ const IglBookingOverviewPage = class {
   isEventType(event) {
     return event === this.eventType;
   }
+  setMinDate() {
+    if (!this.isEventType('EDIT_BOOKING')) {
+      return;
+    }
+    const from_date = moment.hooks(this.bookingData.FROM_DATE, 'YYYY-MM-DD');
+    const today = moment.hooks();
+    if (from_date.isAfter(today)) {
+      return today.add(-2, 'weeks').format('YYYY-MM-DD');
+    }
+    return from_date.add(-2, 'weeks').format('YYYY-MM-DD');
+  }
   render() {
     var _a, _b;
     //console.log(this.bookingData);
-    return (index.h(index.Host, null, index.h("igl-book-property-header", { bookedByInfoData: this.bookedByInfoData, defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData,
+    return (index.h(index.Host, null, index.h("igl-book-property-header", { bookedByInfoData: this.bookedByInfoData, defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData, minDate: this.setMinDate(),
       // minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
       adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings(), propertyId: this.propertyId }), index.h("div", { class: " text-left" }, irInterceptor_store.isRequestPending('/Get_Exposed_Booking_Availability') && this.isEventType('EDIT_BOOKING') ? (index.h("div", { class: "loading-container" }, index.h("div", { class: "loader" }))) : (index.h(index.Fragment, null, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
       //console.log(this.selectedRooms);
@@ -3256,7 +3267,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v36"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v37"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;

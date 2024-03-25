@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
 import { i as isRequestPending } from './ir-interceptor.store.js';
+import { h as hooks } from './moment.js';
 import { d as defineCustomElement$b } from './igl-book-property-footer2.js';
 import { d as defineCustomElement$a } from './igl-book-property-header2.js';
 import { d as defineCustomElement$9 } from './igl-booking-room-rate-plan2.js';
@@ -41,10 +42,21 @@ const IglBookingOverviewPage = /*@__PURE__*/ proxyCustomElement(class IglBooking
   isEventType(event) {
     return event === this.eventType;
   }
+  setMinDate() {
+    if (!this.isEventType('EDIT_BOOKING')) {
+      return;
+    }
+    const from_date = hooks(this.bookingData.FROM_DATE, 'YYYY-MM-DD');
+    const today = hooks();
+    if (from_date.isAfter(today)) {
+      return today.add(-2, 'weeks').format('YYYY-MM-DD');
+    }
+    return from_date.add(-2, 'weeks').format('YYYY-MM-DD');
+  }
   render() {
     var _a, _b;
     //console.log(this.bookingData);
-    return (h(Host, null, h("igl-book-property-header", { bookedByInfoData: this.bookedByInfoData, defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData,
+    return (h(Host, null, h("igl-book-property-header", { bookedByInfoData: this.bookedByInfoData, defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData, minDate: this.setMinDate(),
       // minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
       adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings(), propertyId: this.propertyId }), h("div", { class: " text-left" }, isRequestPending('/Get_Exposed_Booking_Availability') && this.isEventType('EDIT_BOOKING') ? (h("div", { class: "loading-container" }, h("div", { class: "loader" }))) : (h(Fragment, null, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
       //console.log(this.selectedRooms);

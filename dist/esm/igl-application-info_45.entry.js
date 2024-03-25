@@ -2624,10 +2624,21 @@ const IglBookingOverviewPage = class {
   isEventType(event) {
     return event === this.eventType;
   }
+  setMinDate() {
+    if (!this.isEventType('EDIT_BOOKING')) {
+      return;
+    }
+    const from_date = hooks(this.bookingData.FROM_DATE, 'YYYY-MM-DD');
+    const today = hooks();
+    if (from_date.isAfter(today)) {
+      return today.add(-2, 'weeks').format('YYYY-MM-DD');
+    }
+    return from_date.add(-2, 'weeks').format('YYYY-MM-DD');
+  }
   render() {
     var _a, _b;
     //console.log(this.bookingData);
-    return (h(Host, null, h("igl-book-property-header", { bookedByInfoData: this.bookedByInfoData, defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData,
+    return (h(Host, null, h("igl-book-property-header", { bookedByInfoData: this.bookedByInfoData, defaultDaterange: this.defaultDaterange, dateRangeData: this.dateRangeData, minDate: this.setMinDate(),
       // minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
       adultChildCount: this.adultChildCount, splitBookingId: this.showSplitBookingOption, bookingData: this.bookingData, sourceOptions: this.sourceOptions, message: this.message, bookingDataDefaultDateRange: this.bookingData.defaultDateRange, showSplitBookingOption: this.showSplitBookingOption, adultChildConstraints: this.adultChildConstraints, splitBookings: this.getSplitBookings(), propertyId: this.propertyId }), h("div", { class: " text-left" }, isRequestPending('/Get_Exposed_Booking_Availability') && this.isEventType('EDIT_BOOKING') ? (h("div", { class: "loading-container" }, h("div", { class: "loader" }))) : (h(Fragment, null, (_b = (_a = this.bookingData) === null || _a === void 0 ? void 0 : _a.roomsInfo) === null || _b === void 0 ? void 0 : _b.map(roomInfo => {
       //console.log(this.selectedRooms);
@@ -3252,7 +3263,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v36"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v37"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
