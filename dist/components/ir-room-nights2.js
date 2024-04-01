@@ -64,6 +64,7 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
             ...newDatesArr.map(day => ({
               amount,
               date: day,
+              cost: null,
             })),
             ...this.selectedRoom.days,
           ];
@@ -76,6 +77,7 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
             ...newDatesArr.map(day => ({
               amount,
               date: day,
+              cost: null,
             })),
           ];
         }

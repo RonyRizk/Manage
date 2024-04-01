@@ -377,8 +377,9 @@ const IglBookProperty = /*@__PURE__*/ proxyCustomElement(class IglBookProperty e
       isValidProperty(this.bookedByInfoData, 'firstName', '') ||
       isValidProperty(this.bookedByInfoData, 'lastName', '') ||
       // isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
-      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
-      isValidProperty(this.bookedByInfoData, 'email', ''));
+      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '')
+    // || isValidProperty(this.bookedByInfoData, 'email', '')
+    );
   }
   setSourceOptions(bookingSource) {
     this.sourceOptions = bookingSource.map(source => ({

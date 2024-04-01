@@ -273,6 +273,6 @@ export function calculateDaysBetweenDates(from_date, to_date) {
   const startDate = moment(from_date, 'YYYY-MM-DD');
   const endDate = moment(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
-  return daysDiff;
+  return daysDiff || 1;
 }
 //# sourceMappingURL=booking.js.map

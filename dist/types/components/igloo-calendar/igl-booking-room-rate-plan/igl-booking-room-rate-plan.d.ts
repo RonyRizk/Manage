@@ -30,7 +30,6 @@ export declare class IglBookingRoomRatePlan {
     [key: string]: any;
   };
   ratePlanChangedState: boolean;
-  private initialRateValue;
   getAvailableRooms(assignable_units: any[]): any[];
   componentWillLoad(): void;
   disableForm(): any;

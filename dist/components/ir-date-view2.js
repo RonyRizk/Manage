@@ -95,7 +95,7 @@ function calculateDaysBetweenDates(from_date, to_date) {
   const startDate = hooks(from_date, 'YYYY-MM-DD');
   const endDate = hooks(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
-  return daysDiff;
+  return daysDiff || 1;
 }
 
 const irDateViewCss = ".sc-ir-date-view-h{display:block;font-size:13.65px !important}.mx-01.sc-ir-date-view{--m:5px;margin-right:var(--m) !important;margin-left:var(--m) !important}";

@@ -274,7 +274,7 @@ function calculateDaysBetweenDates(from_date, to_date) {
   const startDate = hooks(from_date, 'YYYY-MM-DD');
   const endDate = hooks(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
-  return daysDiff;
+  return daysDiff || 1;
 }
 
 export { transformNewBooking as a, bookingStatus as b, calculateDaysBetweenDates as c, formatName as f, getMyBookings as g, transformNewBLockedRooms as t };

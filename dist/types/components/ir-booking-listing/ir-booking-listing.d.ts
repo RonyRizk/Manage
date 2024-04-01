@@ -14,6 +14,7 @@ export declare class IrBookingListing {
     booking: Booking;
     cause: 'edit' | 'payment' | 'delete';
   } | null;
+  showCost: boolean;
   private bookingListingService;
   private roomService;
   private listingModal;

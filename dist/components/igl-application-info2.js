@@ -58,7 +58,7 @@ const IglApplicationInfo = /*@__PURE__*/ proxyCustomElement(class IglApplication
   updateRoomList() {
     const units = [...this.selectedUnits];
     units[this.index] = -1;
-    this.filterdRoomList = this.roomsList.filter(e => !units.includes(e.id));
+    this.filterdRoomList = this.roomsList.filter(e => !units.includes(e.id) || e.name === '');
   }
   updateData() {
     this.dataUpdateEvent.emit({
