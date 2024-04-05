@@ -3,19 +3,20 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
-const booking_service$1 = require('./booking.service-40d2de7c2.js');
-const utils$1 = require('./utils-9150e847.js');
+const booking_service$1 = require('./booking.service-8b4961e12.js');
+const booking = require('./booking-b591e148.js');
+const utils$1 = require('./utils-8602f26d.js');
 const moment = require('./moment-f96595e5.js');
-const Token = require('./Token-7fd57fe8.js');
-const booking_service = require('./booking.service-40d2de7c.js');
+const axios = require('./axios-77201e24.js');
+const booking_service = require('./booking.service-8b4961e1.js');
 const utils = require('./utils-6a5b3cb5.js');
 const locales_store = require('./locales.store-8fed15eb.js');
 const calendarData = require('./calendar-data-96bc0c2a.js');
-const events_service = require('./events.service-6ecb3b8d.js');
-require('./booking-ed24f5a4.js');
+const events_service = require('./events.service-783481d8.js');
+require('./booking-9e11cf95.js');
 require('./index-797ee4c0.js');
 
-class EventsService extends Token.Token {
+class EventsService extends axios.Token {
   constructor() {
     super(...arguments);
     this.bookingService = new booking_service.BookingService();
@@ -25,7 +26,7 @@ class EventsService extends Token.Token {
       const token = this.getToken();
       if (token) {
         console.log(pool, destination_pr_id, from_date, to_date);
-        const { data } = await Token.axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date });
+        const { data } = await axios.axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -45,7 +46,7 @@ class EventsService extends Token.Token {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await Token.axios.post(`/UnBlock_Exposed_Unit?Ticket=${token}`, {
+        const { data } = await axios.axios.post(`/UnBlock_Exposed_Unit?Ticket=${token}`, {
           POOL,
         });
         if (data.ExceptionMsg !== '') {
@@ -157,7 +158,7 @@ const IglBookingEvent = class {
             throw new Error(`"booking#${this.bookingEvent.BOOKING_NUMBER} have empty pool"`);
           }
         }
-        const _a = utils$1.transformNewBooking(data)[0], others = __rest(_a, ["ID", "TO_DATE", "FROM_DATE", "NO_OF_DAYS", "STATUS", "NAME", "IDENTIFIER", "PR_ID", "POOL", "BOOKING_NUMBER", "NOTES", "is_direct", "BALANCE"]);
+        const _a = booking.transformNewBooking(data)[0], others = __rest(_a, ["ID", "TO_DATE", "FROM_DATE", "NO_OF_DAYS", "STATUS", "NAME", "IDENTIFIER", "PR_ID", "POOL", "BOOKING_NUMBER", "NOTES", "is_direct", "BALANCE"]);
         this.bookingEvent = Object.assign(Object.assign({}, this.bookingEvent), others);
         this.showEventInfo(true);
       }

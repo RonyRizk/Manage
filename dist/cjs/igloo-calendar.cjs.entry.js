@@ -3,14 +3,14 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
-const room_service = require('./room.service-cc99ae5f2.js');
-const booking_service = require('./booking.service-40d2de7c.js');
+const room_service = require('./room.service-a4eab1852.js');
+const booking_service = require('./booking.service-8b4961e1.js');
 const utils = require('./utils-6a5b3cb5.js');
-const Token = require('./Token-7fd57fe8.js');
-const events_service = require('./events.service-6ecb3b8d.js');
+const axios = require('./axios-77201e24.js');
+const events_service = require('./events.service-783481d8.js');
 const moment = require('./moment-f96595e5.js');
-const toBeAssigned_service = require('./toBeAssigned.service-553da14e.js');
-const booking = require('./booking-ed24f5a4.js');
+const toBeAssigned_service = require('./toBeAssigned.service-9700b5a4.js');
+const booking = require('./booking-9e11cf95.js');
 const unassigned_dates_store = require('./unassigned_dates.store-77a8831e.js');
 const locales_store = require('./locales.store-8fed15eb.js');
 const calendarData = require('./calendar-data-96bc0c2a.js');
@@ -3941,7 +3941,7 @@ const IglooCalendar = class {
   componentWillLoad() {
     console.info('without session storage');
     if (this.baseurl) {
-      Token.axios.defaults.baseURL = this.baseurl;
+      axios.axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
       calendarData.calendar_data.token = this.ticket;

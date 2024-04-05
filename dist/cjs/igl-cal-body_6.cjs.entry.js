@@ -5,15 +5,15 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const index = require('./index-94e5c77d.js');
 const unassigned_dates_store = require('./unassigned_dates.store-77a8831e.js');
 const locales_store = require('./locales.store-8fed15eb.js');
-const toBeAssigned_service = require('./toBeAssigned.service-553da14e.js');
+const toBeAssigned_service = require('./toBeAssigned.service-9700b5a4.js');
 const utils = require('./utils-6a5b3cb5.js');
 const moment = require('./moment-f96595e5.js');
 const calendarData = require('./calendar-data-96bc0c2a.js');
-const Token = require('./Token-7fd57fe8.js');
-const booking_service = require('./booking.service-40d2de7c.js');
+const axios = require('./axios-77201e24.js');
+const booking_service = require('./booking.service-8b4961e1.js');
 const v4 = require('./v4-d89fec7e.js');
 require('./index-797ee4c0.js');
-require('./booking-ed24f5a4.js');
+require('./booking-9e11cf95.js');
 
 const iglCalBodyCss = ".sc-igl-cal-body-h{display:block}.bodyContainer.sc-igl-cal-body{position:relative}.roomRow.sc-igl-cal-body{width:max-content}.roomRow.sc-igl-cal-body:first-child{margin-top:80px}.categoryName.sc-igl-cal-body{font-weight:bold;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}.cellData.sc-igl-cal-body{width:58px;height:30px;display:inline-grid;border-top:1px solid #e0e0e0;border-left:1px solid #e0e0e0;vertical-align:top}.cellData.sc-igl-cal-body:nth-child(2){border-left:0px}.cellData.sc-igl-cal-body:last-child{border-right:1px solid #e0e0e0}.roomHeaderCell.sc-igl-cal-body{position:-webkit-sticky;position:sticky;left:0;background:#fff;border-right:1px solid #ccc;width:170px;z-index:1}.currentDay.sc-igl-cal-body{background-color:#e3f3fa}.dragOverHighlight.sc-igl-cal-body{background-color:#f5f5dc !important}.selectedDay.sc-igl-cal-body{background-color:#f9f9c9 !important}.categoryTitle.sc-igl-cal-body{grid-template-columns:1fr 20px;padding-left:10px;cursor:pointer;height:40px;font-size:0.9em}.categoryTitle.sc-igl-cal-body>.sc-igl-cal-body:nth-child(1){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.roomTitle.sc-igl-cal-body{padding-left:20px;font-size:0.9em;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}.roomTitle.sc-igl-cal-body>.sc-igl-cal-body:nth-child(1){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.roomTitle.pl10.sc-igl-cal-body{padding-left:10px}.categoryPriceColumn.sc-igl-cal-body{align-items:center;height:40px;-webkit-user-select:none;user-select:none}.bookingEventsContainer.sc-igl-cal-body{position:absolute;top:0;left:0}";
 
@@ -291,7 +291,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v40"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v42"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -745,7 +745,7 @@ const IrRoomNights = class {
   componentWillLoad() {
     this.bookingService.setToken(calendarData.calendar_data.token);
     if (this.baseUrl) {
-      Token.axios.defaults.baseURL = this.baseUrl;
+      axios.axios.defaults.baseURL = this.baseUrl;
     }
     this.init();
   }
@@ -888,7 +888,7 @@ const IrRoomNights = class {
           rooms: oldRooms,
         },
       };
-      const { data } = await Token.axios.post(`/DoReservation?Ticket=${this.ticket}`, body);
+      const { data } = await axios.axios.post(`/DoReservation?Ticket=${this.ticket}`, body);
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }
