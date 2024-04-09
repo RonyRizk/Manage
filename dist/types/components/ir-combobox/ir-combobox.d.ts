@@ -5,6 +5,7 @@ export declare class IrCombobox {
     id: string;
     name: string;
     image?: string;
+    occupancy?: number;
   }[];
   duration: number;
   placeholder: string;
@@ -21,6 +22,7 @@ export declare class IrCombobox {
   filteredData: {
     id: string;
     name: string;
+    occupancy?: number;
   }[];
   el: HTMLElement;
   comboboxValueChange: EventEmitter<{

@@ -39,7 +39,7 @@ const IrChannelHeader = /*@__PURE__*/ proxyCustomElement(class IrChannelHeader e
     });
   }
   render() {
-    return (h(Host, null, h("ul", null, this.headerTitles.map((title, index) => (h("li", { class: `tab ${title.disabled ? 'text-light' : ''}`, key: title.id, onClick: () => {
+    return (h(Host, null, h("ul", { class: "px-1" }, this.headerTitles.map((title, index) => (h("li", { class: `tab ${title.disabled ? 'text-light' : ''}`, key: title.id, onClick: () => {
         if (!title.disabled)
           this.handleTabSelection(index);
       }, "data-disabled": title.disabled, "data-state": this.selectedIndex === index ? 'selected' : '' }, title.name)))), h("span", { class: "active-indicator", ref: el => (this.activeIndicator = el) })));

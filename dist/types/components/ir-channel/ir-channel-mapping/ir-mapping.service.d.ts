@@ -11,6 +11,7 @@ export declare class IrMappingService {
   };
   getAppropriateRooms(isRoomType: boolean, roomTypeId?: string): {
     id: string;
-    name: string;
+    name: any;
+    occupancy: number;
   }[];
 }
