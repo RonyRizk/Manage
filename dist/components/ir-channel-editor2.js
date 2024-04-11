@@ -46,17 +46,26 @@ class ChannelService extends Token {
       throw new Error(error);
     }
   }
-  async saveConnectedChannel(is_remove) {
+  async saveConnectedChannel(id = null, is_remove) {
     try {
-      const body = {
-        id: channels_data.channel_id,
-        title: channels_data.channel_settings.hotel_title,
-        is_active: channels_data.is_active,
-        channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
-        property: { id: calendar_data.id, name: calendar_data.name },
-        map: channels_data.mappedChannels,
-        is_remove,
-      };
+      let body = {};
+      if (is_remove) {
+        body = {
+          id,
+          is_remove,
+        };
+      }
+      else {
+        body = {
+          id: channels_data.channel_id,
+          title: channels_data.channel_settings.hotel_title,
+          is_active: channels_data.is_active,
+          channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
+          property: { id: calendar_data.id, name: calendar_data.name },
+          map: channels_data.mappedChannels,
+          is_remove,
+        };
+      }
       const token = this.getToken();
       if (!token) {
         throw new Error('Invalid Token');
@@ -135,7 +144,7 @@ const IrChannelEditor = /*@__PURE__*/ proxyCustomElement(class IrChannelEditor e
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      await this.channelService.saveConnectedChannel(false);
+      await this.channelService.saveConnectedChannel(null, false);
       this.saveChannelFinished.emit();
     }
     catch (error) {

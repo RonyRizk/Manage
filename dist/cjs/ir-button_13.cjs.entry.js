@@ -159,17 +159,26 @@ class ChannelService extends axios.Token {
       throw new Error(error);
     }
   }
-  async saveConnectedChannel(is_remove) {
+  async saveConnectedChannel(id = null, is_remove) {
     try {
-      const body = {
-        id: channels_data.channel_id,
-        title: channels_data.channel_settings.hotel_title,
-        is_active: channels_data.is_active,
-        channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
-        property: { id: calendarData.calendar_data.id, name: calendarData.calendar_data.name },
-        map: channels_data.mappedChannels,
-        is_remove,
-      };
+      let body = {};
+      if (is_remove) {
+        body = {
+          id,
+          is_remove,
+        };
+      }
+      else {
+        body = {
+          id: channels_data.channel_id,
+          title: channels_data.channel_settings.hotel_title,
+          is_active: channels_data.is_active,
+          channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
+          property: { id: calendarData.calendar_data.id, name: calendarData.calendar_data.name },
+          map: channels_data.mappedChannels,
+          is_remove,
+        };
+      }
       const token = this.getToken();
       if (!token) {
         throw new Error('Invalid Token');
@@ -260,18 +269,12 @@ const actions = (entries) => [
     icon: () => (index.h("svg", { xmlns: "http://www.w3.org/2000/svg", height: "14", width: "12.25", viewBox: "0 0 448 512" },
       index.h("path", { d: "M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" }))),
     action: (params) => {
-      const selectedProperty = params.map.find(m => m.type === 'property');
-      setChannelIdAndActiveState(params.id, params.is_active);
-      updateChannelSettings('hotel_id', selectedProperty.channel_id);
-      updateChannelSettings('hotel_title', params.title);
-      selectChannel(params.channel.id.toString());
-      testConnection();
       return {
         cause: 'remove',
         action: async () => {
           const channel_service = new ChannelService();
           channel_service.setToken(calendarData.calendar_data.token);
-          await channel_service.saveConnectedChannel(true);
+          await channel_service.saveConnectedChannel(params.id, true);
         },
         title: '',
         message: entries === null || entries === void 0 ? void 0 : entries.Lcz_ThisActionWillDelete,
@@ -399,7 +402,7 @@ const IrChannel = class {
     updateChannelSettings('hotel_title', params.title);
     selectChannel(params.channel.id.toString());
     testConnection();
-    await this.channelService.saveConnectedChannel(false);
+    await this.channelService.saveConnectedChannel(null, false);
     resetStore();
     this.refreshChannels();
   }
@@ -502,7 +505,7 @@ const IrChannelEditor = class {
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      await this.channelService.saveConnectedChannel(false);
+      await this.channelService.saveConnectedChannel(null, false);
       this.saveChannelFinished.emit();
     }
     catch (error) {

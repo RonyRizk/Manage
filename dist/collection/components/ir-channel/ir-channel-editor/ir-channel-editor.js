@@ -61,7 +61,7 @@ export class IrChannelEditor {
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      await this.channelService.saveConnectedChannel(false);
+      await this.channelService.saveConnectedChannel(null, false);
       this.saveChannelFinished.emit();
     }
     catch (error) {
