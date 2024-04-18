@@ -69,6 +69,22 @@ export class BookingService extends Token {
       throw new Error(error);
     }
   }
+  async fetchPMSLogs(booking_nbr) {
+    try {
+      const token = this.getToken();
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_PMS_Logs?Ticket=${token}`, { booking_nbr });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data.My_Result;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
   async editExposedGuest(guest, book_nbr) {
     try {
       const token = this.getToken();

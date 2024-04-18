@@ -373,6 +373,11 @@ export namespace Components {
         "openModal": () => Promise<void>;
         "user": IHouseKeepers;
     }
+    interface IrDialog {
+        "closeModal": () => Promise<void>;
+        "open": boolean;
+        "openModal": () => Promise<void>;
+    }
     interface IrDropdown {
         "data": {
     name: string;
@@ -738,6 +743,10 @@ export interface IrDeleteModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDeleteModalElement;
 }
+export interface IrDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDialogElement;
+}
 export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDropdownElement;
@@ -1047,6 +1056,12 @@ declare global {
         prototype: HTMLIrDeleteModalElement;
         new (): HTMLIrDeleteModalElement;
     };
+    interface HTMLIrDialogElement extends Components.IrDialog, HTMLStencilElement {
+    }
+    var HTMLIrDialogElement: {
+        prototype: HTMLIrDialogElement;
+        new (): HTMLIrDialogElement;
+    };
     interface HTMLIrDropdownElement extends Components.IrDropdown, HTMLStencilElement {
     }
     var HTMLIrDropdownElement: {
@@ -1278,6 +1293,7 @@ declare global {
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-date-view": HTMLIrDateViewElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
+        "ir-dialog": HTMLIrDialogElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
@@ -1741,6 +1757,10 @@ declare namespace LocalJSX {
         "onResetData"?: (event: IrDeleteModalCustomEvent<string>) => void;
         "user"?: IHouseKeepers;
     }
+    interface IrDialog {
+        "onOpenChange"?: (event: IrDialogCustomEvent<boolean>) => void;
+        "open"?: boolean;
+    }
     interface IrDropdown {
         "data"?: {
     name: string;
@@ -2042,6 +2062,7 @@ declare namespace LocalJSX {
         "ir-date-picker": IrDatePicker;
         "ir-date-view": IrDateView;
         "ir-delete-modal": IrDeleteModal;
+        "ir-dialog": IrDialog;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
         "ir-hk-archive": IrHkArchive;
@@ -2118,6 +2139,7 @@ declare module "@stencil/core" {
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
+            "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;

@@ -25,6 +25,7 @@ const initialState = {
   token: '',
   tax_statement: '',
   country: undefined,
+  is_pms_enabled: false,
 };
 export const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 export default calendar_data;

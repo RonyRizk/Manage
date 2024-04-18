@@ -6,23 +6,24 @@ import { f as formatAmount } from './utils2.js';
 import { a as axios } from './axios.js';
 import { h as hooks } from './moment.js';
 import { a as _formatTime } from './functions.js';
-import { d as defineCustomElement$A } from './igl-application-info2.js';
-import { d as defineCustomElement$z } from './igl-block-dates-view2.js';
-import { d as defineCustomElement$y } from './igl-book-property2.js';
-import { d as defineCustomElement$x } from './igl-book-property-container2.js';
-import { d as defineCustomElement$w } from './igl-book-property-footer2.js';
-import { d as defineCustomElement$v } from './igl-book-property-header2.js';
-import { d as defineCustomElement$u } from './igl-booking-overview-page2.js';
-import { d as defineCustomElement$t } from './igl-booking-room-rate-plan2.js';
-import { d as defineCustomElement$s } from './igl-booking-rooms2.js';
-import { d as defineCustomElement$r } from './igl-date-range2.js';
-import { d as defineCustomElement$q } from './igl-pagetwo2.js';
-import { d as defineCustomElement$p } from './igl-property-booked-by2.js';
-import { d as defineCustomElement$o } from './ir-autocomplete2.js';
-import { d as defineCustomElement$n } from './ir-booking-details2.js';
-import { d as defineCustomElement$m } from './ir-button2.js';
-import { d as defineCustomElement$l } from './ir-date-picker2.js';
-import { d as defineCustomElement$k } from './ir-date-view2.js';
+import { d as defineCustomElement$B } from './igl-application-info2.js';
+import { d as defineCustomElement$A } from './igl-block-dates-view2.js';
+import { d as defineCustomElement$z } from './igl-book-property2.js';
+import { d as defineCustomElement$y } from './igl-book-property-container2.js';
+import { d as defineCustomElement$x } from './igl-book-property-footer2.js';
+import { d as defineCustomElement$w } from './igl-book-property-header2.js';
+import { d as defineCustomElement$v } from './igl-booking-overview-page2.js';
+import { d as defineCustomElement$u } from './igl-booking-room-rate-plan2.js';
+import { d as defineCustomElement$t } from './igl-booking-rooms2.js';
+import { d as defineCustomElement$s } from './igl-date-range2.js';
+import { d as defineCustomElement$r } from './igl-pagetwo2.js';
+import { d as defineCustomElement$q } from './igl-property-booked-by2.js';
+import { d as defineCustomElement$p } from './ir-autocomplete2.js';
+import { d as defineCustomElement$o } from './ir-booking-details2.js';
+import { d as defineCustomElement$n } from './ir-button2.js';
+import { d as defineCustomElement$m } from './ir-date-picker2.js';
+import { d as defineCustomElement$l } from './ir-date-view2.js';
+import { d as defineCustomElement$k } from './ir-dialog2.js';
 import { d as defineCustomElement$j } from './ir-guest-info2.js';
 import { d as defineCustomElement$i } from './ir-icon2.js';
 import { d as defineCustomElement$h } from './ir-input-text2.js';
@@ -223,7 +224,7 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["ir-booking-listing", "igl-application-info", "igl-block-dates-view", "igl-book-property", "igl-book-property-container", "igl-book-property-footer", "igl-book-property-header", "igl-booking-overview-page", "igl-booking-room-rate-plan", "igl-booking-rooms", "igl-date-range", "igl-pagetwo", "igl-property-booked-by", "ir-autocomplete", "ir-booking-details", "ir-button", "ir-date-picker", "ir-date-view", "ir-guest-info", "ir-icon", "ir-input-text", "ir-interceptor", "ir-label", "ir-listing-header", "ir-listing-modal", "ir-loading-screen", "ir-modal", "ir-payment-details", "ir-pickup", "ir-room", "ir-select", "ir-sidebar", "ir-title", "ir-toast", "ir-tooltip", "ota-label"];
+  const components = ["ir-booking-listing", "igl-application-info", "igl-block-dates-view", "igl-book-property", "igl-book-property-container", "igl-book-property-footer", "igl-book-property-header", "igl-booking-overview-page", "igl-booking-room-rate-plan", "igl-booking-rooms", "igl-date-range", "igl-pagetwo", "igl-property-booked-by", "ir-autocomplete", "ir-booking-details", "ir-button", "ir-date-picker", "ir-date-view", "ir-dialog", "ir-guest-info", "ir-icon", "ir-input-text", "ir-interceptor", "ir-label", "ir-listing-header", "ir-listing-modal", "ir-loading-screen", "ir-modal", "ir-payment-details", "ir-pickup", "ir-room", "ir-select", "ir-sidebar", "ir-title", "ir-toast", "ir-tooltip", "ota-label"];
   components.forEach(tagName => { switch (tagName) {
     case "ir-booking-listing":
       if (!customElements.get(tagName)) {
@@ -232,85 +233,90 @@ function defineCustomElement$1() {
       break;
     case "igl-application-info":
       if (!customElements.get(tagName)) {
-        defineCustomElement$A();
+        defineCustomElement$B();
       }
       break;
     case "igl-block-dates-view":
       if (!customElements.get(tagName)) {
-        defineCustomElement$z();
+        defineCustomElement$A();
       }
       break;
     case "igl-book-property":
       if (!customElements.get(tagName)) {
-        defineCustomElement$y();
+        defineCustomElement$z();
       }
       break;
     case "igl-book-property-container":
       if (!customElements.get(tagName)) {
-        defineCustomElement$x();
+        defineCustomElement$y();
       }
       break;
     case "igl-book-property-footer":
       if (!customElements.get(tagName)) {
-        defineCustomElement$w();
+        defineCustomElement$x();
       }
       break;
     case "igl-book-property-header":
       if (!customElements.get(tagName)) {
-        defineCustomElement$v();
+        defineCustomElement$w();
       }
       break;
     case "igl-booking-overview-page":
       if (!customElements.get(tagName)) {
-        defineCustomElement$u();
+        defineCustomElement$v();
       }
       break;
     case "igl-booking-room-rate-plan":
       if (!customElements.get(tagName)) {
-        defineCustomElement$t();
+        defineCustomElement$u();
       }
       break;
     case "igl-booking-rooms":
       if (!customElements.get(tagName)) {
-        defineCustomElement$s();
+        defineCustomElement$t();
       }
       break;
     case "igl-date-range":
       if (!customElements.get(tagName)) {
-        defineCustomElement$r();
+        defineCustomElement$s();
       }
       break;
     case "igl-pagetwo":
       if (!customElements.get(tagName)) {
-        defineCustomElement$q();
+        defineCustomElement$r();
       }
       break;
     case "igl-property-booked-by":
       if (!customElements.get(tagName)) {
-        defineCustomElement$p();
+        defineCustomElement$q();
       }
       break;
     case "ir-autocomplete":
       if (!customElements.get(tagName)) {
-        defineCustomElement$o();
+        defineCustomElement$p();
       }
       break;
     case "ir-booking-details":
       if (!customElements.get(tagName)) {
-        defineCustomElement$n();
+        defineCustomElement$o();
       }
       break;
     case "ir-button":
       if (!customElements.get(tagName)) {
-        defineCustomElement$m();
+        defineCustomElement$n();
       }
       break;
     case "ir-date-picker":
       if (!customElements.get(tagName)) {
-        defineCustomElement$l();
+        defineCustomElement$m();
       }
       break;
     case "ir-date-view":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$l();
+      }
+      break;
+    case "ir-dialog":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }

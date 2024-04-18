@@ -3,11 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
-const channel_service = require('./channel.service-e612fccb.js');
+const channel_service = require('./channel.service-0d20d9a3.js');
 const channel_store = require('./channel.store-d60b9f39.js');
 const locales_store = require('./locales.store-8fed15eb.js');
 require('./Token-7fd57fe8.js');
-require('./calendar-data-96bc0c2a.js');
+require('./calendar-data-0a2c60be.js');
 require('./index-797ee4c0.js');
 
 const irChannelEditorCss = ".sc-ir-channel-editor-h{display:block;position:relative}nav.sc-ir-channel-editor{z-index:10}.top-border.sc-ir-channel-editor{border-top:1px solid #e4e5ec}.tab-container.sc-ir-channel-editor{overflow-y:auto;padding-right:0;margin-right:0}";

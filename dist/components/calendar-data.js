@@ -26,6 +26,7 @@ const initialState = {
   token: '',
   tax_statement: '',
   country: undefined,
+  is_pms_enabled: false,
 };
 const { state: calendar_data, onChange: onCalendarDatesChange } = createStore(initialState);
 

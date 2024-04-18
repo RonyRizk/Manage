@@ -4,11 +4,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
 const housekeeping_service = require('./housekeeping.service-8abdb383.js');
-const room_service = require('./room.service-cc99ae5f.js');
+const room_service = require('./room.service-d36aca05.js');
 const locales_store = require('./locales.store-8fed15eb.js');
 const Token = require('./Token-7fd57fe8.js');
 require('./index-797ee4c0.js');
-require('./calendar-data-96bc0c2a.js');
+require('./calendar-data-0a2c60be.js');
 
 const irHkTasksCss = ".sc-ir-hk-tasks-h{display:block}.checkbox-container.sc-ir-hk-tasks{display:flex;align-items:center;justify-content:center}.table-container.sc-ir-hk-tasks{overflow-x:auto;max-width:100%;width:max-content}.table.sc-ir-hk-tasks,th.sc-ir-hk-tasks,td.sc-ir-hk-tasks{border-color:white !important}.select-container.sc-ir-hk-tasks{max-width:500px}@media only screen and (min-width: 900px){td.sc-ir-hk-tasks{min-width:140px !important;width:max-content !important}}@media only screen and (max-width: 900px){td.sc-ir-hk-tasks{min-width:100px !important}.table-container.sc-ir-hk-tasks{width:max-content !important}}";
 

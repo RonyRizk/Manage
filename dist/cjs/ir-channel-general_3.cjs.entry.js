@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const index = require('./index-94e5c77d.js');
 const channel_store = require('./channel.store-d60b9f39.js');
 const locales_store = require('./locales.store-8fed15eb.js');
-const calendarData = require('./calendar-data-96bc0c2a.js');
+const calendarData = require('./calendar-data-0a2c60be.js');
 require('./index-797ee4c0.js');
 
 const irChannelGeneralCss = ".sc-ir-channel-general-h{display:block}.label-style.sc-ir-channel-general{width:100px;text-align:end;padding-right:10px !important}.connection-testing-container.sc-ir-channel-general{display:flex;align-items:center;justify-content:space-between;margin-top:10px !important}.connection-title.sc-ir-channel-general{border-bottom:1px solid #e4e5ec}.ml-18.sc-ir-channel-general{margin-left:18% !important}svg.sc-ir-channel-general{margin-right:5px}";
