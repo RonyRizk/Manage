@@ -3,7 +3,7 @@ import { H as HouseKeepingService, h as housekeeping_store, g as getDefaultPrope
 import { l as locales } from './locales.store-103cb063.js';
 import { c as calendar_data } from './calendar-data-aa1fc96c.js';
 import { i as isRequestPending } from './ir-interceptor.store-131a2ad7.js';
-import { B as BookingService } from './booking.service-7ae13e292.js';
+import { B as BookingService } from './booking.service-32f5332d2.js';
 import './Token-2955ce2c.js';
 import './index-12cef0ac.js';
 import './utils-2c9c611c.js';

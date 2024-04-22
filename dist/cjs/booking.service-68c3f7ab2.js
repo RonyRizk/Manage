@@ -388,6 +388,8 @@ class BookingService extends Token.Token {
           check_in,
           is_pms: true,
           is_direct: true,
+          is_in_loyalty_mode: false,
+          promo_key: null,
           booking: {
             booking_nbr: bookingNumber || '',
             from_date: fromDateStr,
@@ -468,4 +470,4 @@ class BookingService extends Token.Token {
 
 exports.BookingService = BookingService;
 
-//# sourceMappingURL=booking.service-5264c56c2.js.map
+//# sourceMappingURL=booking.service-68c3f7ab2.js.map

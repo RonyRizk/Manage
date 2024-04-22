@@ -1,13 +1,13 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-2fc15efd.js';
-import { B as BookingService$1 } from './booking.service-7ae13e292.js';
+import { B as BookingService$1 } from './booking.service-32f5332d2.js';
 import { t as transformNewBooking, i as isBlockUnit } from './utils-39fd66c4.js';
 import { h as hooks } from './moment-7d60e5ef.js';
 import { T as Token, a as axios } from './Token-2955ce2c.js';
-import { B as BookingService } from './booking.service-7ae13e29.js';
+import { B as BookingService } from './booking.service-32f5332d.js';
 import { a as getReleaseHoursString, p as findCountry, g as getCurrencySymbol } from './utils-2c9c611c.js';
 import { l as locales } from './locales.store-103cb063.js';
 import { c as calendar_data } from './calendar-data-aa1fc96c.js';
-import { E as EventsService$1 } from './events.service-35ff8c86.js';
+import { E as EventsService$1 } from './events.service-77808613.js';
 import './booking-10b64905.js';
 import './index-12cef0ac.js';
 

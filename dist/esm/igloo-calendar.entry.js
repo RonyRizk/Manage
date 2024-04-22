@@ -1,9 +1,9 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-2fc15efd.js';
 import { R as RoomService } from './room.service-30afc8ab2.js';
-import { B as BookingService } from './booking.service-7ae13e29.js';
+import { B as BookingService } from './booking.service-32f5332d.js';
 import { f as formatLegendColors, d as dateToFormattedString, i as isBlockUnit, h as getNextDay, j as addTwoMonthToDate, k as convertDMYToISO, l as computeEndDate } from './utils-2c9c611c.js';
 import { a as axios } from './Token-2955ce2c.js';
-import { E as EventsService } from './events.service-35ff8c86.js';
+import { E as EventsService } from './events.service-77808613.js';
 import { h as hooks } from './moment-7d60e5ef.js';
 import { T as ToBeAssignedService } from './toBeAssigned.service-c34f910c.js';
 import { t as transformNewBLockedRooms, a as transformNewBooking, b as bookingStatus, c as calculateDaysBetweenDates } from './booking-10b64905.js';

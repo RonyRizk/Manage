@@ -6,7 +6,7 @@ import { d as dateToFormattedString, m as getDaysArray, g as getCurrencySymbol, 
 import { h as hooks } from './moment-7d60e5ef.js';
 import { c as calendar_data } from './calendar-data-aa1fc96c.js';
 import { a as axios } from './Token-2955ce2c.js';
-import { B as BookingService } from './booking.service-7ae13e29.js';
+import { B as BookingService } from './booking.service-32f5332d.js';
 import { v as v4 } from './v4-87f26972.js';
 import './index-12cef0ac.js';
 import './booking-10b64905.js';
@@ -287,7 +287,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v49"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v50"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;

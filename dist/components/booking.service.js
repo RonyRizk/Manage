@@ -387,6 +387,8 @@ class BookingService extends Token {
           check_in,
           is_pms: true,
           is_direct: true,
+          is_in_loyalty_mode: false,
+          promo_key: null,
           booking: {
             booking_nbr: bookingNumber || '',
             from_date: fromDateStr,

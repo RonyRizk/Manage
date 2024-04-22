@@ -4,10 +4,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
 const room_service = require('./room.service-d36aca052.js');
-const booking_service = require('./booking.service-5264c56c.js');
+const booking_service = require('./booking.service-68c3f7ab.js');
 const utils = require('./utils-6a5b3cb5.js');
 const Token = require('./Token-7fd57fe8.js');
-const events_service = require('./events.service-39c60389.js');
+const events_service = require('./events.service-dbade8fa.js');
 const moment = require('./moment-f96595e5.js');
 const toBeAssigned_service = require('./toBeAssigned.service-553da14e.js');
 const booking = require('./booking-956095fe.js');
