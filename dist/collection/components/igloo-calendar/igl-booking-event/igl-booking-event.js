@@ -346,7 +346,7 @@ export class IglBookingEvent {
     return null;
   }
   getBalanceNode() {
-    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE > 0) {
+    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE > 1) {
       return this.getLegendOfStatus('OUTSTANDING-BALANCE');
     }
     return null;

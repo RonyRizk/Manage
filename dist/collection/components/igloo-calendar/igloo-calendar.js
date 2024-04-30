@@ -62,6 +62,7 @@ export class IglooCalendar {
     this.showBookProperty = false;
     this.totalAvailabilityQueue = [];
     this.highlightedDate = undefined;
+    this.calDates = undefined;
   }
   ticketChanged() {
     calendar_data.token = this.ticket;
@@ -73,6 +74,10 @@ export class IglooCalendar {
   }
   componentWillLoad() {
     console.info('without session storage');
+    this.calDates = {
+      from: this.from_date,
+      to: this.to_date,
+    };
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -463,6 +468,7 @@ export class IglooCalendar {
     const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
+    console.log(fromDate, toDate);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
       this.days = [...results.days, ...this.days];
@@ -518,11 +524,12 @@ export class IglooCalendar {
   }
   async handleDateSearch(dates) {
     const startDate = moment(dates.start).toDate();
-    const defaultFromDate = moment(this.from_date).toDate();
+    const defaultFromDate = moment(this.calDates.from).toDate();
     const endDate = dates.end.toDate();
     const defaultToDate = this.calendarData.endingDate;
-    if (startDate.getTime() < new Date(this.from_date).getTime()) {
-      await this.addDatesToCalendar(moment(startDate).add(-1, 'days').format('YYYY-MM-DD'), moment(this.from_date).add(-1, 'days').format('YYYY-MM-DD'));
+    if (startDate.getTime() < new Date(this.calDates.from).getTime()) {
+      await this.addDatesToCalendar(moment(startDate).add(-1, 'days').format('YYYY-MM-DD'), moment(defaultFromDate).add(-1, 'days').format('YYYY-MM-DD'));
+      this.calDates = Object.assign(Object.assign({}, this.calDates), { from: dates.start.add(-1, 'days').format('YYYY-MM-DD') });
       this.scrollToElement(this.transformDateForScroll(startDate));
     }
     else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate && endDate.getTime() < defaultToDate) {
@@ -912,7 +919,8 @@ export class IglooCalendar {
       "renderAgain": {},
       "showBookProperty": {},
       "totalAvailabilityQueue": {},
-      "highlightedDate": {}
+      "highlightedDate": {},
+      "calDates": {}
     };
   }
   static get events() {

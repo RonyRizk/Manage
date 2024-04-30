@@ -35,6 +35,10 @@ export declare class IglooCalendar {
     availability: number;
   }[];
   highlightedDate: string;
+  calDates: {
+    from: string;
+    to: string;
+  };
   dragOverHighlightElement: EventEmitter;
   moveBookingTo: EventEmitter;
   calculateUnassignedDates: EventEmitter;

@@ -3968,6 +3968,7 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
     this.showBookProperty = false;
     this.totalAvailabilityQueue = [];
     this.highlightedDate = undefined;
+    this.calDates = undefined;
   }
   ticketChanged() {
     calendar_data.token = this.ticket;
@@ -3979,6 +3980,10 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
   }
   componentWillLoad() {
     console.info('without session storage');
+    this.calDates = {
+      from: this.from_date,
+      to: this.to_date,
+    };
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -4369,6 +4374,7 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
     const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
+    console.log(fromDate, toDate);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
       this.days = [...results.days, ...this.days];
@@ -4424,11 +4430,12 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
   }
   async handleDateSearch(dates) {
     const startDate = hooks(dates.start).toDate();
-    const defaultFromDate = hooks(this.from_date).toDate();
+    const defaultFromDate = hooks(this.calDates.from).toDate();
     const endDate = dates.end.toDate();
     const defaultToDate = this.calendarData.endingDate;
-    if (startDate.getTime() < new Date(this.from_date).getTime()) {
-      await this.addDatesToCalendar(hooks(startDate).add(-1, 'days').format('YYYY-MM-DD'), hooks(this.from_date).add(-1, 'days').format('YYYY-MM-DD'));
+    if (startDate.getTime() < new Date(this.calDates.from).getTime()) {
+      await this.addDatesToCalendar(hooks(startDate).add(-1, 'days').format('YYYY-MM-DD'), hooks(defaultFromDate).add(-1, 'days').format('YYYY-MM-DD'));
+      this.calDates = Object.assign(Object.assign({}, this.calDates), { from: dates.start.add(-1, 'days').format('YYYY-MM-DD') });
       this.scrollToElement(this.transformDateForScroll(startDate));
     }
     else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate && endDate.getTime() < defaultToDate) {
@@ -4673,7 +4680,8 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
     "renderAgain": [32],
     "showBookProperty": [32],
     "totalAvailabilityQueue": [32],
-    "highlightedDate": [32]
+    "highlightedDate": [32],
+    "calDates": [32]
   }, [[0, "deleteButton", "handleDeleteEvent"], [8, "scrollPageToRoom", "scrollPageToRoom"], [0, "showDialog", "handleShowDialog"], [0, "showRoomNightsDialog", "handleShowRoomNightsDialog"], [0, "addBookingDatasEvent", "handleBookingDatasChange"], [8, "showBookingPopup", "showBookingPopupEventDataHandler"], [0, "updateEventData", "updateEventDataHandler"], [0, "dragOverEventData", "dragOverEventDataHandler"]]]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
