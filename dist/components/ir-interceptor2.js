@@ -12,7 +12,8 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
     this.isShown = false;
     this.isLoading = false;
     this.isUnassignedUnit = false;
-    this.handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
+    this.endpointsCount = 0;
+    this.handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   }
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -30,8 +31,11 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
   handleRequest(config) {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
-    if (this.isHandledEndpoint(extractedUrl)) {
+    if (this.isHandledEndpoint(extractedUrl) && this.endpointsCount > 0) {
       this.isLoading = true;
+    }
+    if (extractedUrl === '/Get_Exposed_Calendar') {
+      this.endpointsCount = this.endpointsCount + 1;
     }
     return config;
   }
@@ -65,7 +69,8 @@ const IrInterceptor = /*@__PURE__*/ proxyCustomElement(class IrInterceptor exten
     "handledEndpoints": [16],
     "isShown": [32],
     "isLoading": [32],
-    "isUnassignedUnit": [32]
+    "isUnassignedUnit": [32],
+    "endpointsCount": [32]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {

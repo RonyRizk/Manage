@@ -5,6 +5,7 @@ export declare class IrInterceptor {
   isShown: boolean;
   isLoading: boolean;
   isUnassignedUnit: boolean;
+  endpointsCount: number;
   handledEndpoints: string[];
   toast: EventEmitter<IToast>;
   componentWillLoad(): void;

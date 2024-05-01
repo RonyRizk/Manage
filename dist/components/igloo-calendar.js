@@ -4374,7 +4374,6 @@ const IglooCalendar$1 = /*@__PURE__*/ proxyCustomElement(class IglooCalendar ext
     const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
-    console.log(fromDate, toDate);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
       this.days = [...results.days, ...this.days];

@@ -49,6 +49,7 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
   }
   async init() {
     var _a;
+    console.log(this.fromDate, this.toDate);
     try {
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       if (this.bookingEvent) {
@@ -62,12 +63,13 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
           this.isEndDateBeforeFromDate = true;
           this.rates = [
             ...newDatesArr.map(day => ({
-              amount,
+              amount: amount / newDatesArr.length,
               date: day,
               cost: null,
             })),
             ...this.selectedRoom.days,
           ];
+          this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
         }
         else {
           const amount = await this.fetchBookingAvailability(lastDay.date, hooks(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'), this.selectedRoom.rateplan.id, this.selectedRoom.rateplan.selected_variation.adult_child_offering);
@@ -75,13 +77,12 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
           this.rates = [
             ...this.selectedRoom.days,
             ...newDatesArr.map(day => ({
-              amount,
+              amount: amount / newDatesArr.length,
               date: day,
               cost: null,
             })),
           ];
         }
-        this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
       }
     }
     catch (error) {
@@ -114,6 +115,7 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
     console.log(this.rates);
   }
   async fetchBookingAvailability(from_date, to_date, rate_plan_id, selected_variation) {
+    var _a;
     try {
       this.initialLoading = true;
       const bookingAvailability = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyId, {
@@ -122,7 +124,11 @@ const IrRoomNights = /*@__PURE__*/ proxyCustomElement(class IrRoomNights extends
       }, this.language, [this.selectedRoom.roomtype.id], this.bookingEvent.currency);
       this.inventory = bookingAvailability.roomtypes[0].inventory;
       const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
-      const { amount } = rate_plan_index.variations.find(variation => variation.adult_child_offering === selected_variation);
+      if (!rate_plan_index || !rate_plan_index.variations) {
+        this.inventory = null;
+        return null;
+      }
+      const { amount } = (_a = rate_plan_index.variations) === null || _a === void 0 ? void 0 : _a.find(variation => variation.adult_child_offering === selected_variation);
       return amount;
     }
     catch (error) {

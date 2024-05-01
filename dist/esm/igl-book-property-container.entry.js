@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host } from './index-2fc15efd.js';
-import { B as BookingService } from './booking.service-6cdb291e.js';
+import { B as BookingService } from './booking.service-d2c669f3.js';
 import { R as RoomService } from './room.service-30afc8ab.js';
 import { c as calendar_data } from './calendar-data-aa1fc96c.js';
 import { l as locales } from './locales.store-103cb063.js';

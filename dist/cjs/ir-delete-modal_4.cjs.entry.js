@@ -7,7 +7,7 @@ const housekeeping_service = require('./housekeeping.service-8abdb383.js');
 const locales_store = require('./locales.store-8fed15eb.js');
 const calendarData = require('./calendar-data-0a2c60be.js');
 const irInterceptor_store = require('./ir-interceptor.store-6fd7cde1.js');
-const booking_service = require('./booking.service-a7155cdd.js');
+const booking_service = require('./booking.service-b545c405.js');
 require('./Token-7fd57fe8.js');
 require('./index-797ee4c0.js');
 require('./moment-f96595e5.js');

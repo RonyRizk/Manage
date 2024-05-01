@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-94e5c77d.js');
-const booking_service = require('./booking.service-a7155cdd.js');
+const booking_service = require('./booking.service-b545c405.js');
 const locales_store = require('./locales.store-8fed15eb.js');
 const calendarData = require('./calendar-data-0a2c60be.js');
 const v4 = require('./v4-d89fec7e.js');
@@ -2042,7 +2042,7 @@ const IglBookingEvent = class {
     return null;
   }
   getBalanceNode() {
-    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE > 1) {
+    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE >= 1) {
       return this.getLegendOfStatus('OUTSTANDING-BALANCE');
     }
     return null;
@@ -2070,6 +2070,7 @@ const IglBookingEvent = class {
       pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
     }
     else {
+      console.log(this.bookingEvent);
       console.log('Locating event cell failed ', startingCellClass);
     }
     //console.log(pos);
@@ -3279,7 +3280,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v52"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (index.h(index.Host, { class: "footerContainer" }, index.h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, index.h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, index.h("i", { class: "la la-square" }), index.h("u", null, locales_store.locales.entries.Lcz_Legend), index.h("span", null, " - v53"))), this.calendarData.days.map(dayInfo => (index.h("div", { class: "footerCell align-items-center" }, index.h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -8882,7 +8883,6 @@ const IglooCalendar = class {
     const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
-    console.log(fromDate, toDate);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
       this.days = [...results.days, ...this.days];
@@ -10245,7 +10245,8 @@ const IrInterceptor = class {
     this.isShown = false;
     this.isLoading = false;
     this.isUnassignedUnit = false;
-    this.handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
+    this.endpointsCount = 0;
+    this.handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   }
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -10263,8 +10264,11 @@ const IrInterceptor = class {
   handleRequest(config) {
     const extractedUrl = this.extractEndpoint(config.url);
     irInterceptor_store.interceptor_requests[extractedUrl] = 'pending';
-    if (this.isHandledEndpoint(extractedUrl)) {
+    if (this.isHandledEndpoint(extractedUrl) && this.endpointsCount > 0) {
       this.isLoading = true;
+    }
+    if (extractedUrl === '/Get_Exposed_Calendar') {
+      this.endpointsCount = this.endpointsCount + 1;
     }
     return config;
   }
@@ -11101,6 +11105,7 @@ const IrRoomNights = class {
   }
   async init() {
     var _a;
+    console.log(this.fromDate, this.toDate);
     try {
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       if (this.bookingEvent) {
@@ -11114,12 +11119,13 @@ const IrRoomNights = class {
           this.isEndDateBeforeFromDate = true;
           this.rates = [
             ...newDatesArr.map(day => ({
-              amount,
+              amount: amount / newDatesArr.length,
               date: day,
               cost: null,
             })),
             ...this.selectedRoom.days,
           ];
+          this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
         }
         else {
           const amount = await this.fetchBookingAvailability(lastDay.date, moment.hooks(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'), this.selectedRoom.rateplan.id, this.selectedRoom.rateplan.selected_variation.adult_child_offering);
@@ -11127,13 +11133,12 @@ const IrRoomNights = class {
           this.rates = [
             ...this.selectedRoom.days,
             ...newDatesArr.map(day => ({
-              amount,
+              amount: amount / newDatesArr.length,
               date: day,
               cost: null,
             })),
           ];
         }
-        this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
       }
     }
     catch (error) {
@@ -11166,6 +11171,7 @@ const IrRoomNights = class {
     console.log(this.rates);
   }
   async fetchBookingAvailability(from_date, to_date, rate_plan_id, selected_variation) {
+    var _a;
     try {
       this.initialLoading = true;
       const bookingAvailability = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyId, {
@@ -11174,7 +11180,11 @@ const IrRoomNights = class {
       }, this.language, [this.selectedRoom.roomtype.id], this.bookingEvent.currency);
       this.inventory = bookingAvailability.roomtypes[0].inventory;
       const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
-      const { amount } = rate_plan_index.variations.find(variation => variation.adult_child_offering === selected_variation);
+      if (!rate_plan_index || !rate_plan_index.variations) {
+        this.inventory = null;
+        return null;
+      }
+      const { amount } = (_a = rate_plan_index.variations) === null || _a === void 0 ? void 0 : _a.find(variation => variation.adult_child_offering === selected_variation);
       return amount;
     }
     catch (error) {

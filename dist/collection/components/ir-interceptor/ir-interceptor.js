@@ -6,7 +6,8 @@ export class IrInterceptor {
     this.isShown = false;
     this.isLoading = false;
     this.isUnassignedUnit = false;
-    this.handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
+    this.endpointsCount = 0;
+    this.handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   }
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -24,8 +25,11 @@ export class IrInterceptor {
   handleRequest(config) {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
-    if (this.isHandledEndpoint(extractedUrl)) {
+    if (this.isHandledEndpoint(extractedUrl) && this.endpointsCount > 0) {
       this.isLoading = true;
+    }
+    if (extractedUrl === '/Get_Exposed_Calendar') {
+      this.endpointsCount = this.endpointsCount + 1;
     }
     return config;
   }
@@ -82,7 +86,7 @@ export class IrInterceptor {
           "tags": [],
           "text": ""
         },
-        "defaultValue": "['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings']"
+        "defaultValue": "['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings']"
       }
     };
   }
@@ -90,7 +94,8 @@ export class IrInterceptor {
     return {
       "isShown": {},
       "isLoading": {},
-      "isUnassignedUnit": {}
+      "isUnassignedUnit": {},
+      "endpointsCount": {}
     };
   }
   static get events() {

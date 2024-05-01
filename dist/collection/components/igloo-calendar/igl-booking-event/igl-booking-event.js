@@ -346,7 +346,7 @@ export class IglBookingEvent {
     return null;
   }
   getBalanceNode() {
-    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE > 1) {
+    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE >= 1) {
       return this.getLegendOfStatus('OUTSTANDING-BALANCE');
     }
     return null;
@@ -374,6 +374,7 @@ export class IglBookingEvent {
       pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
     }
     else {
+      console.log(this.bookingEvent);
       console.log('Locating event cell failed ', startingCellClass);
     }
     //console.log(pos);
