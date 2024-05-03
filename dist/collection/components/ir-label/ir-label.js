@@ -5,6 +5,8 @@ export class IrLabel {
     this.value = undefined;
     this.iconShown = false;
     this.imageSrc = undefined;
+    this.country = false;
+    this.imageStyle = '';
   }
   openEditSidebar() {
     this.editSidebar.emit();
@@ -13,7 +15,7 @@ export class IrLabel {
     if (!this.value) {
       return null;
     }
-    return (h(Host, { class: this.imageSrc ? 'align-items-center' : '' }, h("strong", null, this.label), this.imageSrc && h("img", { src: this.imageSrc, class: "p-0 m-0" }), h("p", null, this.value), this.iconShown && (h("div", { class: "icon-container" }, h("ir-icon", { class: "pointer icon", id: "pickup", onIconClickHandler: e => {
+    return (h(Host, { class: this.imageSrc ? 'align-items-center' : '' }, h("strong", null, this.label), this.imageSrc && h("img", { src: this.imageSrc, class: `p-0 m-0 ${this.country ? 'country' : ''} ${this.imageStyle}` }), h("p", null, this.value), this.iconShown && (h("div", { class: "icon-container" }, h("ir-icon", { class: "pointer icon", id: "pickup", onIconClickHandler: e => {
         e.stopImmediatePropagation();
         e.stopPropagation();
         this.openEditSidebar();
@@ -101,6 +103,42 @@ export class IrLabel {
         },
         "attribute": "image-src",
         "reflect": false
+      },
+      "country": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "country",
+        "reflect": false,
+        "defaultValue": "false"
+      },
+      "imageStyle": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "attribute": "image-style",
+        "reflect": false,
+        "defaultValue": "''"
       }
     };
   }

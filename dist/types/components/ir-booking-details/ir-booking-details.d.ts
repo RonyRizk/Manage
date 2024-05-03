@@ -36,6 +36,7 @@ export declare class IrBookingDetails {
   isUpdateClicked: boolean;
   pms_status: IPmsLog;
   isPMSLogLoading: boolean;
+  userCountry: ICountry | null;
   toast: EventEmitter<IToast>;
   bookingChanged: EventEmitter<Booking>;
   closeSidebar: EventEmitter<null>;

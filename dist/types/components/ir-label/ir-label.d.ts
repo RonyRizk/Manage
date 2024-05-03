@@ -4,6 +4,8 @@ export declare class IrLabel {
   value: string;
   iconShown: boolean;
   imageSrc: string;
+  country: boolean;
+  imageStyle: string;
   editSidebar: EventEmitter;
   openEditSidebar(): void;
   render(): any;
