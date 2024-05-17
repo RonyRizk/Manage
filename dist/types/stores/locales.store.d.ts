@@ -291,6 +291,7 @@ export type LocalizationChannelFrontEntries = {
   Lcz_ViewLogs: string;
   Lcz_TestConnection: string;
   Lcz_NoChannelsAreConnected: string;
+  Lcz_InvalidCredentials: string;
 };
 export declare const locales: ILocale, onCalendarDatesChange: import("@stencil/store/dist/types").OnChangeHandler<ILocale>;
 export default locales;

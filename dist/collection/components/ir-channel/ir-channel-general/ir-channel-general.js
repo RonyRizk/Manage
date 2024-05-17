@@ -27,6 +27,7 @@ export class IrChannelGeneral {
     this.status = status;
     this.connection_status_message = status ? (_b = locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_ConnectedChannel : (_c = locales.entries) === null || _c === void 0 ? void 0 : _c.Lcz_IncorrectConnection;
     this.buttonClicked = false;
+    this.connectionStatus.emit(this.status);
   }
   render() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
@@ -78,6 +79,24 @@ export class IrChannelGeneral {
       "connection_status_message": {},
       "status": {}
     };
+  }
+  static get events() {
+    return [{
+        "method": "connectionStatus",
+        "name": "connectionStatus",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        }
+      }];
   }
 }
 //# sourceMappingURL=ir-channel-general.js.map

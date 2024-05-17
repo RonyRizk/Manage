@@ -1,9 +1,11 @@
+import { IToast } from "../../ir-toast/toast";
 import { EventEmitter } from '../../../stencil-public-runtime';
 export declare class IrChannelEditor {
   channel_status: 'create' | 'edit' | null;
   ticket: string;
   selectedTab: string;
   isLoading: boolean;
+  status: boolean;
   headerTitles: {
     id: string;
     name: string;
@@ -12,6 +14,7 @@ export declare class IrChannelEditor {
   selectedRoomType: any[];
   saveChannelFinished: EventEmitter<null>;
   closeSideBar: EventEmitter<null>;
+  toast: EventEmitter<IToast>;
   private channelService;
   componentWillLoad(): void;
   handleTabChange(e: CustomEvent): void;

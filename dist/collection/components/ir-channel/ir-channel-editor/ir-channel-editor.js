@@ -10,6 +10,7 @@ export class IrChannelEditor {
     this.ticket = undefined;
     this.selectedTab = '';
     this.isLoading = false;
+    this.status = false;
     this.headerTitles = [
       {
         id: 'general_settings',
@@ -43,7 +44,7 @@ export class IrChannelEditor {
   renderTabScreen() {
     switch (this.selectedTab) {
       case 'general_settings':
-        return h("ir-channel-general", { channel_status: this.channel_status });
+        return h("ir-channel-general", { channel_status: this.channel_status, onConnectionStatus: e => (this.status = e.detail) });
       case 'mapping':
         return h("ir-channel-mapping", null);
       case 'channel_booking':
@@ -75,7 +76,17 @@ export class IrChannelEditor {
     var _a, _b;
     return (h(Host, { class: " d-flex flex-column h-100" }, h("nav", { class: "position-sticky sticky-top pb-1 top-0 bg-white " }, h("div", { class: "d-flex align-items-center px-1 py-1  justify-content-between" }, h("h3", { class: "text-left font-medium-2  py-0 my-0" }, this.channel_status === 'create' ? (_a = locales.entries) === null || _a === void 0 ? void 0 : _a.Lcz_CreateChannel : (_b = locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_EditChannel), h("ir-icon", { class: 'm-0 p-0 close', onIconClickHandler: () => {
         this.closeSideBar.emit(null);
-      } }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 384 512", height: 20, width: 20 }, h("path", { d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" })))), h("ir-channel-header", { class: "mt-1 px-0", headerTitles: this.headerTitles })), h("section", { class: "flex-fill tab-container px-1" }, this.renderTabScreen()), h("ir-button", { isLoading: this.isLoading, onClickHanlder: () => this.saveConnectedChannel(), class: "px-1 py-1 top-border", btn_styles: "w-100  justify-content-center align-items-center", text: locales.entries.Lcz_Save })));
+      } }, h("svg", { slot: "icon", xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 384 512", height: 20, width: 20 }, h("path", { d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" })))), h("ir-channel-header", { class: "mt-1 px-0", headerTitles: this.headerTitles })), h("section", { class: "flex-fill tab-container px-1" }, this.renderTabScreen()), h("ir-button", { isLoading: this.isLoading, onClickHanlder: () => {
+        if (!this.status) {
+          this.toast.emit({
+            type: 'error',
+            description: locales.entries.Lcz_InvalidCredentials,
+            title: locales.entries.Lcz_InvalidCredentials,
+          });
+          return;
+        }
+        this.saveConnectedChannel();
+      }, class: "px-1 py-1 top-border", btn_styles: "w-100  justify-content-center align-items-center", text: locales.entries.Lcz_Save })));
   }
   static get is() { return "ir-channel-editor"; }
   static get encapsulation() { return "scoped"; }
@@ -132,6 +143,7 @@ export class IrChannelEditor {
     return {
       "selectedTab": {},
       "isLoading": {},
+      "status": {},
       "headerTitles": {},
       "selectedRoomType": {}
     };
@@ -166,6 +178,27 @@ export class IrChannelEditor {
           "original": "null",
           "resolved": "null",
           "references": {}
+        }
+      }, {
+        "method": "toast",
+        "name": "toast",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": ""
+        },
+        "complexType": {
+          "original": "IToast",
+          "resolved": "ICustomToast & Partial<IToastWithButton> | IDefaultToast & Partial<IToastWithButton>",
+          "references": {
+            "IToast": {
+              "location": "import",
+              "path": "@/components/ir-toast/toast",
+              "id": "src/components/ir-toast/toast.ts::IToast"
+            }
+          }
         }
       }];
   }

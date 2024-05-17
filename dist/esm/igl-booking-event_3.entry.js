@@ -1,14 +1,15 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-2fc15efd.js';
-import { B as BookingService$1 } from './booking.service-b4fd9e472.js';
-import { t as transformNewBooking, i as isBlockUnit } from './utils-39fd66c4.js';
+import { B as BookingService$1 } from './booking.service-f0e451a92.js';
+import { t as transformNewBooking } from './booking-24e3092c.js';
+import { i as isBlockUnit } from './utils-f153e38d.js';
 import { h as hooks } from './moment-7d60e5ef.js';
-import { T as Token, a as axios } from './Token-2955ce2c.js';
-import { B as BookingService } from './booking.service-b4fd9e47.js';
-import { a as getReleaseHoursString, p as findCountry } from './utils-2c9c611c.js';
+import { T as Token, a as axios } from './axios-8e9c5680.js';
+import { B as BookingService } from './booking.service-f0e451a9.js';
+import { j as getReleaseHoursString, p as findCountry } from './utils-709063eb.js';
 import { l as locales } from './locales.store-103cb063.js';
 import { c as calendar_data } from './calendar-data-aa1fc96c.js';
-import { E as EventsService$1 } from './events.service-771d9f4f.js';
-import './booking-81861d7b.js';
+import { E as EventsService$1 } from './events.service-6bde3735.js';
+import './booking-b3ad6ae9.js';
 import './index-12cef0ac.js';
 
 class EventsService extends Token {

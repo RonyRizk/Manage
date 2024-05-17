@@ -1,4 +1,4 @@
-import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { c as channels_data, t as testConnection, a as selectChannel, u as updateChannelSettings } from './channel.store.js';
 import { l as locales } from './locales.store.js';
 import { d as defineCustomElement$1 } from './ir-combobox2.js';
@@ -9,6 +9,7 @@ const IrChannelGeneral = /*@__PURE__*/ proxyCustomElement(class IrChannelGeneral
   constructor() {
     super();
     this.__registerHost();
+    this.connectionStatus = createEvent(this, "connectionStatus", 7);
     this.channel_status = null;
     this.buttonClicked = false;
     this.connection_status_message = '';
@@ -33,6 +34,7 @@ const IrChannelGeneral = /*@__PURE__*/ proxyCustomElement(class IrChannelGeneral
     this.status = status;
     this.connection_status_message = status ? (_b = locales.entries) === null || _b === void 0 ? void 0 : _b.Lcz_ConnectedChannel : (_c = locales.entries) === null || _c === void 0 ? void 0 : _c.Lcz_IncorrectConnection;
     this.buttonClicked = false;
+    this.connectionStatus.emit(this.status);
   }
   render() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
