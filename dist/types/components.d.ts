@@ -17,6 +17,7 @@ import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
+import { TIcons } from "./components/ui/ir-icons/icons";
 import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -31,6 +32,7 @@ export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
+export { TIcons } from "./components/ui/ir-icons/icons";
 export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -422,6 +424,10 @@ export namespace Components {
     }
     interface IrIcon {
         "icon": string;
+    }
+    interface IrIcons {
+        "name": TIcons;
+        "svgClassName": string;
     }
     interface IrInputText {
         "LabelAvailable": boolean;
@@ -1122,6 +1128,12 @@ declare global {
         prototype: HTMLIrIconElement;
         new (): HTMLIrIconElement;
     };
+    interface HTMLIrIconsElement extends Components.IrIcons, HTMLStencilElement {
+    }
+    var HTMLIrIconsElement: {
+        prototype: HTMLIrIconsElement;
+        new (): HTMLIrIconsElement;
+    };
     interface HTMLIrInputTextElement extends Components.IrInputText, HTMLStencilElement {
     }
     var HTMLIrInputTextElement: {
@@ -1309,6 +1321,7 @@ declare global {
         "ir-hk-user": HTMLIrHkUserElement;
         "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
+        "ir-icons": HTMLIrIconsElement;
         "ir-input-text": HTMLIrInputTextElement;
         "ir-interceptor": HTMLIrInterceptorElement;
         "ir-label": HTMLIrLabelElement;
@@ -1822,6 +1835,10 @@ declare namespace LocalJSX {
         "icon"?: string;
         "onIconClickHandler"?: (event: IrIconCustomEvent<any>) => void;
     }
+    interface IrIcons {
+        "name"?: TIcons;
+        "svgClassName"?: string;
+    }
     interface IrInputText {
         "LabelAvailable"?: boolean;
         "disabled"?: boolean;
@@ -2082,6 +2099,7 @@ declare namespace LocalJSX {
         "ir-hk-user": IrHkUser;
         "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
+        "ir-icons": IrIcons;
         "ir-input-text": IrInputText;
         "ir-interceptor": IrInterceptor;
         "ir-label": IrLabel;
@@ -2159,6 +2177,7 @@ declare module "@stencil/core" {
             "ir-hk-user": LocalJSX.IrHkUser & JSXBase.HTMLAttributes<HTMLIrHkUserElement>;
             "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
+            "ir-icons": LocalJSX.IrIcons & JSXBase.HTMLAttributes<HTMLIrIconsElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;

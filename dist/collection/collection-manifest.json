@@ -70,7 +70,8 @@
     "components/ir-title/ir-title.js",
     "components/ir-toast/ir-toast.js",
     "components/ir-tooltip/ir-tooltip.js",
-    "components/ota-label/ota-label.js"
+    "components/ota-label/ota-label.js",
+    "components/ui/ir-icons/ir-icons.js"
   ],
   "compiler": {
     "name": "@stencil/core",
