@@ -670,7 +670,7 @@ class PickupService {
     }
   }
   transformDefaultPickupData(data) {
-    const arrival_time = utils.renderTime(data.hour) + ':' + utils.renderTime(data.minute);
+    const arrival_time = data.hour && data.minute ? utils.renderTime(data.hour) + ':' + utils.renderTime(data.minute) : '';
     return {
       arrival_date: data.date,
       arrival_time,
