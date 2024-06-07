@@ -70,7 +70,7 @@ function renderBlock003Date(date, hour, minute) {
   return `${locales.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell, stayStatus) {
-  var _a, _b;
+  var _a, _b, _c;
   if (isBlockUnit(cell.STAY_STATUS_CODE)) {
     const blockedFromDate = moment(cell.My_Block_Info.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.from_date : cell.DATE;
     const blockedToDate = moment(cell.My_Block_Info.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.to_date : cell.DATE;
@@ -98,14 +98,18 @@ function getDefaultData(cell, stayStatus) {
       OUT_OF_SERVICE: cell.STAY_STATUS_CODE === '004',
       FROM_DATE_STR: cell.My_Block_Info.format.from_date,
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
+      defaultDates: {
+        from_date: cell.My_Block_Info.from_date,
+        to_date: cell.My_Block_Info.to_date,
+      },
     };
   }
   // console.log('booking', cell);
-  if (cell.booking.booking_nbr === '57243250') {
-    console.log('cell');
-    console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
-    console.log(cell);
-  }
+  // if (cell.booking.booking_nbr === '61249849') {
+  //   console.log('cell');
+  //   console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
+  //   console.log(cell);
+  // }
   const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
   const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
   return {
@@ -124,29 +128,33 @@ function getDefaultData(cell, stayStatus) {
     BALANCE: (_b = cell.booking.financial) === null || _b === void 0 ? void 0 : _b.due_amount,
     channel_booking_nbr: cell.booking.channel_booking_nbr,
     ARRIVAL_TIME: cell.booking.arrival.description,
+    defaultDates: {
+      from_date: cell.room.from_date,
+      to_date: cell.room.to_date,
+    },
     ///from here
-    //ENTRY_DATE: cell.booking.booked_on.date,
-    // IS_EDITABLE: cell.booking.is_editable,
-    // ARRIVAL: cell.booking.arrival,
-    // PHONE: cell.booking.guest.mobile ?? '',
-    // RATE: cell.room.total,
-    // RATE_PLAN: cell.room.rateplan.name,
-    // SPLIT_BOOKING: false,
-    // RATE_PLAN_ID: cell.room.rateplan.id,
-    // RATE_TYPE: 1,
-    // ADULTS_COUNT: cell.room.occupancy.adult_nbr,
-    // CHILDREN_COUNT: cell.room.occupancy.children_nbr,
-    // origin: cell.booking.origin,
-    // GUEST: cell.booking.guest,
-    // ROOMS: cell.booking.rooms,
-    // cancelation: cell.room.rateplan.cancelation,
-    // guarantee: cell.room.rateplan.guarantee,
-    // TOTAL_PRICE: cell.room.total,
-    // COUNTRY: cell.booking.guest.country_id,
-    // FROM_DATE_STR: cell.booking.format.from_date,
-    // TO_DATE_STR: cell.booking.format.to_date,
-    // adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
-    // SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
+    ENTRY_DATE: cell.booking.booked_on.date,
+    IS_EDITABLE: cell.booking.is_editable,
+    ARRIVAL: cell.booking.arrival,
+    PHONE: (_c = cell.booking.guest.mobile) !== null && _c !== void 0 ? _c : '',
+    RATE: cell.room.total,
+    RATE_PLAN: cell.room.rateplan.name,
+    SPLIT_BOOKING: false,
+    RATE_PLAN_ID: cell.room.rateplan.id,
+    RATE_TYPE: 1,
+    ADULTS_COUNT: cell.room.occupancy.adult_nbr,
+    CHILDREN_COUNT: cell.room.occupancy.children_nbr,
+    origin: cell.booking.origin,
+    GUEST: cell.booking.guest,
+    ROOMS: cell.booking.rooms,
+    cancelation: cell.room.rateplan.cancelation,
+    guarantee: cell.room.rateplan.guarantee,
+    TOTAL_PRICE: cell.room.total,
+    COUNTRY: cell.booking.guest.country_id,
+    FROM_DATE_STR: cell.booking.format.from_date,
+    TO_DATE_STR: cell.booking.format.to_date,
+    adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
+    SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
 // function updateBookingWithStayData(data: any, cell: CellType): any {
@@ -244,6 +252,10 @@ export function transformNewBooking(data) {
       NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
       ota_notes: data.ota_notes,
+      defaultDates: {
+        from_date: room.from_date,
+        to_date: room.to_date,
+      },
     });
   });
   return bookings;
@@ -274,6 +286,10 @@ export async function transformNewBLockedRooms(data) {
     OUT_OF_SERVICE: data.STAY_STATUS_CODE === '004',
     FROM_DATE_STR: data.format.from_date,
     TO_DATE_STR: data.format.to_date,
+    defaultDates: {
+      from_date: data.from_date,
+      to_date: data.to_date,
+    },
   };
 }
 export function calculateDaysBetweenDates(from_date, to_date) {

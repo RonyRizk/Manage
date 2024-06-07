@@ -20,6 +20,9 @@ export declare class IglBookingEvent {
   showDialog: EventEmitter<IReallocationPayload>;
   resetStreachedBooking: EventEmitter<string>;
   toast: EventEmitter<IToast>;
+  updateBookingEvent: EventEmitter<{
+    [key: string]: any;
+  }>;
   renderElement: boolean;
   position: {
     [key: string]: any;

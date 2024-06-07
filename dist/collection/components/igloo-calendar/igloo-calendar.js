@@ -282,6 +282,99 @@ export class IglooCalendar {
       //toastr.error(error);
     }
   }
+  scrollPageToRoom(event) {
+    let targetScrollClass = event.detail.refClass;
+    this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
+    const topLeftCell = this.element.querySelector('.topLeftCell');
+    const gotoRoom = this.element.querySelector('.' + targetScrollClass);
+    if (gotoRoom) {
+      this.scrollContainer.scrollTo({ top: 0 });
+      const gotoRect = gotoRoom.getBoundingClientRect();
+      const containerRect = this.scrollContainer.getBoundingClientRect();
+      const topLeftCellRect = topLeftCell.getBoundingClientRect();
+      this.scrollContainer.scrollTo({
+        top: gotoRect.top - containerRect.top - topLeftCellRect.height - gotoRect.height,
+      });
+    }
+  }
+  handleShowDialog(event) {
+    this.dialogData = event.detail;
+    let modal = this.element.querySelector('ir-modal');
+    if (modal) {
+      modal.openModal();
+    }
+  }
+  handleShowRoomNightsDialog(event) {
+    this.roomNightsData = event.detail;
+  }
+  handleBookingDatasChange(event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    let bookings = [...this.calendarData.bookingEvents];
+    bookings = bookings.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
+    bookings.push(...event.detail.filter(ev => ev.STATUS === 'PENDING-CONFIRMATION'));
+    this.updateBookingEventsDateRange(event.detail);
+    this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: bookings });
+  }
+  handleUpdateBookingEvent(e) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    const newBookingEvent = e.detail;
+    this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: this.calendarData.bookingEvents.map(event => {
+        if (newBookingEvent.ID === event.ID) {
+          return newBookingEvent;
+        }
+        return event;
+      }) });
+  }
+  showBookingPopupEventDataHandler(event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    this.onOptionSelect(event);
+    //console.log("show booking event", event);
+  }
+  updateEventDataHandler(event) {
+    let bookedData = this.calendarData.bookingEvents.find(bookedEvent => bookedEvent.id === event.detail.id);
+    if (bookedData && event.detail && event.detail.data) {
+      Object.entries(event.detail.data).forEach(([key, value]) => {
+        bookedData[key] = value;
+      });
+    }
+  }
+  dragOverEventDataHandler(event) {
+    if (event.detail.id === 'CALCULATE_DRAG_OVER_BOUNDS') {
+      let topLeftCell = document.querySelector('igl-cal-header .topLeftCell');
+      let containerDays = document.querySelectorAll('.headersContainer .headerCell');
+      let containerRooms = document.querySelectorAll('.bodyContainer .roomRow .roomTitle');
+      this.visibleCalendarCells = { x: [], y: [] };
+      containerDays.forEach(element => {
+        const htmlElement = element;
+        this.visibleCalendarCells.x.push({
+          left: htmlElement.offsetLeft + topLeftCell.offsetWidth,
+          width: htmlElement.offsetWidth,
+          id: htmlElement.getAttribute('data-day'),
+        });
+      });
+      containerRooms.forEach(element => {
+        const htmlElement = element;
+        this.visibleCalendarCells.y.push({
+          top: htmlElement.offsetTop,
+          height: htmlElement.offsetHeight,
+          id: htmlElement.getAttribute('data-room'),
+        });
+      });
+      this.highlightDragOver(true, event.detail.data);
+    }
+    else if (event.detail.id === 'DRAG_OVER') {
+      this.highlightDragOver(true, event.detail.data);
+    }
+    else if (event.detail.id === 'DRAG_OVER_END') {
+      this.highlightDragOver(false, event.detail.data);
+    }
+    else if (event.detail.id === 'STRETCH_OVER_END') {
+      this.highlightDragOver(false, event.detail.data);
+    }
+  }
   checkBookingAvailability(data) {
     return this.calendarData.bookingEvents.some(booking => booking.ID === data.ID || (booking.FROM_DATE === data.FROM_DATE && booking.TO_DATE === data.TO_DATE && booking.PR_ID === data.PR_ID));
   }
@@ -371,40 +464,6 @@ export class IglooCalendar {
   transformDateForScroll(date) {
     return moment(date).format('D_M_YYYY');
   }
-  scrollPageToRoom(event) {
-    let targetScrollClass = event.detail.refClass;
-    this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
-    const topLeftCell = this.element.querySelector('.topLeftCell');
-    const gotoRoom = this.element.querySelector('.' + targetScrollClass);
-    if (gotoRoom) {
-      this.scrollContainer.scrollTo({ top: 0 });
-      const gotoRect = gotoRoom.getBoundingClientRect();
-      const containerRect = this.scrollContainer.getBoundingClientRect();
-      const topLeftCellRect = topLeftCell.getBoundingClientRect();
-      this.scrollContainer.scrollTo({
-        top: gotoRect.top - containerRect.top - topLeftCellRect.height - gotoRect.height,
-      });
-    }
-  }
-  handleShowDialog(event) {
-    this.dialogData = event.detail;
-    let modal = this.element.querySelector('ir-modal');
-    if (modal) {
-      modal.openModal();
-    }
-  }
-  handleShowRoomNightsDialog(event) {
-    this.roomNightsData = event.detail;
-  }
-  handleBookingDatasChange(event) {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    let bookings = [...this.calendarData.bookingEvents];
-    bookings = bookings.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
-    bookings.push(...event.detail.filter(ev => ev.STATUS === 'PENDING-CONFIRMATION'));
-    this.updateBookingEventsDateRange(event.detail);
-    this.calendarData = Object.assign(Object.assign({}, this.calendarData), { bookingEvents: bookings });
-  }
   shouldRenderCalendarView() {
     // console.log("rendering...")
     return this.calendarData && this.calendarData.days && this.calendarData.days.length;
@@ -480,6 +539,7 @@ export class IglooCalendar {
       bookings = bookings.filter(newBooking => {
         const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
         if (existingBookingIndex !== -1) {
+          console.log(this.calendarData.bookingEvents[existingBookingIndex]);
           this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE = newBooking.FROM_DATE;
           this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(newBooking.FROM_DATE, this.calendarData.bookingEvents[existingBookingIndex].TO_DATE);
           return false;
@@ -626,54 +686,6 @@ export class IglooCalendar {
       currentElement = currentElement.parentElement;
     }
     return false;
-  }
-  showBookingPopupEventDataHandler(event) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    this.onOptionSelect(event);
-    //console.log("show booking event", event);
-  }
-  updateEventDataHandler(event) {
-    let bookedData = this.calendarData.bookingEvents.find(bookedEvent => bookedEvent.id === event.detail.id);
-    if (bookedData && event.detail && event.detail.data) {
-      Object.entries(event.detail.data).forEach(([key, value]) => {
-        bookedData[key] = value;
-      });
-    }
-  }
-  dragOverEventDataHandler(event) {
-    if (event.detail.id === 'CALCULATE_DRAG_OVER_BOUNDS') {
-      let topLeftCell = document.querySelector('igl-cal-header .topLeftCell');
-      let containerDays = document.querySelectorAll('.headersContainer .headerCell');
-      let containerRooms = document.querySelectorAll('.bodyContainer .roomRow .roomTitle');
-      this.visibleCalendarCells = { x: [], y: [] };
-      containerDays.forEach(element => {
-        const htmlElement = element;
-        this.visibleCalendarCells.x.push({
-          left: htmlElement.offsetLeft + topLeftCell.offsetWidth,
-          width: htmlElement.offsetWidth,
-          id: htmlElement.getAttribute('data-day'),
-        });
-      });
-      containerRooms.forEach(element => {
-        const htmlElement = element;
-        this.visibleCalendarCells.y.push({
-          top: htmlElement.offsetTop,
-          height: htmlElement.offsetHeight,
-          id: htmlElement.getAttribute('data-room'),
-        });
-      });
-      this.highlightDragOver(true, event.detail.data);
-    }
-    else if (event.detail.id === 'DRAG_OVER') {
-      this.highlightDragOver(true, event.detail.data);
-    }
-    else if (event.detail.id === 'DRAG_OVER_END') {
-      this.highlightDragOver(false, event.detail.data);
-    }
-    else if (event.detail.id === 'STRETCH_OVER_END') {
-      this.highlightDragOver(false, event.detail.data);
-    }
   }
   async highlightDragOver(hightLightElement, currentPosition) {
     let xElement, yElement;
@@ -1035,6 +1047,12 @@ export class IglooCalendar {
       }, {
         "name": "addBookingDatasEvent",
         "method": "handleBookingDatasChange",
+        "target": undefined,
+        "capture": false,
+        "passive": false
+      }, {
+        "name": "updateBookingEvent",
+        "method": "handleUpdateBookingEvent",
         "target": undefined,
         "capture": false,
         "passive": false

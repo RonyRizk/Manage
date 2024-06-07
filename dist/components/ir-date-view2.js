@@ -87,6 +87,10 @@ function transformNewBooking(data) {
       NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
       ota_notes: data.ota_notes,
+      defaultDates: {
+        from_date: room.from_date,
+        to_date: room.to_date,
+      },
     });
   });
   return bookings;

@@ -65,6 +65,14 @@ export declare class IglooCalendar {
   private updateTotalAvailability;
   componentDidLoad(): void;
   handleDeleteEvent(ev: CustomEvent): Promise<void>;
+  scrollPageToRoom(event: CustomEvent): void;
+  handleShowDialog(event: CustomEvent): void;
+  handleShowRoomNightsDialog(event: CustomEvent<IRoomNightsData>): void;
+  handleBookingDatasChange(event: CustomEvent): void;
+  handleUpdateBookingEvent(e: CustomEvent): void;
+  showBookingPopupEventDataHandler(event: CustomEvent): void;
+  updateEventDataHandler(event: CustomEvent): void;
+  dragOverEventDataHandler(event: CustomEvent): void;
   checkBookingAvailability(data: any): any;
   updateBookingEventsDateRange(eventData: any): void;
   setRoomsData(roomServiceResp: any): void;
@@ -73,10 +81,6 @@ export declare class IglooCalendar {
   scrollToElement(goToDate: any): void;
   private AddOrUpdateRoomBookings;
   private transformDateForScroll;
-  scrollPageToRoom(event: CustomEvent): void;
-  handleShowDialog(event: CustomEvent): void;
-  handleShowRoomNightsDialog(event: CustomEvent<IRoomNightsData>): void;
-  handleBookingDatasChange(event: CustomEvent): void;
   shouldRenderCalendarView(): any;
   onOptionSelect(event: CustomEvent<{
     [key: string]: any;
@@ -98,9 +102,6 @@ export declare class IglooCalendar {
   onScrollContentMoveEndHandler: EventListener;
   calendarScrolling(): void;
   hasAncestorWithClass(element: HTMLElement, className: string): boolean;
-  showBookingPopupEventDataHandler(event: CustomEvent): void;
-  updateEventDataHandler(event: CustomEvent): void;
-  dragOverEventDataHandler(event: CustomEvent): void;
   highlightDragOver(hightLightElement: any, currentPosition: any): Promise<void>;
   handleModalConfirm(): void;
   handleModalCancel(): void;

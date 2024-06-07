@@ -259,6 +259,10 @@ export interface RoomBookingDetails {
   SOURCE: ISource;
   ROOMS: Room[];
   ota_notes: IOtaNotes[];
+  defaultDates: {
+    from_date: string;
+    to_date: string;
+  };
 }
 export interface ISource {
   code: string;
@@ -285,5 +289,9 @@ export interface RoomBlockDetails {
   OUT_OF_SERVICE: boolean;
   FROM_DATE_STR: string;
   TO_DATE_STR: string;
+  defaultDates: {
+    from_date: string;
+    to_date: string;
+  };
 }
 export {};
