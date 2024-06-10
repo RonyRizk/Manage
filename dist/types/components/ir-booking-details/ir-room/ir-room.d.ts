@@ -5,6 +5,7 @@ import { ILocale } from "../../../stores/locales.store";
 export declare class IrRoom {
   bookingEvent: Booking;
   bookingIndex: number;
+  isEditable: boolean;
   mealCodeName: string;
   myRoomTypeFoodCat: string;
   currency: string;
