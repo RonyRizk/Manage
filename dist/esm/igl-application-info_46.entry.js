@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-2fc15efd.js';
-import { g as getCurrencySymbol, a as getMyBookings, c as convertDateToCustomFormat, b as convertDateToTime, d as dateToFormattedString, e as getReleaseHoursString, t as transformNewBLockedRooms, B as BookingService$1, f as findCountry, h as dateDifference, i as formatLegendColors, j as transformNewBooking$1, k as bookingStatus$1, l as isBlockUnit$1, m as calculateDaysBetweenDates$1, n as getNextDay, o as addTwoMonthToDate, p as convertDMYToISO, q as computeEndDate, r as formatName$1, s as getDaysArray, u as convertDatePrice, v as formatDate } from './booking.service-208b962c.js';
+import { g as getCurrencySymbol, a as getMyBookings, c as convertDateToCustomFormat, b as convertDateToTime, d as dateToFormattedString, e as getReleaseHoursString, t as transformNewBLockedRooms, B as BookingService$1, f as findCountry, h as dateDifference, i as formatLegendColors, j as transformNewBooking$1, k as bookingStatus$1, l as isBlockUnit$1, m as calculateDaysBetweenDates$1, n as getNextDay, o as addTwoMonthToDate, p as convertDMYToISO, q as computeEndDate, r as formatName$1, s as getDaysArray, u as convertDatePrice, v as formatDate } from './booking.service-e3ce3cdb.js';
 import { l as locales } from './locales.store-103cb063.js';
 import { c as calendar_data } from './calendar-data-aa1fc96c.js';
 import { v as v4 } from './v4-87f26972.js';
@@ -218,6 +218,7 @@ class BookingService extends Token {
           language,
           currency_ref: currency.code,
           room_type_ids,
+          is_backend: true,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -3299,7 +3300,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v64"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v65"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -3328,7 +3329,7 @@ class ToBeAssignedService extends Token {
       throw new Error(error);
     }
   }
-  async getUnassignedRooms(propertyid, specific_date, roomInfo, formattedLegendData) {
+  async getUnassignedRooms(calendarFromDates, propertyid, specific_date, roomInfo, formattedLegendData) {
     try {
       const token = this.getToken();
       if (token) {
@@ -3339,7 +3340,7 @@ class ToBeAssignedService extends Token {
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        return this.transformToAssignable(data, roomInfo, formattedLegendData);
+        return this.transformToAssignable(calendarFromDates, data, roomInfo, formattedLegendData);
       }
       else {
         throw new Error('Invalid Token');
@@ -3378,7 +3379,7 @@ class ToBeAssignedService extends Token {
     const regex = /[^a-zA-Z0-9]+/g;
     return str.replace(regex, '');
   }
-  transformToAssignable(data, roomInfo, formattedLegendData) {
+  transformToAssignable(calendarFromDates, data, roomInfo, formattedLegendData) {
     const result = [];
     data.My_Result.forEach((customer) => {
       customer.unassigned_rooms.forEach((room) => {
@@ -3406,7 +3407,7 @@ class ToBeAssignedService extends Token {
           availableRooms: [],
           RT_ID: this.getRoomTypeId(room.room_type_name, roomInfo),
         };
-        this.updateAvailableRooms(room, roomCategory, formattedLegendData, roomInfo);
+        this.updateAvailableRooms(calendarFromDates, room, roomCategory, formattedLegendData, roomInfo);
         this.addDefaultDateRange(roomCategory);
         result.push(roomCategory);
       });
@@ -3425,18 +3426,23 @@ class ToBeAssignedService extends Token {
   getRoomTypeId(roomName, roomInfo) {
     return roomInfo.find(room => this.cleanSpacesAndSpecialChars(room.name) === this.cleanSpacesAndSpecialChars(roomName)).id || null;
   }
-  updateAvailableRooms(room, roomCategory, formattedLegendData, roomsInfo) {
+  updateAvailableRooms(calendarFromDates, room, roomCategory, formattedLegendData, roomsInfo) {
     const rooms = [];
     room.assignable_units.forEach((unit) => {
       if (unit.Is_Fully_Available && !unit.Is_Not_Available) {
         const days = dateDifference(unit.from_date, unit.to_date);
+        const fromDate = hooks(new Date(calendarFromDates.from_date)).isAfter(hooks(new Date(unit.from_date))) ? calendarFromDates.from_date : unit.from_date;
+        const toDate = hooks(new Date(calendarFromDates.to_date)).isBefore(hooks(new Date(unit.to_date))) &&
+          hooks(new Date(calendarFromDates.to_date)).isAfter(hooks(new Date(unit.from_date)))
+          ? calendarFromDates.to_date
+          : unit.to_date;
         rooms.push({
           RT_ID: roomCategory.RT_ID,
           STATUS: 'PENDING-CONFIRMATION',
-          FROM_DATE: unit.from_date,
+          FROM_DATE: fromDate,
           roomName: unit.name,
           PR_ID: unit.pr_id,
-          TO_DATE: unit.to_date,
+          TO_DATE: toDate,
           NO_OF_DAYS: days,
           ID: 'NEW_TEMP_EVENT',
           NAME: '',
@@ -3574,7 +3580,7 @@ const IglCalHeader = class {
       while (endDate <= new Date(toDate).getTime()) {
         const selectedDate = hooks(endDate).format('D_M_YYYY');
         if (data[endDate]) {
-          const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
+          const result = await this.toBeAssignedService.getUnassignedRooms({ from_date: this.calendarData.from_date, to_date: this.calendarData.to_date }, this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
           this.unassignedRoomsNumber[selectedDate] = result.length;
         }
         else if (this.unassignedRoomsNumber[selectedDate]) {
@@ -4386,7 +4392,7 @@ const IglToBeAssigned = class {
     try {
       //console.log("called")
       let categorisedRooms = {};
-      const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(+key)), calendarData.roomsInfo, calendarData.formattedLegendData);
+      const result = await this.toBeAssignedService.getUnassignedRooms({ from_date: calendarData.from_date, to_date: calendarData.to_date }, this.propertyid, dateToFormattedString(new Date(+key)), calendarData.roomsInfo, calendarData.formattedLegendData);
       result.forEach(room => {
         if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
           categorisedRooms[room.RT_ID] = [room];
@@ -8536,6 +8542,8 @@ const IglooCalendar = class {
     this.calendarData.adultChildConstraints = roomResp['My_Result'].adult_child_constraints;
     this.calendarData.legendData = this.getLegendData(roomResp);
     this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
+    this.calendarData.from_date = bookingResp.My_Params_Get_Rooming_Data.FROM;
+    this.calendarData.to_date = bookingResp.My_Params_Get_Rooming_Data.TO;
     this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
     this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
     this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
@@ -8963,6 +8971,7 @@ const IglooCalendar = class {
     this.updateBookingEventsDateRange(newBookings);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
+      this.calendarData.from_date = fromDate;
       this.days = [...results.days, ...this.days];
       let newMonths = [...results.months];
       if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length - 1].monthName) {
@@ -8985,6 +8994,7 @@ const IglooCalendar = class {
     }
     else {
       this.calendarData.endingDate = new Date(toDate).getTime();
+      this.calendarData.to_date = toDate;
       let newMonths = [...results.months];
       this.days = [...this.days, ...results.days];
       if (this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].monthName === results.months[0].monthName) {

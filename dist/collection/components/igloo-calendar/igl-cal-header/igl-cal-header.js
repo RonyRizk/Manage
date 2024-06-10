@@ -57,7 +57,7 @@ export class IglCalHeader {
       while (endDate <= new Date(toDate).getTime()) {
         const selectedDate = moment(endDate).format('D_M_YYYY');
         if (data[endDate]) {
-          const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
+          const result = await this.toBeAssignedService.getUnassignedRooms({ from_date: this.calendarData.from_date, to_date: this.calendarData.to_date }, this.propertyid, dateToFormattedString(new Date(endDate)), this.calendarData.roomsInfo, this.calendarData.formattedLegendData);
           this.unassignedRoomsNumber[selectedDate] = result.length;
         }
         else if (this.unassignedRoomsNumber[selectedDate]) {

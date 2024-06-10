@@ -512,6 +512,7 @@ class BookingService extends Token {
           language,
           currency_ref: currency.code,
           room_type_ids,
+          is_backend: true,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -866,4 +867,4 @@ class BookingService extends Token {
 
 export { BookingService as B, getMyBookings as a, convertDateToTime as b, convertDateToCustomFormat as c, dateToFormattedString as d, getReleaseHoursString as e, findCountry as f, getCurrencySymbol as g, dateDifference as h, formatLegendColors as i, transformNewBooking as j, bookingStatus as k, isBlockUnit as l, calculateDaysBetweenDates as m, getNextDay as n, addTwoMonthToDate as o, convertDMYToISO as p, computeEndDate as q, formatName as r, getDaysArray as s, transformNewBLockedRooms as t, convertDatePrice as u, formatDate as v };
 
-//# sourceMappingURL=booking.service-208b962c.js.map
+//# sourceMappingURL=booking.service-e3ce3cdb.js.map

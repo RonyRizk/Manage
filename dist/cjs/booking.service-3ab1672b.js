@@ -514,6 +514,7 @@ class BookingService extends Token.Token {
           language,
           currency_ref: currency.code,
           room_type_ids,
+          is_backend: true,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -890,4 +891,4 @@ exports.isBlockUnit = isBlockUnit;
 exports.transformNewBLockedRooms = transformNewBLockedRooms;
 exports.transformNewBooking = transformNewBooking;
 
-//# sourceMappingURL=booking.service-0a5c88b8.js.map
+//# sourceMappingURL=booking.service-3ab1672b.js.map

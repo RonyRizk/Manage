@@ -102,7 +102,7 @@ const IglToBeAssigned = /*@__PURE__*/ proxyCustomElement(class IglToBeAssigned e
     try {
       //console.log("called")
       let categorisedRooms = {};
-      const result = await this.toBeAssignedService.getUnassignedRooms(this.propertyid, dateToFormattedString(new Date(+key)), calendarData.roomsInfo, calendarData.formattedLegendData);
+      const result = await this.toBeAssignedService.getUnassignedRooms({ from_date: calendarData.from_date, to_date: calendarData.to_date }, this.propertyid, dateToFormattedString(new Date(+key)), calendarData.roomsInfo, calendarData.formattedLegendData);
       result.forEach(room => {
         if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
           categorisedRooms[room.RT_ID] = [room];
