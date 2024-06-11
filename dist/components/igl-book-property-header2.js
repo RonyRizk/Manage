@@ -29,6 +29,8 @@ const IglBookPropertyHeader = /*@__PURE__*/ proxyCustomElement(class IglBookProp
       code: '',
       description: '',
       tag: '',
+      id: '',
+      type: '',
     };
     this.splitBookingId = '';
     this.bookingData = '';

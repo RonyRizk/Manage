@@ -8,12 +8,22 @@ export declare class BookingService extends Token {
   fetchGuest(email: string): Promise<Guest>;
   fetchPMSLogs(booking_nbr: string | number): Promise<IPmsLog>;
   editExposedGuest(guest: Guest, book_nbr: string): Promise<any>;
-  getBookingAvailability(from_date: string, to_date: string, propertyid: number, adultChildCount: {
-    adult: number;
-    child: number;
-  }, language: string, room_type_ids: number[], currency: {
-    id: number;
-    code: string;
+  getBookingAvailability(props: {
+    from_date: string;
+    to_date: string;
+    propertyid: number;
+    adultChildCount: {
+      adult: number;
+      child: number;
+    };
+    language: string;
+    room_type_ids: number[];
+    currency: {
+      id: number;
+      code: string;
+    };
+    is_in_agent_mode?: boolean;
+    agent_id?: string | number;
   }): Promise<BookingDetails>;
   getCountries(language: string): Promise<ICountry[]>;
   fetchSetupEntries(): Promise<ISetupEntries>;

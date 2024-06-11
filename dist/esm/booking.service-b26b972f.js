@@ -400,6 +400,17 @@ function calculateDaysBetweenDates(from_date, to_date) {
   return daysDiff || 1;
 }
 
+var __rest = (undefined && undefined.__rest) || function (s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+    t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function")
+    for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+      if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+        t[p[i]] = s[p[i]];
+    }
+  return t;
+};
 class BookingService extends Token {
   async getCalendarData(propertyid, from_date, to_date) {
     try {
@@ -499,21 +510,12 @@ class BookingService extends Token {
       throw new Error(error);
     }
   }
-  async getBookingAvailability(from_date, to_date, propertyid, adultChildCount, language, room_type_ids, currency) {
+  async getBookingAvailability(props) {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
-          propertyid,
-          from_date,
-          to_date,
-          adult_nbr: adultChildCount.adult,
-          child_nbr: adultChildCount.child,
-          language,
-          currency_ref: currency.code,
-          room_type_ids,
-          is_backend: true,
-        });
+        const { adultChildCount, currency } = props, rest = __rest(props, ["adultChildCount", "currency"]);
+        const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, Object.assign(Object.assign({}, rest), { adult_nbr: adultChildCount.adult, child_nbr: adultChildCount.child, currency_ref: currency.code, is_backend: true }));
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -867,4 +869,4 @@ class BookingService extends Token {
 
 export { BookingService as B, getMyBookings as a, convertDateToTime as b, convertDateToCustomFormat as c, dateToFormattedString as d, getReleaseHoursString as e, findCountry as f, getCurrencySymbol as g, dateDifference as h, formatLegendColors as i, transformNewBooking as j, bookingStatus as k, isBlockUnit as l, calculateDaysBetweenDates as m, getNextDay as n, addTwoMonthToDate as o, convertDMYToISO as p, computeEndDate as q, formatName as r, getDaysArray as s, transformNewBLockedRooms as t, convertDatePrice as u, formatDate as v };
 
-//# sourceMappingURL=booking.service-e3ce3cdb.js.map
+//# sourceMappingURL=booking.service-b26b972f.js.map

@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-2fc15efd.js';
-import { g as getCurrencySymbol, a as getMyBookings, c as convertDateToCustomFormat, b as convertDateToTime, d as dateToFormattedString, e as getReleaseHoursString, t as transformNewBLockedRooms, B as BookingService$1, f as findCountry, h as dateDifference, i as formatLegendColors, j as transformNewBooking$1, k as bookingStatus$1, l as isBlockUnit$1, m as calculateDaysBetweenDates$1, n as getNextDay, o as addTwoMonthToDate, p as convertDMYToISO, q as computeEndDate, r as formatName$1, s as getDaysArray, u as convertDatePrice, v as formatDate } from './booking.service-e3ce3cdb.js';
+import { g as getCurrencySymbol, a as getMyBookings, c as convertDateToCustomFormat, b as convertDateToTime, d as dateToFormattedString, e as getReleaseHoursString, t as transformNewBLockedRooms, B as BookingService$1, f as findCountry, h as dateDifference, i as formatLegendColors, j as transformNewBooking$1, k as bookingStatus$1, l as isBlockUnit$1, m as calculateDaysBetweenDates$1, n as getNextDay, o as addTwoMonthToDate, p as convertDMYToISO, q as computeEndDate, r as formatName$1, s as getDaysArray, u as convertDatePrice, v as formatDate } from './booking.service-b26b972f.js';
 import { l as locales } from './locales.store-103cb063.js';
 import { c as calendar_data } from './calendar-data-aa1fc96c.js';
 import { v as v4 } from './v4-87f26972.js';
@@ -106,6 +106,17 @@ const IglApplicationInfo = class {
 };
 IglApplicationInfo.style = iglApplicationInfoCss;
 
+var __rest$1 = (undefined && undefined.__rest) || function (s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+    t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function")
+    for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+      if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+        t[p[i]] = s[p[i]];
+    }
+  return t;
+};
 class BookingService extends Token {
   async getCalendarData(propertyid, from_date, to_date) {
     try {
@@ -205,21 +216,12 @@ class BookingService extends Token {
       throw new Error(error);
     }
   }
-  async getBookingAvailability(from_date, to_date, propertyid, adultChildCount, language, room_type_ids, currency) {
+  async getBookingAvailability(props) {
     try {
       const token = this.getToken();
       if (token) {
-        const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
-          propertyid,
-          from_date,
-          to_date,
-          adult_nbr: adultChildCount.adult,
-          child_nbr: adultChildCount.child,
-          language,
-          currency_ref: currency.code,
-          room_type_ids,
-          is_backend: true,
-        });
+        const { adultChildCount, currency } = props, rest = __rest$1(props, ["adultChildCount", "currency"]);
+        const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, Object.assign(Object.assign({}, rest), { adult_nbr: adultChildCount.adult, child_nbr: adultChildCount.child, currency_ref: currency.code, is_backend: true }));
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -964,6 +966,7 @@ const IglBookProperty = class {
   }
   componentDidLoad() {
     document.addEventListener('keydown', this.handleKeyDown);
+    console.log(this.allowedBookingSources);
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
@@ -1090,7 +1093,7 @@ const IglBookProperty = class {
   }
   setSourceOptions(bookingSource) {
     this.sourceOptions = bookingSource.map(source => ({
-      id: source.code,
+      id: source.id,
       value: source.description,
       tag: source.tag,
       type: source.type,
@@ -1103,6 +1106,8 @@ const IglBookProperty = class {
         code: bookingSource[0].code,
         description: bookingSource[0].description,
         tag: bookingSource[0].tag,
+        type: bookingSource[0].type,
+        id: bookingSource[0].id,
       };
     }
   }
@@ -1118,9 +1123,21 @@ const IglBookProperty = class {
     this.adultChildCount = Object.assign({}, event.detail);
   }
   async initializeBookingAvailability(from_date, to_date) {
+    console.log(this.sourceOption);
+    const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';
     try {
       const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
-      const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
+      const data = await this.bookingService.getBookingAvailability({
+        from_date,
+        to_date,
+        propertyid: this.propertyid,
+        adultChildCount: this.adultChildCount,
+        language: this.language,
+        room_type_ids,
+        currency: this.currency,
+        agent_id: is_in_agent_mode ? this.sourceOption['tag'] : null,
+        is_in_agent_mode,
+      });
       if (!this.isEventType('EDIT_BOOKING')) {
         this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
         this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
@@ -1195,6 +1212,8 @@ const IglBookProperty = class {
       code: value,
       description: selectedSource.value || '',
       tag: selectedSource.tag,
+      id: selectedSource.id,
+      type: selectedSource.type,
     };
   }
   renderPage() {
@@ -1408,6 +1427,8 @@ const IglBookPropertyHeader = class {
       code: '',
       description: '',
       tag: '',
+      id: '',
+      type: '',
     };
     this.splitBookingId = '';
     this.bookingData = '';
@@ -3300,7 +3321,7 @@ const IglCalFooter = class {
     this.optionEvent.emit({ key, data });
   }
   render() {
-    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v65"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
+    return (h(Host, { class: "footerContainer" }, h("div", { class: "footerCell bottomLeftCell align-items-center preventPageScroll" }, h("div", { class: "legendBtn", onClick: () => this.handleOptionEvent('showLegend') }, h("i", { class: "la la-square" }), h("u", null, locales.entries.Lcz_Legend), h("span", null, " - v66"))), this.calendarData.days.map(dayInfo => (h("div", { class: "footerCell align-items-center" }, h("div", { class: `dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}` }, dayInfo.dayDisplayName))))));
   }
 };
 IglCalFooter.style = iglCalFooterCss;
@@ -11223,10 +11244,18 @@ const IrRoomNights = class {
     var _a;
     try {
       this.initialLoading = true;
-      const bookingAvailability = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyId, {
-        adult: this.selectedRoom.rateplan.selected_variation.adult_nbr,
-        child: this.selectedRoom.rateplan.selected_variation.child_nbr,
-      }, this.language, [this.selectedRoom.roomtype.id], this.bookingEvent.currency);
+      const bookingAvailability = await this.bookingService.getBookingAvailability({
+        from_date,
+        to_date,
+        propertyid: this.propertyId,
+        adultChildCount: {
+          adult: this.selectedRoom.rateplan.selected_variation.adult_nbr,
+          child: this.selectedRoom.rateplan.selected_variation.child_nbr,
+        },
+        language: this.language,
+        currency: this.bookingEvent.currency,
+        room_type_ids: [this.selectedRoom.roomtype.id],
+      });
       this.inventory = bookingAvailability.roomtypes[0].inventory;
       const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
       if (!rate_plan_index || !rate_plan_index.variations) {

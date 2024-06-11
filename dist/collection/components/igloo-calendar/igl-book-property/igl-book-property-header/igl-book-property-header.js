@@ -9,6 +9,8 @@ export class IglBookPropertyHeader {
       code: '',
       description: '',
       tag: '',
+      id: '',
+      type: '',
     };
     this.splitBookingId = '';
     this.bookingData = '';
